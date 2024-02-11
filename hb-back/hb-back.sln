@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{4184B481-EDCC-481E-BA56-F4A91E1E91A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web-test", "web-test\web-test.csproj", "{B73687D2-BD8C-4B7E-BBB5-BE7EC60B9331}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4184B481-EDCC-481E-BA56-F4A91E1E91A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4184B481-EDCC-481E-BA56-F4A91E1E91A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4184B481-EDCC-481E-BA56-F4A91E1E91A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4184B481-EDCC-481E-BA56-F4A91E1E91A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B73687D2-BD8C-4B7E-BBB5-BE7EC60B9331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B73687D2-BD8C-4B7E-BBB5-BE7EC60B9331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B73687D2-BD8C-4B7E-BBB5-BE7EC60B9331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B73687D2-BD8C-4B7E-BBB5-BE7EC60B9331}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
