@@ -1,6 +1,7 @@
 ﻿namespace web.Domain.Models;
 
-public class UserModel
+public class UserModel : BaseModel
 {
-    
+    public UserModel(string? id) : base(id)
+    { }
 }
