@@ -5,7 +5,7 @@ export LC_ALL=ru_RU.UTF-8
 
 # Get the absolute path of the script's directory
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P )
-backend_folder="$parent_path/../../hb-back"
+backend_folder="$parent_path/../hb-back"
 echo "$backend_folder"
 
 # Check backend
