@@ -12,6 +12,6 @@ namespace BackendBase.Models
 
         [BsonElement("password")]
         public string Password { get; set; } = null!;
-        
+
     }
 }
