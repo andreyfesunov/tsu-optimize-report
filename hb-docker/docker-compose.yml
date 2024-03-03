@@ -1,0 +1,15 @@
+﻿services:
+  hb-backend:
+    container_name: hb-backend
+    build: "../hb-back/"
+  hb-frontend:
+    container_name: hb-frontend
+    build: "../hb-front/"
+  hb-nginx:
+    container_name: hb-nginx
+    image: nginx:1.23.3
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on: 
+      - hb-backend
+      - hb-frontend

@@ -1,7 +1,7 @@
 import { ViewEncapsulation } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { AppModule } from './presentation/app/app.module';
+import { AppModule } from './app/app.module';
 
 
 platformBrowserDynamic().bootstrapModule(AppModule, {

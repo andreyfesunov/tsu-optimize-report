@@ -1,0 +1,14 @@
+﻿services: 
+  hb-backend:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5243:80"
+  hb-frontend:
+    ports:
+      - "8080:80"
+    volumes:
+      - ../hb-frontend:/
+  hb-nginx:
+    ports:
+      - "80:80"
