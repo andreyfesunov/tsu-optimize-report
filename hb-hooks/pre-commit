@@ -7,6 +7,7 @@ export LC_ALL=ru_RU.UTF-8
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P )
 
 backend_folder="$parent_path/../hb-back"
+solution_file="./BackendBase.sln"
 echo "$backend_folder"
 
 # Check backend
@@ -14,7 +15,7 @@ BACKEND_FILES=$(git diff --cached --name-only --diff-filter=ACMRTUXB | grep '^hb
 if [[ ${#BACKEND_FILES} > 0 ]]; then
 	pushd "$backend_folder"
 	
-	dotnet-format --check -v m
+	dotnet-format "$solution_file" --check -v m
 	val=$?
 
 	if [ $val -ne 0 ]; then
