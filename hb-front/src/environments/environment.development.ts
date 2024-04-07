@@ -1,5 +1,5 @@
 import {EnvironmentContract} from "./environment.contract";
 
 export const environment: EnvironmentContract = {
-  apiRoot: 'NOT IMPLEMENTED'
+  apiRoot: 'http://localhost:5443/'
 };
