@@ -1,12 +1,22 @@
 ﻿services: 
-  hb-backend:
+  tsu-backend:
     environment:
       - ASPNET-CORE_ENVIRONMENT=Development
     ports:
       - "5243:80"
-  hb-frontend:
+  tsu-frontend:
     ports:
       - "8080:80"
-  hb-nginx:
+  tsu-nginx:
     ports:
       - "80:80"
+  tsu-adminer:
+    ports:
+      - "8081:8080"
+  tsu-psql:
+    environment:
+      POSTGRES_DB: tsu
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "6789:5432"

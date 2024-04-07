@@ -1,15 +1,29 @@
 ﻿services:
-  hb-backend:
-    container_name: hb-backend
-    build: "../hb-back/"
-  hb-frontend:
-    container_name: hb-frontend
-    build: "../hb-front/"
-  hb-nginx:
-    container_name: hb-nginx
+  tsu-nginx:
+    container_name: tsu-nginx
     image: nginx:1.23.3
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on: 
-      - hb-backend
-      - hb-frontend
+    depends_on:
+      - tsu-backend
+      - tsu-frontend
+      - tsu-psql
+  tsu-frontend:
+    container_name: tsu-frontend
+    build: "../hb-front/"
+  tsu-backend:
+    container_name: tsu-backend
+    build: "../hb-back/"
+  tsu-psql:
+    image: postgres:latest
+    container_name: tsu-psql
+    restart: always
+    volumes:
+      - tsu_db:/var/lib/postgresql/data
+  tsu-adminer:
+    image: adminer:latest
+    container_name: tsu-adminer
+    restart: always
+
+volumes:
+  tsu_db:
