@@ -21,7 +21,8 @@ namespace BackendBase.Controllers
         {
             try
             {
-                var users = await _userService.GetAll();
+                var test = HttpContext;
+                var users = await _userService.GetAllUsers();
                 return Ok(users);
             }
             catch (Exception ex)
@@ -30,8 +31,22 @@ namespace BackendBase.Controllers
             }
         }
 
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<UserDto>> GetById(int userId)
+        {
+            try
+            {
+                var user = await _userService.GetUserById(userId);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("login")]
-        public async Task<ActionResult<TokenDto>> Login([FromBody] LoginDto loginDto)
+        public async Task<ActionResult<UserLoginDto>> Login([FromBody] LoginDto loginDto)
         {
             try
             {

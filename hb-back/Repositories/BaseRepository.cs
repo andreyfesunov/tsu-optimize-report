@@ -1,68 +1,65 @@
 ﻿using BackendBase.Data;
 using BackendBase.Interfaces;
-using BackendBase.settings;
-using Microsoft.Extensions.Options;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace BackendBase.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        private readonly IMongoCollection<TEntity> _collection;
-        private readonly MongoDataContext _context;
+        private readonly DataContext _context;
+        private readonly DbSet<TEntity> _dbset;
 
-        public BaseRepository(MongoDataContext context, string collection)
+        public BaseRepository(DataContext context)
         {
             _context = context;
-            _collection = _context.GetCollection<TEntity>(collection);
+            _dbset = _context.Set<TEntity>();
         }
 
-        public async Task AddEntity(TEntity entity)
+        public async Task<TEntity> AddEntity(TEntity entity)
         {
-            await _collection.InsertOneAsync(entity);
+            var model = await _context.AddAsync(entity);
+            await Save();
+            return model.Entity;
         }
 
-        public async Task Delete(string id)
+        public async Task<bool> Delete(TEntity entity)
         {
-            await _collection.DeleteOneAsync(GetObjectId(id));
+            _context.Remove(entity);
+            return await Save();
         }
 
-        public async Task<bool> DoesExist(string id)
+        public async Task<bool> DoesExist(int id)
         {
-            var exists = await GetById(id);
-            return exists != null;
+            return await _dbset.FindAsync(id) != null;
         }
 
         public async Task<List<TEntity>> GetAll()
         {
-            var allEntities = await _collection.FindAsync(Builders<TEntity>.Filter.Empty);
-            return await allEntities.ToListAsync();
+            return await _dbset.AsNoTracking().ToListAsync();
         }
 
-        public async Task<TEntity> GetById(string id)
+        public async Task<TEntity> GetById(int id)
         {
-            return await _collection.FindAsync(GetObjectId(id)).Result.FirstOrDefaultAsync();
+            return await _dbset.FindAsync(id);
         }
 
-        public async Task<List<TEntity>> SearchEntities(Func<TEntity, bool> predicate)
+        public async Task<bool> Save()
         {
-            Expression<Func<TEntity, bool>> expression = x => predicate(x);
-            return await _collection.FindAsync(expression).Result.ToListAsync();
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0 ? true : false;
         }
 
-        public async Task UpdateEntity(string id, TEntity entity)
+        public List<TEntity> SearchEntity(Func<TEntity, bool> predicate)
         {
-            await _collection.ReplaceOneAsync(GetObjectId(id), entity);
+            return _dbset.Where(predicate).ToList();
         }
 
-        private FilterDefinition<TEntity> GetObjectId(string id)
+        public async Task<TEntity> UpdateEntity(TEntity entity)
         {
-            var objectId = new ObjectId(id);
-            return Builders<TEntity>.Filter.Eq("_id", objectId);
+            var model = _context.Update(entity).Entity;
+            await Save();
+            return model;
         }
     }
 }

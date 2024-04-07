@@ -1,17 +1,19 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BackendBase.Models
 {
-    public class User : Base
+    public class User
     {
-        [BsonElement("nickname")]
-        public string Nickname { get; set; } = null!;
+        [Required]
+        public Guid Id { get; set; }
 
-        [BsonElement("email")]
-        public string Email { get; set; } = null!;
+        [Required]
+        public string Nickname { get; set; }
 
-        [BsonElement("password")]
-        public string Password { get; set; } = null!;
+        [Required]
+        public string Email { get; set; }
 
+        [Required]
+        public string Password { get; set; }
     }
 }
