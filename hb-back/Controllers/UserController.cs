@@ -21,7 +21,6 @@ namespace BackendBase.Controllers
         {
             try
             {
-                var test = HttpContext;
                 var users = await _userService.GetAllUsers();
                 return Ok(users);
             }
