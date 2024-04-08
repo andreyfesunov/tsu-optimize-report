@@ -1,4 +1,4 @@
-﻿using BackendBase.Data.Dto;
+﻿using BackendBase.Dto;
 
 namespace BackendBase.Interfaces
 {

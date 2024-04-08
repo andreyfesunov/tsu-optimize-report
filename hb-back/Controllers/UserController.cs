@@ -1,4 +1,4 @@
-﻿using BackendBase.Data.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

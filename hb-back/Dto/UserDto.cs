@@ -1,4 +1,4 @@
-﻿namespace BackendBase.Data.Dto
+﻿namespace BackendBase.Dto
 {
     public class UserDto
     {

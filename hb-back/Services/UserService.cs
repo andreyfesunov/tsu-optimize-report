@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BackendBase.Data.Dto;
+using BackendBase.Dto;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
