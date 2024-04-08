@@ -14,6 +14,12 @@
   tsu-backend:
     container_name: tsu-backend
     build: "../hb-back/"
+    develop:
+      watch:
+        - action: rebuild
+          path: ../hb-back
+    depends_on:
+      - tsu-psql
   tsu-psql:
     image: postgres:latest
     container_name: tsu-psql

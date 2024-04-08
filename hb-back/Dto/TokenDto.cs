@@ -1,8 +1,7 @@
-﻿namespace BackendBase.Data.Dto
+﻿namespace BackendBase.Dto
 {
     public class TokenDto
     {
-        public string? Id { get; set; }
         public string? Token { get; set; }
     }
 }

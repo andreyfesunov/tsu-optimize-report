@@ -1,19 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BackendBase.Models
+namespace BackendBase.Dto
 {
-    public class User
+    public class RegistrationDto
     {
         [Required]
-        public Guid Id { get; set; }
-
-        [Required]
         public string Nickname { get; set; }
-
         [Required]
         public string Email { get; set; }
-
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        public string ConfirmPassword { get; set; }
     }
 }

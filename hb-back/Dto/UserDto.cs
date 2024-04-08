@@ -1,10 +1,9 @@
-﻿namespace BackendBase.Data.Dto
+﻿namespace BackendBase.Dto
 {
-    public class RegistrationDto
+    public class UserDto
     {
         public string Nickname { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
     }
 }

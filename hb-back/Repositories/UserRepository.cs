@@ -1,23 +1,21 @@
 ﻿using BackendBase.Data;
 using BackendBase.Models;
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
     public class UserRepository : BaseRepository<User>
     {
-        private MongoDataContext _context;
-        private IMongoCollection<User> _collection;
+        private readonly DataContext _context;
 
-        public UserRepository(MongoDataContext context) : base(context, "users")
+        public UserRepository(DataContext context) : base(context)
         {
             _context = context;
-            _collection = _context.GetCollection<User>("users");
         }
 
-        public async Task<User> GetByNickname(string nickName)
+        public async Task<User> GetUserByNickname(string nickname)
         {
-            return await _collection.FindAsync(x => x.Nickname == nickName).Result.FirstOrDefaultAsync();
+            return await _context.Users.Where(u => u.Nickname == nickname).FirstOrDefaultAsync();
         }
     }
 }
