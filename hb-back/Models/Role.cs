@@ -1,4 +1,4 @@
-﻿ namespace BackendBase.Models
+﻿namespace BackendBase.Models
 {
     public class Role
     {
@@ -7,4 +7,3 @@
         public ICollection<User> Users { get; set; }
     }
 }
- 

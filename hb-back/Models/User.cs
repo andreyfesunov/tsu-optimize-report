@@ -18,9 +18,9 @@ namespace BackendBase.Models
 
         [Required]
         public string Password { get; set; }
-        
+
         public ICollection<State> States { get; set; }
-         
+
         public ICollection<Role> Roles { get; set; }
 
     }
