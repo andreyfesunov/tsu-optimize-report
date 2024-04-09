@@ -13,6 +13,11 @@ namespace BackendBase.Data
 
         protected readonly IConfiguration _configuration;
         public DbSet<User> Users { get; set; }
+        public DbSet<Institute> Institutes { get; set; }
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));

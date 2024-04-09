@@ -5,7 +5,11 @@ namespace BackendBase.Dto
     public class RegistrationDto
     {
         [Required]
-        public string Nickname { get; set; }
+        public string Firstname { get; set; }
+
+        [Required]
+        public string Lastname { get; set; }
+
         [Required]
         public string Email { get; set; }
         [Required]

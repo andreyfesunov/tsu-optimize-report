@@ -43,7 +43,7 @@ namespace BackendBase.Services
 
         public async Task<UserLoginDto> Login(LoginDto loginDto)
         {
-            var user = await _userRepository.GetUserByNickname(loginDto.Nickname);
+            var user = await _userRepository.GetUserByEmail(loginDto.Email);
             if (user == null)
             {
                 throw new UserNotFoundException();
@@ -62,7 +62,7 @@ namespace BackendBase.Services
 
         public async Task<bool> Registrate(RegistrationDto registrationDto)
         {
-            var userExistsCheck = await _userRepository.GetUserByNickname(registrationDto.Nickname);
+            var userExistsCheck = await _userRepository.GetUserByEmail(registrationDto.Email);
             if (userExistsCheck != null)
             {
                 throw new UserAlreadyExistsException();
@@ -87,7 +87,7 @@ namespace BackendBase.Services
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,user.Nickname),
+                //new Claim(ClaimTypes.NameIdentifier,user.Nickname),
                 new Claim(ClaimTypes.Email,user.Email)
             };
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],

@@ -8,12 +8,20 @@ namespace BackendBase.Models
         public Guid Id { get; set; }
 
         [Required]
-        public string Nickname { get; set; }
+        public string Firstname { get; set; }
+
+        [Required]
+        public string Lastname { get; set; }
 
         [Required]
         public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
+        
+        public ICollection<State> States { get; set; }
+         
+        public ICollection<Role> Roles { get; set; }
+
     }
 }
