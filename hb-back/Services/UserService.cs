@@ -45,38 +45,28 @@ namespace BackendBase.Services
         {
             var user = await _userRepository.GetUserByEmail(loginDto.Email);
             if (user == null)
-            {
-                throw new UserNotFoundException();
-            }
+                throw new UnauthorizedAccessException("1"); //Wrong email
 
-            if (GetPasswordHash(loginDto.Password) == user.Password)
-            {
+            if (GetPasswordHash(loginDto.Password) != user.Password)
+                throw new UnauthorizedAccessException("2"); //Wrong password
 
-                var userLogin = new UserLoginDto();
-                userLogin.Token = GenerateJWT(_mapper.Map<UserDto>(user));
-                return userLogin;
-            }
-
-            throw new Exception("Nickname or Password are not correct");
+            var userLogin = new UserLoginDto();
+            userLogin.Token = GenerateJWT(_mapper.Map<UserDto>(user));
+            return userLogin;
         }
 
         public async Task<bool> Registrate(RegistrationDto registrationDto)
         {
             var userExistsCheck = await _userRepository.GetUserByEmail(registrationDto.Email);
             if (userExistsCheck != null)
-            {
-                throw new UserAlreadyExistsException();
-            }
+                throw new UnauthorizedAccessException("3"); //UserAlreadyExists
 
             if (registrationDto.Password != registrationDto.ConfirmPassword)
-            {
-                throw new PasswordNotConfirmedException();
-            }
+                throw new UnauthorizedAccessException("2"); //Wrong password
 
             var user = _mapper.Map<User>(registrationDto);
             user.Id = new Guid();
             user.Password = GetPasswordHash(registrationDto.Password);
-
             var userAdded = await _userRepository.AddEntity(user);
             return userAdded != null;
         }
