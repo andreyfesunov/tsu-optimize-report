@@ -18,6 +18,8 @@
       watch:
         - action: rebuild
           path: ../hb-back
+    volumes:
+      - xlsx:/app/xlsx
     depends_on:
       - tsu-psql
   tsu-psql:
@@ -33,3 +35,4 @@
 
 volumes:
   tsu_db:
+  xlsx:
