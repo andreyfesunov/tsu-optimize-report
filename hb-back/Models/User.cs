@@ -2,11 +2,8 @@
 
 namespace BackendBase.Models
 {
-    public class User
+    public class User : Base
     {
-        [Required]
-        public Guid Id { get; set; }
-
         [Required]
         public string Firstname { get; set; }
 

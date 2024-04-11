@@ -2,9 +2,8 @@
 
 namespace BackendBase.Models
 {
-    public class Institute
+    public class Institute : Base
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }

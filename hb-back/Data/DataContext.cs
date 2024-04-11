@@ -1,6 +1,6 @@
 ﻿using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
+using DBFile = BackendBase.Models.File;
 
 namespace BackendBase.Data
 {
@@ -11,13 +11,20 @@ namespace BackendBase.Data
             _configuration = configuration;
         }
 
-        protected readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
+        
         public DbSet<User> Users { get; set; }
         public DbSet<Institute> Institutes { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventType> EventTypes { get; set; }
+        public DbSet<DBFile> Files { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Report> Reports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));

@@ -1,8 +1,7 @@
 ﻿namespace BackendBase.Models
 {
-    public class Job
+    public class Job : Base
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }
