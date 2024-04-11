@@ -36,6 +36,8 @@ $hb-front-theme: mat.define-light-theme((
 @include mat.all-component-themes($hb-front-theme);
 
 /* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
+h1 {
+  margin: 0px;
+}
+html, body { height: 100%; background-color: rgb(228, 228, 228);}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
