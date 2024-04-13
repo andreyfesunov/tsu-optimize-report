@@ -2,8 +2,7 @@
 {
     public class Role : Base
     {
-        public ICollection<User> Users { get; set; }
-
+        public ICollection<RoleUser> RolesUsers { get; set; }
         public string Name { get; set; }
     }
 }

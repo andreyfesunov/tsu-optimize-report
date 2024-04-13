@@ -22,21 +22,6 @@ namespace BackendBase.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ActivityEventType", b =>
-                {
-                    b.Property<Guid>("ActivitiesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EventTypesId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ActivitiesId", "EventTypesId");
-
-                    b.HasIndex("EventTypesId");
-
-                    b.ToTable("ActivityEventType");
-                });
-
             modelBuilder.Entity("BackendBase.Models.Activity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -52,13 +37,34 @@ namespace BackendBase.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("BackendBase.Models.ActivityEventType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventTypeId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("EventTypeId");
+
+                    b.ToTable("ActivitiesEventsTypes");
+                });
+
             modelBuilder.Entity("BackendBase.Models.Department", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("InstituteId")
+                    b.Property<Guid>("InsituteId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -67,7 +73,7 @@ namespace BackendBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InstituteId");
+                    b.HasIndex("InsituteId");
 
                     b.ToTable("Departments");
                 });
@@ -87,16 +93,37 @@ namespace BackendBase.Migrations
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("WorkId")
+                    b.Property<Guid>("StateUserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EventTypeId");
 
-                    b.HasIndex("WorkId");
+                    b.HasIndex("StateUserId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.EventFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("FileId");
+
+                    b.ToTable("EventsFiles");
                 });
 
             modelBuilder.Entity("BackendBase.Models.EventType", b =>
@@ -109,9 +136,14 @@ namespace BackendBase.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("WorkId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.ToTable("EventTypes");
+                    b.HasIndex("WorkId");
+
+                    b.ToTable("EventsTypes");
                 });
 
             modelBuilder.Entity("BackendBase.Models.File", b =>
@@ -120,16 +152,19 @@ namespace BackendBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("StateUserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StateUserId");
 
                     b.ToTable("Files");
                 });
@@ -170,7 +205,7 @@ namespace BackendBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("EventId")
+                    b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("FactDate")
@@ -205,6 +240,27 @@ namespace BackendBase.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("BackendBase.Models.RoleUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RolesUsers");
+                });
+
             modelBuilder.Entity("BackendBase.Models.State", b =>
                 {
                     b.Property<Guid>("Id")
@@ -214,7 +270,7 @@ namespace BackendBase.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("DepartmentId")
+                    b.Property<Guid>("DepartmentId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("EndDate")
@@ -223,7 +279,7 @@ namespace BackendBase.Migrations
                     b.Property<int>("Hours")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("JobId")
+                    b.Property<Guid>("JobId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("StartDate")
@@ -236,6 +292,34 @@ namespace BackendBase.Migrations
                     b.HasIndex("JobId");
 
                     b.ToTable("States");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.StateUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Rate")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StateId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StatesUsers");
                 });
 
             modelBuilder.Entity("BackendBase.Models.User", b =>
@@ -280,104 +364,167 @@ namespace BackendBase.Migrations
                     b.ToTable("Work");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("BackendBase.Models.ActivityEventType", b =>
                 {
-                    b.Property<Guid>("RolesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("RolesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("RoleUser");
-                });
-
-            modelBuilder.Entity("ActivityEventType", b =>
-                {
-                    b.HasOne("BackendBase.Models.Activity", null)
-                        .WithMany()
-                        .HasForeignKey("ActivitiesId")
+                    b.HasOne("BackendBase.Models.Activity", "Activity")
+                        .WithMany("ActivitiesEventsTypes")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendBase.Models.EventType", null)
-                        .WithMany()
-                        .HasForeignKey("EventTypesId")
+                    b.HasOne("BackendBase.Models.EventType", "EventType")
+                        .WithMany("ActivitiesEventsTypes")
+                        .HasForeignKey("EventTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("EventType");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Department", b =>
                 {
-                    b.HasOne("BackendBase.Models.Institute", null)
+                    b.HasOne("BackendBase.Models.Institute", "Insitute")
                         .WithMany("Departments")
-                        .HasForeignKey("InstituteId");
+                        .HasForeignKey("InsituteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Insitute");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Event", b =>
                 {
                     b.HasOne("BackendBase.Models.EventType", "EventType")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("EventTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendBase.Models.Work", "Work")
-                        .WithMany()
-                        .HasForeignKey("WorkId")
+                    b.HasOne("BackendBase.Models.StateUser", "StateUser")
+                        .WithMany("Events")
+                        .HasForeignKey("StateUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EventType");
+
+                    b.Navigation("StateUser");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.EventFile", b =>
+                {
+                    b.HasOne("BackendBase.Models.Event", "Event")
+                        .WithMany("EventsFiles")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendBase.Models.File", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("File");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.EventType", b =>
+                {
+                    b.HasOne("BackendBase.Models.Work", "Work")
+                        .WithMany("EventsTypes")
+                        .HasForeignKey("WorkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Work");
                 });
 
             modelBuilder.Entity("BackendBase.Models.File", b =>
                 {
-                    b.HasOne("BackendBase.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("BackendBase.Models.StateUser", "StateUser")
+                        .WithMany("Files")
+                        .HasForeignKey("StateUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("StateUser");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Lesson", b =>
                 {
-                    b.HasOne("BackendBase.Models.Event", null)
+                    b.HasOne("BackendBase.Models.Event", "Event")
                         .WithMany("Lessons")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.RoleUser", b =>
+                {
+                    b.HasOne("BackendBase.Models.Role", "Role")
+                        .WithMany("RolesUsers")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendBase.Models.User", "User")
+                        .WithMany("RolesUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BackendBase.Models.State", b =>
                 {
-                    b.HasOne("BackendBase.Models.Department", null)
+                    b.HasOne("BackendBase.Models.Department", "Department")
                         .WithMany("States")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("BackendBase.Models.Job", null)
+                    b.HasOne("BackendBase.Models.Job", "Job")
                         .WithMany("States")
-                        .HasForeignKey("JobId");
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Job");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("BackendBase.Models.StateUser", b =>
                 {
-                    b.HasOne("BackendBase.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
+                    b.HasOne("BackendBase.Models.State", "State")
+                        .WithMany("StatesUsers")
+                        .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendBase.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
+                    b.HasOne("BackendBase.Models.User", "User")
+                        .WithMany("StatesUsers")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("State");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Activity", b =>
+                {
+                    b.Navigation("ActivitiesEventsTypes");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Department", b =>
@@ -387,7 +534,16 @@ namespace BackendBase.Migrations
 
             modelBuilder.Entity("BackendBase.Models.Event", b =>
                 {
+                    b.Navigation("EventsFiles");
+
                     b.Navigation("Lessons");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.EventType", b =>
+                {
+                    b.Navigation("ActivitiesEventsTypes");
+
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Institute", b =>
@@ -398,6 +554,35 @@ namespace BackendBase.Migrations
             modelBuilder.Entity("BackendBase.Models.Job", b =>
                 {
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Role", b =>
+                {
+                    b.Navigation("RolesUsers");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.State", b =>
+                {
+                    b.Navigation("StatesUsers");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.StateUser", b =>
+                {
+                    b.Navigation("Events");
+
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.User", b =>
+                {
+                    b.Navigation("RolesUsers");
+
+                    b.Navigation("StatesUsers");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Work", b =>
+                {
+                    b.Navigation("EventsTypes");
                 });
 #pragma warning restore 612, 618
         }

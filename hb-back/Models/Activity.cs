@@ -2,7 +2,6 @@
 
 public class Activity : Base
 {
-    public ICollection<EventType> EventTypes { get; set; }
-
+    public ICollection<ActivityEventType> ActivitiesEventsTypes { get; set; }
     public string Name { get; set; }
 }
