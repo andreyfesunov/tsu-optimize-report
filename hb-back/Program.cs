@@ -6,34 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BackendBase.Extensions;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-
-
-{
-    var Articles = new[]
-    {
-        new {
-            Id = "101", Name = "C++"
-        },
-        new {
-            Id = "102", Name = "Python"
-        },
-        new {
-            Id = "103", Name = "Java Script"
-        },
-        new {
-            Id = "104", Name = "GO"
-        },
-        new {
-            Id = "105", Name = "Java"
-        },
-        new {
-            Id = "106", Name = "C#"
-        }
-    };
-}
-
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -12,7 +12,7 @@ namespace BackendBase.Data
         }
 
         private readonly IConfiguration _configuration;
-        
+
         public DbSet<User> Users { get; set; }
         public DbSet<Institute> Institutes { get; set; }
         public DbSet<Job> Jobs { get; set; }

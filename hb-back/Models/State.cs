@@ -2,10 +2,6 @@
 {
     public class State : Base
     {
-        public ICollection<User> Users { get; set; }
-        public ICollection<Department> Departments { get; set; }
-        public ICollection<Job> Jobs { get; set; }
-        
         public int Count { get; set; }
         public int Hours { get; set; }
         public DateTime StartDate { get; set; }

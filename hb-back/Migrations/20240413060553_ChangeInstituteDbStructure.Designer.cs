@@ -3,6 +3,7 @@ using System;
 using BackendBase.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendBase.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240413060553_ChangeInstituteDbStructure")]
+    partial class ChangeInstituteDbStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,14 +206,14 @@ namespace BackendBase.Migrations
                     b.Property<Guid>("FileId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("StateUserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FileId");
 
-                    b.HasIndex("StateUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reports");
                 });
@@ -255,41 +257,18 @@ namespace BackendBase.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("JobId");
 
-                    b.ToTable("States");
-                });
-
-            modelBuilder.Entity("BackendBase.Models.StateUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Rate")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("StateId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StateId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("StateUser");
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("BackendBase.Models.User", b =>
@@ -420,15 +399,15 @@ namespace BackendBase.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendBase.Models.StateUser", "StateUser")
+                    b.HasOne("BackendBase.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("StateUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("File");
 
-                    b.Navigation("StateUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BackendBase.Models.State", b =>
@@ -440,25 +419,10 @@ namespace BackendBase.Migrations
                     b.HasOne("BackendBase.Models.Job", null)
                         .WithMany("States")
                         .HasForeignKey("JobId");
-                });
 
-            modelBuilder.Entity("BackendBase.Models.StateUser", b =>
-                {
-                    b.HasOne("BackendBase.Models.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackendBase.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("State");
-
-                    b.Navigation("User");
+                    b.HasOne("BackendBase.Models.User", null)
+                        .WithMany("States")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -499,6 +463,11 @@ namespace BackendBase.Migrations
             modelBuilder.Entity("BackendBase.Models.Report", b =>
                 {
                     b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.User", b =>
+                {
+                    b.Navigation("States");
                 });
 #pragma warning restore 612, 618
         }
