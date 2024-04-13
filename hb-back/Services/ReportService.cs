@@ -1,15 +1,23 @@
-﻿using BackendBase.Dto;
+﻿using BackendBase.Data;
 using BackendBase.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using BackendBase.Models;
+using BackendBase.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace BackendBase.Controllers
+namespace BackendBase.Services
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ExcelController : ControllerBase
+    public class ReportService : IReportService
     {
-        /*
+        private readonly FileRepository _fileRepository;
+
+        public ReportService(FileRepository fileRepository)
+        {
+            _fileRepository = fileRepository;
+        }
+
+        public async Task<int> CreateReport()
+        {
+            /*
         // Creating an instance 
         // of ExcelPackage 
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -73,5 +81,8 @@ namespace BackendBase.Controllers
         //excel.Dispose();
         //Console.ReadKey();
         */
+
+            return 1;
+        }
     }
 }
