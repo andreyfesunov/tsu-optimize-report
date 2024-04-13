@@ -24,7 +24,6 @@ namespace BackendBase.Data
         public DbSet<EventType> EventTypes { get; set; }
         public DbSet<DBFile> Files { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
-        public DbSet<Report> Reports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
