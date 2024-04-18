@@ -10,10 +10,10 @@
       - tsu-psql
   tsu-frontend:
     container_name: tsu-frontend
-    build: "../hb-front/"
+    build: ../hb-front
   tsu-backend:
     container_name: tsu-backend
-    build: "../hb-back/"
+    build: ../hb-back
     develop:
       watch:
         - action: rebuild
