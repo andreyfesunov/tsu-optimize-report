@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class FileRepository : BaseRepository<File>
+    public class EventTypeRepository : BaseRepository<EventType>
     {
         private readonly DataContext _context;
 
-        public FileRepository(DataContext context) : base(context)
+        public EventTypeRepository(DataContext context) : base(context)
         {
             _context = context;
         }

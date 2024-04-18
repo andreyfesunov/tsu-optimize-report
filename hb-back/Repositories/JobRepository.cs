@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class FileRepository : BaseRepository<File>
+    public class JobRepository : BaseRepository<Job>
     {
         private readonly DataContext _context;
 
-        public FileRepository(DataContext context) : base(context)
+        public JobRepository(DataContext context) : base(context)
         {
             _context = context;
         }
