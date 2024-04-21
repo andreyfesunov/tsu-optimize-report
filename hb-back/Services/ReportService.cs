@@ -15,8 +15,13 @@ namespace BackendBase.Services
             _fileRepository = fileRepository;
         }
 
-        public async Task<int> CreateReport()
+        public async Task<int> CreateReport(IFormFile file)
         {
+            if (!file.FileName.EndsWith(".xls"))
+            {
+                throw new Exception("Incorrect type of file");
+            }
+            
             /*
         // Creating an instance 
         // of ExcelPackage 

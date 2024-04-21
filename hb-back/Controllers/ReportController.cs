@@ -1,4 +1,5 @@
-﻿using BackendBase.Dto;
+﻿using System.Reflection.Metadata;
+using BackendBase.Dto;
 using BackendBase.Interfaces;
 using BackendBase.Services;
 using Microsoft.AspNetCore.Http;
@@ -18,9 +19,9 @@ namespace BackendBase.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<int> CreateReport()
+        public async Task<int> CreateReport(IFormFile file)
         {
-            return await _reportService.CreateReport();
+            return await _reportService.CreateReport(file);
         }
     }
 }

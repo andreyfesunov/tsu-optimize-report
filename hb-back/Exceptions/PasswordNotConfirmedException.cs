@@ -2,7 +2,7 @@
 {
     public class PasswordNotConfirmedException : Exception
     {
-        public PasswordNotConfirmedException() : base("Пароли не совпадают")
+        public PasswordNotConfirmedException() : base("Password mismatch")
         {
 
         }

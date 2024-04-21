@@ -4,6 +4,6 @@ namespace BackendBase.Interfaces
 {
     public interface IReportService
     {
-        Task<int> CreateReport();
+        Task<int> CreateReport(IFormFile file);
     }
 }

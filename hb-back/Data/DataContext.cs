@@ -1,4 +1,5 @@
 ﻿using BackendBase.Models;
+using BackendBase.Factories;
 using Microsoft.EntityFrameworkCore;
 using DBFile = BackendBase.Models.File;
 
@@ -32,5 +33,28 @@ namespace BackendBase.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            var institutes = InstituteFactory.Make();
+            var departments = DepartmentFactory.Make(institutes.First());
+            var jobs = JobFactory.Make();
+            var roles = RoleFactory.Make();
+            var users = UserFactory.Make();
+            var states = StateFactory.Make(departments.First(), jobs.First());
+
+            modelBuilder.Entity<Activity>().HasData(ActivityFactory.Make());
+            
+            // For testing
+            modelBuilder.Entity<Institute>().HasData(institutes);
+            modelBuilder.Entity<Department>().HasData(departments);
+            modelBuilder.Entity<Job>().HasData(jobs);
+            modelBuilder.Entity<Role>().HasData(roles);
+            modelBuilder.Entity<User>().HasData(users);
+            modelBuilder.Entity<State>().HasData(states);
+            
+            modelBuilder.Entity<RoleUser>().HasData(RoleUserFactory.Make(roles, users));
+            modelBuilder.Entity<StateUser>().HasData(StateUserFactory.Make(users.First(), states.First()));
+        }
     }
 }

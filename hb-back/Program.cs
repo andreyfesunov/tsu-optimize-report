@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ActivityEventTypeRepository>();
-builder.Services.AddScoped<ActivtyRepository>();
+builder.Services.AddScoped<ActivityRepository>();
 builder.Services.AddScoped<DepartmentRepository>();
 builder.Services.AddScoped<EventFileRepository>();
 builder.Services.AddScoped<EventRepository>();
