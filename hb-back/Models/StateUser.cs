@@ -1,9 +1,12 @@
-﻿namespace BackendBase.Models;
+﻿using System.Collections;
+
+namespace BackendBase.Models;
 
 public class StateUser : Base
 {
     public ICollection<Event> Events { get; set; }
     public ICollection<File> Files { get; set; }
+    public ICollection<Record> Records { get; set; }
     public State State { get; set; }
     public User User { get; set; }
     public double Rate { get; set; }

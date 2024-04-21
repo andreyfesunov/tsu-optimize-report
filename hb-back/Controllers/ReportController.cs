@@ -12,7 +12,7 @@ namespace BackendBase.Controllers
     {
         private readonly IReportService _reportService;
 
-        public ReportController(IReportService reportService) 
+        public ReportController(IReportService reportService)
         {
             _reportService = reportService;
         }
