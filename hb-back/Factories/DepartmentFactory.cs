@@ -6,16 +6,14 @@ public static class DepartmentFactory
 {
     public static List<Department> Make(Institute institute)
     {
-        var departments = new List<Department>
+        return new List<Department>
         {
-            new Department
+            new()
             {
                 Id = Guid.NewGuid(),
-                Insitute = institute,
+                Institute = institute,
                 Name = "Вычислительная техника"
             }
         };
-        
-        return departments;
     }
 }

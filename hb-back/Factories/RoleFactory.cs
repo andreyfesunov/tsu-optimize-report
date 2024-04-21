@@ -4,16 +4,16 @@ namespace BackendBase.Factories;
 
 public static class RoleFactory
 {
-    public static IEnumerable<Role> Make()
+    public static List<Role> Make()
     {
         return new List<Role>
         {
-            new Role
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "USER"
             },
-            new Role
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "SUPERADMIN"

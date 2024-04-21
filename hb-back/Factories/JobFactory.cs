@@ -4,11 +4,11 @@ namespace BackendBase.Factories;
 
 public static class JobFactory
 {
-    public static IEnumerable<Job> Make()
+    public static List<Job> Make()
     {
         return new List<Job>
         {
-            new Job
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Доцент"

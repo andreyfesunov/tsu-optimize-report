@@ -21,7 +21,7 @@ namespace BackendBase.Services
             {
                 throw new Exception("Incorrect type of file");
             }
-            
+
             /*
         // Creating an instance 
         // of ExcelPackage 

@@ -8,7 +8,7 @@ public static class InstituteFactory
     {
         return new List<Institute>
         {
-            new Institute()
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Институт прикладной математики и компьютерных наук"

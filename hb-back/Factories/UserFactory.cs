@@ -4,11 +4,11 @@ namespace BackendBase.Factories;
 
 public class UserFactory
 {
-    public static IEnumerable<User> Make()
+    public static List<User> Make()
     {
         return new List<User>
         {
-            new User
+            new()
             {
                 Id = Guid.NewGuid(),
                 Email = "test1@gmail.com",
@@ -16,14 +16,14 @@ public class UserFactory
                 Lastname = "Petrov",
                 Password = "123123"
             },
-            new User
+            new()
             {
                 Id = Guid.NewGuid(),
                 Email = "test2@gmail.com",
                 Firstname = "Ivan",
                 Lastname = "Petrov",
                 Password = "123123",
-            }, 
+            },
         };
     }
 }

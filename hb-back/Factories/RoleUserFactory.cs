@@ -4,27 +4,27 @@ namespace BackendBase.Factories;
 
 public static class RoleUserFactory
 {
-    public static IEnumerable<RoleUser> Make(IEnumerable<Role> roles, IEnumerable<User> user)
+    public static List<RoleUser> Make(List<Role> roles, List<User> user)
     {
         return new List<RoleUser>
         {
-            new RoleUser
+            new()
             {
                 Id = Guid.NewGuid(),
                 Role = roles.First(),
                 User = user.First(),
             },
-            new RoleUser
+            new()
             {
                 Id = Guid.NewGuid(),
                 Role = roles.Last(),
-                User = user.First()
+                User = user.First(),
             },
-            new RoleUser
+            new()
             {
                 Id = Guid.NewGuid(),
                 Role = roles.First(),
-                User = user.Last()
+                User = user.Last(),
             }
         };
     }

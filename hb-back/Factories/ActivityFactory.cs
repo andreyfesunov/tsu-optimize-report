@@ -4,7 +4,7 @@ namespace BackendBase.Factories;
 
 public static class ActivityFactory
 {
-    public static IEnumerable<Activity> Make()
+    public static List<Activity> Make()
     {
         var dict = _getDefaultFields();
         var res = new List<Activity>();
