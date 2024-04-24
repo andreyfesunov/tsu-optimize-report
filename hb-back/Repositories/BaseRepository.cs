@@ -29,7 +29,7 @@ namespace BackendBase.Repositories
             return await Save();
         }
 
-        public async Task<bool> DoesExist(int id)
+        public async Task<bool> DoesExist(Guid id)
         {
             return await _dbset.FindAsync(id) != null;
         }
@@ -39,7 +39,7 @@ namespace BackendBase.Repositories
             return await _dbset.AsNoTracking().ToListAsync();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(Guid id)
         {
             return await _dbset.FindAsync(id);
         }

@@ -35,13 +35,13 @@ namespace BackendBase.Services
             return _mapper.Map<List<UserDto>>(users);
         }
 
-        public async Task<UserDto> GetUserById(int userId)
+        public async Task<UserDto> GetUserById(Guid userId)
         {
             var user = await _userRepository.GetById(userId);
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task<UserLoginDto> Login(LoginDto loginDto)
+        public async Task<UserLoginDto> LogIn(LoginDto loginDto)
         {
             var user = await _userRepository.GetUserByEmail(loginDto.Email);
             if (user == null)
@@ -50,35 +50,37 @@ namespace BackendBase.Services
             if (GetPasswordHash(loginDto.Password) != user.Password)
                 throw new UnauthorizedAccessException("2"); //Wrong password
 
-            var userLogin = new UserLoginDto();
-            userLogin.Token = GenerateJWT(_mapper.Map<UserDto>(user));
+            var userLogin = new UserLoginDto
+            {
+                Token = GenerateJwt(_mapper.Map<UserDto>(user))
+            };
             return userLogin;
         }
 
-        public async Task<bool> Registrate(RegistrationDto registrationDto)
+        public async Task<string> Reg(RegistrationDto registrationDto)
         {
             var userExistsCheck = await _userRepository.GetUserByEmail(registrationDto.Email);
             if (userExistsCheck != null)
-                throw new UnauthorizedAccessException("3"); //UserAlreadyExists
+                throw new UnauthorizedAccessException();
 
             if (registrationDto.Password != registrationDto.ConfirmPassword)
-                throw new UnauthorizedAccessException("2"); //Wrong password
+                throw new UnauthorizedAccessException();
 
             var user = _mapper.Map<User>(registrationDto);
             user.Id = new Guid();
             user.Password = GetPasswordHash(registrationDto.Password);
             var userAdded = await _userRepository.AddEntity(user);
-            return userAdded != null;
+
+            return userAdded.Id.ToString();
         }
 
-        private string GenerateJWT(UserDto user)
+        private string GenerateJwt(UserDto user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                //new Claim(ClaimTypes.NameIdentifier,user.Nickname),
-                new Claim(ClaimTypes.Email,user.Email)
+                new Claim(ClaimTypes.NameIdentifier,user.Id)
             };
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
@@ -90,7 +92,7 @@ namespace BackendBase.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private string GetPasswordHash(string password)
+        private static string GetPasswordHash(string password)
         {
             var sha = SHA256.Create();
             var byteArray = Encoding.UTF8.GetBytes(password);

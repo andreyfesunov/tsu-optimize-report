@@ -30,8 +30,8 @@ namespace BackendBase.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<UserDto>> GetById(int userId)
+        [HttpGet("{userId:guid}")]
+        public async Task<ActionResult<UserDto>> GetById(Guid userId)
         {
             try
             {
@@ -44,12 +44,12 @@ namespace BackendBase.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost("log-in")]
         public async Task<ActionResult<UserLoginDto>> Login([FromBody] LoginDto loginDto)
         {
             try
             {
-                var userLoginDto = await _userService.Login(loginDto);
+                var userLoginDto = await _userService.LogIn(loginDto);
                 return Ok(userLoginDto);
             }
             catch (Exception ex)
@@ -58,13 +58,13 @@ namespace BackendBase.Controllers
             }
         }
 
-        [HttpPost("registrate")]
-        public async Task<ActionResult<bool>> Registrate([FromBody] RegistrationDto registrationDto)
+        [HttpPost("reg")]
+        public async Task<ActionResult<string>> Reg([FromBody] RegistrationDto registrationDto)
         {
             try
             {
-                var registrated = await _userService.Registrate(registrationDto);
-                return Ok(registrated);
+                var userId = await _userService.Reg(registrationDto);
+                return Ok(userId);
             }
             catch (Exception ex)
             {

@@ -1,6 +1,5 @@
 ﻿using BackendBase.Data;
 using BackendBase.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {

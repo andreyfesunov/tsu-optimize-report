@@ -28,9 +28,8 @@ namespace BackendBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Column")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Column")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -242,7 +241,7 @@ namespace BackendBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LessonType");
+                    b.ToTable("LessonTypes");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Record", b =>
@@ -271,7 +270,7 @@ namespace BackendBase.Migrations
 
                     b.HasIndex("StateUserId");
 
-                    b.ToTable("Record");
+                    b.ToTable("Records");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Role", b =>

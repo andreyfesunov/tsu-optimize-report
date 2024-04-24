@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BackendBase.Migrations
 {
-    public partial class initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace BackendBase.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Column = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +44,18 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LessonTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LessonTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,15 +102,15 @@ namespace BackendBase.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    InsituteId = table.Column<Guid>(type: "uuid", nullable: false),
+                    InstituteId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Departments_Institutes_InsituteId",
-                        column: x => x.InsituteId,
+                        name: "FK_Departments_Institutes_InstituteId",
+                        column: x => x.InstituteId,
                         principalTable: "Institutes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -276,12 +289,45 @@ namespace BackendBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Records",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ActivityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LessonTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Hours = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Records", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Records_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Records_LessonTypes_LessonTypeId",
+                        column: x => x.LessonTypeId,
+                        principalTable: "LessonTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Records_StatesUsers_StateUserId",
+                        column: x => x.StateUserId,
+                        principalTable: "StatesUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Lessons",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    LessonTypeId = table.Column<Guid>(type: "uuid", nullable: false),
                     FactDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PlanDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -292,6 +338,12 @@ namespace BackendBase.Migrations
                         name: "FK_Lessons_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Lessons_LessonTypes_LessonTypeId",
+                        column: x => x.LessonTypeId,
+                        principalTable: "LessonTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -332,9 +384,9 @@ namespace BackendBase.Migrations
                 column: "EventTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Departments_InsituteId",
+                name: "IX_Departments_InstituteId",
                 table: "Departments",
-                column: "InsituteId");
+                column: "InstituteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_EventTypeId",
@@ -370,6 +422,26 @@ namespace BackendBase.Migrations
                 name: "IX_Lessons_EventId",
                 table: "Lessons",
                 column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lessons_LessonTypeId",
+                table: "Lessons",
+                column: "LessonTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_ActivityId",
+                table: "Records",
+                column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_LessonTypeId",
+                table: "Records",
+                column: "LessonTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_StateUserId",
+                table: "Records",
+                column: "StateUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolesUsers_RoleId",
@@ -414,16 +486,22 @@ namespace BackendBase.Migrations
                 name: "Lessons");
 
             migrationBuilder.DropTable(
-                name: "RolesUsers");
+                name: "Records");
 
             migrationBuilder.DropTable(
-                name: "Activities");
+                name: "RolesUsers");
 
             migrationBuilder.DropTable(
                 name: "Files");
 
             migrationBuilder.DropTable(
                 name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "Activities");
+
+            migrationBuilder.DropTable(
+                name: "LessonTypes");
 
             migrationBuilder.DropTable(
                 name: "Roles");

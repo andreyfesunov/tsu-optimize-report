@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendBase.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240413180616_initial")]
-    partial class initial
+    [Migration("20240424210525_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace BackendBase.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Column")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -66,7 +69,7 @@ namespace BackendBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("InsituteId")
+                    b.Property<Guid>("InstituteId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -75,7 +78,7 @@ namespace BackendBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InsituteId");
+                    b.HasIndex("InstituteId");
 
                     b.ToTable("Departments");
                 });
@@ -213,9 +216,8 @@ namespace BackendBase.Migrations
                     b.Property<DateTime>("FactDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("LessonTypeId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("PlanDate")
                         .HasColumnType("timestamp with time zone");
@@ -224,7 +226,53 @@ namespace BackendBase.Migrations
 
                     b.HasIndex("EventId");
 
+                    b.HasIndex("LessonTypeId");
+
                     b.ToTable("Lessons");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.LessonType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LessonTypes");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Record", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("LessonTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StateUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("LessonTypeId");
+
+                    b.HasIndex("StateUserId");
+
+                    b.ToTable("Records");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Role", b =>
@@ -387,13 +435,13 @@ namespace BackendBase.Migrations
 
             modelBuilder.Entity("BackendBase.Models.Department", b =>
                 {
-                    b.HasOne("BackendBase.Models.Institute", "Insitute")
+                    b.HasOne("BackendBase.Models.Institute", "Institute")
                         .WithMany("Departments")
-                        .HasForeignKey("InsituteId")
+                        .HasForeignKey("InstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Insitute");
+                    b.Navigation("Institute");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Event", b =>
@@ -464,7 +512,42 @@ namespace BackendBase.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BackendBase.Models.LessonType", "LessonType")
+                        .WithMany("Lessons")
+                        .HasForeignKey("LessonTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Event");
+
+                    b.Navigation("LessonType");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Record", b =>
+                {
+                    b.HasOne("BackendBase.Models.Activity", "Activity")
+                        .WithMany("Records")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendBase.Models.LessonType", "LessonType")
+                        .WithMany("Records")
+                        .HasForeignKey("LessonTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendBase.Models.StateUser", "StateUser")
+                        .WithMany("Records")
+                        .HasForeignKey("StateUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("LessonType");
+
+                    b.Navigation("StateUser");
                 });
 
             modelBuilder.Entity("BackendBase.Models.RoleUser", b =>
@@ -527,6 +610,8 @@ namespace BackendBase.Migrations
             modelBuilder.Entity("BackendBase.Models.Activity", b =>
                 {
                     b.Navigation("ActivitiesEventsTypes");
+
+                    b.Navigation("Records");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Department", b =>
@@ -558,6 +643,13 @@ namespace BackendBase.Migrations
                     b.Navigation("States");
                 });
 
+            modelBuilder.Entity("BackendBase.Models.LessonType", b =>
+                {
+                    b.Navigation("Lessons");
+
+                    b.Navigation("Records");
+                });
+
             modelBuilder.Entity("BackendBase.Models.Role", b =>
                 {
                     b.Navigation("RolesUsers");
@@ -573,6 +665,8 @@ namespace BackendBase.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("Files");
+
+                    b.Navigation("Records");
                 });
 
             modelBuilder.Entity("BackendBase.Models.User", b =>

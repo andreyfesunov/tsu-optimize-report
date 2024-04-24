@@ -13,7 +13,7 @@ namespace BackendBase.Repositories
             _context = context;
         }
 
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email)
         {
             return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }

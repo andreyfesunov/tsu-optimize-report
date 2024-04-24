@@ -5,8 +5,8 @@ namespace BackendBase.Interfaces
     public interface IUserService
     {
         Task<List<UserDto>> GetAllUsers();
-        Task<UserDto> GetUserById(int userId);
-        Task<UserLoginDto> Login(LoginDto loginDto);
-        Task<bool> Registrate(RegistrationDto registrationDto);
+        Task<UserDto> GetUserById(Guid userId);
+        Task<UserLoginDto> LogIn(LoginDto loginDto);
+        Task<string> Reg(RegistrationDto registrationDto);
     }
 }

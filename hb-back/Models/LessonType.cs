@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace BackendBase.Models;
+﻿namespace BackendBase.Models;
 
 public class LessonType : Base
 {

@@ -2,6 +2,7 @@
 using BackendBase.Dto;
 using BackendBase.Interfaces;
 using BackendBase.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace BackendBase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;
@@ -18,10 +20,10 @@ namespace BackendBase.Controllers
             _reportService = reportService;
         }
 
-        [HttpPost("[action]")]
-        public async Task<int> CreateReport(IFormFile file)
+        [HttpPost("{stateUserId:guid}/[action]")]
+        public async Task<int> CreateReport(Guid stateUserId, IFormFile file)
         {
-            return await _reportService.CreateReport(file);
+            return await _reportService.CreateReport(stateUserId, file);
         }
     }
 }

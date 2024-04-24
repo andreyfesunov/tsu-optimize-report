@@ -4,6 +4,8 @@
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5243:80"
+    depends_on:
+      - tsu-psql
   tsu-frontend:
     ports:
       - "8080:80"
