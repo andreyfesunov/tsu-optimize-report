@@ -4,11 +4,10 @@ using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
 using Microsoft.IdentityModel.Tokens;
-using StudentHubBackend.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
+using BackendBase.Utils;
 
 namespace BackendBase.Services
 {
@@ -47,7 +46,7 @@ namespace BackendBase.Services
             if (user == null)
                 throw new UnauthorizedAccessException("1"); //Wrong email
 
-            if (GetPasswordHash(loginDto.Password) != user.Password)
+            if (PasswordUtils.GetPasswordHash(loginDto.Password) != user.Password)
                 throw new UnauthorizedAccessException("2"); //Wrong password
 
             var userLogin = new UserLoginDto
@@ -68,7 +67,7 @@ namespace BackendBase.Services
 
             var user = _mapper.Map<User>(registrationDto);
             user.Id = new Guid();
-            user.Password = GetPasswordHash(registrationDto.Password);
+            user.Password = PasswordUtils.GetPasswordHash(registrationDto.Password);
             var userAdded = await _userRepository.AddEntity(user);
 
             return userAdded.Id.ToString();
@@ -90,14 +89,6 @@ namespace BackendBase.Services
 
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        private static string GetPasswordHash(string password)
-        {
-            var sha = SHA256.Create();
-            var byteArray = Encoding.UTF8.GetBytes(password);
-            var hash = sha.ComputeHash(byteArray);
-            return Convert.ToBase64String(hash);
         }
     }
 }

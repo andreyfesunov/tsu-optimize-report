@@ -101,6 +101,9 @@ namespace BackendBase.Services
 
         private async Task<LessonType> _resolveLessonType(string lessonName)
         {
+            /*
+             * TODO get rid of db calling every time. add memoization/get all lessonTypes 
+             */
             var lessonType = await _lessonTypeRepository.GetLessonTypeByName(lessonName);
 
             return lessonType ?? await _lessonTypeRepository.AddEntity(new LessonType { Name = lessonName, Id = Guid.NewGuid() });

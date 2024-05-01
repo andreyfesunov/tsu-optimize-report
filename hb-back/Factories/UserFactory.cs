@@ -1,8 +1,9 @@
 ﻿using BackendBase.Models;
+using BackendBase.Utils;
 
 namespace BackendBase.Factories;
 
-public class UserFactory
+public static class UserFactory
 {
     public static List<User> Make()
     {
@@ -14,7 +15,7 @@ public class UserFactory
                 Email = "test1@gmail.com",
                 Firstname = "Alexey",
                 Lastname = "Petrov",
-                Password = "123123"
+                Password = PasswordUtils.GetPasswordHash("123123")
             },
             new()
             {
@@ -22,7 +23,7 @@ public class UserFactory
                 Email = "test2@gmail.com",
                 Firstname = "Ivan",
                 Lastname = "Petrov",
-                Password = "123123",
+                Password = PasswordUtils.GetPasswordHash("123123"),
             },
         };
     }
