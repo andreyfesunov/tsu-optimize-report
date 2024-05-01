@@ -91,13 +91,15 @@ namespace BackendBase.Services
 
                     var hours = int.Parse(contentCell.StringCellValue);
 
+                    if (hours <= 0) continue;
+
                     await _recordRepository.AddEntity(new Record
                     {
-                        LessonType = lessonType,
-                        Activity = activity,
+                        LessonTypeId = lessonType.Id,
+                        ActivityId = activity.Id,
                         Hours = hours,
                         Id = Guid.NewGuid(),
-                        StateUser = stateUser
+                        StateUserId = stateUser.Id
                     });
                 }
 
