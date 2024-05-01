@@ -1,9 +1,9 @@
-﻿using BackendBase.Data;
-using BackendBase.Interfaces;
+﻿using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
-using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace BackendBase.Services
 {
@@ -39,11 +39,12 @@ namespace BackendBase.Services
                 throw new Exception("Please, put '.xls' document");
             }
 
-            var stream = new MemoryStream();
+            using var stream = new MemoryStream();
             await file.CopyToAsync(stream);
+            stream.Position = 0;
 
-            var package = new ExcelPackage(stream);
-            var worksheetCount = package.Workbook.Worksheets.Count;
+            using var package = new HSSFWorkbook(stream);
+            var worksheetCount = package.NumberOfSheets;
 
             if (worksheetCount <= 1)
             {
@@ -55,7 +56,7 @@ namespace BackendBase.Services
 
             for (var worksheetNumber = 1; worksheetNumber < worksheetCount; worksheetNumber++)
             {
-                _handleWorksheet(package.Workbook.Worksheets[worksheetNumber], stateUser, activities);
+                await _handleWorksheet(package.GetSheetAt(worksheetNumber), stateUser, activities);
             }
 
             // TODO add file saving
@@ -63,39 +64,46 @@ namespace BackendBase.Services
             return 1;
         }
 
-        private async void _handleWorksheet(ExcelWorksheet worksheet, StateUser stateUser, List<Activity> activities)
+        private async Task _handleWorksheet(ISheet worksheet, StateUser stateUser, List<Activity> activities)
         {
             /*
              * TODO get rid of HARDCODE
              *
-             * 6 - строка, с которой начинаются отчёты.
+             * NPOI - считает с нуля
+             * 
+             * 5 - строка, с которой начинаются отчёты.
              * "Всего за семестр" - строка, которой оканчивается часть, необходимая для считывания.
              */
-            var row = 6;
+            var row = 5;
             const string endString = "Всего за семестр";
 
-            var lessonName = worksheet.Cells[row, 2].Value.ToString();
-            while (lessonName != endString)
+            var cell = worksheet.GetRow(row).GetCell(1);
+
+            while (cell != null && cell.StringCellValue != endString)
             {
-                var lessonType = await _resolveLessonType(lessonName ?? throw new InvalidOperationException());
+                var lessonName = cell.StringCellValue;
+                var lessonType = await _resolveLessonType(lessonName);
 
                 foreach (var activity in activities)
                 {
-                    var content = worksheet.Cells[row, activity.Column].Value.ToString();
+                    var contentCell = worksheet.GetRow(row).GetCell(activity.Column);
 
-                    await _recordRepository.AddEntity(
-                        new Record
-                        {
-                            LessonType = lessonType,
-                            Activity = activity,
-                            Hours = int.Parse(content ?? throw new InvalidOperationException()),
-                            Id = Guid.NewGuid(),
-                            StateUser = stateUser
-                        });
+                    if (contentCell is not { CellType: CellType.Numeric }) continue;
+
+                    var hours = (int)contentCell.NumericCellValue;
+
+                    await _recordRepository.AddEntity(new Record
+                    {
+                        LessonType = lessonType,
+                        Activity = activity,
+                        Hours = hours,
+                        Id = Guid.NewGuid(),
+                        StateUser = stateUser
+                    });
                 }
 
                 row += 1;
-                lessonName = worksheet.Cells[row, 2].Value.ToString();
+                cell = worksheet.GetRow(row)?.GetCell(1); // Move to the next row and get the lesson name cell
             }
         }
 

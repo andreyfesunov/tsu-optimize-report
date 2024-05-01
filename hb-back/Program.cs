@@ -16,6 +16,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<ActivityEventTypeRepository>();
 builder.Services.AddScoped<ActivityRepository>();
 builder.Services.AddScoped<DepartmentRepository>();
@@ -34,9 +35,11 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<WorkRepository>();
 builder.Services.AddScoped<LessonTypeRepository>();
 builder.Services.AddScoped<RecordRepository>();
-builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<DataContext>();
 
