@@ -1,5 +1,6 @@
 ﻿using BackendBase.Data;
 using BackendBase.Interfaces;
+using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 

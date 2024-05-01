@@ -3,7 +3,6 @@ using BackendBase.Models;
 using BackendBase.Repositories;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 
 namespace BackendBase.Services
 {
@@ -88,9 +87,9 @@ namespace BackendBase.Services
                 {
                     var contentCell = worksheet.GetRow(row).GetCell(activity.Column);
 
-                    if (contentCell is not { CellType: CellType.Numeric }) continue;
+                    if (contentCell is not { CellType: CellType.String }) continue;
 
-                    var hours = (int)contentCell.NumericCellValue;
+                    var hours = int.Parse(contentCell.StringCellValue);
 
                     await _recordRepository.AddEntity(new Record
                     {
