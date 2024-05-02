@@ -2,7 +2,7 @@
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
-
+using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories
 {
@@ -30,12 +30,20 @@ namespace BackendBase.Repositories
             return await Save();
         }
 
+        public async Task<bool> DeleteById(Guid entityId)
+        {
+            var entity = await GetById(entityId);
+            if (entity == null) throw new EntityNotFoundException();
+            _context.Remove(entity);
+            return await Save();
+        }
+
         public async Task<bool> DoesExist(Guid id)
         {
             return await _dbset.FindAsync(id) != null;
         }
 
-        public async Task<List<TEntity>> GetAll()
+        public async Task<ICollection<TEntity>> GetAll()
         {
             return await _dbset.AsNoTracking().ToListAsync();
         }
@@ -51,7 +59,7 @@ namespace BackendBase.Repositories
             return saved > 0;
         }
 
-        public List<TEntity> SearchEntity(Func<TEntity, bool> predicate)
+        public ICollection<TEntity> SearchEntity(Func<TEntity, bool> predicate)
         {
             return _dbset.Where(predicate).ToList();
         }

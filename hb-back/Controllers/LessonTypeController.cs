@@ -1,9 +1,9 @@
 ﻿using BackendBase.Dto;
-using BackendBase.Helpers;
 using BackendBase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BackendBase.Models;
+using BackendBase.Helpers.CRUD;
 
 namespace BackendBase.Controllers
 {

@@ -3,12 +3,13 @@
     public interface IBaseRepository<TEntity> where TEntity : class
     {
         Task<TEntity> GetById(Guid id);
-        List<TEntity> SearchEntity(Func<TEntity, bool> predicate);
-        Task<List<TEntity>> GetAll();
+        ICollection<TEntity> SearchEntity(Func<TEntity, bool> predicate);
+        Task<ICollection<TEntity>> GetAll();
         Task<bool> DoesExist(Guid id);
         Task<TEntity> AddEntity(TEntity entity);
         Task<TEntity> UpdateEntity(TEntity entity);
         Task<bool> Delete(TEntity entity);
+        Task<bool> DeleteById(Guid entityId);
         Task<bool> Save();
     }
 }

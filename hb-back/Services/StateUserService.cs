@@ -1,5 +1,5 @@
 ﻿using BackendBase.Data;
-using BackendBase.Helpers;
+using BackendBase.Helpers.CRUD;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;

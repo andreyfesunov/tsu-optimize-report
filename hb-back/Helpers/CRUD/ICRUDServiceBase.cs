@@ -2,7 +2,7 @@
 using BackendBase.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace BackendBase.Helpers
+namespace BackendBase.Helpers.CRUD
 {
     public interface ICRUDServiceBase<TEntity> where TEntity : Base
     {
@@ -10,8 +10,10 @@ namespace BackendBase.Helpers
 
         Task<TEntity> GetById(Guid id);
 
+        Task<ICollection<TEntity>> GetAll();
+
         Task<TEntity> Update(TEntity entity);
 
-        Task<bool> Delete(TEntity entity);
+        Task<bool> DeleteById(Guid entityId);
     }
 }

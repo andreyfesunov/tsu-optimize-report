@@ -1,8 +1,7 @@
 ﻿using BackendBase.Models;
 using BackendBase.Repositories;
-using Microsoft.EntityFrameworkCore;
 
-namespace BackendBase.Helpers
+namespace BackendBase.Helpers.CRUD
 {
     public class CRUDServiceBase<TEntity> : ICRUDServiceBase<TEntity> where TEntity : Base
     {
@@ -14,10 +13,15 @@ namespace BackendBase.Helpers
         public async Task<TEntity> GetById(Guid id)
             => await _repository.GetById(id);
 
+        public async Task<ICollection<TEntity>> GetAll()
+            => await _repository.GetAll();
+
         public async Task<TEntity> Update(TEntity entity)
             => await _repository.UpdateEntity(entity);
 
-        public async Task<bool> Delete(TEntity entity)
-            => await _repository.Delete(entity);
+        public async Task<bool> DeleteById(Guid entityId)
+            => await _repository.DeleteById(entityId);
+
+
     }
 }

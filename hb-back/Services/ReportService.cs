@@ -63,7 +63,7 @@ namespace BackendBase.Services
             return 1;
         }
 
-        private async Task _handleWorksheet(ISheet worksheet, StateUser stateUser, List<Activity> activities)
+        private async Task _handleWorksheet(ISheet worksheet, StateUser stateUser, ICollection<Activity> activities)
         {
             /*
              * TODO get rid of HARDCODE
