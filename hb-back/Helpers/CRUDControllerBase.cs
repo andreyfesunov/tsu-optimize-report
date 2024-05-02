@@ -37,7 +37,7 @@ namespace BackendBase.Helpers
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult<TEntity>> GetById(int id)
+        public async Task<ActionResult<TEntity>> GetById(Guid id)
         {
             try
             {

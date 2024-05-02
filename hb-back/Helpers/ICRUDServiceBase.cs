@@ -8,7 +8,7 @@ namespace BackendBase.Helpers
     {
         Task<TEntity> AddEntity(TEntity entity);
 
-        Task<TEntity> GetById(int id);
+        Task<TEntity> GetById(Guid id);
 
         Task<TEntity> Update(TEntity entity);
 

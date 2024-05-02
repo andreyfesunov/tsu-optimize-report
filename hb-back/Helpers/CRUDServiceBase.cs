@@ -11,7 +11,7 @@ namespace BackendBase.Helpers
         public async Task<TEntity> AddEntity(TEntity entity)
             => await _repository.AddEntity(entity);
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(Guid id)
             => await _repository.GetById(id);
 
         public async Task<TEntity> Update(TEntity entity)
