@@ -1,9 +1,5 @@
-﻿using System.Reflection.Metadata;
-using BackendBase.Dto;
-using BackendBase.Interfaces;
-using BackendBase.Services;
+﻿using BackendBase.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendBase.Controllers

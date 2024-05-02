@@ -104,7 +104,7 @@ namespace BackendBase.Services
                 }
 
                 row += 1;
-                cell = worksheet.GetRow(row)?.GetCell(1); // Move to the next row and get the lesson name cell
+                cell = worksheet.GetRow(row)?.GetCell(1);
             }
         }
 
