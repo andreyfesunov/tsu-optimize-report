@@ -3,7 +3,9 @@
     public class State : Base
     {
         public ICollection<StateUser> StatesUsers { get; set; }
+        public Guid DepartmentId { get; set; }
         public Department Department { get; set; }
+        public Guid JobId { get; set; }
         public Job Job { get; set; }
         public int Count { get; set; }
         public int Hours { get; set; }
