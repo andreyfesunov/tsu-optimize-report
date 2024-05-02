@@ -1,4 +1,4 @@
-import {AuthState, IUser} from "../../../shared";
+import {AuthState, IUser} from "../../../@shared";
 
 export class AuthStateImpl extends AuthState<IUser> {
   constructor() {

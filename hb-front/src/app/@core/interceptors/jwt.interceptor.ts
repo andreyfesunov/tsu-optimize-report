@@ -1,6 +1,6 @@
 import {HttpInterceptorFn} from "@angular/common/http";
 import {inject} from "@angular/core";
-import {AuthState} from "../states";
+import {AuthState} from "../../@shared/states";
 import {switchMap} from "rxjs";
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {

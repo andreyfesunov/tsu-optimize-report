@@ -1,7 +1,8 @@
-import {AuthService, IToken} from "../../../shared";
+import {IToken} from "../../../@shared";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
+import {AuthService} from "../../../@core/services";
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {

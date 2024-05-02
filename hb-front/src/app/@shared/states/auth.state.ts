@@ -1,5 +1,5 @@
 import {map, Observable, shareReplay} from "rxjs";
-import {exists, fromLocalStorage, parseJwt} from "../utils";
+import {exists, fromLocalStorage, parseJwt} from "../index";
 
 export abstract class AuthState<TEntity> {
   public readonly tokenRaw$: Observable<string | undefined> = fromLocalStorage(this._tokenKey).pipe(
