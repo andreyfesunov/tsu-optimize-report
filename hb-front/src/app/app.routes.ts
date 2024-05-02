@@ -1,3 +1,19 @@
 import {Routes} from '@angular/router';
 
-export const routes: Routes = [];
+export enum AppRoutes {
+  AUTH = 'auth',
+  ADMIN = 'adm',
+  USER = 'usr'
+}
+
+export const routes: Routes = [
+  {
+    path: AppRoutes.AUTH,
+    loadChildren: () => import('@features/auth/auth.routes').then(m => m.routes)
+  },
+  {
+    path: '',
+    pathMatch: "full",
+    redirectTo: AppRoutes.AUTH
+  }
+];

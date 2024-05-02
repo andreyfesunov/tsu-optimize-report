@@ -1,6 +1,6 @@
 import {Routes} from "@angular/router";
-import {AuthLoginComponent} from "./components/auth-login/auth-login.component";
-import {AuthRegComponent} from "./components/auth-reg/auth-reg.component";
+import {AuthLoginComponent} from "@features/auth/сontainers/auth-login/auth-login.component";
+import {AuthRegComponent} from "@features/auth/сontainers/auth-reg/auth-reg.component";
 
 export enum AuthRoutes {
   LOGIN = 'login',

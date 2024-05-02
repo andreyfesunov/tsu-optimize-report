@@ -1,8 +1,7 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
+// Plus imports for other сontainers in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -39,5 +38,19 @@ $hb-front-theme: mat.define-light-theme((
 h1 {
   margin: 0px;
 }
-html, body { height: 100%; background-color: rgb(228, 228, 228);}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body {
+  height: 100%;
+  background-color: rgb(228, 228, 228);
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.host-class {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 1px;
+}

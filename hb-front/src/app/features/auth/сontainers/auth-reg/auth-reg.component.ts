@@ -1,10 +1,9 @@
 import {Component} from "@angular/core";
 
 @Component({
-  selector: 'app-auth-login',
   standalone: true,
-  template: ''
+  template: ``
 })
-export class AuthLoginComponent {
+export class AuthRegComponent {
 
 }
