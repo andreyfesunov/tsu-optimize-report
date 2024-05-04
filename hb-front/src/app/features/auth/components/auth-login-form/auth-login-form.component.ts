@@ -31,14 +31,6 @@ export class AuthLoginFormComponent {
   ) {
   }
 
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      // Логика обработки нажатия на Enter
-      if (event.target instanceof HTMLElement) {
-        event.target.click(); // Можно имитировать клик при нажатии на Enter
-      }
-    }
-  }
   protected submit(): void {
     if (this.form.invalid) {
       return this.form.markAllAsTouched();
