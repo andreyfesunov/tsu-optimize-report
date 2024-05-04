@@ -6,7 +6,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { RouterService } from "@core/services";
 
 @Component({
-  selector: 'app-auth-login-form',
+  selector: 'app-auth-reg-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -14,16 +14,16 @@ import { RouterService } from "@core/services";
     MatInputModule,
     MatButtonModule,
   ],
-  templateUrl: './auth-login-form.component.html',
+  templateUrl: './auth-reg-form.component.html',
   styleUrls: ['../../auth-form-base.scss']
 })
-export class AuthLoginFormComponent {
+export class AuthRegFormComponent {
   @Output() public readonly submitEvent: EventEmitter<{ login: string; password: string }> = new EventEmitter<{
     login: string;
     password: string
   }>()
 
-  protected readonly form: FormGroup<IAuthLoginForm> = this._buildForm();
+  protected readonly form: FormGroup<IAuthRegForm> = this._buildForm();
 
   public constructor(
     private readonly _fb: NonNullableFormBuilder,
@@ -31,14 +31,6 @@ export class AuthLoginFormComponent {
   ) {
   }
 
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      // Логика обработки нажатия на Enter
-      if (event.target instanceof HTMLElement) {
-        event.target.click(); // Можно имитировать клик при нажатии на Enter
-      }
-    }
-  }
   protected submit(): void {
     if (this.form.invalid) {
       return this.form.markAllAsTouched();
@@ -46,25 +38,25 @@ export class AuthLoginFormComponent {
 
     const request = {
       login: this.form.controls.login.value,
-      password: this.form.controls.password.value
+      password: this.form.controls.login.value
     };
 
     this.submitEvent.next(request);
   }
 
-  protected toRegister(): void {
-    this._routerService.navigate(['auth/reg']);
+  protected toLogin(): void {
+    this._routerService.navigate(['auth/login']);
   }
 
-  private _buildForm(): FormGroup<IAuthLoginForm> {
-    return this._fb.group<IAuthLoginForm>({
+  private _buildForm(): FormGroup<IAuthRegForm> {
+    return this._fb.group<IAuthRegForm>({
       login: this._fb.control<string>('', Validators.required),
       password: this._fb.control<string>('', Validators.required)
     })
   }
 }
 
-export interface IAuthLoginForm {
+export interface IAuthRegForm {
   login: FormControl<string>;
   password: FormControl<string>;
 }

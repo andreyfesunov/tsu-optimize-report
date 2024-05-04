@@ -1,23 +1,28 @@
-import {Component, HostBinding} from "@angular/core";
+import {Component} from "@angular/core";
 import {AuthLoginFormComponent} from "@features/auth/components/auth-login-form/auth-login-form.component";
-import {AuthWrapperComponent} from "@features/auth/components/auth-wrapper/auth-wrapper.component";
+import { AuthServiceImpl } from "@features/auth/services";
 
 @Component({
   standalone: true,
   imports: [
     AuthLoginFormComponent,
-    AuthWrapperComponent
   ],
   template: `
-    <app-auth-wrapper>
-      <app-auth-login-form (submitEvent)="onSubmit()"></app-auth-login-form>
-    </app-auth-wrapper>
+    <app-auth-login-form (submitEvent)="onSubmit($event)"></app-auth-login-form>
   `
 })
 export class AuthLoginComponent {
-  @HostBinding('class.host-class') addHostClass = true;
 
-  protected onSubmit(): void {
+  public constructor(
+    private readonly _authService: AuthServiceImpl,
+  ) {
+  }
+  // хост класс всё ламаит :(
+  // @HostBinding('class.host-class') addHostClass = true;
 
+  // how to use distinctUntilChanged ? where is subscribe on event?
+  protected onSubmit(eventData: {login: string, password: string}): void {
+    console.log(eventData.login + " | " + eventData.password);
+    this._authService.logIn(eventData);
   }
 }

@@ -5,6 +5,7 @@ import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {jwtInterceptor, proxyInterceptor} from "@core/interceptors";
 import {provideAuthService, provideAuthState} from "@core/providers";
+import { AuthServiceImpl } from '@features/auth/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
 
     provideAuthService(),
-    provideAuthState()
+    provideAuthState(),
+    AuthServiceImpl,
   ]
 };
