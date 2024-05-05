@@ -1,8 +1,8 @@
-import {IToken} from "../../../@shared";
+import {IToken} from "@shared/models";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
-import {AuthService} from "../../../@core/services";
+import {AuthService} from "@shared/services";
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -13,10 +13,10 @@ export class AuthServiceImpl extends AuthService {
   }
 
   public logIn(credentials: { login: string; password: string }): Observable<IToken> {
-    return this._http.post<IToken>('api/User/login', credentials);
+    return this._http.post<IToken>("api/User/login", credentials);
   }
 
-  public reg(credentials: { login: string; password: string; confirmPassword: string }): Observable<boolean> {
-    return this._http.post<boolean>('api/User/registrate', credentials);
+  public reg(credentials: { login: string; password: string }): Observable<boolean> {
+    return this._http.post<boolean>("api/User/registrate", credentials);
   }
 }

@@ -3,8 +3,8 @@ import {AuthLoginComponent} from "@features/auth/сontainers/auth-login/auth-log
 import {AuthRegComponent} from "@features/auth/сontainers/auth-reg/auth-reg.component";
 
 export enum AuthRoutes {
-  LOGIN = 'login',
-  REG = 'reg'
+  LOGIN = "login",
+  REG = "reg"
 }
 
 export const routes: Routes = [
@@ -17,8 +17,8 @@ export const routes: Routes = [
     component: AuthRegComponent
   },
   {
-    path: '',
-    pathMatch: 'full',
+    path: "",
+    pathMatch: "full",
     redirectTo: AuthRoutes.LOGIN
   }
 ]

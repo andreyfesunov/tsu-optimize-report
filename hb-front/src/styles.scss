@@ -1,25 +1,25 @@
-@forward 'scss/theme';
-@forward 'scss/mixins';
+@forward "scss/theme";
+@forward "scss/mixins";
 
-@use '@angular/material' as mat;
-@use '@angular/material-experimental' as matx;
-@use 'scss/mixins/typography';
+@use "@angular/material" as mat;
+@use "@angular/material-experimental" as matx;
+@use "scss/mixins/typography";
 
 $theme: matx.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: matx.$m3-blue-palette,
-      tertiary: matx.$m3-chartreuse-palette,
-    ),
-    typography: (
-      brand-family: 'Comic Sans',
-      bold-weight: 900
-    ),
-    density: (
-      scale: -1
+    (
+      color: (
+        theme-type: light,
+        primary: matx.$m3-blue-palette,
+        tertiary: matx.$m3-chartreuse-palette,
+      ),
+      typography: (
+        brand-family: "Comic Sans",
+        bold-weight: 900
+      ),
+      density: (
+        scale: -1
+      )
     )
-  )
 );
 
 @include mat.core();
@@ -28,6 +28,7 @@ $theme: matx.define-theme(
 :root {
   @include mat.all-component-themes($theme);
 }
+
 /* You can add global styles to this file, and also import other style files */
 h1 {
   margin: 0px;

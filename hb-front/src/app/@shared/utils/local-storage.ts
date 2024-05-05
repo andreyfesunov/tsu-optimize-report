@@ -10,8 +10,8 @@ export function fromLocalStorage(key: string): Observable<string | undefined> {
       }
     }
 
-    window.addEventListener('storage', handler);
+    window.addEventListener("storage", handler);
 
-    return () => window.removeEventListener('storage', handler)
+    return () => window.removeEventListener("storage", handler)
   })
 }

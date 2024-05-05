@@ -1,2 +1,2 @@
 export * from "@shared/services/auth.service";
-export * from "./router.service";
+export * from "./router-impl.service";

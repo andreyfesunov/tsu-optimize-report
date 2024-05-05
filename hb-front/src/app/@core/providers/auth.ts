@@ -4,10 +4,11 @@ import {AuthServiceImpl} from "@features/auth/services";
 import {AuthState} from "@shared/states";
 import {AuthStateImpl} from "@features/auth/states";
 
-export function provideAuthService(): Provider {
-  return {provide: AuthService, useClass: AuthServiceImpl}
-}
+const authServiceProvider: Provider = {provide: AuthService, useClass: AuthServiceImpl};
 
-export function provideAuthState(): Provider {
-  return {provide: AuthState, useClass: AuthStateImpl};
-}
+const authStateProvider: Provider = {provide: AuthState, useClass: AuthStateImpl};
+
+export const authProviders = [
+  authServiceProvider,
+  authStateProvider
+];

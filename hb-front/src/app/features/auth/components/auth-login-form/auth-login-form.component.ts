@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { MatInputModule } from "@angular/material/input";
-import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { RouterService } from "@core/services";
+import {Component, EventEmitter, Output} from "@angular/core";
+import {MatInputModule} from "@angular/material/input";
+import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatButtonModule} from "@angular/material/button";
+import {MatFormFieldModule} from "@angular/material/form-field";
 
 @Component({
-  selector: 'app-auth-login-form',
+  selector: "app-auth-login-form",
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -14,22 +13,23 @@ import { RouterService } from "@core/services";
     MatInputModule,
     MatButtonModule,
   ],
-  templateUrl: './auth-login-form.component.html',
-  styleUrls: ['../../auth-form-base.scss']
+  templateUrl: "./auth-login-form.component.html",
+  styleUrls: ["../auth-form-base.scss"]
 })
 export class AuthLoginFormComponent {
+  public constructor(
+    private readonly _fb: NonNullableFormBuilder,
+  ) {
+  }
+
   @Output() public readonly submitEvent: EventEmitter<{ login: string; password: string }> = new EventEmitter<{
     login: string;
     password: string
   }>()
 
-  protected readonly form: FormGroup<IAuthLoginForm> = this._buildForm();
+  @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  public constructor(
-    private readonly _fb: NonNullableFormBuilder,
-    private readonly _routerService: RouterService,
-  ) {
-  }
+  protected readonly form: FormGroup<IAuthLoginForm> = this._buildForm();
 
   protected submit(): void {
     if (this.form.invalid) {
@@ -45,13 +45,13 @@ export class AuthLoginFormComponent {
   }
 
   protected toRegister(): void {
-    this._routerService.navigate(['auth/reg']);
+    this.redirectEvent.next();
   }
 
   private _buildForm(): FormGroup<IAuthLoginForm> {
     return this._fb.group<IAuthLoginForm>({
-      login: this._fb.control<string>('', Validators.required),
-      password: this._fb.control<string>('', Validators.required)
+      login: this._fb.control<string>("", Validators.required),
+      password: this._fb.control<string>("", Validators.required)
     })
   }
 }
