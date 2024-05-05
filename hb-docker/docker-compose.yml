@@ -11,9 +11,11 @@
   tsu-frontend:
     container_name: tsu-frontend
     build: ../hb-front
+    image: tsu-frontend
   tsu-backend:
     container_name: tsu-backend
     build: ../hb-back
+    image: tsu-backend
     develop:
       watch:
         - action: rebuild

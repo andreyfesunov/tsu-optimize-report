@@ -63,9 +63,14 @@ namespace BackendBase.Services
             if (userExistsCheck != null)
                 throw new UnauthorizedAccessException();
 
-            var user = _mapper.Map<User>(registrationDto);
-            user.Id = new Guid();
-            user.Password = PasswordUtils.GetPasswordHash(registrationDto.Password);
+            var user = new User
+            {
+                Id = new Guid(),
+                Password = PasswordUtils.GetPasswordHash(registrationDto.Password),
+                Email = registrationDto.Email,
+                Firstname = "",
+                Lastname = ""
+            };
             var userAdded = await _userRepository.AddEntity(user);
 
             return userAdded.Id.ToString();

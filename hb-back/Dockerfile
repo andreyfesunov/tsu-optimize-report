@@ -12,6 +12,8 @@ COPY . .
 WORKDIR "/src/"
 RUN dotnet build "BackendBase.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+FROM tsu-debugger as debugger
+
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "BackendBase.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
@@ -19,4 +21,5 @@ RUN dotnet publish "BackendBase.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=debugger /vsdbg /vsdbg
 ENTRYPOINT ["dotnet", "BackendBase.dll"]
