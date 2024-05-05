@@ -22,8 +22,8 @@ export class AuthLoginFormComponent {
   ) {
   }
 
-  @Output() public readonly submitEvent: EventEmitter<{ login: string; password: string }> = new EventEmitter<{
-    login: string;
+  @Output() public readonly submitEvent: EventEmitter<{ email: string; password: string }> = new EventEmitter<{
+    email: string;
     password: string
   }>()
 
@@ -37,7 +37,7 @@ export class AuthLoginFormComponent {
     }
 
     const request = {
-      login: this.form.controls.login.value,
+      email: this.form.controls.email.value,
       password: this.form.controls.password.value
     };
 
@@ -50,13 +50,13 @@ export class AuthLoginFormComponent {
 
   private _buildForm(): FormGroup<IAuthLoginForm> {
     return this._fb.group<IAuthLoginForm>({
-      login: this._fb.control<string>("", Validators.required),
+      email: this._fb.control<string>("", [Validators.required, Validators.email]),
       password: this._fb.control<string>("", Validators.required)
     })
   }
 }
 
 export interface IAuthLoginForm {
-  login: FormControl<string>;
+  email: FormControl<string>;
   password: FormControl<string>;
 }

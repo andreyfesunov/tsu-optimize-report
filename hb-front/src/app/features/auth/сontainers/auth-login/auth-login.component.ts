@@ -23,7 +23,7 @@ export class AuthLoginComponent extends SubscriptionComponent {
     super();
   }
 
-  protected onSubmit(eventData: { login: string, password: string }): void {
+  protected onSubmit(eventData: { email: string, password: string }): void {
     this.subscription.add(this._authService.logIn(eventData).subscribe());
   }
 

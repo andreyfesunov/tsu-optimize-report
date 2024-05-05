@@ -8,15 +8,15 @@
     </div>
     <form [formGroup]="form" class="register__form">
       <mat-form-field appearance="outline">
-        <mat-label>Логин</mat-label>
-        <input [formControl]="form.controls.login" formControlName="login" matInput>
+        <mat-label>Email</mat-label>
+        <input [formControl]="form.controls.email" matInput>
         <!-- <mat-error *ngIf="email.hasError("required")">Email обязательное поле</mat-error>     -->
         <!-- <mat-error *ngIf="email.hasError("email")">Email не валидный</mat-error>     -->
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Пароль</mat-label>
         <!-- <mat-error *ngIf="password.hasError("required")">Пароль обязательное поле</mat-error> -->
-        <input [formControl]="form.controls.password" formControlName="password" matInput type="password">
+        <input [formControl]="form.controls.password" matInput type="password">
       </mat-form-field>
     </form>
     <div class="register__buttons">

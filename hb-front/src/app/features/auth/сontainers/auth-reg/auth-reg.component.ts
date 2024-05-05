@@ -23,7 +23,7 @@ export class AuthRegComponent extends SubscriptionComponent {
     super();
   }
 
-  protected onSubmit(params: { login: string; password: string }): void {
+  protected onSubmit(params: { email: string; password: string }): void {
     this.subscription.add(this._authService.reg(params).subscribe());
   }
 

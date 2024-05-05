@@ -93,7 +93,8 @@
               "buildTarget": "hb-front:build:production"
             },
             "development": {
-              "buildTarget": "hb-front:build:development"
+              "buildTarget": "hb-front:build:development",
+              "proxyConfig": "proxy-dev.conf.js"
             }
           },
           "defaultConfiguration": "development"

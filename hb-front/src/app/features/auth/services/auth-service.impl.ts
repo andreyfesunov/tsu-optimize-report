@@ -12,11 +12,11 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public logIn(credentials: { login: string; password: string }): Observable<IToken> {
-    return this._http.post<IToken>("api/User/login", credentials);
+  public logIn(credentials: { email: string; password: string }): Observable<IToken> {
+    return this._http.post<IToken>("/api/User/log-in", credentials);
   }
 
-  public reg(credentials: { login: string; password: string }): Observable<boolean> {
-    return this._http.post<boolean>("api/User/registrate", credentials);
+  public reg(credentials: { email: string; password: string }): Observable<boolean> {
+    return this._http.post<boolean>("/api/User/reg", credentials);
   }
 }

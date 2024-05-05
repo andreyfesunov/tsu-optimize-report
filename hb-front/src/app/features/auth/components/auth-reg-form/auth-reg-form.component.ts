@@ -22,8 +22,8 @@ export class AuthRegFormComponent {
   ) {
   }
 
-  @Output() public readonly submitEvent: EventEmitter<{ login: string; password: string }> = new EventEmitter<{
-    login: string;
+  @Output() public readonly submitEvent: EventEmitter<{ email: string; password: string }> = new EventEmitter<{
+    email: string;
     password: string
   }>()
 
@@ -33,7 +33,7 @@ export class AuthRegFormComponent {
 
   private _buildForm(): FormGroup<IAuthRegForm> {
     return this._fb.group<IAuthRegForm>({
-      login: this._fb.control<string>("", Validators.required),
+      email: this._fb.control<string>("", [Validators.required, Validators.email]),
       password: this._fb.control<string>("", Validators.required)
     })
   }
@@ -48,8 +48,8 @@ export class AuthRegFormComponent {
     }
 
     const request = {
-      login: this.form.controls.login.value,
-      password: this.form.controls.login.value
+      email: this.form.controls.email.value,
+      password: this.form.controls.password.value
     };
 
     this.submitEvent.next(request);
@@ -57,6 +57,6 @@ export class AuthRegFormComponent {
 }
 
 export interface IAuthRegForm {
-  login: FormControl<string>;
+  email: FormControl<string>;
   password: FormControl<string>;
 }

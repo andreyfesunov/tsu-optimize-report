@@ -44,10 +44,10 @@ namespace BackendBase.Services
         {
             var user = await _userRepository.GetUserByEmail(loginDto.Email);
             if (user == null)
-                throw new UnauthorizedAccessException("1"); //Wrong email
+                throw new UnauthorizedAccessException("Not found user with given email");
 
             if (PasswordUtils.GetPasswordHash(loginDto.Password) != user.Password)
-                throw new UnauthorizedAccessException("2"); //Wrong password
+                throw new UnauthorizedAccessException("Wrong password");
 
             var userLogin = new UserLoginDto
             {
@@ -59,10 +59,8 @@ namespace BackendBase.Services
         public async Task<string> Reg(RegistrationDto registrationDto)
         {
             var userExistsCheck = await _userRepository.GetUserByEmail(registrationDto.Email);
-            if (userExistsCheck != null)
-                throw new UnauthorizedAccessException();
 
-            if (registrationDto.Password != registrationDto.ConfirmPassword)
+            if (userExistsCheck != null)
                 throw new UnauthorizedAccessException();
 
             var user = _mapper.Map<User>(registrationDto);
