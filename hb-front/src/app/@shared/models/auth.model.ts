@@ -5,6 +5,5 @@ export interface IUser {
 }
 
 export interface IToken {
-  id: string,
-  accessToken: string
+  token: string
 }

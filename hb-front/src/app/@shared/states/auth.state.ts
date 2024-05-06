@@ -26,7 +26,26 @@ export abstract class AuthState<TEntity> {
   protected constructor(private readonly _tokenKey: string) {
   }
 
+  public isTokenValid(): boolean {
+    const token = localStorage.getItem(this._tokenKey);
+    if (token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(atob(base64));
+        const exp = payload.exp;
+        if (exp) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            return currentTime < exp;
+        }
+    }
+    return false;
+  }
+
   public setToken(accessToken: string): void {
     localStorage.setItem(this._tokenKey, JSON.stringify(accessToken));
+  }
+
+  public removeToken(): void {
+    localStorage.removeItem(this._tokenKey);
   }
 }

@@ -16,9 +16,10 @@ export const routes: Routes = [
     path: AuthRoutes.REG,
     component: AuthRegComponent
   },
-  {
-    path: "",
-    pathMatch: "full",
-    redirectTo: AuthRoutes.LOGIN
-  }
+  // {
+  //  //ВСЁ ЛОМАЕТ МНЕ Ё ПЕ РЕ СЕ ТЕ! :*-(
+  //   path: "",
+  //   pathMatch: "full",
+  //   redirectTo: AuthRoutes.LOGIN
+  // }
 ]

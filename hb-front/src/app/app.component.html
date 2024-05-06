@@ -1,0 +1,8 @@
+<div *ngIf="isAuthorizedFn()" class="container">
+  <app-navigation></app-navigation>
+  <main class="main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<router-outlet *ngIf="!isAuthorizedFn()"></router-outlet>

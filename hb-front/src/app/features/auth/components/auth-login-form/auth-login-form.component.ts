@@ -3,6 +3,7 @@ import {MatInputModule} from "@angular/material/input";
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-auth-login-form",
@@ -19,6 +20,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 export class AuthLoginFormComponent {
   public constructor(
     private readonly _fb: NonNullableFormBuilder,
+    private readonly _router: Router,
   ) {
   }
 
