@@ -32,7 +32,7 @@ export class AppComponent  {
   ) { }
 
   public isAuthorizedFn(): boolean {
-    let test = this._authState.isTokenValid() && (["/reg", "/login"].every(url => this._router.url !== url));
+    let test = this._authState.isTokenValid();
     return test;
   }
 }

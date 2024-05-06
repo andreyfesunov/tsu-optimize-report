@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { authGuard } from "@features/auth/guards";
+import { notAuthGuard } from "@features/auth/guards";
 import { AuthLoginComponent } from "@features/auth/сontainers/auth-login/auth-login.component";
 import { AuthRegComponent } from "@features/auth/сontainers/auth-reg/auth-reg.component";
 import { ReportsComponent } from "@shared/components/reports/reports.component";
@@ -28,11 +29,14 @@ export const routes: Routes = [
   // },
   {
     path: "login",
-    component: AuthLoginComponent
+    component: AuthLoginComponent,
+    canActivate: [notAuthGuard]    
   },
   {
     path: "reg",
-    component: AuthRegComponent
+    component: AuthRegComponent,
+    canActivate: [notAuthGuard]
+
   },
   {
     path: "",

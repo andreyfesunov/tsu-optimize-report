@@ -9,3 +9,11 @@ export const authGuard: CanActivateFn = () => {
   if(!isAuthorized) inject(Router).navigate(["login"]);
   return isAuthorized;
 }
+
+export const notAuthGuard: CanActivateFn = () => {
+  const state: AuthState<IUser> = inject(AuthState);
+  const isNotAuthorized = state.isTokenValid();
+  if(!isNotAuthorized) return true;
+  inject(Router).navigate(["main"]);
+  return false;
+}
