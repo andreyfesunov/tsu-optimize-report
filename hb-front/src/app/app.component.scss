@@ -8,11 +8,12 @@ $phone-media: 500px;
     height: 100%;
     margin: 0px;
     display: grid;
-    grid-template-columns: 360px 1fr;
+    // grid-template-columns: 360px 1fr;
+    grid-template-columns: 96px 1fr;
 
-    @media(max-width: $tablet-media) {
-        grid-template-columns: 80px 1fr;
-    }
+    // @media(max-width: $tablet-media) {
+    //     grid-template-columns: 96px 1fr;
+    // }
 
     @media(max-width: $phone-media) {
         grid-template-columns: 1fr;
