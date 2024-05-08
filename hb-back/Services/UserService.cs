@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using BackendBase.Utils;
+using BackendBase.Models.Enum;
 
 namespace BackendBase.Services
 {
@@ -56,7 +57,7 @@ namespace BackendBase.Services
             return userLogin;
         }
 
-        public async Task<string> Reg(RegistrationDto registrationDto)
+        public async Task<RoleUserEnum> Reg(RegistrationDto registrationDto)
         {
             var userExistsCheck = await _userRepository.GetUserByEmail(registrationDto.Email);
 
@@ -69,11 +70,12 @@ namespace BackendBase.Services
                 Password = PasswordUtils.GetPasswordHash(registrationDto.Password),
                 Email = registrationDto.Email,
                 Firstname = "",
-                Lastname = ""
+                Lastname = "",
+                RoleUsers = RoleUserEnum.User,
             };
             var userAdded = await _userRepository.AddEntity(user);
 
-            return userAdded.Id.ToString();
+            return userAdded.RoleUsers;
         }
 
         private string GenerateJwt(UserDto user)

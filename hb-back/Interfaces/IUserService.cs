@@ -1,4 +1,5 @@
 ﻿using BackendBase.Dto;
+using BackendBase.Models.Enum;
 
 namespace BackendBase.Interfaces
 {
@@ -7,6 +8,6 @@ namespace BackendBase.Interfaces
         Task<List<UserDto>> GetAllUsers();
         Task<UserDto> GetUserById(Guid userId);
         Task<UserLoginDto> LogIn(LoginDto loginDto);
-        Task<string> Reg(RegistrationDto registrationDto);
+        Task<RoleUserEnum> Reg(RegistrationDto registrationDto);
     }
 }
