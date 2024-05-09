@@ -4,8 +4,6 @@
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5243:80"
-    depends_on:
-      - tsu-debugger
   tsu-frontend:
     ports:
       - "8080:80"
@@ -22,7 +20,3 @@
       POSTGRES_PASSWORD: root
     ports:
       - "6789:5432"
-  tsu-debugger:
-    container_name: tsu-debugger
-    build: images/debugger
-    image: tsu-debugger

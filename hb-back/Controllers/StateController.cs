@@ -1,6 +1,4 @@
-﻿using BackendBase.Dto;
-using BackendBase.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using BackendBase.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using BackendBase.Models;
 using BackendBase.Helpers.CRUD;
