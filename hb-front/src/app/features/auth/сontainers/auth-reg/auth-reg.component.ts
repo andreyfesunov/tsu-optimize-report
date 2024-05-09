@@ -17,7 +17,7 @@ import { Router } from "@angular/router";
   `
 })
 export class AuthRegComponent extends SubscriptionComponent {
-  constructor(
+  public constructor(
     private readonly _authService: AuthService,
     @Inject(AUTH_ROUTER) private readonly _routerService: RouterService,
     private readonly _routerNORMAL: Router

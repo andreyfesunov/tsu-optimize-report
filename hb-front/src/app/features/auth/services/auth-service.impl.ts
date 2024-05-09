@@ -16,7 +16,7 @@ export class AuthServiceImpl extends AuthService {
     return this._http.post<IToken>("/api/User/log-in", credentials);
   }
 
-  public reg(credentials: { email: string; password: string }): Observable<boolean> {
-    return this._http.post<boolean>("/api/User/reg", credentials);
+  public reg(credentials: { email: string; password: string }): Observable<string> {
+    return this._http.post<string>("/api/User/reg", credentials);
   }
 }
