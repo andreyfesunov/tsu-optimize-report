@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "tsu-backend",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "tsu-adminer": "StartWithoutDebugging",
+        "tsu-backend": "StartDebugging",
+        "tsu-frontend": "StartWithoutDebugging",
+        "tsu-nginx": "StartWithoutDebugging",
+        "tsu-psql": "StartWithoutDebugging"
+      }
+    }
+  }
+}
