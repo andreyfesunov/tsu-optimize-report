@@ -17,7 +17,6 @@ namespace BackendBase.Helpers.CRUD
 
 
         [HttpPost("create")]
-        [RoleFilter(RoleUserEnum.Admin)]
         public async Task<ActionResult<TEntity>> Create(TEntity entity)
         {
             try
@@ -32,7 +31,6 @@ namespace BackendBase.Helpers.CRUD
         }
 
         [HttpGet("{Id}")]
-        [RoleFilter(RoleUserEnum.Admin)]
         public async Task<ActionResult<TEntity>> GetById(Guid Id)
         {
             try
@@ -47,7 +45,6 @@ namespace BackendBase.Helpers.CRUD
         }
 
         [HttpGet("getAll")]
-        [RoleFilter(RoleUserEnum.Admin)]
         public async Task<ActionResult<ICollection<TEntity>>> GetAll()
         {
             try
@@ -62,7 +59,6 @@ namespace BackendBase.Helpers.CRUD
         }
 
         [HttpPut("update")]
-        [RoleFilter(RoleUserEnum.Admin)]
         public async Task<ActionResult<TEntity>> Update(TEntity entity)
         {
             try

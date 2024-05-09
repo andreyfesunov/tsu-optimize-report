@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Services
 {
-    public class StateUserService : CRUDServiceBase<StateUser>, IStateUserService
+    public class StateUserService //: CRUDServiceBase<StateUser>, IStateUserService
     {
         public StateUserService(StateUserRepository repository)
         {
-            _repository = repository;
+            //_repository = repository;
         }
     }
 }

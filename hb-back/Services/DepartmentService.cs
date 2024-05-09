@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Services
 {
-    public class DepartmentService : CRUDServiceBase<Department>, IDepartmentService
+    public class DepartmentService //: CRUDServiceBase<Department>, IDepartmentService
     {
         public DepartmentService(DepartmentRepository repository)
         {
-            _repository = repository;
+            //_repository = repository;
         }
     }
 }

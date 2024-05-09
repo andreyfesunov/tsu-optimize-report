@@ -1,5 +1,6 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Interfaces;
+using BackendBase.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendBase.Controllers

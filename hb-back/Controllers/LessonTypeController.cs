@@ -7,10 +7,10 @@ namespace BackendBase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LessonTypeController : CRUDControllerBase<LessonType>
+    public class LessonTypeController //: CRUDControllerBase<LessonType>
     {
         public LessonTypeController(ILessonTypeService serivce)
-            : base(serivce)
+            //: base(serivce)
         {
         }
     }

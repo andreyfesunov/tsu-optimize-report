@@ -39,12 +39,12 @@ builder.Services.AddScoped<RecordRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReportService, ReportService>();
-builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-builder.Services.AddScoped<IEventTypeService, EventTypeService>();
-builder.Services.AddScoped<IInstituteService, InstituteService>();
-builder.Services.AddScoped<ILessonTypeService, LessonTypeService>();
-builder.Services.AddScoped<IStateService, StateService>();
-builder.Services.AddScoped<IStateUserService, StateUserService>();
+//builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+//builder.Services.AddScoped<IEventTypeService, EventTypeService>();
+//builder.Services.AddScoped<IInstituteService, InstituteService>();
+//builder.Services.AddScoped<ILessonTypeService, LessonTypeService>();
+//builder.Services.AddScoped<IStateService, StateService>();
+//builder.Services.AddScoped<IStateUserService, StateUserService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

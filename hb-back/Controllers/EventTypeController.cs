@@ -7,10 +7,10 @@ namespace BackendBase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventTypeController : CRUDControllerBase<EventType>
+    public class EventTypeController //: CRUDControllerBase<EventType>
     {
         public EventTypeController(IEventTypeService serivce)
-            : base(serivce)
+            //: base(serivce)
         {
         }
     }

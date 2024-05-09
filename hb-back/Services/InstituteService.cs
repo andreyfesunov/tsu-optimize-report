@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Services
 {
-    public class InstituteService : CRUDServiceBase<Institute>, IInstituteService
+    public class InstituteService //: CRUDServiceBase<Institute>, IInstituteService
     {
         public InstituteService(InstituteRepository repository)
         {
-            _repository = repository;
+            //_repository = repository;
         }
     }
 }
