@@ -1,4 +1,4 @@
-import {AppRoutes} from "@core/models";
+import {AppRoutes} from "@core/models/routes/enums";
 
 export const toAuth = [AppRoutes.AUTH];
 

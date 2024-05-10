@@ -1,11 +1,10 @@
 import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {RouterModule} from '@angular/router';
-import {ITokenData, toLogin} from '@core/models';
-import {AuthState, RouterService} from "@core/abstracts";
+import {NavItemModel} from "@core/models/navigation";
 
 @Component({
     selector: 'app-navigation-bar',
@@ -20,30 +19,12 @@ import {AuthState, RouterService} from "@core/abstracts";
     template: `
         <div class="navigation">
             <nav class="navigation__category">
-                <a mat-button class="item-wrapper" routerLink="main" routerLink="main"
-                   routerLinkActive="mdc-list-item--activated">
+                <a *ngFor="let item of items" mat-button class="item-wrapper" [routerLink]="item.path"
+                   routerLinkActive="mdc-list-item--activated" (click)="item.fn()">
                     <div class="navigation__category__item">
-                        <mat-icon class="navigation__category__item__icon material-symbols-outlined">person</mat-icon>
-                        <span>Профиль</span>
-                    </div>
-                </a>
-                <a mat-button class="item-wrapper" routerLink="products" routerLinkActive="mdc-list-item--activated">
-                    <div class="navigation__category__item">
-                        <mat-icon class="navigation__category__item__icon material-symbols-outlined">grocery</mat-icon>
-                        <span>Продукты</span>
-                    </div>
-                </a>
-                <a mat-button class="item-wrapper" routerLink="calendar" routerLinkActive="mdc-list-item--activated">
-                    <div class="navigation__category__item">
-                        <mat-icon class="navigation__category__item__icon material-symbols-outlined">calendar_month
-                        </mat-icon>
-                        <span>Календарь</span>
-                    </div>
-                </a>
-                <a mat-button class="item-wrapper" (click)="logout();">
-                    <div class="navigation__category__item">
-                        <mat-icon class="navigation__category__item__icon material-symbols-outlined">logout</mat-icon>
-                        <span>Выйти</span>
+                        <mat-icon
+                                class="navigation__category__item__icon material-symbols-outlined">{{ item.icon }}</mat-icon>
+                        <span>{{ item.text }}</span>
                     </div>
                 </a>
             </nav>
@@ -52,14 +33,5 @@ import {AuthState, RouterService} from "@core/abstracts";
     styleUrl: './navigation-bar.component.scss'
 })
 export class NavigationBarComponent {
-    constructor(
-        private readonly _authState: AuthState<ITokenData>,
-        private readonly _router: RouterService
-    ) {
-    }
-
-    public logout(): void {
-        this._authState.removeToken();
-        this._router.navigate(toLogin);
-    }
+    @Input() public items: NavItemModel[] = [];
 }

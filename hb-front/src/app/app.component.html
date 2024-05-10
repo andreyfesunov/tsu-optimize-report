@@ -1,6 +1,6 @@
 <ng-container *ngIf="valid$ | async">
     <div class="container">
-        <app-navigation-bar></app-navigation-bar>
+        <app-navigation-bar [items]="navItems"></app-navigation-bar>
 
         <main class="main">
             <router-outlet></router-outlet>

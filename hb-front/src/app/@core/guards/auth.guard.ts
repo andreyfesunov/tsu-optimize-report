@@ -1,11 +1,11 @@
 import {CanActivateFn} from "@angular/router";
 import {inject} from "@angular/core";
-import {ITokenData, toLogin, toMain} from "@core/models";
+import {ITokenModel, toLogin, toMain} from "@core/models";
 import {AuthState, RouterService} from "@core/abstracts";
 import {map, tap} from "rxjs";
 
 export const authGuard: CanActivateFn = () => {
-    const state: AuthState<ITokenData> = inject(AuthState);
+    const state: AuthState<ITokenModel> = inject(AuthState);
     const router: RouterService = inject(RouterService);
 
     return state.valid$.pipe(
@@ -14,7 +14,7 @@ export const authGuard: CanActivateFn = () => {
 }
 
 export const notAuthGuard: CanActivateFn = () => {
-    const state: AuthState<ITokenData> = inject(AuthState);
+    const state: AuthState<ITokenModel> = inject(AuthState);
     const router: RouterService = inject(RouterService);
 
     return state.valid$.pipe(

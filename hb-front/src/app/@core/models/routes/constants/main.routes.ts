@@ -1,4 +1,4 @@
-import {toMain} from "@core/models";
-import {MainRoutes} from "@core/models/routes/enums/main.routes";
+import {toMain} from "@core/models/routes/constants/app.routes";
+import {MainRoutes} from "@core/models";
 
 export const toReports = [...toMain, MainRoutes.REPORTS];

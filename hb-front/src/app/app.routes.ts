@@ -1,7 +1,6 @@
 import {Routes} from "@angular/router";
 import {authGuard, notAuthGuard} from "@core/guards";
-import {AppRoutes} from "@core/models";
-import {MainRoutes} from "@core/models/routes/enums/main.routes";
+import {AppRoutes, MainRoutes} from "@core/models";
 
 export const routes: Routes = [
     {
