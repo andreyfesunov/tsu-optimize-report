@@ -7,3 +7,9 @@ export function parseJwt(token: string) {
 
     return JSON.parse(jsonPayload);
 }
+
+export function isTokenValid(token: string | undefined): boolean {
+    if (!token) return false;
+    const currentTime = Math.floor(Date.now() / 1000);
+    return currentTime < parseJwt(token).exp;
+}

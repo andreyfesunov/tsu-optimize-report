@@ -1,8 +1,5 @@
-export interface IUser {
-  email: string;
-  password: string;
-}
-
-export interface IToken {
-  token: string
+export interface ITokenData {
+    exp: number;
+    iss: string;
+    aud: string;
 }

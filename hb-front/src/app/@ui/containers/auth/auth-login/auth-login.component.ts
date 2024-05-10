@@ -1,9 +1,10 @@
 import {Component} from "@angular/core";
 import {SubscriptionComponent} from "@ui/widgets/utils/subscription/subscription.component";
 import {RouterService} from "@core/abstracts/services/router.service";
-import {IUser, toReg} from "@core/models";
+import {ITokenData, toMain, toReg} from "@core/models";
 import {AuthLoginFormComponent} from "@ui/widgets";
 import {AuthService, AuthState} from "@core/abstracts";
+import {ILoginRegDto} from "@core/dtos";
 
 @Component({
     standalone: true,
@@ -17,17 +18,16 @@ import {AuthService, AuthState} from "@core/abstracts";
 export class AuthLoginComponent extends SubscriptionComponent {
     public constructor(
         private readonly _authService: AuthService,
-        private readonly _authState: AuthState<IUser>,
+        private readonly _authState: AuthState<ITokenData>,
         private readonly _routerService: RouterService
     ) {
         super();
     }
 
-    protected onSubmit(eventData: { email: string, password: string }): void {
+    protected onSubmit(eventData: ILoginRegDto): void {
         this.subscription.add(this._authService.logIn(eventData).subscribe((res) => {
-            console.log(res.token);
             this._authState.setToken(res.token);
-            // this._routerNORMAL.navigate(["main"]);
+            this._routerService.navigate(toMain);
         }));
     }
 

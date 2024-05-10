@@ -1,3 +1,3 @@
 export * from "./exists";
 export * from "./jwt";
-export * from "./local-storage";
+export * from "./storage";

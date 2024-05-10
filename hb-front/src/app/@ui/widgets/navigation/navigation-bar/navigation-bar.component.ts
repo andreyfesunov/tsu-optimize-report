@@ -3,9 +3,9 @@ import {Component} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
-import {Router, RouterModule} from '@angular/router';
-import {IUser} from '@core/models';
-import {AuthState} from "@core/abstracts";
+import {RouterModule} from '@angular/router';
+import {ITokenData, toLogin} from '@core/models';
+import {AuthState, RouterService} from "@core/abstracts";
 
 @Component({
     selector: 'app-navigation-bar',
@@ -53,13 +53,13 @@ import {AuthState} from "@core/abstracts";
 })
 export class NavigationBarComponent {
     constructor(
-        private readonly _authState: AuthState<IUser>,
-        private readonly _router: Router
+        private readonly _authState: AuthState<ITokenData>,
+        private readonly _router: RouterService
     ) {
     }
 
     public logout(): void {
         this._authState.removeToken();
-        this._router.navigate(["login"]);
+        this._router.navigate(toLogin);
     }
 }

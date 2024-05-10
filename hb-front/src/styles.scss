@@ -6,20 +6,20 @@
 @use "scss/mixins/typography";
 
 $theme: matx.define-theme(
-    (
-      color: (
-        theme-type: light,
-        primary: matx.$m3-red-palette,
-        tertiary: matx.$m3-chartreuse-palette,
-      ),
-      typography: (
-        brand-family: "Comic Sans",
-        bold-weight: 900
-      ),
-      density: (
-        scale: -1
-      )
-    )
+                (
+                        color: (
+                                theme-type: light,
+                                primary: matx.$m3-red-palette,
+                                tertiary: matx.$m3-chartreuse-palette,
+                        ),
+                        typography: (
+                                brand-family: "Comic Sans",
+                                bold-weight: 900
+                        ),
+                        density: (
+                                scale: -1
+                        )
+                )
 );
 
 @include mat.core();

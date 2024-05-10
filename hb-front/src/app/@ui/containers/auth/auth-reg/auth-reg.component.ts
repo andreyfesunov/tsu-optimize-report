@@ -3,6 +3,7 @@ import {RouterService} from "@core/abstracts/services/router.service";
 import {AuthRegFormComponent, SubscriptionComponent} from "@ui/widgets";
 import {toLogin} from "@core/models";
 import {AuthService} from "@core/abstracts";
+import {ILoginRegDto} from "@core/dtos";
 
 @Component({
     standalone: true,
@@ -21,7 +22,7 @@ export class AuthRegComponent extends SubscriptionComponent {
         super();
     }
 
-    protected onSubmit(params: { email: string; password: string }): void {
+    protected onSubmit(params: ILoginRegDto): void {
         this.subscription.add(this._authService.reg(params).subscribe(() => this.onLogin()));
     }
 

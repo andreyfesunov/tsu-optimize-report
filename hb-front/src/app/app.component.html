@@ -1,8 +1,13 @@
-<div *ngIf="isAuthorizedFn()" class="container">
-    <app-navigation-bar></app-navigation-bar>
-    <main class="main">
-        <router-outlet></router-outlet>
-    </main>
-</div>
+<ng-container *ngIf="valid$ | async">
+    <div class="container">
+        <app-navigation-bar></app-navigation-bar>
 
-<router-outlet *ngIf="!isAuthorizedFn()"></router-outlet>
+        <main class="main">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="invalid$ | async">
+    <router-outlet></router-outlet>
+</ng-container>

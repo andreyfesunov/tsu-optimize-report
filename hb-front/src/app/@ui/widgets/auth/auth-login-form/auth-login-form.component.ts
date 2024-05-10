@@ -3,6 +3,7 @@ import {MatInputModule} from "@angular/material/input";
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {ILoginRegDto} from "@core/dtos";
 
 @Component({
     selector: "app-auth-login-form",
@@ -22,10 +23,7 @@ export class AuthLoginFormComponent {
     ) {
     }
 
-    @Output() public readonly submitEvent: EventEmitter<{ email: string; password: string }> = new EventEmitter<{
-        email: string;
-        password: string
-    }>()
+    @Output() public readonly submitEvent: EventEmitter<ILoginRegDto> = new EventEmitter<ILoginRegDto>()
 
     @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
 
@@ -36,7 +34,7 @@ export class AuthLoginFormComponent {
             return this.form.markAllAsTouched();
         }
 
-        const request = {
+        const request: ILoginRegDto = {
             email: this.form.controls.email.value,
             password: this.form.controls.password.value
         };

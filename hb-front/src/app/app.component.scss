@@ -5,15 +5,11 @@ $tablet-media: 950px;
 $phone-media: 500px;
 
 .container {
-    height: 100%;
-    margin: 0px;
     display: grid;
-    // grid-template-columns: 360px 1fr;
     grid-template-columns: 96px 1fr;
 
-    // @media(max-width: $tablet-media) {
-    //     grid-template-columns: 96px 1fr;
-    // }
+    height: 100%;
+    margin: 0;
 
     @media(max-width: $phone-media) {
         grid-template-columns: 1fr;
@@ -23,10 +19,11 @@ $phone-media: 500px;
 
 .main {
     overflow: auto;
-    &::-webkit-scrollbar{
-        width: 0px;
+
+    &::-webkit-scrollbar {
+        width: 0;
     }
-    
+
     @media(max-width: $phone-media) {
         grid-column: 1;
         grid-row: 1;

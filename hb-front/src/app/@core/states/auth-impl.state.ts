@@ -1,7 +1,9 @@
-import {IUser} from "@core/models";
+import {ITokenData} from "@core/models";
 import {AuthState} from "@core/abstracts/states/auth.state";
+import {Injectable} from "@angular/core";
 
-export class AuthImplState extends AuthState<IUser> {
+@Injectable()
+export class AuthImplState extends AuthState<ITokenData> {
     constructor() {
         super("JWT_TOKEN");
     }
