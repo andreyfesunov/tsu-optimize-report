@@ -10,7 +10,7 @@ namespace BackendBase.Controllers
     public class EventTypeController //: CRUDControllerBase<EventType>
     {
         public EventTypeController(IEventTypeService serivce)
-            //: base(serivce)
+        //: base(serivce)
         {
         }
     }

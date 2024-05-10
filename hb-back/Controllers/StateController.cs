@@ -10,7 +10,7 @@ namespace BackendBase.Controllers
     public class StateController //: CRUDControllerBase<State>
     {
         public StateController(IStateService serivce)
-            //: base(serivce)
+        //: base(serivce)
         {
         }
     }

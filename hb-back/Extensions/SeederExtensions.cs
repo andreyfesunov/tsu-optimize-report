@@ -1,7 +1,5 @@
 ﻿using BackendBase.Data;
 using BackendBase.Factories;
-using BackendBase.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Extensions;
 
@@ -19,7 +17,6 @@ public static class SeederExtensions
         var institutes = InstituteFactory.Make();
         var departments = DepartmentFactory.Make(institutes.First());
         var jobs = JobFactory.Make();
-        var roles = RoleFactory.Make();
         var users = UserFactory.Make();
         var states = StateFactory.Make(departments.First(), jobs.First());
 
@@ -28,11 +25,9 @@ public static class SeederExtensions
         context.Institutes.AddRange(institutes);
         context.Departments.AddRange(departments);
         context.Jobs.AddRange(jobs);
-        context.Roles.AddRange(roles);
         context.Users.AddRange(users);
         context.States.AddRange(states);
 
-        context.RolesUsers.AddRange(RoleUserFactory.Make(roles, users));
         context.StatesUsers.AddRange(StateUserFactory.Make(users.First(), states.First()));
 
         context.SaveChanges();

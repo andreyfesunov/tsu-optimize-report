@@ -1,12 +1,15 @@
 import {Router} from "@angular/router";
-import {RouterService} from "@shared/services/router.service";
+import {RouterService} from "@core/abstracts/services/router.service";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class RouterServiceImpl extends RouterService {
-  constructor(private readonly _router: Router, private readonly _prefixParams: string[] = []) {
-    super();
-  }
+    constructor(private readonly _router: Router) {
+        super();
+    }
 
-  public navigate(params: string[]): Promise<boolean> {
-    return this._router.navigate([...this._prefixParams, ...params]);
-  }
+    /** For now just wrapper */
+    public navigate(params: string[]): Promise<boolean> {
+        return this._router.navigate(params);
+    }
 }

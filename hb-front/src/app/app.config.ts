@@ -7,15 +7,15 @@ import {jwtInterceptor, proxyInterceptor} from "@core/interceptors";
 import {authProviders, routersProviders} from "@core/providers";
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient(withInterceptors([
-      proxyInterceptor,
-      jwtInterceptor
-    ])),
-    provideAnimationsAsync(),
+    providers: [
+        provideRouter(routes),
+        provideHttpClient(withInterceptors([
+            proxyInterceptor,
+            jwtInterceptor
+        ])),
+        provideAnimationsAsync(),
 
-    ...routersProviders,
-    ...authProviders
-  ]
+        ...routersProviders,
+        ...authProviders
+    ]
 };

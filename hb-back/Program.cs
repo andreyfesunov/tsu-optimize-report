@@ -28,8 +28,6 @@ builder.Services.AddScoped<InstituteRepository>();
 builder.Services.AddScoped<JobRepository>();
 builder.Services.AddScoped<LessonRepository>();
 builder.Services.AddScoped<LessonTypeRepository>();
-builder.Services.AddScoped<RoleRepository>();
-builder.Services.AddScoped<RoleUserRepository>();
 builder.Services.AddScoped<StateRepository>();
 builder.Services.AddScoped<StateUserRepository>();
 builder.Services.AddScoped<UserRepository>();

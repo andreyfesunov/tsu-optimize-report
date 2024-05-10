@@ -1,51 +1,22 @@
-import { Routes } from "@angular/router";
-import { authGuard } from "@features/auth/guards";
-import { notAuthGuard } from "@features/auth/guards";
-import { AuthLoginComponent } from "@features/auth/сontainers/auth-login/auth-login.component";
-import { AuthRegComponent } from "@features/auth/сontainers/auth-reg/auth-reg.component";
-import { ReportsComponent } from "@shared/components/reports/reports.component";
-
-export enum AppRoutes {
-  AUTH = "auth",
-  ADMIN = "adm",
-  USER = "usr"
-}
+import {Routes} from "@angular/router";
+import {ReportsTabsComponent} from "@ui/widgets/reports/reports-tabs/reports-tabs.component";
+import {authGuard, notAuthGuard} from "@core/guards";
+import {AppRoutes} from "@core/models";
 
 export const routes: Routes = [
-  // {
-  //   path: AppRoutes.AUTH,
-  //   loadChildren: () => import("@features/auth/auth.routes").then(m => m.routes),
-  //   providers: []
-  // },
-  // {
-  //   path: "",
-  //   pathMatch: "full",
-  //   redirectTo: AppRoutes.AUTH
-  // },
-  // {
-  //   path: 'main',
-  //   component: ReportsComponent,
-  //   canActivate: [authGuard],
-  // },
-  {
-    path: "login",
-    component: AuthLoginComponent,
-    canActivate: [notAuthGuard]    
-  },
-  {
-    path: "reg",
-    component: AuthRegComponent,
-    canActivate: [notAuthGuard]
-
-  },
-  {
-    path: "",
-    pathMatch: "full",
-    redirectTo: "main",
-  },
-  {
-    path: 'main',
-    component: ReportsComponent,
-    canActivate: [authGuard]
-  },
+    {
+        path: AppRoutes.AUTH,
+        loadChildren: () => import("@ui/containers/auth/auth.routes").then(m => m.routes),
+        canActivate: [notAuthGuard]
+    },
+    {
+        path: AppRoutes.MAIN,
+        component: ReportsTabsComponent,
+        canActivate: [authGuard],
+    },
+    {
+        path: "",
+        pathMatch: "full",
+        redirectTo: AppRoutes.AUTH
+    }
 ];

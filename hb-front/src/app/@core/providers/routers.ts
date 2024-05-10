@@ -1,15 +1,10 @@
-import {FactoryProvider, Provider} from "@angular/core";
-import {AUTH_ROUTER} from "@shared/tokens/routers";
-import {Router} from "@angular/router";
-import {authRouterFactory} from "@core/factories/routers";
+import {Provider} from "@angular/core";
+import {RouterService} from "@core/abstracts";
+import {RouterServiceImpl} from "@core/services";
 
-const authRouterProvider: FactoryProvider = {
-  provide: AUTH_ROUTER,
-  useFactory: authRouterFactory,
-  deps: [Router],
-}
+const routerProvider: Provider = {provide: RouterService, useClass: RouterServiceImpl}
 
 export const routersProviders: Provider[] = [
-  authRouterProvider
+    routerProvider
 ];
 

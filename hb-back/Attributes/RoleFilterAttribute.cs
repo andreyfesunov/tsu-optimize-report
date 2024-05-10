@@ -30,8 +30,7 @@ namespace BackendBase.Attributes
             if (model == null)
                 return _permissionLevel == RoleUserEnum.User;
 
-            //return model.RoleUsers >= _permissionLevel;
-            return true;
+            return model.Role >= _permissionLevel;
         }
     }
 }

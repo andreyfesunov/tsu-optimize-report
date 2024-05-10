@@ -10,7 +10,7 @@ namespace BackendBase.Controllers
     public class LessonTypeController //: CRUDControllerBase<LessonType>
     {
         public LessonTypeController(ILessonTypeService serivce)
-            //: base(serivce)
+        //: base(serivce)
         {
         }
     }

@@ -71,12 +71,11 @@ namespace BackendBase.Services
                 Email = registrationDto.Email,
                 Firstname = "",
                 Lastname = "",
-                //RoleUsers = RoleUserEnum.User,
+                Role = RoleUserEnum.User,
             };
             var userAdded = await _userRepository.AddEntity(user);
 
-            return (RoleUserEnum)1;
-            //return userAdded.RoleUsers;
+            return userAdded.Role;
         }
 
         private string GenerateJwt(UserDto user)

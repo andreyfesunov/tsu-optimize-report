@@ -25,14 +25,11 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@features/*": [
-        "src/app/features/*"
-      ],
       "@core/*": [
         "src/app/@core/*"
       ],
-      "@shared/*": [
-        "src/app/@shared/*"
+      "@ui/*": [
+        "src/app/@ui/*"
       ]
     }
   },

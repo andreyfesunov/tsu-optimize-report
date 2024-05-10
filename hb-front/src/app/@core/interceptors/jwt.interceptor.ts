@@ -1,22 +1,22 @@
 import {HttpInterceptorFn} from "@angular/common/http";
 import {inject} from "@angular/core";
-import {AuthState} from "../../@shared/states";
 import {switchMap} from "rxjs";
+import {AuthState} from "@core/abstracts";
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const state = inject(AuthState);
+    const state = inject(AuthState);
 
-  return state.tokenRaw$.pipe(
-    switchMap((token) => {
-      if (token === undefined) {
-        return next(req);
-      }
+    return state.tokenRaw$.pipe(
+        switchMap((token) => {
+            if (token === undefined) {
+                return next(req);
+            }
 
-      const clonedReq = req.clone({
-        setHeaders: {"Authorization": `Bearer ${token}`}
-      });
+            const clonedReq = req.clone({
+                setHeaders: {"Authorization": `Bearer ${token}`}
+            });
 
-      return next(clonedReq);
-    })
-  );
+            return next(clonedReq);
+        })
+    );
 }

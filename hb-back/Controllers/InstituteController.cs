@@ -10,7 +10,7 @@ namespace BackendBase.Controllers
     public class InstituteController //: CRUDControllerBase<Institute>
     {
         public InstituteController(IInstituteService serivce)
-            //: base(serivce)
+        //: base(serivce)
         {
         }
     }

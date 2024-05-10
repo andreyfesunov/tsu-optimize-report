@@ -1,11 +1,12 @@
-import { Component } from "@angular/core";
-import { Router, RouterModule, RouterOutlet } from "@angular/router";
-import { AuthState, IUser } from "./@shared";
-import { CommonModule } from "@angular/common";
-import { NavigationComponent } from "./@shared/components/navigation/navigation.component";
-import { MatIconModule } from "@angular/material/icon";
-import { MatListModule } from "@angular/material/list";
-import { MatButtonModule } from "@angular/material/button";
+import {Component} from "@angular/core";
+import {RouterModule, RouterOutlet} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {MatIconModule} from "@angular/material/icon";
+import {MatListModule} from "@angular/material/list";
+import {MatButtonModule} from "@angular/material/button";
+import {AuthState} from "@core/abstracts";
+import {IUser} from "@core/models";
+import {NavigationBarComponent} from "@ui/widgets";
 
 @Component({
     selector: "app-root",
@@ -16,23 +17,19 @@ import { MatButtonModule } from "@angular/material/button";
         CommonModule,
         RouterOutlet,
         RouterModule,
-        NavigationComponent,
+        NavigationBarComponent,
         MatListModule,
         MatIconModule,
         MatButtonModule
     ]
 })
-export class AppComponent  {
+export class AppComponent {
+    constructor(
+        private _authState: AuthState<IUser>,
+    ) {
+    }
 
-  protected readonly isAutorized!: boolean;
-
-  constructor(
-    private _authState: AuthState<IUser>,
-    private _router: Router
-  ) { }
-
-  public isAuthorizedFn(): boolean {
-    let test = this._authState.isTokenValid();
-    return test;
-  }
+    public isAuthorizedFn(): boolean {
+        return this._authState.isTokenValid();
+    }
 }
