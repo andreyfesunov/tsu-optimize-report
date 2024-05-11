@@ -81,6 +81,7 @@ namespace BackendBase.Repositories
             return new PaginationDto<TEntity>
             {
                 PageNumber = searchDto.PageNumber,
+                PageSize = searchDto.PageSize,
                 TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
                 Entities = items
             };

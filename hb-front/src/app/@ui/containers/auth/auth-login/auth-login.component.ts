@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {SubscriptionComponent} from "@ui/widgets/utils/subscription/subscription.component";
+import {SubscriptionComponent} from "@ui/widgets/common";
 import {RouterService} from "@core/abstracts/services/router.service";
 import {ITokenModel, toMain, toReg} from "@core/models";
 import {AuthLoginFormComponent} from "@ui/widgets";
