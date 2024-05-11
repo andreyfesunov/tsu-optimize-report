@@ -1,17 +1,15 @@
-﻿using BackendBase.Data;
-using BackendBase.Helpers.CRUD;
+﻿using BackendBase.Helpers.CRUD;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Services
 {
-    public class LessonTypeService //: CRUDServiceBase<LessonType>, ILessonTypeService
+    public class LessonTypeService : CRUDServiceBase<LessonType>, ILessonTypeService
     {
         public LessonTypeService(LessonTypeRepository repository)
         {
-            //_repository = repository;
+            _repository = repository;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace BackendBase.Interfaces
+﻿using BackendBase.Dto;
+using BackendBase.Models;
+
+namespace BackendBase.Interfaces
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {
@@ -11,5 +14,6 @@
         Task<bool> Delete(TEntity entity);
         Task<bool> DeleteById(Guid entityId);
         Task<bool> Save();
+        Task<PaginationDto<TEntity>> Search(SearchDto searchDto);
     }
 }

@@ -1,4 +1,5 @@
-﻿using BackendBase.Models;
+﻿using BackendBase.Dto;
+using BackendBase.Models;
 using BackendBase.Repositories;
 
 namespace BackendBase.Helpers.CRUD
@@ -22,6 +23,6 @@ namespace BackendBase.Helpers.CRUD
         public async Task<bool> DeleteById(Guid entityId)
             => await _repository.DeleteById(entityId);
 
-
+        public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto) => await _repository.Search(searchDto);
     }
 }

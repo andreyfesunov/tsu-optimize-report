@@ -1,4 +1,5 @@
 ﻿using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,20 @@ namespace BackendBase.Repositories
             var model = _context.Update(entity).Entity;
             await Save();
             return model;
+        }
+
+        public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
+        {
+            var count = await _dbset.CountAsync();
+            var items = await _dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
+                .ToListAsync();
+
+            return new PaginationDto<TEntity>
+            {
+                PageNumber = searchDto.PageNumber,
+                TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
+                Entities = items
+            };
         }
     }
 }

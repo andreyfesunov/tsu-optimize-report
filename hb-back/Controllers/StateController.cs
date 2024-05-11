@@ -7,10 +7,10 @@ namespace BackendBase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StateController //: CRUDControllerBase<State>
+    public class StateController : CRUDControllerBase<State>
     {
-        public StateController(IStateService serivce)
-        //: base(serivce)
+        public StateController(IStateService service)
+        : base(service)
         {
         }
     }

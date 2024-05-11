@@ -84,7 +84,8 @@ namespace BackendBase.Services
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim("id",user.Id)
+                new Claim("id",user.Id),
+                new Claim("role", user.Role.ToString())
             };
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],

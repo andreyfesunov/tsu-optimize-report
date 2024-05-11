@@ -1,4 +1,5 @@
 ﻿using BackendBase.Attributes;
+using BackendBase.Dto;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
@@ -7,12 +8,11 @@ namespace BackendBase.Helpers.CRUD
 {
     public class CRUDControllerBase<TEntity> : ControllerBase where TEntity : Base
     {
-        protected ICRUDServiceBase<TEntity> _service;
+        private readonly ICRUDServiceBase<TEntity> _service;
 
-
-        public CRUDControllerBase(ICRUDServiceBase<TEntity> serivce)
+        public CRUDControllerBase(ICRUDServiceBase<TEntity> service)
         {
-            _service = serivce;
+            _service = service;
         }
 
 
@@ -78,6 +78,20 @@ namespace BackendBase.Helpers.CRUD
             try
             {
                 var result = await _service.DeleteById(entityId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("search")]
+        public async Task<ActionResult<PaginationDto<TEntity>>> Search([FromBody] SearchDto searchDto)
+        {
+            try
+            {
+                var result = await _service.Search(searchDto);
                 return Ok(result);
             }
             catch (Exception ex)
