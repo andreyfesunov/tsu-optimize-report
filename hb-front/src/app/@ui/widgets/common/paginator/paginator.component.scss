@@ -1,0 +1,17 @@
+.paginator {
+  display: flex;
+  justify-content: flex-end;
+
+  &--hidden {
+    display: none;
+  }
+}
+
+.paginator-item {
+  display: flex;
+  flex-direction: row;
+
+  &__label, &__value {
+    align-content: center;
+  }
+}
