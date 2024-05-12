@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {ContentComponent, ReportsTableComponent, ReportsTabsComponent} from "@ui/widgets";
-import {ReportService} from "@core/abstracts";
+import {ReportsService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
 
 @Component({
@@ -20,7 +20,7 @@ import {IPaginationRequest} from "@core/dtos";
 })
 export class ReportsListComponent {
   constructor(
-    private readonly _reportService: ReportService
+    private readonly _reportService: ReportsService
   ) {
   }
 

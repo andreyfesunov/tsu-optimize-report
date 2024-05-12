@@ -5,6 +5,7 @@ import {IPagination, IReport, ITableColumn} from "@core/models";
 import {Component, input} from "@angular/core";
 import {PaginatorComponent, ReportsTableRowComponent, ReportsTableRowItemField, TableComponent} from "@ui/widgets";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {getDefaultPaginationRequest} from "@core/utils";
 
 @Component({
   selector: 'app-reports-table',
@@ -38,10 +39,7 @@ export class ReportsTableComponent extends TableController<IReport> {
 
   protected config(): ITableConfig {
     return {
-      request: {
-        pageNumber: 1,
-        pageSize: 25
-      }
+      request: getDefaultPaginationRequest()
     };
   }
 

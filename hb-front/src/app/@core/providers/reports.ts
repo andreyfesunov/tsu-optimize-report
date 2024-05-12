@@ -1,9 +1,9 @@
 import {Provider} from "@angular/core";
-import {ReportService} from "@core/abstracts";
-import {ReportImplService} from "@core/services";
+import {ReportsService} from "@core/abstracts";
+import {ReportsImplService} from "@core/services";
 
-const reportServiceProvider: Provider = {provide: ReportService, useClass: ReportImplService}
+const reportServiceProvider: Provider = {provide: ReportsService, useClass: ReportsImplService}
 
 export const reportsProviders = [
-    reportServiceProvider
+  reportServiceProvider
 ]

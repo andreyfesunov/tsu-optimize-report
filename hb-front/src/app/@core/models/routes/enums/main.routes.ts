@@ -1,3 +1,4 @@
 export enum MainRoutes {
-    REPORTS = 'reports'
+  REPORTS = 'reports',
+  USERS = 'users'
 }

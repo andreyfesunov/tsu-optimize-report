@@ -1,4 +1,4 @@
-import {ReportService} from "@core/abstracts";
+import {ReportsService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {IPaginationRequest} from "@core/dtos";
 import {Observable} from "rxjs";
@@ -6,7 +6,7 @@ import {IPagination, IReport} from "@core/models";
 import {HttpClient} from "@angular/common/http";
 
 @Injectable()
-export class ReportImplService extends ReportService {
+export class ReportsImplService extends ReportsService {
   constructor(
     private readonly _httpClient: HttpClient
   ) {
