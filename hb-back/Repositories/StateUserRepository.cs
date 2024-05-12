@@ -1,33 +1,26 @@
 ﻿using BackendBase.Data;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class StateUserRepository : BaseRepository<StateUser>
+    public class StateUserRepository : BaseRepositoryV2<StateUser>
     {
-        private readonly DataContext _context;
-        private readonly DbSet<StateUser> _dbset;
-
         public StateUserRepository(DataContext context) : base(context)
         {
-            _context = context;
-            _dbset = _context.Set<StateUser>();
         }
 
-        public async Task<StateUser> GetByIdInclude(Guid id)
+        protected override IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)
         {
-            return await _dbset
-                .Include(x => x.Events)
+            return query.Include(x => x.Events)
                 .Include(x => x.Files)
                 .Include(x => x.Records)
                 .Include(x => x.State)
-                    .ThenInclude(x => x.Job)
-                    .Include(x => x.State)
-                    .ThenInclude(x => x.Department)
-                .Include(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .ThenInclude(x => x.Job)
+                .Include(x => x.State)
+                .ThenInclude(x => x.Department)
+                .ThenInclude(x => x.Institute)
+                .Include(x => x.User);
         }
     }
 }

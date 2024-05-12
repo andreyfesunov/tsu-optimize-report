@@ -1,12 +1,12 @@
 ﻿using BackendBase.Dto;
+using BackendBase.Interfaces;
 using BackendBase.Models;
-using BackendBase.Repositories;
 
 namespace BackendBase.Helpers.CRUD
 {
     public class CRUDServiceBase<TEntity> : ICRUDServiceBase<TEntity> where TEntity : Base
     {
-        protected BaseRepository<TEntity> _repository;
+        protected IBaseRepository<TEntity> _repository;
 
         public async Task<TEntity> AddEntity(TEntity entity)
             => await _repository.AddEntity(entity);

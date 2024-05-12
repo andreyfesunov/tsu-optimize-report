@@ -7,16 +7,18 @@ using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public abstract class BaseRepositoryV2<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         private readonly DataContext _context;
         private readonly DbSet<TEntity> _dbset;
 
-        public BaseRepository(DataContext context)
+        public BaseRepositoryV2(DataContext context)
         {
             _context = context;
             _dbset = _context.Set<TEntity>();
         }
+
+        protected abstract IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query);
 
         public async Task<TEntity> AddEntity(TEntity entity)
         {
@@ -75,15 +77,17 @@ namespace BackendBase.Repositories
         public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
         {
             var count = await _dbset.CountAsync();
-            var items = await _dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
-                .ToListAsync();
+            var itemsQuery = _dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
+                .AsQueryable();
+
+            itemsQuery = IncludeChildren(itemsQuery);
 
             return new PaginationDto<TEntity>
             {
                 PageNumber = searchDto.PageNumber,
                 PageSize = searchDto.PageSize,
                 TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
-                Entities = items
+                Entities = await itemsQuery.ToListAsync()
             };
         }
     }

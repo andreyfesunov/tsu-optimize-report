@@ -6,6 +6,5 @@ namespace BackendBase.Interfaces
 {
     public interface IStateUserService : ICRUDServiceBase<StateUser>
     {
-        Task<StateUser> GetByIdInclude(Guid id);
     }
 }
