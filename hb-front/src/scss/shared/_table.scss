@@ -1,0 +1,106 @@
+@use "variables";
+@use "../mixins/typography";
+
+.tsu-table {
+  --_tsu-table-padding: 0 #{variables.$padding-lg};
+  --_tsu-table-border: none;
+  --_tsu-table-border-radius: unset;
+
+  --_tsu-table-td-border-bottom: none;
+  --_tsu-table-td-height: 44px;
+  --_tsu-table-td-last-border-bottom: none;
+  --_tsu-table-th-border-bottom: 1px solid #{variables.$table-border-color};
+  --_tsu-table-th-height: 40px;
+  --_tsu-table-th-background-color: unset;
+
+  --_tsu-table-head-position: unset;
+
+  width: 100%;
+  isolation: isolate;
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  border: var(--_tsu-table-border);
+  border-radius: var(--_tsu-table-border-radius);
+
+  &__tbody > :last-child {
+    --_tsu-table-td-border-bottom: var(--_tsu-table-td-last-border-bottom);
+  }
+
+  &__thead {
+    background-color: var(--_tsu-table-th-background-color);
+    position: var(--_tsu-table-head-position);
+  }
+
+  &__thead--sticky {
+    --_tsu-table-th-background-color: #{variables.$table-background-color};
+    --_tsu-table-head-position: sticky;
+
+    top: 0;
+    z-index: 1;
+  }
+
+  &--mini {
+    --_tsu-table-th-height: 32px;
+    --_tsu-table-td-height: 36px;
+  }
+
+  &--shadowed {
+    --_tsu-table-td-border-bottom: 1px solid #{variables.$table-border-color};
+    --_tsu-table-td-last-border-bottom: 1px solid #{variables.$table-border-color};
+  }
+
+  &--bordered {
+    --_tsu-table-border: 1px solid #{variables.$table-border-color};
+    --_tsu-table-border-radius: #{variables.$padding-md};
+    --_tsu-table-td-last-border-bottom: none;
+  }
+
+  &-th,
+  &-td {
+    padding: var(--_tsu-table-padding);
+
+    white-space: nowrap;
+    position: relative;
+  }
+
+  &-th {
+    height: var(--_tsu-table-th-height);
+    border-bottom: var(--_tsu-table-th-border-bottom);
+
+    &-item {
+      @include typography.body-small();
+
+      display: flex;
+      align-items: center;
+      gap: variables.$padding-md;
+
+      color: variables.$table-color;
+      overflow: hidden;
+      text-transform: uppercase;
+
+      &__center {
+        text-align: center;
+      }
+    }
+  }
+
+  &-td {
+    @include typography.body-medium();
+
+    height: var(--_tsu-table-td-height);
+    border-bottom: var(--_tsu-table-td-border-bottom);
+
+    transition: background-color 0.5s;
+    cursor: pointer;
+
+    &--hovered {
+      background-color: variables.$table-background-color--hovered;
+    }
+
+    &--center {
+      text-align: center;
+    }
+  }
+}

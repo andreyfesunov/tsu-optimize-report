@@ -23,15 +23,16 @@
             "prefix": "app",
             "style": "camelCase"
           }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "app",
-            "style": "kebab-case"
-          }
         ]
+        //        TODO research about table[app-table]
+        //        "@angular-eslint/component-selector": [
+        //          "error",
+        //          {
+        //            "type": "element",
+        //            "prefix": "app",
+        //            "style": "kebab-case"
+        //          }
+        //        ]
       }
     },
     {

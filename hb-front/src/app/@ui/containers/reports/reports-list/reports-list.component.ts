@@ -1,14 +1,15 @@
 import {Component} from "@angular/core";
-import {ReportsTabsComponent} from "@ui/widgets";
+import {ReportsTableComponent, ReportsTabsComponent} from "@ui/widgets";
 
 @Component({
     selector: 'app-reports-list',
     standalone: true,
     imports: [
-        ReportsTabsComponent
+        ReportsTabsComponent,
+        ReportsTableComponent
     ],
     template: `
-        <app-reports-tabs></app-reports-tabs>
+        <app-reports-table></app-reports-table>
     `
 })
 export class ReportsListComponent {

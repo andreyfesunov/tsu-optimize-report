@@ -1,5 +1,6 @@
 @forward "scss/theme";
 @forward "scss/mixins";
+@forward "scss/shared";
 
 @use "@angular/material" as mat;
 @use "@angular/material-experimental" as matx;

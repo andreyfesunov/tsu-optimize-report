@@ -1,10 +1,10 @@
 import {Component} from "@angular/core";
-import {SubscriptionComponent} from "@ui/widgets/common";
 import {RouterService} from "@core/abstracts/services/router.service";
 import {ITokenModel, toMain, toReg} from "@core/models";
 import {AuthLoginFormComponent} from "@ui/widgets";
 import {AuthService, AuthState} from "@core/abstracts";
 import {ILoginRegDto} from "@core/dtos";
+import {SubscriptionController} from "@core/controllers";
 
 @Component({
     standalone: true,
@@ -15,7 +15,7 @@ import {ILoginRegDto} from "@core/dtos";
         <app-auth-login-form (redirectEvent)="onRegister()" (submitEvent)="onSubmit($event)"></app-auth-login-form>
     `
 })
-export class AuthLoginComponent extends SubscriptionComponent {
+export class AuthLoginComponent extends SubscriptionController {
     public constructor(
         private readonly _authService: AuthService,
         private readonly _authState: AuthState<ITokenModel>,

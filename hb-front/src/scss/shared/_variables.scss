@@ -1,0 +1,13 @@
+@use "../theme/palette";
+
+// Paddings
+$padding-sm: 4px;
+$padding-md: $padding-sm * 2;
+$padding-lg: $padding-sm * 3;
+
+// Tables
+$table-color: var(--table-color, palette.$palette-dark);
+$table-border-color: var(--table-border-color, palette.$palette-red);
+$table-background-color: var(--table-background-color, palette.$palette-white-o50);
+$table-background-color--hovered: var(--table-background-color--hovered, palette.$palette-dark-o25);
+
