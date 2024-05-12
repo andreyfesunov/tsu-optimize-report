@@ -9,10 +9,11 @@ using System.Security.Claims;
 using System.Text;
 using BackendBase.Utils;
 using BackendBase.Models.Enum;
+using BackendBase.Helpers.CRUD;
 
 namespace BackendBase.Services
 {
-    public class UserService : IUserService
+    public class UserService : CRUDServiceBase<User>, IUserService
     {
         private readonly UserRepository _userRepository;
         private readonly IConfiguration _configuration;
@@ -25,6 +26,7 @@ namespace BackendBase.Services
         )
         {
             _userRepository = userRepository;
+            _repository = userRepository;
             _configuration = configuration;
             _mapper = mapper;
         }

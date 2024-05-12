@@ -1,15 +1,20 @@
 ﻿using BackendBase.Data;
 using BackendBase.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class StateRepository : BaseRepository<State>
+    public class StateRepository : BaseRepositoryV2<State>
     {
-        private readonly DataContext _context;
-
         public StateRepository(DataContext context) : base(context)
+        { }
+
+        protected override IQueryable<State> IncludeChildren(IQueryable<State> query)
         {
-            _context = context;
+            return query
+                    .Include(x => x.Department)
+                    .ThenInclude(x => x.Institute)
+                    .Include(x => x.Job);
         }
     }
 }

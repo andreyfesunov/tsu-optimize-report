@@ -1,5 +1,8 @@
-﻿using BackendBase.Dto;
+﻿using AutoMapper;
+using BackendBase.Dto;
+using BackendBase.Dto.Report;
 using BackendBase.Interfaces;
+using BackendBase.Models;
 using BackendBase.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +13,12 @@ namespace BackendBase.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet("get-all")]
@@ -71,6 +76,27 @@ namespace BackendBase.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("search")]
+        public async Task<ActionResult<PaginationDto<UserDto>>> Search(SearchDto searchDto)
+        {
+            try
+            {
+                var result = await _userService.Search(searchDto);
+                return Ok(new PaginationDto<UserDto>
+                {
+                    PageNumber = result.PageNumber,
+                    PageSize = result.PageSize,
+                    TotalPages = result.TotalPages,
+                    Entities = result.Entities.Select(x => _mapper.Map<UserDto>(x)).ToList()
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class UserRepository : BaseRepository<User>
+    public class UserRepository : BaseRepositoryV2<User>
     {
         private readonly DataContext _context;
 
@@ -16,6 +16,11 @@ namespace BackendBase.Repositories
         public async Task<User?> GetUserByEmail(string email)
         {
             return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+        }
+
+        protected override IQueryable<User> IncludeChildren(IQueryable<User> query)
+        {
+            return query;
         }
     }
 }

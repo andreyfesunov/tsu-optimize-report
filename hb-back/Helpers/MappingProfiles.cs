@@ -15,6 +15,13 @@ namespace BackendBase.Helpers
             CreateMap<RegistrationDto, User>();
             CreateMap<StateUser, ReportListDto>();
             CreateMap<State, StateDto>();
+            CreateMap<LessonType, LessonTypeDto>();
+            CreateMap<Lesson, LessonDto>();
+            CreateMap<Record, RecordDto>();
+            CreateMap<Event, EventDto>();
+            CreateMap<EventType, EventTypeDto>();
+            CreateMap<Work, WorkDto>();
+            CreateMap<Activity, ActivityDto>();
             CreateMap<Department, DepartmentDto>();
             CreateMap<Institute, InstituteDto>();
             CreateMap<Job, JobDto>();

@@ -86,18 +86,18 @@ namespace BackendBase.Helpers.CRUD
             }
         }
 
-        [HttpPost("search")]
-        public async Task<ActionResult<PaginationDto<TEntity>>> Search([FromBody] SearchDto searchDto)
-        {
-            try
-            {
-                var result = await _service.Search(searchDto);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpPost("search")]
+        //public async Task<ActionResult<PaginationDto<TEntity>>> Search([FromBody] SearchDto searchDto)
+        //{
+        //    try
+        //    {
+        //        var result = await _service.Search(searchDto);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }
