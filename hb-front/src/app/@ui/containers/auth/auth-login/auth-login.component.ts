@@ -7,31 +7,32 @@ import {ILoginRegDto} from "@core/dtos";
 import {SubscriptionController} from "@core/controllers";
 
 @Component({
-    standalone: true,
-    imports: [
-        AuthLoginFormComponent,
-    ],
-    template: `
-        <app-auth-login-form (redirectEvent)="onRegister()" (submitEvent)="onSubmit($event)"></app-auth-login-form>
-    `
+  standalone: true,
+  imports: [
+    AuthLoginFormComponent,
+  ],
+  template: `
+    <app-auth-login-form (redirectEvent)="onRegister()" (submitEvent)="onSubmit($event)"></app-auth-login-form>
+  `,
+  host: {class: 'host-class'}
 })
 export class AuthLoginComponent extends SubscriptionController {
-    public constructor(
-        private readonly _authService: AuthService,
-        private readonly _authState: AuthState<ITokenModel>,
-        private readonly _routerService: RouterService
-    ) {
-        super();
-    }
+  public constructor(
+    private readonly _authService: AuthService,
+    private readonly _authState: AuthState<ITokenModel>,
+    private readonly _routerService: RouterService
+  ) {
+    super();
+  }
 
-    protected onSubmit(eventData: ILoginRegDto): void {
-        this.subscription.add(this._authService.logIn(eventData).subscribe((res) => {
-            this._authState.setToken(res.token);
-            this._routerService.navigate(toMain);
-        }));
-    }
+  protected onSubmit(eventData: ILoginRegDto): void {
+    this.subscription.add(this._authService.logIn(eventData).subscribe((res) => {
+      this._authState.setToken(res.token);
+      this._routerService.navigate(toMain);
+    }));
+  }
 
-    protected onRegister(): void {
-        this._routerService.navigate(toReg);
-    }
+  protected onRegister(): void {
+    this._routerService.navigate(toReg);
+  }
 }

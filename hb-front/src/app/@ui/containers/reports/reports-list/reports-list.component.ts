@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ReportsTableComponent, ReportsTabsComponent} from "@ui/widgets";
+import {ContentComponent, ReportsTableComponent, ReportsTabsComponent} from "@ui/widgets";
 import {ReportService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
 
@@ -8,11 +8,15 @@ import {IPaginationRequest} from "@core/dtos";
   standalone: true,
   imports: [
     ReportsTabsComponent,
-    ReportsTableComponent
+    ReportsTableComponent,
+    ContentComponent
   ],
   template: `
-    <app-reports-table [loadFn]="loadFn"></app-reports-table>
-  `
+    <app-content>
+      <app-reports-table [loadFn]="loadFn"></app-reports-table>
+    </app-content>
+  `,
+  host: {class: 'host-class'}
 })
 export class ReportsListComponent {
   constructor(

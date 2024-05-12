@@ -1,13 +1,13 @@
 <ng-container *ngIf="valid$ | async">
-    <div class="container">
-        <app-navigation-bar [items]="navItems"></app-navigation-bar>
+  <div class="container host-class">
+    <app-navigation-bar [items]="navItems"></app-navigation-bar>
 
-        <main class="main">
-            <router-outlet></router-outlet>
-        </main>
-    </div>
+    <main class="main host-class">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </ng-container>
 
 <ng-container *ngIf="invalid$ | async">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </ng-container>

@@ -7,20 +7,20 @@
 @use "scss/mixins/typography";
 
 $theme: matx.define-theme(
-                (
-                        color: (
-                                theme-type: light,
-                                primary: matx.$m3-red-palette,
-                                tertiary: matx.$m3-chartreuse-palette,
-                        ),
-                        typography: (
-                                brand-family: "Comic Sans",
-                                bold-weight: 900
-                        ),
-                        density: (
-                                scale: -1
-                        )
-                )
+    (
+      color: (
+        theme-type: light,
+        primary: matx.$m3-red-palette,
+        tertiary: matx.$m3-chartreuse-palette,
+      ),
+      typography: (
+        brand-family: "Comic Sans",
+        bold-weight: 900
+      ),
+      density: (
+        scale: -1
+      )
+    )
 );
 
 @include mat.core();
@@ -45,8 +45,8 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-// .host-class {
-//   display: flex;
-//   flex-direction: column;
-//   flex: 1 1 1px;
-// }
+.host-class {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 1px;
+}

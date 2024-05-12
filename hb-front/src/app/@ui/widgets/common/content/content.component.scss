@@ -1,0 +1,15 @@
+@use "../../../../../scss/shared/variables";
+
+.content {
+  display: flex;
+  flex: 1 1 1px;
+  position: relative;
+
+  &__inner {
+    max-width: 100%;
+  }
+
+  &--padding {
+    padding: variables.$padding-lg;
+  }
+}
