@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BackendBase.Helpers.CRUD
 {
-    public class CRUDControllerBase<TEntity> : ControllerBase where TEntity : Base
+    public class CRUDControllerBase<TEntity, DtoEntity> : ControllerBase where TEntity : Base
     {
-        private readonly ICRUDServiceBase<TEntity> _service;
+        private readonly ICRUDServiceBase<TEntity, DtoEntity> _service;
 
-        public CRUDControllerBase(ICRUDServiceBase<TEntity> service)
+        public CRUDControllerBase(ICRUDServiceBase<TEntity, DtoEntity> service)
         {
             _service = service;
         }
@@ -31,7 +31,7 @@ namespace BackendBase.Helpers.CRUD
         }
 
         [HttpGet("{Id}")]
-        public async Task<ActionResult<TEntity>> GetById(Guid Id)
+        public async Task<ActionResult<DtoEntity>> GetById(Guid Id)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace BackendBase.Helpers.CRUD
         }
 
         [HttpGet("getAll")]
-        public async Task<ActionResult<ICollection<TEntity>>> GetAll()
+        public async Task<ActionResult<ICollection<DtoEntity>>> GetAll()
         {
             try
             {
@@ -86,18 +86,18 @@ namespace BackendBase.Helpers.CRUD
             }
         }
 
-        //[HttpPost("search")]
-        //public async Task<ActionResult<PaginationDto<TEntity>>> Search([FromBody] SearchDto searchDto)
-        //{
-        //    try
-        //    {
-        //        var result = await _service.Search(searchDto);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        [HttpPost("search")]
+        public async Task<ActionResult<PaginationDto<DtoEntity>>> Search([FromBody] SearchDto searchDto)
+        {
+            try
+            {
+                var result = await _service.Search(searchDto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

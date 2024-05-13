@@ -7,7 +7,7 @@ using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity, TEntity> where TEntity : Base
     {
         private readonly DataContext _context;
         private readonly DbSet<TEntity> _dbset;

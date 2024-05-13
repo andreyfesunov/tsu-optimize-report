@@ -4,17 +4,17 @@ using BackendBase.Models;
 
 namespace BackendBase.Helpers.CRUD
 {
-    public class CRUDServiceBase<TEntity> : ICRUDServiceBase<TEntity> where TEntity : Base
+    public class CRUDServiceBase<TEntity, DtoEntity> : ICRUDServiceBase<TEntity, DtoEntity> where TEntity : Base
     {
-        protected IBaseRepository<TEntity> _repository;
+        protected IBaseRepository<TEntity, DtoEntity> _repository;
 
         public async Task<TEntity> AddEntity(TEntity entity)
             => await _repository.AddEntity(entity);
 
-        public async Task<TEntity> GetById(Guid id)
+        public async Task<DtoEntity> GetById(Guid id)
             => await _repository.GetById(id);
 
-        public async Task<ICollection<TEntity>> GetAll()
+        public async Task<ICollection<DtoEntity>> GetAll()
             => await _repository.GetAll();
 
         public async Task<TEntity> Update(TEntity entity)
@@ -23,6 +23,6 @@ namespace BackendBase.Helpers.CRUD
         public async Task<bool> DeleteById(Guid entityId)
             => await _repository.DeleteById(entityId);
 
-        public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto) => await _repository.Search(searchDto);
+        public async Task<PaginationDto<DtoEntity>> Search(SearchDto searchDto) => await _repository.Search(searchDto);
     }
 }

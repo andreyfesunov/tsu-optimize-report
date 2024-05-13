@@ -1,4 +1,5 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Interfaces;
 using BackendBase.Models;
@@ -7,15 +8,17 @@ using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories
 {
-    public abstract class BaseRepositoryV2<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public abstract class BaseRepositoryV2<TEntity, DtoEntity> : IBaseRepository<TEntity, DtoEntity> where TEntity : Base
     {
         private readonly DataContext _context;
         private readonly DbSet<TEntity> _dbset;
+        private readonly IMapper _mapper;
 
-        public BaseRepositoryV2(DataContext context)
+        public BaseRepositoryV2(DataContext context, IMapper mapper)
         {
             _context = context;
             _dbset = _context.Set<TEntity>();
+            _mapper = mapper;
         }
 
         protected abstract IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query);
@@ -46,14 +49,18 @@ namespace BackendBase.Repositories
             return await _dbset.FindAsync(id) != null;
         }
 
-        public async Task<ICollection<TEntity>> GetAll()
+        public async Task<ICollection<DtoEntity>> GetAll()
         {
-            return await _dbset.AsNoTracking().ToListAsync();
+            var itemsQuery = _dbset.AsNoTracking().AsQueryable();
+
+            return await IncludeChildren(itemsQuery).Select(x => _mapper.Map<DtoEntity>(x)).ToListAsync();
         }
 
-        public async Task<TEntity> GetById(Guid id)
+        public async Task<DtoEntity> GetById(Guid id)
         {
-            return await _dbset.FindAsync(id);
+            var entityQuery = _dbset.AsQueryable().Where(e => e.Id == id);
+            var dtoEntitiy = (await IncludeChildren(entityQuery).Select(x => _mapper.Map<DtoEntity>(x)).ToListAsync())[0];
+            return dtoEntitiy;
         }
 
         public async Task<bool> Save()
@@ -74,7 +81,7 @@ namespace BackendBase.Repositories
             return model;
         }
 
-        public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
+        public async Task<PaginationDto<DtoEntity>> Search(SearchDto searchDto)
         {
             var count = await _dbset.CountAsync();
             var itemsQuery = _dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
@@ -82,12 +89,12 @@ namespace BackendBase.Repositories
 
             itemsQuery = IncludeChildren(itemsQuery);
 
-            return new PaginationDto<TEntity>
+            return new PaginationDto<DtoEntity>
             {
                 PageNumber = searchDto.PageNumber,
                 PageSize = searchDto.PageSize,
                 TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
-                Entities = await itemsQuery.ToListAsync()
+                Entities = await itemsQuery.Select(x => _mapper.Map<DtoEntity>(x)).ToListAsync()
             };
         }
     }

@@ -1,12 +1,14 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class StateRepository : BaseRepositoryV2<State>
+    public class StateRepository : BaseRepositoryV2<State, StateDto>
     {
-        public StateRepository(DataContext context) : base(context)
+        public StateRepository(DataContext context, IMapper mapper) : base(context, mapper)
         { }
 
         protected override IQueryable<State> IncludeChildren(IQueryable<State> query)

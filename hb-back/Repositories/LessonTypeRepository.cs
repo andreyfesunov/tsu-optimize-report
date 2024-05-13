@@ -1,14 +1,16 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class LessonTypeRepository : BaseRepositoryV2<LessonType>
+    public class LessonTypeRepository : BaseRepositoryV2<LessonType, LessonTypeDto>
     {
         private readonly DataContext _context;
 
-        public LessonTypeRepository(DataContext context) : base(context)
+        public LessonTypeRepository(DataContext context, IMapper mapper) : base(context, mapper)
         {
             _context = context;
         }

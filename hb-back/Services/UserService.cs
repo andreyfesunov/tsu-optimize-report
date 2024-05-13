@@ -13,7 +13,7 @@ using BackendBase.Helpers.CRUD;
 
 namespace BackendBase.Services
 {
-    public class UserService : CRUDServiceBase<User>, IUserService
+    public class UserService : CRUDServiceBase<User, UserDto>, IUserService
     {
         private readonly UserRepository _userRepository;
         private readonly IConfiguration _configuration;

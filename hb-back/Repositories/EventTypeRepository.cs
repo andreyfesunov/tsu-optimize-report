@@ -1,15 +1,18 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Models;
 
 namespace BackendBase.Repositories
 {
-    public class EventTypeRepository : BaseRepository<EventType>
+    public class EventTypeRepository : BaseRepositoryV2<EventType, EventTypeDto>
     {
-        private readonly DataContext _context;
+        public EventTypeRepository(DataContext context, IMapper mapper) : base(context, mapper)
+        { }
 
-        public EventTypeRepository(DataContext context) : base(context)
+        protected override IQueryable<EventType> IncludeChildren(IQueryable<EventType> query)
         {
-            _context = context;
+            return query;
         }
     }
 }

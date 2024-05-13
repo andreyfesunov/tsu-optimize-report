@@ -1,4 +1,7 @@
-﻿using BackendBase.Interfaces;
+﻿using AutoMapper;
+using BackendBase.Dto;
+using BackendBase.Dto.Report;
+using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
 using NPOI.HSSF.UserModel;
@@ -13,13 +16,15 @@ namespace BackendBase.Services
         private readonly LessonTypeRepository _lessonTypeRepository;
         private readonly RecordRepository _recordRepository;
         private readonly StateUserRepository _stateUserRepository;
+        private readonly IMapper _mapper;
 
         public ReportService(
             FileRepository fileRepository,
             ActivityRepository activityRepository,
             LessonTypeRepository lessonTypeRepository,
             RecordRepository recordRepository,
-            StateUserRepository stateUserRepository
+            StateUserRepository stateUserRepository,
+            IMapper mapper
             )
         {
             _fileRepository = fileRepository;
@@ -27,6 +32,7 @@ namespace BackendBase.Services
             _lessonTypeRepository = lessonTypeRepository;
             _recordRepository = recordRepository;
             _stateUserRepository = stateUserRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> CreateReport(Guid stateUserId, IFormFile file)
@@ -50,8 +56,10 @@ namespace BackendBase.Services
                 throw new Exception("Workbook is incorrect, too few worksheets");
             }
 
-            var activities = await _activityRepository.GetAll();
-            var stateUser = await _stateUserRepository.GetById(stateUserId);
+            var activitiesDto = await _activityRepository.GetAll();
+            var activities = activitiesDto.Select(x => _mapper.Map<Activity>(x)).ToList();
+            var stateUserDto = await _stateUserRepository.GetById(stateUserId);
+            var stateUser = _mapper.Map<StateUser>(stateUserDto);
 
             for (var worksheetNumber = 1; worksheetNumber < worksheetCount; worksheetNumber++)
             {

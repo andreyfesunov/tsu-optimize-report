@@ -1,12 +1,14 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
+using BackendBase.Dto.Report;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class StateUserRepository : BaseRepositoryV2<StateUser>
+    public class StateUserRepository : BaseRepositoryV2<StateUser, ReportListDto>
     {
-        public StateUserRepository(DataContext context) : base(context)
+        public StateUserRepository(DataContext context, IMapper mapper) : base(context, mapper)
         {
         }
 

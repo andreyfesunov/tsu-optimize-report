@@ -2,19 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using BackendBase.Models;
 using BackendBase.Helpers.CRUD;
+using BackendBase.Dto.Report;
 
 namespace BackendBase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StateUserController : CRUDControllerBase<StateUser>
+    public class StateUserController : CRUDControllerBase<StateUser, ReportListDto>
     {
-        private readonly IStateUserService _service;
-
         public StateUserController(IStateUserService service)
         : base(service)
-        {
-            _service = service;
-        }
+        { }
     }
 }

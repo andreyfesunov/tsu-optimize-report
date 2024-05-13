@@ -96,7 +96,5 @@ namespace BackendBase.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
     }
 }

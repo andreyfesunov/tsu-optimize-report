@@ -1,10 +1,10 @@
-﻿using BackendBase.Helpers.CRUD;
+﻿using BackendBase.Dto.Report;
+using BackendBase.Helpers.CRUD;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 
 namespace BackendBase.Interfaces
 {
-    public interface IStateUserService : ICRUDServiceBase<StateUser>
+    public interface IStateUserService : ICRUDServiceBase<StateUser, ReportListDto>
     {
     }
 }

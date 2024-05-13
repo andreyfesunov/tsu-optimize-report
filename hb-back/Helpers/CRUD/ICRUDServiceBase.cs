@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Helpers.CRUD
 {
-    public interface ICRUDServiceBase<TEntity> where TEntity : Base
+    public interface ICRUDServiceBase<TEntity, DtoEntity> where TEntity : Base
     {
         Task<TEntity> AddEntity(TEntity entity);
 
-        Task<TEntity> GetById(Guid id);
+        Task<DtoEntity> GetById(Guid id);
 
-        Task<ICollection<TEntity>> GetAll();
+        Task<ICollection<DtoEntity>> GetAll();
 
         Task<TEntity> Update(TEntity entity);
 
         Task<bool> DeleteById(Guid entityId);
 
-        Task<PaginationDto<TEntity>> Search(SearchDto searchDto);
+        Task<PaginationDto<DtoEntity>> Search(SearchDto searchDto);
     }
 }

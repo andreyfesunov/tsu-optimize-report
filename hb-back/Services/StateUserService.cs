@@ -1,4 +1,5 @@
 ﻿using BackendBase.Data;
+using BackendBase.Dto.Report;
 using BackendBase.Helpers.CRUD;
 using BackendBase.Interfaces;
 using BackendBase.Models;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Services
 {
-    public class StateUserService : CRUDServiceBase<StateUser>, IStateUserService
+    public class StateUserService : CRUDServiceBase<StateUser, ReportListDto>, IStateUserService
     {
         public StateUserService(StateUserRepository repository)
         {

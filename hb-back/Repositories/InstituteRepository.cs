@@ -1,15 +1,18 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Models;
 
 namespace BackendBase.Repositories
 {
-    public class InstituteRepository : BaseRepository<Institute>
+    public class InstituteRepository : BaseRepositoryV2<Institute, InstituteDto>
     {
-        private readonly DataContext _context;
+        public InstituteRepository(DataContext context, IMapper mapper) : base(context, mapper)
+        { }
 
-        public InstituteRepository(DataContext context) : base(context)
+        protected override IQueryable<Institute> IncludeChildren(IQueryable<Institute> query)
         {
-            _context = context;
+            return query;
         }
     }
 }

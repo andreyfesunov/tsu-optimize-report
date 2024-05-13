@@ -5,7 +5,7 @@ using BackendBase.Models.Enum;
 
 namespace BackendBase.Interfaces
 {
-    public interface IUserService : ICRUDServiceBase<User>
+    public interface IUserService : ICRUDServiceBase<User, UserDto>
     {
         Task<List<UserDto>> GetAllUsers();
         Task<UserDto> GetUserById(Guid userId);
