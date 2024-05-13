@@ -3,7 +3,13 @@ import {IPaginationRequest} from "@core/dtos";
 import {Observable} from "rxjs";
 import {IPagination, IReport, ITableColumn} from "@core/models";
 import {Component, input} from "@angular/core";
-import {PaginatorComponent, ReportsTableRowComponent, ReportsTableRowItemField, TableComponent} from "@ui/widgets";
+import {
+  PaginatorComponent,
+  ReportsTableRowComponent,
+  ReportsTableRowItemField,
+  SpinnerComponent,
+  TableComponent
+} from "@ui/widgets";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {getDefaultPaginationRequest} from "@core/utils";
 
@@ -17,6 +23,7 @@ import {getDefaultPaginationRequest} from "@core/utils";
     AsyncPipe,
     ReportsTableRowComponent,
     PaginatorComponent,
+    SpinnerComponent,
   ],
   template: `
     <ng-container *ngIf="items$ | async as items">
@@ -30,6 +37,8 @@ import {getDefaultPaginationRequest} from "@core/utils";
 
       <app-paginator *ngIf="page$ | async as page" [page]="page"></app-paginator>
     </ng-container>
+
+    <app-spinner *ngIf="spinner.active$"></app-spinner>
   `
 })
 export class ReportsTableComponent extends TableController<IReport> {

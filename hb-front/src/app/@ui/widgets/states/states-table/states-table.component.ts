@@ -2,7 +2,13 @@ import {ITableConfig, TableController} from "@core/controllers";
 import {IPagination, IState, ITableColumn} from "@core/models";
 import {Component, input} from "@angular/core";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {PaginatorComponent, StatesTableRowComponent, StateTableRowItemField, TableComponent} from "@ui/widgets";
+import {
+  PaginatorComponent,
+  SpinnerComponent,
+  StatesTableRowComponent,
+  StateTableRowItemField,
+  TableComponent
+} from "@ui/widgets";
 import {IPaginationRequest} from "@core/dtos";
 import {Observable} from "rxjs";
 import {getDefaultPaginationRequest} from "@core/utils";
@@ -18,6 +24,8 @@ import {getDefaultPaginationRequest} from "@core/utils";
 
       <app-paginator *ngIf="page$ | async as page" [page]="page"></app-paginator>
     </ng-container>
+
+    <app-spinner *ngIf="spinner.active$"></app-spinner>
   `,
   imports: [
     AsyncPipe,
@@ -25,7 +33,8 @@ import {getDefaultPaginationRequest} from "@core/utils";
     NgIf,
     PaginatorComponent,
     StatesTableRowComponent,
-    NgForOf
+    NgForOf,
+    SpinnerComponent
   ]
 })
 export class StatesTableComponent extends TableController<IState> {

@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 import {getDefaultPaginationRequest} from "@core/utils";
 import {Component, input} from "@angular/core";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {PaginatorComponent, TableComponent, UsersTableRowComponent} from "@ui/widgets";
+import {PaginatorComponent, SpinnerComponent, TableComponent, UsersTableRowComponent} from "@ui/widgets";
 import {UsersTableRowItemField} from "@ui/widgets/users/users-table/users-table-row.component";
 
 @Component({
@@ -17,7 +17,8 @@ import {UsersTableRowItemField} from "@ui/widgets/users/users-table/users-table-
     NgIf,
     PaginatorComponent,
     TableComponent,
-    UsersTableRowComponent
+    UsersTableRowComponent,
+    SpinnerComponent
   ],
   template: `
     <ng-container *ngIf="items$ | async as items">
@@ -31,6 +32,8 @@ import {UsersTableRowItemField} from "@ui/widgets/users/users-table/users-table-
 
       <app-paginator *ngIf="page$ | async as page" [page]="page"></app-paginator>
     </ng-container>
+
+    <app-spinner *ngIf="spinner.active$"></app-spinner>
   `
 })
 export class UsersTableComponent extends TableController<IUser> {
