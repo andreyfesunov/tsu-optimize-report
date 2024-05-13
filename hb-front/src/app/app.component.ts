@@ -5,7 +5,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatListModule} from "@angular/material/list";
 import {MatButtonModule} from "@angular/material/button";
 import {AuthState} from "@core/abstracts";
-import {ITokenModel, Navigation, toLogin, toReports, toUsers} from "@core/models";
+import {ITokenModel, Navigation, toLogin, toReports, toStates, toUsers} from "@core/models";
 import {NavigationBarComponent} from "@ui/widgets";
 import {map} from "rxjs";
 
@@ -33,8 +33,12 @@ export class AppComponent {
   }
 
   protected readonly navItems: Navigation[] = [
-    {text: "Отчёты", icon: "calendar_month", fn: () => void 0, path: toReports},
-    {text: "Пользователи", icon: "settings_accessibility", fn: () => void 0, path: toUsers},
+    {text: "Отчёты", icon: "stack_star", fn: () => void 0, path: toReports},
+    {text: "Штат", icon: "groups", fn: () => void 0, path: toUsers},
+    {
+      text: "Ставки", icon: "add_task", fn: () => void 0,
+      path: toStates
+    },
     {
       text: "Выход", icon: "logout", fn: () => this._authState.removeToken(),
       path: toLogin

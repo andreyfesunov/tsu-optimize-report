@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ContentComponent, ReportsTableComponent, ReportsTabsComponent} from "@ui/widgets";
+import {ContentComponent, ReportsTableComponent} from "@ui/widgets";
 import {ReportsService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
 
@@ -7,7 +7,6 @@ import {IPaginationRequest} from "@core/dtos";
   selector: 'app-reports-list',
   standalone: true,
   imports: [
-    ReportsTabsComponent,
     ReportsTableComponent,
     ContentComponent
   ],

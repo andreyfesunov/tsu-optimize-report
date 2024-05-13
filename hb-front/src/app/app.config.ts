@@ -4,7 +4,7 @@ import {routes} from "./app.routes";
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 import {jwtInterceptor, proxyInterceptor} from "@core/interceptors";
-import {authProviders, reportsProviders, routersProviders, usersProviders} from "@core/providers";
+import {authProviders, reportsProviders, routersProviders, statesProviders, usersProviders} from "@core/providers";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     ...routersProviders,
     ...authProviders,
     ...reportsProviders,
-    ...usersProviders
+    ...usersProviders,
+    ...statesProviders
   ]
 };
