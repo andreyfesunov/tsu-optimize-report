@@ -30,6 +30,8 @@ namespace BackendBase.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<LessonType> LessonTypes { get; set; }
         public DbSet<Record> Records { get; set; }
+        public DbSet<Rank> Ranks { get; set; }
+        public DbSet<Degree> Degrees { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));

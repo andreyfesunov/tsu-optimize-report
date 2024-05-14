@@ -28,6 +28,8 @@ namespace BackendBase.Helpers
             CreateMap<Department, DepartmentDto>();
             CreateMap<Institute, InstituteDto>();
             CreateMap<Job, JobDto>();
+            CreateMap<Rank, RankDto>();
+            CreateMap<Degree, DegreeDto>();
         }
     }
 }

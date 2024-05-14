@@ -11,6 +11,10 @@ $phone-media: 500px;
     color: #830100 !important; // red theme
 }
 
+.active {
+    background-color: #fbdfdf;
+}
+
 .navigation {
     position: fixed;
     top: 0;
