@@ -34,9 +34,9 @@ export class AppComponent {
 
   protected readonly navItems: Navigation[] = [
     {text: "Отчёты", icon: "stack_star", fn: () => void 0, path: toReports},
-    {text: "Штат", icon: "groups", fn: () => void 0, path: toUsers},
+    {text: "ППС", icon: "groups", fn: () => void 0, path: toUsers},
     {
-      text: "Ставки", icon: "add_task", fn: () => void 0,
+      text: "Штат", icon: "add_task", fn: () => void 0,
       path: toStates
     },
     {
