@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
+using BackendBase.Dto.CreateDto;
 using BackendBase.Dto.Report;
 using BackendBase.Models;
 
@@ -30,6 +31,9 @@ namespace BackendBase.Helpers
             CreateMap<Job, JobDto>();
             CreateMap<Rank, RankDto>();
             CreateMap<Degree, DegreeDto>();
+
+            CreateMap<StateCreateDto, State>();
+            CreateMap<State, StateCreateDto>();
         }
     }
 }
