@@ -1,7 +1,6 @@
-import {BehaviorSubject, map, Observable, shareReplay} from "rxjs";
+import {BehaviorSubject, map, Observable, shareReplay, switchMap} from "rxjs";
 import {IPagination} from "@core/models";
 import {IPaginationRequest} from "@core/dtos";
-import {Spinner, switchMapSpinner} from "@core/utils";
 
 export interface ITableConfig {
   request: IPaginationRequest;
@@ -9,8 +8,6 @@ export interface ITableConfig {
 }
 
 export abstract class TableController<TEntity> {
-  protected readonly spinner: Spinner = new Spinner();
-
   protected abstract config(): ITableConfig;
 
   protected abstract load(request: IPaginationRequest): Observable<IPagination<TEntity>>;
@@ -18,7 +15,7 @@ export abstract class TableController<TEntity> {
   protected readonly request$: BehaviorSubject<IPaginationRequest> = new BehaviorSubject<IPaginationRequest>(this.config().request);
 
   protected readonly page$: Observable<IPagination<TEntity>> = this.request$.pipe(
-    switchMapSpinner((request) => this.load(request), this.spinner),
+    switchMap((request) => this.load(request)),
     shareReplay({
       bufferSize: 1,
       refCount: true

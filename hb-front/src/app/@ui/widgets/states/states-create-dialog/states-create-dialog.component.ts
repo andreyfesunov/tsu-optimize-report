@@ -10,7 +10,7 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
 import {IStateCreateRequest} from "@core/dtos";
 import {JobsService} from "@core/abstracts";
 import {ModalDialogActionComponent, ModalDialogComponent} from "@ui/widgets";
-import {DialogRef} from "@angular/cdk/dialog";
+import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-states-create-dialog',
@@ -77,14 +77,14 @@ import {DialogRef} from "@angular/cdk/dialog";
     </app-modal-dialog>
 
     <ng-template #actionsRef>
-      <app-modal-dialog-action></app-modal-dialog-action>
+      <app-modal-dialog-action (apply)="submit()"></app-modal-dialog-action>
     </ng-template>
   `
 })
 export class StatesCreateDialogComponent {
   constructor(
     private readonly _jobsService: JobsService,
-    private readonly _dialogRef: DialogRef
+    private readonly _dialogRef: MatDialogRef<StatesCreateDialogComponent>
   ) {
   }
 
@@ -124,7 +124,7 @@ export class StatesCreateDialogComponent {
       hours: this.form.controls.hours.value,
       startDate: this.form.controls.startDate.value,
       endDate: this.form.controls.endDate.value,
-      job: this.form.controls.job.value
+      jobId: this.form.controls.job.value
     }
 
     this._dialogRef.close(request);

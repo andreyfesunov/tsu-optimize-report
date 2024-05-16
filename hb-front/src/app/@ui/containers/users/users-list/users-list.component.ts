@@ -1,7 +1,9 @@
 import {Component} from "@angular/core";
-import {ContentComponent, UsersTableComponent} from "@ui/widgets";
+import {ContentComponent, SpinnerComponent, UsersTableComponent} from "@ui/widgets";
 import {UsersService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
+import {NgIf} from "@angular/common";
+import {Spinner, withSpinner} from "@core/utils";
 
 @Component({
   selector: 'app-users-list',
@@ -9,11 +11,15 @@ import {IPaginationRequest} from "@core/dtos";
   template: `
     <app-content>
       <app-users-table [loadFn]="loadFn"></app-users-table>
+
+      <app-spinner *ngIf="spinner.active$"></app-spinner>
     </app-content>
   `,
   imports: [
     ContentComponent,
-    UsersTableComponent
+    UsersTableComponent,
+    NgIf,
+    SpinnerComponent
   ],
   host: {class: 'host-class'}
 })
@@ -23,5 +29,7 @@ export class UsersListComponent {
   ) {
   }
 
-  protected readonly loadFn = (request: IPaginationRequest) => this._usersService.search(request);
+  protected readonly spinner = new Spinner();
+
+  protected readonly loadFn = (request: IPaginationRequest) => withSpinner(this._usersService.search(request), this.spinner);
 }

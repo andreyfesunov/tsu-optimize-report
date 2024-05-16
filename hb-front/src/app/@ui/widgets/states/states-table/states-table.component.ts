@@ -24,8 +24,6 @@ import {getDefaultPaginationRequest} from "@core/utils";
 
       <app-paginator *ngIf="page$ | async as page" [page]="page"></app-paginator>
     </ng-container>
-
-    <app-spinner *ngIf="spinner.active$"></app-spinner>
   `,
   imports: [
     AsyncPipe,

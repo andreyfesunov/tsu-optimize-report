@@ -38,5 +38,5 @@ export class ModalDialogActionComponent {
   public readonly applyText = input<string>('Создать');
   public readonly apply = output();
 
-  protected readonly cancel = () => this._dialogRef.close(null);
+  protected readonly cancel = () => this._dialogRef.close();
 }

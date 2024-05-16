@@ -32,8 +32,6 @@ import {UsersTableRowItemField} from "@ui/widgets/users/users-table/users-table-
 
       <app-paginator *ngIf="page$ | async as page" [page]="page"></app-paginator>
     </ng-container>
-
-    <app-spinner *ngIf="spinner.active$"></app-spinner>
   `
 })
 export class UsersTableComponent extends TableController<IUser> {

@@ -22,7 +22,7 @@ export class StatesImplService extends StatesService {
   }
 
   public create(dto: IStateCreateRequest): Observable<boolean> {
-    return this._httpClient.post<boolean>('/api/State/create', dto).pipe(
+    return this._httpClient.post<boolean>('/api/State/createWithDto', dto).pipe(
       tap(() => this._reload$.next())
     )
   }

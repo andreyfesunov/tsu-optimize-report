@@ -1,7 +1,7 @@
 export interface IStateCreateRequest {
   hours: number;
   count: number;
-  job: string;
+  jobId: string;
   startDate: Date;
   endDate: Date;
 }
