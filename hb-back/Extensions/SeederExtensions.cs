@@ -14,6 +14,7 @@ public static class SeederExtensions
 
         if (activity != null) return;
 
+        var worksAndEventTypes = WorkAndEventTypeFactory.Make();
         var institutes = InstituteFactory.Make();
         var departments = DepartmentFactory.Make(institutes.First());
         var jobs = JobFactory.Make();
@@ -27,6 +28,8 @@ public static class SeederExtensions
         context.Jobs.AddRange(jobs);
         context.Users.AddRange(users);
         context.States.AddRange(states);
+        context.Work.AddRange(worksAndEventTypes.Item1);
+        context.EventsTypes.AddRange(worksAndEventTypes.Item2);
 
         context.StatesUsers.AddRange(StateUserFactory.Make(users.First(), states.First()));
 

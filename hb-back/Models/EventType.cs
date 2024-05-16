@@ -9,4 +9,5 @@ public class EventType : Base
     public Guid WorkId { get; set; }
     public Work Work { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
 }
