@@ -1,6 +1,8 @@
 import {Component} from "@angular/core";
 import {ModalDialogActionComponent, ModalDialogComponent, StatesCreateDialogFormComponent} from "@ui/widgets";
 import {Subject} from "rxjs";
+import {JobsService} from "@core/abstracts";
+import {AsyncPipe, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-states-create-dialog',
@@ -8,14 +10,16 @@ import {Subject} from "rxjs";
   imports: [
     ModalDialogComponent,
     ModalDialogActionComponent,
-    StatesCreateDialogFormComponent
+    StatesCreateDialogFormComponent,
+    AsyncPipe,
+    NgIf
   ],
   template: `
     <app-modal-dialog
       [title]="'Создание ставки'"
       [actionsRef]="actionsRef"
     >
-      <app-states-create-dialog-form [jobs]="[]"></app-states-create-dialog-form>
+      <app-states-create-dialog-form *ngIf="jobs$ | async as jobs" [jobs]="jobs"></app-states-create-dialog-form>
     </app-modal-dialog>
 
     <ng-template #actionsRef>
@@ -24,5 +28,10 @@ import {Subject} from "rxjs";
   `
 })
 export class StatesCreateDialogComponent {
+  constructor(private readonly _jobsService: JobsService) {
+  }
+
+  protected readonly jobs$ = this._jobsService.list();
+
   protected readonly submit$ = new Subject<void>();
 }

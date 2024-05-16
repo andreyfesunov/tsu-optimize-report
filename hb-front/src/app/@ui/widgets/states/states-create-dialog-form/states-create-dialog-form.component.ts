@@ -35,7 +35,7 @@ import {IStateCreateRequest} from "@core/dtos";
         <mat-label>Должность</mat-label>
         <input [formControl]="form.controls.job" [matAutocomplete]="auto" matInput>
 
-        <mat-autocomplete #auto="matAutocomplete">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(jobs())">
           <mat-option *ngFor="let job of jobs()" [value]="job.id">{{ job.name }}</mat-option>
         </mat-autocomplete>
       </mat-form-field>
@@ -70,6 +70,13 @@ export class StatesCreateDialogFormComponent {
   public readonly submitRequest = output<IStateCreateRequest>();
 
   public readonly jobs = input.required<IJob[]>();
+
+  protected displayFn(opts: IJob[]) {
+    return (id: string) => {
+      const job = opts.find(v => v.id === id);
+      return job ? job.name : '';
+    }
+  }
 
   protected readonly form: FormGroup<IStatesDialogForm> = new FormGroup<IStatesDialogForm>({
     hours: new FormControl<number>(1485, {nonNullable: true, validators: [Validators.min(1), Validators.required]}),

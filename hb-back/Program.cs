@@ -47,6 +47,7 @@ builder.Services.AddScoped<IInstituteService, InstituteService>();
 builder.Services.AddScoped<ILessonTypeService, LessonTypeService>();
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<IStateUserService, StateUserService>();
+builder.Services.AddScoped<IJobService, JobService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

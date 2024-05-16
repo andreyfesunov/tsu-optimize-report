@@ -1,15 +1,19 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Models;
 
 namespace BackendBase.Repositories
 {
-    public class JobRepository : BaseRepository<Job>
+    public class JobRepository : BaseRepositoryV2<Job, JobDto>
     {
-        private readonly DataContext _context;
-
-        public JobRepository(DataContext context) : base(context)
+        public JobRepository(DataContext context, IMapper mapper) : base(context, mapper)
         {
-            _context = context;
+        }
+
+        protected override IQueryable<Job> IncludeChildren(IQueryable<Job> query)
+        {
+            return query;
         }
     }
 }

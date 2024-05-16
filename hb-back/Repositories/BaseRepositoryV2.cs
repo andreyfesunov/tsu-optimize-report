@@ -14,7 +14,7 @@ namespace BackendBase.Repositories
         private readonly DbSet<TEntity> _dbset;
         private readonly IMapper _mapper;
 
-        public BaseRepositoryV2(DataContext context, IMapper mapper)
+        protected BaseRepositoryV2(DataContext context, IMapper mapper)
         {
             _context = context;
             _dbset = _context.Set<TEntity>();

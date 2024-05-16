@@ -10,9 +10,9 @@ namespace BackendBase.Models
         public string Lastname { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public Guid RankId { get; set; }
-        public Rank Rank { get; set; }
-        public Guid DegreeId { get; set; }
-        public Degree Degree { get; set; }
+        public Guid? RankId { get; set; }
+        public Rank? Rank { get; set; }
+        public Guid? DegreeId { get; set; }
+        public Degree? Degree { get; set; }
     }
 }
