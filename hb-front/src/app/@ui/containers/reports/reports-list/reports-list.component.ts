@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {ContentComponent, ReportsTableComponent, SpinnerComponent} from "@ui/widgets";
-import {ReportsService} from "@core/abstracts";
+import {ReportsDialogService, ReportsService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
 import {Spinner, withSpinner} from "@core/utils";
 import {NgIf} from "@angular/common";
@@ -25,11 +25,16 @@ import {NgIf} from "@angular/common";
 })
 export class ReportsListComponent {
   constructor(
-    private readonly _reportService: ReportsService
+    private readonly _reportService: ReportsService,
+    private readonly _reportDialogService: ReportsDialogService
   ) {
   }
 
   protected readonly spinner = new Spinner();
 
   protected readonly loadFn = (req: IPaginationRequest) => withSpinner(this._reportService.search(req), this.spinner);
+
+  protected edit(id: string): void {
+    this._reportDialogService.openDetail(id);
+  }
 }

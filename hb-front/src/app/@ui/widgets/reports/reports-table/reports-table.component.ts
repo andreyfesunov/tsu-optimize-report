@@ -12,6 +12,7 @@ import {
 } from "@ui/widgets";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {getDefaultPaginationRequest} from "@core/utils";
+import {ReportsDialogService} from "@core/abstracts";
 
 @Component({
   selector: 'app-reports-table',
@@ -29,6 +30,7 @@ import {getDefaultPaginationRequest} from "@core/utils";
     <ng-container *ngIf="items$ | async as items">
       <table app-table [cols]="defaultCols" [shadowed]="true" *ngIf="items.length > 0">
         <tr *ngFor="let item of items"
+            (onclick)="edit(item.id)"
             app-reports-table-row
             [item]="item"
             [cols]="defaultCols"
@@ -40,6 +42,12 @@ import {getDefaultPaginationRequest} from "@core/utils";
   `
 })
 export class ReportsTableComponent extends TableController<IReport> {
+  constructor(
+    private readonly _reportsDialogService: ReportsDialogService
+  ) {
+    super();
+  }
+
   public readonly loadFn = input.required<(req: IPaginationRequest) => Observable<IPagination<IReport>>>();
 
   protected readonly defaultCols = defaultCols;
@@ -52,6 +60,11 @@ export class ReportsTableComponent extends TableController<IReport> {
 
   protected load(request: IPaginationRequest): Observable<IPagination<IReport>> {
     return this.loadFn()(request);
+  }
+
+  protected edit(id: string): void {
+    console.log(this, id);
+    this._reportsDialogService.openDetail(id);
   }
 }
 

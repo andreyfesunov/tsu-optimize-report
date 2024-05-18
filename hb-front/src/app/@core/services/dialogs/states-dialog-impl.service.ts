@@ -5,7 +5,9 @@ import {StatesCreateDialogComponent} from "@ui/widgets";
 
 @Injectable()
 export class StatesDialogImplService extends StatesDialogService {
-  constructor(private readonly _dialog: MatDialog) {
+  constructor(
+    private readonly _dialog: MatDialog
+  ) {
     super();
   }
 

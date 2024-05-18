@@ -74,6 +74,7 @@
             },
             "development": {
               "optimization": false,
+              "aot": false,
               "extractLicenses": false,
               "sourceMap": true,
               "fileReplacements": [
