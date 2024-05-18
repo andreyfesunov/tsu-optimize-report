@@ -63,6 +63,11 @@ namespace BackendBase.Repositories
             return dtoEntitiy;
         }
 
+        public async Task<TEntity> GetEntityById(Guid id)
+        {
+            return await _dbset.FindAsync(id);
+        }
+
         public async Task<bool> Save()
         {
             var saved = await _context.SaveChangesAsync();

@@ -17,6 +17,7 @@ namespace BackendBase.Helpers
             CreateMap<StateUser, ReportListDto>();
             CreateMap<ReportListDto, StateUser>();
             CreateMap<State, StateDto>();
+            CreateMap<StateDto, State>();
             CreateMap<LessonType, LessonTypeDto>();
             CreateMap<Lesson, LessonDto>();
             CreateMap<Record, RecordDto>();
@@ -27,13 +28,17 @@ namespace BackendBase.Helpers
             CreateMap<Activity, ActivityDto>();
             CreateMap<ActivityDto, Activity>();
             CreateMap<Department, DepartmentDto>();
+            CreateMap<DepartmentDto, Department>();
             CreateMap<Institute, InstituteDto>();
             CreateMap<Job, JobDto>();
+            CreateMap<JobDto, Job>();
             CreateMap<Rank, RankDto>();
             CreateMap<Degree, DegreeDto>();
 
             CreateMap<StateCreateDto, State>();
             CreateMap<State, StateCreateDto>();
+            CreateMap<StateUser, StateUserCreateDto>();
+            CreateMap<StateUserCreateDto, StateUser>();
         }
     }
 }

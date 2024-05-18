@@ -9,5 +9,7 @@ namespace BackendBase.Interfaces
     public interface IStateService : ICRUDServiceBase<State, StateDto>
     {
         Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto);
+
+        Task<bool> SetState(StateUserCreateDto stateUserCreateDto);
     }
 }

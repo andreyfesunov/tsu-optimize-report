@@ -24,5 +24,10 @@ namespace BackendBase.Services
         {
             return await _stateRepository.AddStateWithCreateDto(stateCreateDto);
         }
+
+        public async Task<bool> SetState(StateUserCreateDto stateUserCreateDto)
+        {
+            return await _stateRepository.SetState(stateUserCreateDto);
+        }
     }
 }

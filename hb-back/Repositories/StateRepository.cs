@@ -9,15 +9,25 @@ namespace BackendBase.Repositories
 {
     public class StateRepository : BaseRepositoryV2<State, StateDto>
     {
-        private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
         private readonly DepartmentRepository _departmentRepository;
+        private readonly UserRepository _userRepository;
+        private readonly StateUserRepository _stateUserRepository;
 
-        public StateRepository(DataContext context, IMapper mapper, DepartmentRepository departmentRepository) : base(context, mapper)
+        public StateRepository(
+            IMapper mapper,
+            DataContext context,
+            DepartmentRepository departmentRepository,
+            UserRepository userRepository,
+            StateUserRepository stateUserRepository
+            ) : base(context, mapper)
         {
             _context = context;
             _mapper = mapper;
             _departmentRepository = departmentRepository;
+            _userRepository = userRepository;
+            _stateUserRepository = stateUserRepository;
         }
 
         public async Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto)
@@ -28,6 +38,19 @@ namespace BackendBase.Repositories
             var model = await _context.AddAsync(state);
             await Save();
             return model.Entity;
+        }
+
+        public async Task<bool> SetState(StateUserCreateDto stateUserCreate)
+        {
+            var state = await GetEntityById(Guid.Parse(stateUserCreate.StateId));
+            var userDto = _userRepository.GetById(Guid.Parse(stateUserCreate.UserId));
+            if (state == null || userDto == null) return false;
+
+            if (state.Count < 1) return false;
+            state.Count -= 1;
+            await UpdateEntity(state);
+            await _stateUserRepository.AddStateWithCreateDto(stateUserCreate);
+            return true;
         }
 
         protected override IQueryable<State> IncludeChildren(IQueryable<State> query)

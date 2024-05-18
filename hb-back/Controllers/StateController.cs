@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using BackendBase.Models;
 using BackendBase.Helpers.CRUD;
 using BackendBase.Dto;
-using AutoMapper;
-using BackendBase.Services;
-using MathNet.Numerics.Statistics.Mcmc;
 using BackendBase.Dto.CreateDto;
 
 namespace BackendBase.Controllers
@@ -28,6 +25,20 @@ namespace BackendBase.Controllers
             try
             {
                 var result = await _stateService.AddStateWithCreateDto(entity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("setState")]
+        public async Task<ActionResult<bool>> SetState(StateUserCreateDto entity)
+        {
+            try
+            {
+                var result = await _stateService.SetState(entity);
                 return Ok(result);
             }
             catch (Exception ex)
