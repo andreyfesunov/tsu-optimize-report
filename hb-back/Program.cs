@@ -1,14 +1,14 @@
+using System.Text;
+using System.Text.Json.Serialization;
 using BackendBase.Data;
+using BackendBase.Extensions;
 using BackendBase.Interfaces;
+using BackendBase.Middlewares;
 using BackendBase.Repositories;
 using BackendBase.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using BackendBase.Extensions;
-using BackendBase.Middlewares;
 using Microsoft.OpenApi.Models;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +48,7 @@ builder.Services.AddScoped<ILessonTypeService, LessonTypeService>();
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<IStateUserService, StateUserService>();
 builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<IWorkService, WorkService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -86,8 +87,8 @@ builder.Services.AddSwaggerGen(option =>
             {
                 Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
             },
             Array.Empty<string>()

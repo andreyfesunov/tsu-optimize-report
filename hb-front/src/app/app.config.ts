@@ -10,7 +10,8 @@ import {
   reportsProviders,
   routersProviders,
   statesProviders,
-  usersProviders
+  usersProviders,
+  worksProviders
 } from "@core/providers";
 import {provideNativeDateAdapter} from "@angular/material/core";
 import {institutesProviders} from "@core/providers/institutes";
@@ -27,10 +28,12 @@ export const appConfig: ApplicationConfig = {
 
     ...routersProviders,
     ...authProviders,
-    ...reportsProviders,
+    ...worksProviders,
     ...usersProviders,
     ...statesProviders,
     ...jobsProviders,
-    ...institutesProviders
+    ...institutesProviders,
+    ...reportsProviders,
+    ...worksProviders
   ]
 };

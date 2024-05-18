@@ -1,6 +1,6 @@
 export interface IPagination<T> {
-    pageNumber: number;
-    pageSize: number;
-    totalPages: number;
-    entities: T[];
+  readonly pageNumber: number;
+  readonly pageSize: number;
+  readonly totalPages: number;
+  readonly entities: T[];
 }

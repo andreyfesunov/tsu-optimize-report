@@ -1,6 +1,6 @@
 export interface Navigation {
-  path: string[];
-  fn: () => void;
-  icon: string;
-  text: string;
+  readonly path: string[];
+  readonly fn: () => void;
+  readonly icon: string;
+  readonly text: string;
 }

@@ -1,15 +1,18 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Models;
 
-namespace BackendBase.Repositories
-{
-    public class WorkRepository : BaseRepository<Work>
-    {
-        private readonly DataContext _context;
+namespace BackendBase.Repositories;
 
-        public WorkRepository(DataContext context) : base(context)
-        {
-            _context = context;
-        }
+public class WorkRepository : BaseRepositoryV2<Work, WorkDto>
+{
+    public WorkRepository(DataContext context, IMapper mapper) : base(context, mapper)
+    {
+    }
+
+    protected override IQueryable<Work> IncludeChildren(IQueryable<Work> query)
+    {
+        return query;
     }
 }

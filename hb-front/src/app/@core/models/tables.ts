@@ -1,7 +1,7 @@
 export interface ITableColumn<T extends string = string> {
-    id: T;
-    text: string;
-    order: number;
-    align?: 'center';
-    width?: string;
+  readonly id: T;
+  readonly text: string;
+  readonly order: number;
+  readonly align?: 'center';
+  readonly width?: string;
 }

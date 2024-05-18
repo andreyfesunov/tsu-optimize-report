@@ -4,17 +4,17 @@ export enum RoleEnum {
 }
 
 export interface ITokenModel {
-  id: string;
-  role: RoleEnum;
-  exp: number;
-  iss: string;
-  aud: string;
+  readonly id: string;
+  readonly role: RoleEnum;
+  readonly exp: number;
+  readonly iss: string;
+  readonly aud: string;
 }
 
 export interface IUser {
-  id: string;
-  role: RoleEnum;
-  firstname: string;
-  lastname: string;
-  email: string;
+  readonly id: string;
+  readonly role: RoleEnum;
+  readonly firstname: string;
+  readonly lastname: string;
+  readonly email: string;
 }
