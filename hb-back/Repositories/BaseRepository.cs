@@ -7,7 +7,7 @@ using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity, TEntity> where TEntity : Base
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : Base
     {
         private readonly DataContext _context;
         private readonly DbSet<TEntity> _dbset;
@@ -85,6 +85,16 @@ namespace BackendBase.Repositories
                 TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
                 Entities = items
             };
+        }
+
+        public async Task<PaginationDto<TEntity>> SearchRoot(SearchDto searchDto)
+        {
+            throw new Exception();//deprecated
+        }
+
+        public async Task<TEntity> GetByIdRoot(Guid searchDto)
+        {
+            throw new Exception();//deprecated
         }
     }
 }

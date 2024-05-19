@@ -1,4 +1,5 @@
-﻿using BackendBase.Data;
+﻿using AutoMapper;
+using BackendBase.Data;
 using BackendBase.Dto.Report;
 using BackendBase.Helpers.CRUD;
 using BackendBase.Interfaces;
@@ -11,7 +12,7 @@ namespace BackendBase.Services
 {
     public class StateUserService : CRUDServiceBase<StateUser, ReportListDto>, IStateUserService
     {
-        public StateUserService(StateUserRepository repository)
+        public StateUserService(StateUserRepository repository, IMapper mapper) : base(mapper)
         {
             _repository = repository;
         }

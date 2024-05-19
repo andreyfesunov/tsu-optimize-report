@@ -3,17 +3,19 @@ using BackendBase.Models;
 
 namespace BackendBase.Interfaces
 {
-    public interface IBaseRepository<TEntity, DtoEntity> where TEntity : Base
+    public interface IBaseRepository<TEntity> where TEntity : Base
     {
-        Task<DtoEntity> GetById(Guid id);
+        Task<TEntity> GetById(Guid id);
+        Task<TEntity> GetByIdRoot(Guid id);
         ICollection<TEntity> SearchEntity(Func<TEntity, bool> predicate);
-        Task<ICollection<DtoEntity>> GetAll();
+        Task<ICollection<TEntity>> GetAll();
         Task<bool> DoesExist(Guid id);
         Task<TEntity> AddEntity(TEntity entity);
         Task<TEntity> UpdateEntity(TEntity entity);
         Task<bool> Delete(TEntity entity);
         Task<bool> DeleteById(Guid entityId);
         Task<bool> Save();
-        Task<PaginationDto<DtoEntity>> Search(SearchDto searchDto);
+        Task<PaginationDto<TEntity>> SearchRoot(SearchDto searchDto);
+        Task<PaginationDto<TEntity>> Search(SearchDto searchDto);
     }
 }

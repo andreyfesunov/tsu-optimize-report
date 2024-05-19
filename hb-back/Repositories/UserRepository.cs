@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class UserRepository : BaseRepositoryV2<User, UserDto>
+    public class UserRepository : BaseRepositoryV2<User>
     {
         private readonly DataContext _context;
 
-        public UserRepository(DataContext context, IMapper mapper) : base(context, mapper)
+        public UserRepository(DataContext context) : base(context)
         {
             _context = context;
         }

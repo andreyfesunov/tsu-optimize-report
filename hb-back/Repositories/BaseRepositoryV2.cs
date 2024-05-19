@@ -4,21 +4,21 @@ using BackendBase.Dto;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1;
 using StudentHubBackend.Exceptions;
+using System.Linq;
 
 namespace BackendBase.Repositories;
 
-public abstract class BaseRepositoryV2<TEntity, DtoEntity> : IBaseRepository<TEntity, DtoEntity> where TEntity : Base
+public abstract class BaseRepositoryV2<TEntity> : IBaseRepository<TEntity> where TEntity : Base
 {
     protected readonly DataContext context;
     protected readonly DbSet<TEntity> dbset;
-    protected readonly IMapper mapper;
 
-    protected BaseRepositoryV2(DataContext context, IMapper mapper)
+    protected BaseRepositoryV2(DataContext context)
     {
         this.context = context;
         dbset = this.context.Set<TEntity>();
-        this.mapper = mapper;
     }
 
     public async Task<TEntity> AddEntity(TEntity entity)
@@ -47,21 +47,20 @@ public abstract class BaseRepositoryV2<TEntity, DtoEntity> : IBaseRepository<TEn
         return await dbset.FindAsync(id) != null;
     }
 
-    public async Task<ICollection<DtoEntity>> GetAll()
+    public async Task<ICollection<TEntity>> GetAll()
     {
         var itemsQuery = dbset.AsNoTracking().AsQueryable();
-
-        return await IncludeChildren(itemsQuery).Select(x => mapper.Map<DtoEntity>(x)).ToListAsync();
+        return await IncludeChildren(itemsQuery).ToListAsync();
     }
 
-    public async Task<DtoEntity> GetById(Guid id)
+    public async Task<TEntity> GetById(Guid id)
     {
         var entityQuery = dbset.AsQueryable().Where(e => e.Id == id);
-        var dtoEntity = (await IncludeChildren(entityQuery).Select(x => mapper.Map<DtoEntity>(x)).ToListAsync())[0];
+        var dtoEntity = (await IncludeChildren(entityQuery).ToListAsync())[0];
         return dtoEntity;
     }
 
-    public async Task<TEntity> GetEntityById(Guid id)
+    public async Task<TEntity> GetByIdRoot(Guid id)
     {
         return await dbset.FindAsync(id);
     }
@@ -84,27 +83,40 @@ public abstract class BaseRepositoryV2<TEntity, DtoEntity> : IBaseRepository<TEn
         return model;
     }
 
-    public async Task<PaginationDto<DtoEntity>> Search(SearchDto searchDto)
+    public async Task<PaginationDto<TEntity>> SearchRoot(SearchDto searchDto)
     {
-        return await SearchFunc(dbset, searchDto);
+        var count = await dbset.CountAsync();
+        var items = await dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
+            .ToListAsync();
+
+        return new PaginationDto<TEntity>
+        {
+            PageNumber = searchDto.PageNumber,
+            PageSize = searchDto.PageSize,
+            TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
+            Entities = items
+        };
     }
 
-    protected async Task<PaginationDto<DtoEntity>> SearchFunc(IQueryable<TEntity> queryable, SearchDto searchDto)
+    public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
     {
-        var count = await queryable.CountAsync();
-        var itemsQuery = queryable.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
+        var count = await dbset.CountAsync();
+        var itemsQuery = dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
             .AsQueryable();
 
         itemsQuery = IncludeChildren(itemsQuery);
 
-        return new PaginationDto<DtoEntity>
+        return new PaginationDto<TEntity>
         {
             PageNumber = searchDto.PageNumber,
             PageSize = searchDto.PageSize,
             TotalPages = count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0,
-            Entities = await itemsQuery.Select(x => mapper.Map<DtoEntity>(x)).ToListAsync()
+            Entities = await itemsQuery.ToListAsync()
         };
     }
 
-    protected abstract IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query);
+    protected virtual IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query)
+    {
+        return query;
+    }
 }

@@ -2,13 +2,14 @@
 using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Models;
+using MathNet.Numerics.Statistics.Mcmc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
-public class EventTypeRepository : BaseRepositoryV2<EventType, EventTypeDto>
+public class EventTypeRepository : BaseRepositoryV2<EventType>
 {
-    public EventTypeRepository(DataContext context, IMapper mapper) : base(context, mapper)
+    public EventTypeRepository(DataContext context) : base(context)
     {
     }
 
@@ -17,21 +18,29 @@ public class EventTypeRepository : BaseRepositoryV2<EventType, EventTypeDto>
         return query;
     }
 
-    public Task<PaginationDto<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
+    public async Task<PaginationDto<EventType>> Search(Guid activityId, SearchDto searchDto)
     {
         var queryable = context.Set<ActivityEventType>().AsQueryable().Where(x => x.ActivityId == activityId)
             .Select(x => x.EventType);
 
-        return SearchFunc(queryable, searchDto);
+        return await SearchFunc(queryable, searchDto);
     }
 
-    public async Task<Dictionary<string, PaginationDto<EventTypeDto>>> SearchMap(SearchDto searchDto)
+    protected async Task<PaginationDto<EventType>> SearchFunc(IQueryable<EventType> queryable, SearchDto searchDto)
     {
-        var record = new Dictionary<string, PaginationDto<EventTypeDto>>();
-        var activities = await context.Set<Activity>().AsQueryable().ToListAsync();
+        var count = await queryable.CountAsync();
+        var itemsQuery = queryable.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
+            .AsQueryable();
 
-        foreach (var activity in activities) record[activity.Id.ToString()] = await Search(activity.Id, searchDto);
+        itemsQuery = IncludeChildren(itemsQuery);
 
-        return record;
+        return new PaginationDto<EventType>
+        {
+            PageNumber = searchDto.PageNumber,
+            PageSize = searchDto.PageSize,
+            TotalPages = count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0,
+            Entities = (ICollection<EventType>)itemsQuery
+        };
     }
+
 }

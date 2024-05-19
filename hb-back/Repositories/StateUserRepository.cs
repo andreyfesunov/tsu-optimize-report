@@ -7,25 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
-public class StateUserRepository : BaseRepositoryV2<StateUser, ReportListDto>
+public class StateUserRepository : BaseRepositoryV2<StateUser>
 {
     private readonly DataContext _context;
-    private readonly IMapper _mapper;
 
 
-    public StateUserRepository(DataContext context, IMapper mapper) : base(context, mapper)
+    public StateUserRepository(DataContext context) : base(context)
     {
-        _mapper = mapper;
         _context = context;
-    }
-
-    public async Task<StateUser> AddStateWithCreateDto(StateUserCreateDto stateUserCreateDto)
-    {
-        var stateUser = _mapper.Map<StateUser>(stateUserCreateDto);
-        stateUser.Rate = 1.0;
-        var model = await _context.AddAsync(stateUser);
-        await Save();
-        return model.Entity;
     }
 
     //public async Task<bool> ExistStateUser(StateUserCreateDto stateUserCreateDto)

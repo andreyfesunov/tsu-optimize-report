@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class DepartmentRepository : BaseRepositoryV2<Department, DepartmentDto>
+    public class DepartmentRepository : BaseRepositoryV2<Department>
     {
-        public DepartmentRepository(DataContext context, IMapper mapper) : base(context, mapper)
+        public DepartmentRepository(DataContext context) : base(context)
         { }
 
         protected override IQueryable<Department> IncludeChildren(IQueryable<Department> query)

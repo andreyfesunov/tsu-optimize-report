@@ -23,7 +23,7 @@ namespace BackendBase.Services
             IConfiguration configuration,
             UserRepository userRepository,
             IMapper mapper
-        )
+        ) : base(mapper)
         {
             _userRepository = userRepository;
             _repository = userRepository;

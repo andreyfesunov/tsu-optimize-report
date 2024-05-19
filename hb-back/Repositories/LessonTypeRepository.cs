@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class LessonTypeRepository : BaseRepositoryV2<LessonType, LessonTypeDto>
+    public class LessonTypeRepository : BaseRepositoryV2<LessonType>
     {
         private readonly DataContext _context;
 
-        public LessonTypeRepository(DataContext context, IMapper mapper) : base(context, mapper)
+        public LessonTypeRepository(DataContext context) : base(context)
         {
             _context = context;
         }

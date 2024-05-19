@@ -1,4 +1,5 @@
-﻿using BackendBase.Dto;
+﻿using AutoMapper;
+using BackendBase.Dto;
 using BackendBase.Helpers.CRUD;
 using BackendBase.Interfaces;
 using BackendBase.Models;
@@ -8,7 +9,7 @@ namespace BackendBase.Services
 {
     public class DepartmentService : CRUDServiceBase<Department, DepartmentDto>, IDepartmentService
     {
-        public DepartmentService(DepartmentRepository repository)
+        public DepartmentService(DepartmentRepository repository, IMapper mapper) : base(mapper)
         {
             _repository = repository;
         }

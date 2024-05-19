@@ -50,7 +50,7 @@ public class ReportService : IReportService
 
         var activitiesDto = await _activityRepository.GetAll();
         var activities = activitiesDto.Select(x => _mapper.Map<Activity>(x)).ToList();
-        var stateUser = await _stateUserRepository.GetEntityById(stateUserId);
+        var stateUser = await _stateUserRepository.GetById(stateUserId);
 
         for (var worksheetNumber = 1; worksheetNumber < worksheetCount; worksheetNumber++)
             await _handleWorksheet(package.GetSheetAt(worksheetNumber), stateUser, activities);
