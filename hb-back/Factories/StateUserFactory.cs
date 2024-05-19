@@ -12,9 +12,8 @@ public static class StateUserFactory
             {
                 Id = Guid.NewGuid(),
                 Rate = 1.0,
-                Status = "ACTIVE",
                 User = user,
-                State = state,
+                State = state
             }
         };
     }

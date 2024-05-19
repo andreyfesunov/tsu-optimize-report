@@ -1,7 +1,7 @@
 import {TableRowController} from "@core/controllers";
-import {IReport} from "@core/models";
+import {IReport, reportStatusStyles, reportStatusToString} from "@core/models";
 import {Component} from "@angular/core";
-import {NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 
 export enum ReportsTableRowItemField {
   JOB = 'JOB',
@@ -10,7 +10,8 @@ export enum ReportsTableRowItemField {
   RATE = 'RATE',
   HOURS = 'HOURS',
   START_DATE = 'START_DATE',
-  END_DATE = 'END_DATE'
+  END_DATE = 'END_DATE',
+  STATUS = 'STATUS'
 }
 
 @Component({
@@ -20,7 +21,8 @@ export enum ReportsTableRowItemField {
     NgForOf,
     NgSwitch,
     NgSwitchCase,
-    NgIf
+    NgIf,
+    NgClass,
   ],
   template: `
     <td
@@ -43,10 +45,15 @@ export enum ReportsTableRowItemField {
           *ngSwitchCase="ReportsTableRowItemField.START_DATE">{{ item.state.startDate }}
         </ng-container>
         <ng-container *ngSwitchCase="ReportsTableRowItemField.END_DATE">{{ item.state.endDate }}</ng-container>
+        <ng-container *ngSwitchCase="ReportsTableRowItemField.STATUS">
+          <span [ngClass]="reportStatusStyles(item.status)">{{ reportStatusToString(item.status) }}</span>
+        </ng-container>
       </ng-container>
     </td>
   `
 })
 export class ReportsTableRowComponent extends TableRowController<IReport, ReportsTableRowItemField> {
   protected readonly ReportsTableRowItemField = ReportsTableRowItemField;
+  protected readonly reportStatusToString = reportStatusToString;
+  protected readonly reportStatusStyles = reportStatusStyles;
 }

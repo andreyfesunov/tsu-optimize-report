@@ -1,0 +1,23 @@
+@use "variables";
+
+.report-status {
+  --_tsu-report-status-background-color: none;
+
+  background-color: var(--_tsu-report-status-background-color);
+
+  display: grid;
+  place-items: center;
+  height: 100%;
+
+  &--not-active {
+    --_tsu-report-status-background-color: #{variables.$status--not-active};
+  }
+
+  &--active {
+    --_tsu-report-status-background-color: #{variables.$status--active};
+  }
+
+  &--finished {
+    --_tsu-report-status-background-color: #{variables.$status--finished};
+  }
+}

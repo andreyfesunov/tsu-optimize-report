@@ -3,6 +3,7 @@ using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
 using BackendBase.Dto.Report;
 using BackendBase.Models;
+using BackendBase.Models.Enum;
 
 namespace BackendBase.Helpers;
 
@@ -14,7 +15,12 @@ public class MappingProfiles : Profile
         CreateMap<UserDto, User>();
         CreateMap<User, RegistrationDto>();
         CreateMap<RegistrationDto, User>();
-        CreateMap<StateUser, ReportListDto>();
+        CreateMap<StateUser, ReportListDto>().ForMember(
+            dest => dest.Status,
+            opt => opt.MapFrom(src =>
+                src.State.EndDate <= DateTime.Now ? StateUserStatus.Finished :
+                src.Records.Count > 0 ? StateUserStatus.Active : StateUserStatus.NotActive)
+        );
         CreateMap<ReportListDto, StateUser>();
         CreateMap<State, StateDto>();
         CreateMap<StateDto, State>();

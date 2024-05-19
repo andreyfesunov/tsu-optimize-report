@@ -1,9 +1,6 @@
-﻿using BackendBase.Dto;
+﻿namespace BackendBase.Interfaces;
 
-namespace BackendBase.Interfaces
+public interface IReportService
 {
-    public interface IReportService
-    {
-        Task<int> CreateReport(Guid stateUserId, IFormFile file);
-    }
+    Task<bool> CreateReport(Guid stateUserId, IFormFile file);
 }

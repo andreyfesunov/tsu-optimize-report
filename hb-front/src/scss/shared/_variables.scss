@@ -13,3 +13,8 @@ $table-background-color--hovered: var(--table-background-color--hovered, palette
 
 // Dialogs
 $dialog-border-color: var(--dialog-border-color, palette.$palette-red);
+
+// Statuses
+$status--active: palette.$palette-blue-o50;
+$status--not-active: palette.$palette-red-o50;
+$status--finished: palette.$palette-white-o50;

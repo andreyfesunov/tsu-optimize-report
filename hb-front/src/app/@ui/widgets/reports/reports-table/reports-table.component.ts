@@ -1,7 +1,7 @@
 import {ITableConfig, TableController} from "@core/controllers";
 import {IPaginationRequest} from "@core/dtos";
 import {Observable} from "rxjs";
-import {IPagination, IReport, ITableColumn} from "@core/models";
+import {IPagination, IReport, ITableColumn, ReportStatus} from "@core/models";
 import {Component, input, output} from "@angular/core";
 import {
   PaginatorComponent,
@@ -29,7 +29,7 @@ import {getDefaultPaginationRequest} from "@core/utils";
     <ng-container *ngIf="items$ | async as items">
       <table app-table [cols]="defaultCols" [shadowed]="true" [itemsCount]="items.length">
         <tr *ngFor="let item of items"
-            (click)="edit.emit(item.id)"
+            (click)="edit.emit({ id: item.id, status: item.status })"
             app-reports-table-row
             [item]="item"
             [cols]="defaultCols"
@@ -43,7 +43,7 @@ import {getDefaultPaginationRequest} from "@core/utils";
 export class ReportsTableComponent extends TableController<IReport> {
   public readonly loadFn = input.required<(req: IPaginationRequest) => Observable<IPagination<IReport>>>();
 
-  public readonly edit = output<string>();
+  public readonly edit = output<{ id: string, status: ReportStatus }>();
 
   protected readonly defaultCols = defaultCols;
 
@@ -70,28 +70,33 @@ const defaultCols: ITableColumn<ReportsTableRowItemField>[] = [
     order: 2,
   },
   {
+    id: ReportsTableRowItemField.STATUS,
+    text: 'Статус',
+    order: 3,
+  },
+  {
     id: ReportsTableRowItemField.DEPARTMENT,
     text: 'Кафедра',
-    order: 3
+    order: 4
   },
   {
     id: ReportsTableRowItemField.INSTITUTE,
     text: 'Институт',
-    order: 4
+    order: 5
   },
   {
     id: ReportsTableRowItemField.HOURS,
     text: 'Часы',
-    order: 5
+    order: 6
   },
   {
     id: ReportsTableRowItemField.START_DATE,
     text: "Дата начала",
-    order: 6
+    order: 7
   },
   {
     id: ReportsTableRowItemField.END_DATE,
     text: "Дата окончания",
-    order: 7
+    order: 8
   }
 ];
