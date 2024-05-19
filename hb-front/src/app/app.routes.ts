@@ -25,6 +25,10 @@ export const routes: Routes = [
         loadChildren: () => import("@ui/containers/states/states.routes").then(m => m.routes)
       },
       {
+        path: MainRoutes.ACTIVITIES,
+        loadChildren: () => import("@ui/containers/activities/activities.routes").then(m => m.routes)
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: MainRoutes.REPORTS

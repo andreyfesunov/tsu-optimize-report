@@ -1,7 +1,21 @@
 <mat-tab-group *ngIf="works$ | async as works" class="tabs" animationDuration="0ms">
-  <mat-tab *ngFor="let work of works" [label]="work.name">
+  <mat-tab *ngFor="let work of works; index as index" [disabled]="index !== 0" [label]="work.name">
     <div class="tabs__content">
       <h1>{{ work.id }}</h1>
+
+      <table *ngFor="let event of workForm.controls" app-table [cols]="defaultCols"
+             [itemsCount]="workForm.controls.length">
+        <td
+          *ngFor="let col of defaultCols"
+          class="tsu-table-td"
+          [class.tsu-table-td--center]="col.align === 'center'"
+        >
+        </td>
+      </table>
+
+      <button mat-icon-button>
+        <mat-icon>add_circle</mat-icon>
+      </button>
     </div>
   </mat-tab>
 </mat-tab-group>

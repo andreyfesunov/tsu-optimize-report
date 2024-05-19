@@ -1,5 +1,5 @@
 import {Component, input, TemplateRef, ViewEncapsulation} from "@angular/core";
-import {NgTemplateOutlet} from "@angular/common";
+import {NgIf, NgTemplateOutlet} from "@angular/common";
 
 @Component({
   selector: 'app-modal-dialog',
@@ -14,18 +14,19 @@ import {NgTemplateOutlet} from "@angular/common";
         <ng-content></ng-content>
       </div>
 
-      <div class="modal-dialog__actions">
-        <ng-container *ngTemplateOutlet="actionsRef()"></ng-container>
+      <div *ngIf="actionsRef() as actionsRef" class="modal-dialog__actions">
+        <ng-container *ngTemplateOutlet="actionsRef"></ng-container>
       </div>
     </div>
   `,
   imports: [
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    NgIf
   ],
   styleUrls: ['modal-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ModalDialogComponent {
   public readonly title = input.required<string>();
-  public readonly actionsRef = input.required<TemplateRef<null>>();
+  public readonly actionsRef = input<TemplateRef<null> | null>(null);
 }

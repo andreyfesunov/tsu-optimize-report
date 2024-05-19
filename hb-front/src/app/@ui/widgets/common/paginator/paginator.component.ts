@@ -35,7 +35,7 @@ export class PaginatorComponent {
   public readonly page = input.required<IPagination<unknown>>();
 
   protected get paginationDisabled(): boolean {
-    return this.page().totalPages === 1;
+    return this.page().totalPages <= 1;
   }
 
   protected get startItemNumber(): number {

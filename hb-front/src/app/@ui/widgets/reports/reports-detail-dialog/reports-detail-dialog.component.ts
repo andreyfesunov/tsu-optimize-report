@@ -11,26 +11,21 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
   ],
   template: `
     <app-modal-dialog
-      [actionsRef]="actionsRef"
       [title]="'Заполнение отчёта'"
     >
-      <app-reports-tabs></app-reports-tabs>
+      <app-reports-tabs [id]="id"></app-reports-tabs>
     </app-modal-dialog>
-
-    <ng-template #actionsRef>
-
-    </ng-template>
   `
 })
 export class ReportsDetailDialogComponent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly _dialogData: ReportsDetailDialogData
+    @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IReportsDetailDialogData
   ) {
   }
 
-  private readonly _id: string = this._dialogData.id;
+  protected readonly id: string = this._dialogData.id;
 }
 
-export interface ReportsDetailDialogData {
+export interface IReportsDetailDialogData {
   id: string;
 }

@@ -49,6 +49,7 @@ builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<IStateUserService, StateUserService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IWorkService, WorkService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

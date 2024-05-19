@@ -1,18 +1,34 @@
-﻿using BackendBase.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using BackendBase.Models;
+﻿using BackendBase.Dto;
 using BackendBase.Helpers.CRUD;
-using BackendBase.Dto;
+using BackendBase.Interfaces;
+using BackendBase.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace BackendBase.Controllers
+namespace BackendBase.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class EventTypeController : CRUDControllerBase<EventType, EventTypeDto>
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EventTypeController : CRUDControllerBase<EventType, EventTypeDto>
-    {
-        public EventTypeController(IEventTypeService service)
+    private readonly IEventTypeService _service;
+
+    public EventTypeController(IEventTypeService service)
         : base(service)
+    {
+        _service = service;
+    }
+
+    [HttpPost("{activityId:guid}/search")]
+    public async Task<ActionResult<PaginationDto<EventTypeDto>>> Search(Guid activityId, [FromBody] SearchDto searchDto)
+    {
+        try
         {
+            var result = await _service.Search(activityId, searchDto);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

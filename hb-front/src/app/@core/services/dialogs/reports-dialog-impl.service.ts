@@ -1,7 +1,7 @@
 import {ReportsDialogService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {ReportsDetailDialogComponent, ReportsDetailDialogData} from "@ui/widgets";
+import {IReportsDetailDialogData, ReportsDetailDialogComponent} from "@ui/widgets";
 
 @Injectable()
 export class ReportsDialogImplService extends ReportsDialogService {
@@ -12,7 +12,7 @@ export class ReportsDialogImplService extends ReportsDialogService {
   }
 
   public openDetail(id: string): MatDialogRef<ReportsDetailDialogComponent> {
-    return this._dialog.open<ReportsDetailDialogComponent, ReportsDetailDialogData>(ReportsDetailDialogComponent, {
+    return this._dialog.open<ReportsDetailDialogComponent, IReportsDetailDialogData>(ReportsDetailDialogComponent, {
       minWidth: '900px',
       data: {id: id}
     });

@@ -22,7 +22,7 @@ import {UsersTableRowItemField} from "@ui/widgets/users/users-table/users-table-
   ],
   template: `
     <ng-container *ngIf="items$ | async as items">
-      <table app-table [cols]="defaultCols" [shadowed]="true" *ngIf="items.length > 0">
+      <table app-table [cols]="defaultCols" [shadowed]="true" [itemsCount]="items.length">
         <tr *ngFor="let item of items"
             app-users-table-row
             [item]="item"

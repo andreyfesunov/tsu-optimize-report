@@ -18,7 +18,7 @@ import {getDefaultPaginationRequest} from "@core/utils";
   standalone: true,
   template: `
     <ng-container *ngIf="items$ | async as items">
-      <table app-table [shadowed]="true" [cols]="defaultCols">
+      <table app-table [shadowed]="true" [cols]="defaultCols" [itemsCount]="items.length">
         <tr *ngFor="let item of items" app-states-table-row [item]="item" [cols]="defaultCols"></tr>
       </table>
 

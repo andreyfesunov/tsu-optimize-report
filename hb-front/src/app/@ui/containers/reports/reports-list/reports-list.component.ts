@@ -16,7 +16,10 @@ import {NgIf} from "@angular/common";
   ],
   template: `
     <app-content>
-      <app-reports-table [loadFn]="loadFn"></app-reports-table>
+      <app-reports-table
+        [loadFn]="loadFn"
+        (edit)="edit($event)"
+      ></app-reports-table>
 
       <app-spinner *ngIf="spinner.active$"></app-spinner>
     </app-content>

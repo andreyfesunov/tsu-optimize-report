@@ -6,3 +6,5 @@ export * from "./states.service";
 export * from "./jobs.service";
 export * from "./institutes.service";
 export * from "./works.service";
+export * from "./activities.service";
+export * from "./event-types.service";

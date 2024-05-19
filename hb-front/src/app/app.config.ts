@@ -5,7 +5,9 @@ import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 import {jwtInterceptor, proxyInterceptor} from "@core/interceptors";
 import {
+  activitiesProviders,
   authProviders,
+  eventTypesProviders,
   jobsProviders,
   reportsProviders,
   routersProviders,
@@ -34,6 +36,8 @@ export const appConfig: ApplicationConfig = {
     ...jobsProviders,
     ...institutesProviders,
     ...reportsProviders,
-    ...worksProviders
+    ...worksProviders,
+    ...activitiesProviders,
+    ...eventTypesProviders
   ]
 };

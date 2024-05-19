@@ -11,6 +11,7 @@
   --_tsu-table-td-last-border-bottom: none;
   --_tsu-table-th-border-bottom: 1px solid #{variables.$table-border-color};
   --_tsu-table-th-height: 40px;
+  --_tsu-table-no-content-height: 150px;
   --_tsu-table-th-background-color: unset;
 
   --_tsu-table-head-position: unset;
@@ -55,6 +56,21 @@
     --_tsu-table-border: 1px solid #{variables.$table-border-color};
     --_tsu-table-border-radius: #{variables.$padding-md};
     --_tsu-table-td-last-border-bottom: none;
+  }
+
+  &__no-content {
+    position: relative;
+    height: var(--_tsu-table-no-content-height);
+  }
+
+  &__no-content-text {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+
+    display: grid;
+    place-items: center;
   }
 
   &-th,

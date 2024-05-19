@@ -5,3 +5,5 @@ export * from "./users";
 export * from "./states";
 export * from "./jobs";
 export * from "./works";
+export * from "./activities";
+export * from "./event-types";

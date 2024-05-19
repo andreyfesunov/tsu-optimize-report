@@ -6,101 +6,105 @@ using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentHubBackend.Exceptions;
 
-namespace BackendBase.Repositories
+namespace BackendBase.Repositories;
+
+public abstract class BaseRepositoryV2<TEntity, DtoEntity> : IBaseRepository<TEntity, DtoEntity> where TEntity : Base
 {
-    public abstract class BaseRepositoryV2<TEntity, DtoEntity> : IBaseRepository<TEntity, DtoEntity> where TEntity : Base
+    protected readonly DataContext context;
+    protected readonly DbSet<TEntity> dbset;
+    protected readonly IMapper mapper;
+
+    protected BaseRepositoryV2(DataContext context, IMapper mapper)
     {
-        private readonly DataContext _context;
-        private readonly DbSet<TEntity> _dbset;
-        private readonly IMapper _mapper;
+        this.context = context;
+        dbset = this.context.Set<TEntity>();
+        this.mapper = mapper;
+    }
 
-        protected BaseRepositoryV2(DataContext context, IMapper mapper)
-        {
-            _context = context;
-            _dbset = _context.Set<TEntity>();
-            _mapper = mapper;
-        }
+    public async Task<TEntity> AddEntity(TEntity entity)
+    {
+        var model = await context.AddAsync(entity);
+        await Save();
+        return model.Entity;
+    }
 
-        protected abstract IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query);
+    public async Task<bool> Delete(TEntity entity)
+    {
+        context.Remove(entity);
+        return await Save();
+    }
 
-        public async Task<TEntity> AddEntity(TEntity entity)
-        {
-            var model = await _context.AddAsync(entity);
-            await Save();
-            return model.Entity;
-        }
+    public async Task<bool> DeleteById(Guid entityId)
+    {
+        var entity = await GetById(entityId);
+        if (entity == null) throw new EntityNotFoundException();
+        context.Remove(entity);
+        return await Save();
+    }
 
-        public async Task<bool> Delete(TEntity entity)
-        {
-            _context.Remove(entity);
-            return await Save();
-        }
+    public async Task<bool> DoesExist(Guid id)
+    {
+        return await dbset.FindAsync(id) != null;
+    }
 
-        public async Task<bool> DeleteById(Guid entityId)
-        {
-            var entity = await GetById(entityId);
-            if (entity == null) throw new EntityNotFoundException();
-            _context.Remove(entity);
-            return await Save();
-        }
+    public async Task<ICollection<DtoEntity>> GetAll()
+    {
+        var itemsQuery = dbset.AsNoTracking().AsQueryable();
 
-        public async Task<bool> DoesExist(Guid id)
-        {
-            return await _dbset.FindAsync(id) != null;
-        }
+        return await IncludeChildren(itemsQuery).Select(x => mapper.Map<DtoEntity>(x)).ToListAsync();
+    }
 
-        public async Task<ICollection<DtoEntity>> GetAll()
-        {
-            var itemsQuery = _dbset.AsNoTracking().AsQueryable();
-
-            return await IncludeChildren(itemsQuery).Select(x => _mapper.Map<DtoEntity>(x)).ToListAsync();
-        }
-
-        public async Task<DtoEntity> GetById(Guid id)
-        {
-            var entityQuery = _dbset.AsQueryable().Where(e => e.Id == id);
-            var dtoEntitiy = (await IncludeChildren(entityQuery).Select(x => _mapper.Map<DtoEntity>(x)).ToListAsync())[0];
-            return dtoEntitiy;
-        }
+    public async Task<DtoEntity> GetById(Guid id)
+    {
+        var entityQuery = dbset.AsQueryable().Where(e => e.Id == id);
+        var dtoEntity = (await IncludeChildren(entityQuery).Select(x => mapper.Map<DtoEntity>(x)).ToListAsync())[0];
+        return dtoEntity;
+    }
 
         public async Task<TEntity> GetEntityById(Guid id)
         {
-            return await _dbset.FindAsync(id);
+            return await dbset.FindAsync(id);
         }
 
         public async Task<bool> Save()
         {
-            var saved = await _context.SaveChangesAsync();
+            var saved = await context.SaveChangesAsync();
             return saved > 0;
         }
 
-        public ICollection<TEntity> SearchEntity(Func<TEntity, bool> predicate)
-        {
-            return _dbset.Where(predicate).ToList();
-        }
-
-        public async Task<TEntity> UpdateEntity(TEntity entity)
-        {
-            var model = _context.Update(entity).Entity;
-            await Save();
-            return model;
-        }
-
-        public async Task<PaginationDto<DtoEntity>> Search(SearchDto searchDto)
-        {
-            var count = await _dbset.CountAsync();
-            var itemsQuery = _dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
-                .AsQueryable();
-
-            itemsQuery = IncludeChildren(itemsQuery);
-
-            return new PaginationDto<DtoEntity>
-            {
-                PageNumber = searchDto.PageNumber,
-                PageSize = searchDto.PageSize,
-                TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
-                Entities = await itemsQuery.Select(x => _mapper.Map<DtoEntity>(x)).ToListAsync()
-            };
-        }
+    public ICollection<TEntity> SearchEntity(Func<TEntity, bool> predicate)
+    {
+        return dbset.Where(predicate).ToList();
     }
+
+    public async Task<TEntity> UpdateEntity(TEntity entity)
+    {
+        var model = context.Update(entity).Entity;
+        await Save();
+        return model;
+    }
+
+    public async Task<PaginationDto<DtoEntity>> Search(SearchDto searchDto)
+    {
+        return await SearchFunc(dbset, searchDto);
+    }
+
+    protected async Task<PaginationDto<DtoEntity>> SearchFunc(IQueryable<TEntity> queryable, SearchDto searchDto)
+    {
+        var count = await queryable.CountAsync();
+        var itemsQuery = queryable.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
+            .AsQueryable();
+
+        itemsQuery = IncludeChildren(itemsQuery);
+
+        return new PaginationDto<DtoEntity>
+        {
+            PageNumber = searchDto.PageNumber,
+            PageSize = searchDto.PageSize,
+            TotalPages = count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0,
+            Entities = await itemsQuery.Select(x => mapper.Map<DtoEntity>(x)).ToListAsync()
+        };
+    }
+
+    protected abstract IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query);
 }

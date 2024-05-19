@@ -6,3 +6,5 @@ export const toReports = [...toMain, MainRoutes.REPORTS];
 export const toUsers = [...toMain, MainRoutes.USERS];
 
 export const toStates = [...toMain, MainRoutes.STATES];
+
+export const toActivities = [...toMain, MainRoutes.ACTIVITIES];

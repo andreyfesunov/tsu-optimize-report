@@ -5,7 +5,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatListModule} from "@angular/material/list";
 import {MatButtonModule} from "@angular/material/button";
 import {AuthState} from "@core/abstracts";
-import {ITokenModel, Navigation, toLogin, toReports, toStates, toUsers} from "@core/models";
+import {ITokenModel, Navigation, toActivities, toLogin, toReports, toStates, toUsers} from "@core/models";
 import {NavigationBarComponent} from "@ui/widgets";
 import {map} from "rxjs";
 
@@ -38,6 +38,10 @@ export class AppComponent {
     {
       text: "Штат", icon: "add_task", fn: () => void 0,
       path: toStates
+    },
+    {
+      text: "События", icon: "emoji_objects", fn: () => void 0,
+      path: toActivities
     },
     {
       text: "Выход", icon: "logout", fn: () => this._authState.removeToken(),
