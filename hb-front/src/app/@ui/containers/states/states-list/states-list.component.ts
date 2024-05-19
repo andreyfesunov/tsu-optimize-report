@@ -22,7 +22,7 @@ import {NgIf} from "@angular/common";
         (create)="create()"
       ></app-states-table-header>
 
-      <app-states-table [loadFn]="loadFn"></app-states-table>
+      <app-states-table [loadFn]="loadFn" (assign)="assign($event)"></app-states-table>
 
       <app-spinner *ngIf="spinner.active$"></app-spinner>
     </app-content>
@@ -48,6 +48,17 @@ export class StatesListComponent extends SubscriptionController {
       ref.afterClosed().pipe(
         exists(),
         switchMapSpinner((req) => this._statesService.create(req), this.spinner)
+      ).subscribe()
+    );
+  }
+
+  protected assign(id: string): void {
+    const ref = this._statesDialogService.openAssign(id);
+
+    this.subscription.add(
+      ref.afterClosed().pipe(
+        exists(),
+        switchMapSpinner((req) => this._statesService.assign(req), this.spinner)
       ).subscribe()
     );
   }

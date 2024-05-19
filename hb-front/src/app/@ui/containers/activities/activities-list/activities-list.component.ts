@@ -72,7 +72,7 @@ export class ActivitiesListComponent extends SubscriptionController {
   protected readonly loadFn = (id: string, req: IPaginationRequest) => withSpinner(this._eventTypesService.search(id, req), this.spinner);
 
   protected assign(id: string, name: string): void {
-    const dialog = this._activitiesDialogService.openAddEvent(id, name);
+    const dialog = this._activitiesDialogService.openAssign(id, name);
 
     this.subscription.add(
       dialog.afterClosed().pipe(

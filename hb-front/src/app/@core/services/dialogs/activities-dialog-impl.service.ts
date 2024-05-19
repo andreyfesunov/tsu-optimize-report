@@ -12,7 +12,7 @@ export class ActivitiesDialogImplService extends ActivitiesDialogService {
     super();
   }
 
-  public openAddEvent(activityId: string, activityName: string): MatDialogRef<ActivitiesEventDialogComponent, IActivitiesAssignEventRequest> {
+  public openAssign(activityId: string, activityName: string): MatDialogRef<ActivitiesEventDialogComponent, IActivitiesAssignEventRequest> {
     return this._dialog.open<ActivitiesEventDialogComponent, IActivitiesEventDialogData, IActivitiesAssignEventRequest>(ActivitiesEventDialogComponent, {
       data: {
         activityId,

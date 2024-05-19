@@ -5,3 +5,8 @@ export interface IStateCreateRequest {
   startDate: Date;
   endDate: Date;
 }
+
+export interface IStateAssignRequest {
+  stateId: string;
+  userId: string;
+}

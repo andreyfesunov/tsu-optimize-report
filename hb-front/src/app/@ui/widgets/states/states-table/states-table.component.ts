@@ -1,6 +1,6 @@
 import {ITableConfig, TableController} from "@core/controllers";
 import {IPagination, IState, ITableColumn} from "@core/models";
-import {Component, input} from "@angular/core";
+import {Component, input, output} from "@angular/core";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {
   PaginatorComponent,
@@ -19,7 +19,9 @@ import {getDefaultPaginationRequest} from "@core/utils";
   template: `
     <ng-container *ngIf="items$ | async as items">
       <table app-table [shadowed]="true" [cols]="defaultCols" [itemsCount]="items.length">
-        <tr *ngFor="let item of items" app-states-table-row [item]="item" [cols]="defaultCols"></tr>
+        <tr *ngFor="let item of items" (click)="item.count !== 0 && assign.emit(item.id)" [clickable]="item.count !== 0"
+            app-states-table-row [item]="item"
+            [cols]="defaultCols"></tr>
       </table>
 
       <app-paginator *ngIf="page$ | async as page" [page]="page"></app-paginator>
@@ -36,6 +38,8 @@ import {getDefaultPaginationRequest} from "@core/utils";
   ]
 })
 export class StatesTableComponent extends TableController<IState> {
+  public readonly assign = output<string>();
+
   public readonly loadFn = input.required<(request: IPaginationRequest) => Observable<IPagination<IState>>>();
 
   protected readonly defaultCols = defaultCols;
