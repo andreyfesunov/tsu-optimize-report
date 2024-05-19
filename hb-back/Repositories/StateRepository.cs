@@ -9,15 +9,10 @@ namespace BackendBase.Repositories;
 
 public class StateRepository : BaseRepositoryV2<State>
 {
-    private readonly DataContext _context;
-
     public StateRepository(
-        DataContext context,
-        UserRepository userRepository,
-        StateUserRepository stateUserRepository
+        DataContext context
     ) : base(context)
     {
-        _context = context;
     }
 
     protected override IQueryable<State> IncludeChildren(IQueryable<State> query)

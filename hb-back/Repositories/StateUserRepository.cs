@@ -9,12 +9,8 @@ namespace BackendBase.Repositories;
 
 public class StateUserRepository : BaseRepositoryV2<StateUser>
 {
-    private readonly DataContext _context;
-
-
     public StateUserRepository(DataContext context) : base(context)
     {
-        _context = context;
     }
 
     //public async Task<bool> ExistStateUser(StateUserCreateDto stateUserCreateDto)

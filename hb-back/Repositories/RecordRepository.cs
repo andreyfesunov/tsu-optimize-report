@@ -6,11 +6,8 @@ namespace BackendBase.Repositories
 {
     public class RecordRepository : BaseRepository<Record>
     {
-        private readonly DataContext _context;
-
         public RecordRepository(DataContext context) : base(context)
         {
-            _context = context;
         }
     }
 }
