@@ -48,9 +48,9 @@ public class ReportService : IReportService
 
         if (worksheetCount <= 1) throw new Exception("Workbook is incorrect, too few worksheets");
 
-            var activitiesDto = await _activityRepository.GetAll();
-            var activities = activitiesDto.Select(x => _mapper.Map<Activity>(x)).ToList();
-            var stateUser = await _stateUserRepository.GetEntityById(stateUserId);
+        var activitiesDto = await _activityRepository.GetAll();
+        var activities = activitiesDto.Select(x => _mapper.Map<Activity>(x)).ToList();
+        var stateUser = await _stateUserRepository.GetEntityById(stateUserId);
 
         for (var worksheetNumber = 1; worksheetNumber < worksheetCount; worksheetNumber++)
             await _handleWorksheet(package.GetSheetAt(worksheetNumber), stateUser, activities);
