@@ -32,7 +32,7 @@ namespace BackendBase.Repositories
         //public async Task<bool> ExistStateUser(StateUserCreateDto stateUserCreateDto)
         //{
         //    return _context.Set<StateUser>().FirstOrDefault(x => x.StateId == Guid.Parse(stateUserCreateDto.StateId) && x.UserId == Guid.Parse(stateUserCreateDto.UserId)) == null;
-        //}
+        //}aahahh
 
         protected override IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)
         {
