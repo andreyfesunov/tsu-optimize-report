@@ -3,26 +3,33 @@ using BackendBase.Models;
 
 namespace BackendBase.Helpers
 {
-    public static class MappingHelper<TEntity, TEntityDto>
+    public class MappingHelper<TEntity, TEntityDto>
     {
-        public static TEntityDto toDto(TEntity entity, IMapper _mapper)
+        private readonly IMapper _mapper;
+
+        public MappingHelper(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
+        public TEntityDto toDto(TEntity entity)
         {
             return _mapper.Map<TEntityDto>(entity);
         }
 
-        public static ICollection<TEntityDto> toDto(ICollection<TEntity> entities, IMapper _mapper)
+        public ICollection<TEntityDto> toDto(ICollection<TEntity> entities)
         {
-            return (ICollection<TEntityDto>)(entities.Select(x => toDto(x, _mapper)));
+            return (ICollection<TEntityDto>)(entities.Select(x => toDto(x)));
         }
 
-        public static PaginationDto<TEntityDto> paginationToDto(PaginationDto<TEntity> pagination, IMapper _mapper)
+        public PaginationDto<TEntityDto> paginationToDto(PaginationDto<TEntity> pagination)
         {
             PaginationDto<TEntityDto> result = new PaginationDto<TEntityDto>
             {
                 PageNumber = pagination.PageNumber,
                 PageSize = pagination.PageSize,
                 TotalPages = pagination.TotalPages,
-                Entities = toDto(pagination.Entities, _mapper)
+                Entities = toDto(pagination.Entities)
             };
             return result;
         }

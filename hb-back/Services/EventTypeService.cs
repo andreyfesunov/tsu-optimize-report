@@ -43,13 +43,14 @@ public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEvent
 
     public async Task<PaginationDto<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
     {
-        return MappingHelper<EventType, EventTypeDto>.paginationToDto((await _eventRepository.Search(activityId, searchDto)), _mapper);
+        return _mappingHelper.paginationToDto(await _eventRepository.Search(activityId, searchDto));
     }
 
     public async Task<ActivityEventType> Assign(EventTypeAssignDto dto)
     {
         var model = _mapper.Map<ActivityEventType>(dto);
-        if (!await _activityEventTypeRepository.Validate(model)) throw new Exception("Связь уже существует");
+        if (!await _activityEventTypeRepository.Validate(model))
+            throw new Exception("Связь уже существует");
 
         return await _activityEventTypeRepository.AddEntity(model);
     }
