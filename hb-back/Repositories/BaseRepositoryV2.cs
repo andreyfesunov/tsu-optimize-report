@@ -61,16 +61,16 @@ public abstract class BaseRepositoryV2<TEntity, DtoEntity> : IBaseRepository<TEn
         return dtoEntity;
     }
 
-        public async Task<TEntity> GetEntityById(Guid id)
-        {
-            return await dbset.FindAsync(id);
-        }
+    public async Task<TEntity> GetEntityById(Guid id)
+    {
+        return await dbset.FindAsync(id);
+    }
 
-        public async Task<bool> Save()
-        {
-            var saved = await context.SaveChangesAsync();
-            return saved > 0;
-        }
+    public async Task<bool> Save()
+    {
+        var saved = await context.SaveChangesAsync();
+        return saved > 0;
+    }
 
     public ICollection<TEntity> SearchEntity(Func<TEntity, bool> predicate)
     {

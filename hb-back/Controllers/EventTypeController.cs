@@ -31,4 +31,18 @@ public class EventTypeController : CRUDControllerBase<EventType, EventTypeDto>
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPost("assign")]
+    public async Task<ActionResult<bool>> Assign([FromBody] EventTypeAssignDto dto)
+    {
+        try
+        {
+            await _service.Assign(dto);
+            return Ok(true);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
