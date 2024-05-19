@@ -1,100 +1,98 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
-using BackendBase.Dto.Report;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BackendBase.Controllers
+namespace BackendBase.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UserController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    private readonly IMapper _mapper;
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService, IMapper mapper)
     {
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
+        _userService = userService;
+        _mapper = mapper;
+    }
 
-        public UserController(IUserService userService, IMapper mapper)
+    [HttpGet("getAll")]
+    public async Task<ActionResult<List<UserDto>>> GetAll()
+    {
+        try
         {
-            _userService = userService;
-            _mapper = mapper;
+            var users = await _userService.GetAllUsers();
+            return Ok(users);
         }
-
-        [HttpGet("get-all")]
-        public async Task<ActionResult<List<UserDto>>> GetAll()
+        catch (Exception ex)
         {
-            try
-            {
-                var users = await _userService.GetAllUsers();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("{userId:guid}")]
-        public async Task<ActionResult<UserDto>> GetById(Guid userId)
+    [HttpGet("{userId:guid}")]
+    public async Task<ActionResult<UserDto>> GetById(Guid userId)
+    {
+        try
         {
-            try
-            {
-                var user = await _userService.GetUserById(userId);
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var user = await _userService.GetUserById(userId);
+            return Ok(user);
         }
-
-        [HttpPost("log-in")]
-        public async Task<ActionResult<UserLoginDto>> Login([FromBody] LoginDto loginDto)
+        catch (Exception ex)
         {
-            try
-            {
-                var userLoginDto = await _userService.LogIn(loginDto);
-                return Ok(userLoginDto);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpPost("reg")]
-        public async Task<ActionResult<RoleUserEnum>> Reg([FromBody] RegistrationDto registrationDto)
+    [HttpPost("log-in")]
+    public async Task<ActionResult<UserLoginDto>> Login([FromBody] LoginDto loginDto)
+    {
+        try
         {
-            try
-            {
-                var userId = await _userService.Reg(registrationDto);
-                return Ok(userId);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var userLoginDto = await _userService.LogIn(loginDto);
+            return Ok(userLoginDto);
         }
-
-        [HttpPost("search")]
-        public async Task<ActionResult<PaginationDto<UserDto>>> Search(SearchDto searchDto)
+        catch (Exception ex)
         {
-            try
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("reg")]
+    public async Task<ActionResult<RoleUserEnum>> Reg([FromBody] RegistrationDto registrationDto)
+    {
+        try
+        {
+            var userId = await _userService.Reg(registrationDto);
+            return Ok(userId);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("search")]
+    public async Task<ActionResult<PaginationDto<UserDto>>> Search(SearchDto searchDto)
+    {
+        try
+        {
+            var result = await _userService.Search(searchDto);
+            return Ok(new PaginationDto<UserDto>
             {
-                var result = await _userService.Search(searchDto);
-                return Ok(new PaginationDto<UserDto>
-                {
-                    PageNumber = result.PageNumber,
-                    PageSize = result.PageSize,
-                    TotalPages = result.TotalPages,
-                    Entities = result.Entities.Select(x => _mapper.Map<UserDto>(x)).ToList()
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+                PageNumber = result.PageNumber,
+                PageSize = result.PageSize,
+                TotalPages = result.TotalPages,
+                Entities = result.Entities.Select(x => _mapper.Map<UserDto>(x)).ToList()
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

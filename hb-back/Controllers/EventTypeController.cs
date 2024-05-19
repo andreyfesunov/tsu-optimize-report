@@ -18,6 +18,21 @@ public class EventTypeController : CRUDControllerBase<EventType, EventTypeDto>
         _service = service;
     }
 
+    [HttpPost("searchMap")]
+    public async Task<ActionResult<Dictionary<string, PaginationDto<EventTypeDto>>>> SearchMap(
+        [FromBody] SearchDto searchDto)
+    {
+        try
+        {
+            var result = await _service.SearchMap(searchDto);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPost("{activityId:guid}/search")]
     public async Task<ActionResult<PaginationDto<EventTypeDto>>> Search(Guid activityId, [FromBody] SearchDto searchDto)
     {

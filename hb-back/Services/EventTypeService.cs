@@ -25,6 +25,11 @@ public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEvent
         _mapper = mapper;
     }
 
+    public Task<Dictionary<string, PaginationDto<EventTypeDto>>> SearchMap(SearchDto searchDto)
+    {
+        return _eventRepository.SearchMap(searchDto);
+    }
+
     public Task<PaginationDto<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
     {
         return _eventRepository.Search(activityId, searchDto);

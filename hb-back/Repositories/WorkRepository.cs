@@ -13,6 +13,6 @@ public class WorkRepository : BaseRepositoryV2<Work, WorkDto>
 
     protected override IQueryable<Work> IncludeChildren(IQueryable<Work> query)
     {
-        return query;
+        return query.OrderBy(x => x.Order);
     }
 }

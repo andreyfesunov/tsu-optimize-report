@@ -13,7 +13,8 @@ public static class WorkAndEventTypeFactory
         var w1 = new Work
         {
             Id = Guid.NewGuid(),
-            Name = "Учебно-методичечкая работа"
+            Name = "Учебно-методичечкая работа",
+            Order = 1
         };
 
         var ets1 = new List<EventType>
@@ -424,7 +425,8 @@ public static class WorkAndEventTypeFactory
         var w2 = new Work
         {
             Id = Guid.NewGuid(),
-            Name = "Научная и научно-методическая деятельность"
+            Name = "Научная и научно-методическая деятельность",
+            Order = 2
         };
 
         var ets2 = new List<EventType>
@@ -572,7 +574,8 @@ public static class WorkAndEventTypeFactory
         var w3 = new Work
         {
             Id = Guid.NewGuid(),
-            Name = "Руководство научно-исследовательской работой студентов"
+            Name = "Руководство научно-исследовательской работой студентов",
+            Order = 3
         };
 
         var ets3 = new List<EventType>
@@ -602,7 +605,8 @@ public static class WorkAndEventTypeFactory
         var w4 = new Work
         {
             Id = Guid.NewGuid(),
-            Name = "Организационно-методическая работа"
+            Name = "Организационно-методическая работа",
+            Order = 4
         };
 
         var ets4 = new List<EventType>
@@ -761,7 +765,8 @@ public static class WorkAndEventTypeFactory
         var w5 = new Work
         {
             Id = Guid.NewGuid(),
-            Name = "Воспитательная работа"
+            Name = "Воспитательная работа",
+            Order = 5
         };
 
         var ets5 = new List<EventType>
@@ -788,7 +793,8 @@ public static class WorkAndEventTypeFactory
         var w6 = new Work
         {
             Id = Guid.NewGuid(),
-            Name = "Осуществление медицинской деятельности, необходимой для практической подготовки обучающихся"
+            Name = "Осуществление медицинской деятельности, необходимой для практической подготовки обучающихся",
+            Order = 6
         };
 
         var ets6 = new List<EventType>
@@ -842,7 +848,8 @@ public static class WorkAndEventTypeFactory
         var w7 = new Work
         {
             Id = Guid.NewGuid(),
-            Name = "Дополнительное профессиональное образованию по профилю педагогической деятельности"
+            Name = "Дополнительное профессиональное образованию по профилю педагогической деятельности",
+            Order = 7
         };
 
         var ets7 = new List<EventType>

@@ -2,14 +2,12 @@
 using BackendBase.Dto.CreateDto;
 using BackendBase.Helpers.CRUD;
 using BackendBase.Models;
-using BackendBase.Repositories;
 
-namespace BackendBase.Interfaces
+namespace BackendBase.Interfaces;
+
+public interface IStateService : ICRUDServiceBase<State, StateDto>
 {
-    public interface IStateService : ICRUDServiceBase<State, StateDto>
-    {
-        Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto);
+    Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto);
 
-        Task<bool> SetState(StateUserCreateDto stateUserCreateDto);
-    }
+    Task<bool> Assign(StateUserCreateDto stateUserCreateDto);
 }

@@ -1,50 +1,49 @@
-﻿using BackendBase.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using BackendBase.Models;
-using BackendBase.Helpers.CRUD;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
+using BackendBase.Helpers.CRUD;
+using BackendBase.Interfaces;
+using BackendBase.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace BackendBase.Controllers
+namespace BackendBase.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class StateController : CRUDControllerBase<State, StateDto>
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class StateController : CRUDControllerBase<State, StateDto>
-    {
-        private readonly IStateService _stateService;
+    private readonly IStateService _stateService;
 
-        public StateController(IStateService service)
+    public StateController(IStateService service)
         : base(service)
-        {
-            _stateService = service;
-        }
+    {
+        _stateService = service;
+    }
 
-        [HttpPost("createWithDto")]
-        public async Task<ActionResult<State>> Create(StateCreateDto entity)
+    [HttpPost("createWithDto")]
+    public async Task<ActionResult<State>> Create(StateCreateDto entity)
+    {
+        try
         {
-            try
-            {
-                var result = await _stateService.AddStateWithCreateDto(entity);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await _stateService.AddStateWithCreateDto(entity);
+            return Ok(result);
         }
-
-        [HttpPost("setState")]
-        public async Task<ActionResult<bool>> SetState(StateUserCreateDto entity)
+        catch (Exception ex)
         {
-            try
-            {
-                var result = await _stateService.SetState(entity);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("assign")]
+    public async Task<ActionResult<bool>> Assign(StateUserCreateDto entity)
+    {
+        try
+        {
+            var result = await _stateService.Assign(entity);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

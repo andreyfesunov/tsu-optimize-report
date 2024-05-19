@@ -1,33 +1,29 @@
-﻿using BackendBase.Data;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
 using BackendBase.Helpers.CRUD;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
-using Microsoft.EntityFrameworkCore;
-using NPOI.HSSF.UserModel;
 
-namespace BackendBase.Services
+namespace BackendBase.Services;
+
+public class StateService : CRUDServiceBase<State, StateDto>, IStateService
 {
-    public class StateService : CRUDServiceBase<State, StateDto>, IStateService
+    private readonly StateRepository _stateRepository;
+
+    public StateService(StateRepository repository)
     {
-        private readonly StateRepository _stateRepository;
+        _repository = repository;
+        _stateRepository = repository;
+    }
 
-        public StateService(StateRepository repository)
-        {
-            _repository = repository;
-            _stateRepository = repository;
-        }
+    public async Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto)
+    {
+        return await _stateRepository.AddStateWithCreateDto(stateCreateDto);
+    }
 
-        public async Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto)
-        {
-            return await _stateRepository.AddStateWithCreateDto(stateCreateDto);
-        }
-
-        public async Task<bool> SetState(StateUserCreateDto stateUserCreateDto)
-        {
-            return await _stateRepository.SetState(stateUserCreateDto);
-        }
+    public async Task<bool> Assign(StateUserCreateDto stateUserCreateDto)
+    {
+        return await _stateRepository.Assign(stateUserCreateDto);
     }
 }
