@@ -5,7 +5,7 @@ using BackendBase.Models;
 
 namespace BackendBase.Repositories
 {
-    public class InstituteRepository : BaseRepositoryV2<Institute>
+    public class InstituteRepository : BaseRepository<Institute>
     {
         public InstituteRepository(DataContext context) : base(context)
         { }

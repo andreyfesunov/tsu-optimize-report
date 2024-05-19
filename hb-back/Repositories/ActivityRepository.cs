@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class ActivityRepository : BaseRepositoryV2<Activity>
+    public class ActivityRepository : BaseRepository<Activity>
     {
         public ActivityRepository(DataContext context) : base(context)
         {

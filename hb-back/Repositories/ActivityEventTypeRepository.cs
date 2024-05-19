@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
-public class ActivityEventTypeRepository : BaseRepositoryV2<ActivityEventType>
+public class ActivityEventTypeRepository : BaseRepository<ActivityEventType>
 {
     public ActivityEventTypeRepository(DataContext context) : base(context)
     {

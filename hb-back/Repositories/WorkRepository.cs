@@ -5,7 +5,7 @@ using BackendBase.Models;
 
 namespace BackendBase.Repositories;
 
-public class WorkRepository : BaseRepositoryV2<Work>
+public class WorkRepository : BaseRepository<Work>
 {
     public WorkRepository(DataContext context) : base(context)
     {

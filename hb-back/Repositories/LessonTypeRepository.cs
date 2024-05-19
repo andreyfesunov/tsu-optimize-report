@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class LessonTypeRepository : BaseRepositoryV2<LessonType>
+    public class LessonTypeRepository : BaseRepository<LessonType>
     {
         public LessonTypeRepository(DataContext context) : base(context)
         {

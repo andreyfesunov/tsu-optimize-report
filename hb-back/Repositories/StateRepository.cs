@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
-public class StateRepository : BaseRepositoryV2<State>
+public class StateRepository : BaseRepository<State>
 {
     public StateRepository(
         DataContext context
