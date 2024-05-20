@@ -5,9 +5,9 @@
   display: flex;
   flex-direction: column;
 
-  min-height: 160px;
+  // min-height: 160px;
 
-  padding: variables.$padding-lg;
+  padding: variables.$padding-lg-2;
 
   &__title {
     @include typography.body-large;
@@ -24,7 +24,7 @@
   }
 
   &__actions {
-    border-top: 1px solid variables.$dialog-border-color;
+    // border-top: 1px solid variables.$dialog-border-color;
     padding: variables.$padding-md variables.$padding-lg 0;
 
     display: flex;

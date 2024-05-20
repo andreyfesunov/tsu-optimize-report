@@ -43,7 +43,7 @@ public class StateService : CRUDServiceBase<State, StateDto>, IStateService
     public async Task<bool> Assign(StateUserCreateDto stateUserCreateDto)
     {
         var state = await _stateRepository.GetByIdRoot(Guid.Parse(stateUserCreateDto.StateId));
-        var userDto = await _userRepository.GetById(Guid.Parse(stateUserCreateDto.UserId));
+        var userDto = _userRepository.GetById(Guid.Parse(stateUserCreateDto.UserId));
         if (state == null || userDto == null)
             return false;
         if (state.Count < 1)

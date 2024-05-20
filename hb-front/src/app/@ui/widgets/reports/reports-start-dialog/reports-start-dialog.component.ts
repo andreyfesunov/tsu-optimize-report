@@ -37,8 +37,8 @@ import {MatDialogRef} from "@angular/material/dialog";
     >
       <form (ngSubmit)="submit()">
         <mat-form-field appearance="outline">
-          <mat-label>Файл</mat-label>
-          <button mat-icon-button matPrefix (click)="$event.preventDefault(); file_input.click()">
+          <mat-label style="margin-left: 12px;">Файл</mat-label>
+          <button mat-icon-button matPrefix (click)="$event.preventDefault(); file_input.click()" style="margin-left: 8px">
             <mat-icon>attach_file</mat-icon>
           </button>
           <input type="text" readonly [formControl]="displayControl" matInput>

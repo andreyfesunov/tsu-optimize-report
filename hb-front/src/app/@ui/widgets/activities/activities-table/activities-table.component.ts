@@ -25,7 +25,7 @@ import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
   ],
   template: `
     <ng-container *ngIf="items$ | async as items">
-      <table app-table [cols]="defaultCols" [shadowed]="true" [itemsCount]="items.length">
+      <table app-table [cols]="defaultCols" [shadowed]="true" [itemsCount]="items.length" [bordered]="true">
         <tr *ngFor="let item of items"
             (click)="edit.emit(item.id)"
             app-activities-table-row
