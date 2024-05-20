@@ -48,7 +48,7 @@ export class ActivitiesTableComponent extends TableController<IEventType> {
 
   protected config(): ITableConfig {
     return {
-      request: getDefaultPaginationRequest(2)
+      request: getDefaultPaginationRequest(10)
     };
   }
 

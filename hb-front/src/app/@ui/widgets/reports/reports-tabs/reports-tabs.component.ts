@@ -1,6 +1,6 @@
 import {Component, input} from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
-import {BehaviorSubject, concat, distinctUntilChanged, map, Observable, of, shareReplay, switchMap, tap} from "rxjs";
+import {BehaviorSubject, concat, distinctUntilChanged, map, Observable, of, shareReplay, switchMap} from "rxjs";
 import {IEventType, ITableColumn, IWork} from "@core/models";
 import {EventTypesService, WorksService} from "@core/abstracts";
 import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
@@ -83,7 +83,6 @@ export class ReportsTabsComponent extends SubscriptionController {
 
   protected readonly eventControlsChanges$: Observable<(string | null)[]> = concat(of(this.workForm.value), this.workForm.valueChanges).pipe(
     distinctUntilChanged((prev, curr) => prev.length === curr.length),
-    tap((forms) => console.log(forms, 'im here')),
     map(() => new FormArray(this.workForm.controls.map(form => form.controls.event.controls.eventType))),
     switchMap((control) => concat(of(control.value), control.valueChanges)),
     distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
