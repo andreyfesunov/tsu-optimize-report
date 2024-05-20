@@ -2,7 +2,7 @@ import {EventTypesService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {IActivitiesAssignEventRequest, IPaginationRequest} from "@core/dtos";
-import {concat, filter, Observable, of, shareReplay, Subject, switchMap, tap} from "rxjs";
+import {concat, filter, map, Observable, of, shareReplay, Subject, switchMap, take, tap} from "rxjs";
 import {IEventType, IPagination} from "@core/models";
 
 @Injectable()
@@ -19,13 +19,15 @@ export class EventTypesImplService extends EventTypesService {
     shareReplay(1)
   )
 
+  private _eventTypesMap$: Observable<{ [key: string]: IPagination<IEventType> }> | null = null;
+
   public getAll(): Observable<IEventType[]> {
     return this._eventTypes$;
   }
 
   public search(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {
     return concat(of(0), this.activityEvent$(activityId)).pipe(
-      switchMap(() => this._httpClient.post<IPagination<IEventType>>(`/api/EventType/${activityId}/search`, req))
+      switchMap(() => this._getSearchRequest(activityId, req))
     );
   }
 
@@ -38,4 +40,20 @@ export class EventTypesImplService extends EventTypesService {
   private readonly activityEvent$ = (id: string) => this._activityId$.pipe(
     filter((activityId) => activityId === id)
   );
+
+  private _getSearchRequest(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {
+    if (req.pageNumber !== 1) {
+      return this._httpClient.post<IPagination<IEventType>>(`/api/EventType/${activityId}/search`, req)
+    }
+
+    return (this._eventTypesMap$ ?? (this._eventTypesMap$ = concat(of(0), this._activityId$).pipe(
+      switchMap(() => this._httpClient.post<{
+        [key: string]: IPagination<IEventType>
+      }>(`/api/EventType/searchMap`, req)),
+      shareReplay({bufferSize: 1, refCount: true})
+    ))).pipe(
+      map((map) => map[activityId]),
+      take(1)
+    );
+  }
 }

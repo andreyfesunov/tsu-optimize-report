@@ -1,8 +1,8 @@
 import {IPaginationRequest} from "@core/dtos";
 
-export function getDefaultPaginationRequest(): IPaginationRequest {
+export function getDefaultPaginationRequest(size: number = 25): IPaginationRequest {
   return {
     pageNumber: 1,
-    pageSize: 25
+    pageSize: size
   }
 }

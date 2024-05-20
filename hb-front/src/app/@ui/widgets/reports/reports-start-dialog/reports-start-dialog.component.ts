@@ -42,7 +42,8 @@ import {MatDialogRef} from "@angular/material/dialog";
             <mat-icon>attach_file</mat-icon>
           </button>
           <input type="text" readonly [formControl]="displayControl" matInput>
-          <input type="file" hidden accept=".xls, .xlsx" #file_input (change)="change(file_input.files)">
+          <input type="file" hidden accept=".xls, .xlsx" #file_input
+                 (change)="file_input.files && change(file_input.files)">
         </mat-form-field>
       </form>
     </app-modal-dialog>

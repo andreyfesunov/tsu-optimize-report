@@ -19,7 +19,7 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 })
 export class ReportsDetailDialogComponent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IReportsDetailDialogData
+    @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IReportsDetailDialogData,
   ) {
   }
 
