@@ -1,44 +1,70 @@
 <mat-tab-group *ngIf="works$ | async as works" class="tabs" animationDuration="0ms"
                (selectedTabChange)="tabChanged$.next($event.index)">
   <mat-tab *ngFor="let work of works; index as index" [disabled]="index !== 0" [label]="work.name">
-    <div class="tabs__content">
-      <table *ngFor="let event of workForm.controls" app-table [cols]="defaultCols"
-             [itemsCount]="workForm.controls.length">
-        <td
-          *ngFor="let col of defaultCols"
-          class="tsu-table-td"
-          [class.tsu-table-td--center]="col.align === 'center'"
-        >
-          <ng-container [ngSwitch]="col.id">
-            <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
-              <mat-form-field *ngIf="events$ | async as eventTypes" appearance="outline">
-                <mat-label>Мероприятие</mat-label>
-                <input [formControl]="event.controls.event.controls.eventType" [matAutocomplete]="auto" matInput>
+    <app-scrollable class="tabs__scrollable" [horizontalScroll]="true">
+      <div class="tabs__content">
+        <table *ngFor="let event of workForm.controls" app-table [cols]="defaultCols"
+               [itemsCount]="workForm.controls.length" [bordered]="true">
+          <tr>
+            <td
+              *ngFor="let col of defaultCols"
+              class="tsu-table-td"
+              [class.tsu-table-td--center]="col.align === 'center'"
+            >
+              <ng-container [ngSwitch]="col.id">
+                <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
+                  <mat-form-field *ngIf="events$ | async as eventTypes" appearance="outline">
+                    <input [formControl]="event.controls.event.controls.eventType" [matAutocomplete]="auto" matInput>
 
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
-                  <mat-option *ngFor="let eventType of eventTypes"
-                              [value]="eventType.id">{{ displayFn(eventTypes)(eventType.id) }}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </ng-container>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
+                      <mat-option *ngFor="let eventType of eventTypes"
+                                  [value]="eventType.id">{{ displayFn(eventTypes)(eventType.id) }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </ng-container>
 
-            <ng-container *ngSwitchCase="ReportItemField.START_DATE"></ng-container>
+                <ng-container *ngSwitchCase="ReportItemField.START_DATE">
+                  <mat-form-field appearance="outline">
+                    <input [formControl]="event.controls.event.controls.startDate" [matDatepicker]="dp1" matInput>
+                    <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                    <mat-datepicker #dp1></mat-datepicker>
+                  </mat-form-field>
+                </ng-container>
 
-            <ng-container *ngSwitchCase="ReportItemField.END_DATE"></ng-container>
+                <ng-container *ngSwitchCase="ReportItemField.END_DATE">
+                  <mat-form-field appearance="outline">
+                    <input [formControl]="event.controls.event.controls.startDate" [matDatepicker]="dp2" matInput>
+                    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                    <mat-datepicker #dp2></mat-datepicker>
+                  </mat-form-field>
+                </ng-container>
 
-            <ng-container *ngSwitchCase="ReportItemField.PLAN"></ng-container>
+                <ng-container *ngSwitchCase="ReportItemField.PLAN"></ng-container>
 
-            <ng-container *ngSwitchCase="ReportItemField.FACT"></ng-container>
-          </ng-container>
-        </td>
-      </table>
+                <ng-container *ngSwitchCase="ReportItemField.FACT"></ng-container>
+              </ng-container>
+            </td>
+          </tr>
 
-      <button mat-button (click)="addEventForm()">
-        <mat-icon>add_circle</mat-icon>
-        Добавить событие
-      </button>
-    </div>
+          <tr>
+            <td
+              class="tsu-table-td"
+            >
+              <button mat-button>
+                <mat-icon>add_circle</mat-icon>
+                Добавить учебную дисциплину
+              </button>
+            </td>
+          </tr>
+        </table>
+
+        <button mat-button (click)="addEventForm()">
+          <mat-icon>add_circle</mat-icon>
+          Добавить событие
+        </button>
+      </div>
+    </app-scrollable>
   </mat-tab>
 </mat-tab-group>
 

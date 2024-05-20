@@ -1,5 +1,6 @@
 import {Component, input, TemplateRef, ViewEncapsulation} from "@angular/core";
 import {NgIf, NgTemplateOutlet} from "@angular/common";
+import {ScrollableComponent} from "@ui/widgets";
 
 @Component({
   selector: 'app-modal-dialog',
@@ -10,9 +11,9 @@ import {NgIf, NgTemplateOutlet} from "@angular/common";
         <span>{{ title() }}</span>
       </div>
 
-      <div class="modal-dialog__content">
+      <app-scrollable class="modal-dialog__content">
         <ng-content></ng-content>
-      </div>
+      </app-scrollable>
 
       <div *ngIf="actionsRef() as actionsRef" class="modal-dialog__actions">
         <ng-container *ngTemplateOutlet="actionsRef"></ng-container>
@@ -21,7 +22,8 @@ import {NgIf, NgTemplateOutlet} from "@angular/common";
   `,
   imports: [
     NgTemplateOutlet,
-    NgIf
+    NgIf,
+    ScrollableComponent
   ],
   styleUrls: ['modal-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None

@@ -1,12 +1,21 @@
-.tabs {
-    background-color: white;
+@use "../../../../../scss/shared/variables";
 
-    &__content {
-        padding: 16px;
-        background-color: rgb(228, 228, 228);
-    }
+.tabs {
+  background-color: white;
+
+  &__scrollable {
+    background-color: variables.$table-background-color;
+  }
+
+  &__content {
+    padding: variables.$padding-lg;
+
+    display: flex;
+    flex-direction: column;
+    gap: variables.$padding-lg;
+  }
 }
 
 h1 {
-    margin: 0px;
+  margin: 0px;
 }
