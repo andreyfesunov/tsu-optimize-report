@@ -95,7 +95,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
     {
         var queryWithIncludes = IncludeChildren(dbset.Where(predicate).AsQueryable());
 
-        return await queryWithIncludes.ToListAsync();
+        return queryWithIncludes.ToList();
     }
 
     public async Task<ICollection<TEntity>> GetByIds(ICollection<Guid> ids)
