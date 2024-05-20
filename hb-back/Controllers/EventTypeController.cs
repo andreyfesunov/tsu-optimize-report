@@ -60,4 +60,18 @@ public class EventTypeController : CRUDControllerBase<EventType, EventTypeDto>
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("getAll/{stateUserId:guid}/{workId:guid}")]
+    public async Task<ActionResult<ICollection<EventTypeDto>>> GetAllForReport(Guid stateUserId, Guid workId)
+    {
+        try
+        {
+            var eventTypes = await _service.GetAllForReport(stateUserId, workId);
+            return Ok(eventTypes);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

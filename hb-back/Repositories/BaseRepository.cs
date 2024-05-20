@@ -91,6 +91,20 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         return await IncludeChildren(dbset).Search(searchDto);
     }
 
+    public async Task<ICollection<TEntity>> GetAll(Func<TEntity, bool> predicate)
+    {
+        var queryWithIncludes = IncludeChildren(dbset.Where(predicate).AsQueryable());
+
+        return await queryWithIncludes.ToListAsync();
+    }
+
+    public async Task<ICollection<TEntity>> GetByIds(ICollection<Guid> ids)
+    {
+        var query = dbset.AsQueryable().Where(e => ids.Contains(e.Id));
+        var entities = await IncludeChildren(query).ToListAsync();
+        return entities;
+    }
+
     protected virtual IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query)
     {
         return query;

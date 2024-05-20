@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using BackendBase.Data;
-using BackendBase.Dto.CreateDto;
-using BackendBase.Dto.Report;
+﻿using BackendBase.Data;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +21,7 @@ public class StateUserRepository : BaseRepository<StateUser>
             .Include(x => x.User)
             .Include(x => x.Files)
             .Include(x => x.Records)
+            .ThenInclude(x => x.Activity)
             .Include(x => x.State)
             .ThenInclude(x => x.Job)
             .Include(x => x.State)
