@@ -19,7 +19,8 @@ namespace BackendBase.Helpers
 
         public ICollection<TEntityDto> toDto(ICollection<TEntity> entities)
         {
-            return (ICollection<TEntityDto>)(entities.Select(x => toDto(x)));
+            var result = entities.Select(x => toDto(x)).ToList();
+            return (ICollection<TEntityDto>)result;
         }
 
         public PaginationDto<TEntityDto> paginationToDto(PaginationDto<TEntity> pagination)
