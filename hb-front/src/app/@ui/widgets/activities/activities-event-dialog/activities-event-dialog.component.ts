@@ -36,7 +36,7 @@ import {concat, map, of, switchMap} from "rxjs";
     >
       <form (ngSubmit)="submit()">
         <mat-form-field *ngIf="events$ | async as eventTypes" appearance="outline">
-          <mat-label>Должность</mat-label>
+          <mat-label>Мероприятие</mat-label>
           <input [formControl]="formControl" [matAutocomplete]="auto" matInput>
 
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">

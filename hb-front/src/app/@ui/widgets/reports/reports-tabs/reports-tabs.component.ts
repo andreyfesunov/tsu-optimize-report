@@ -1,15 +1,18 @@
 import {Component, input} from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
-import {Observable, shareReplay} from "rxjs";
-import {ITableColumn, IWork} from "@core/models";
-import {WorksService} from "@core/abstracts";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {BehaviorSubject, map, Observable, shareReplay, switchMap} from "rxjs";
+import {IEventType, ITableColumn, IWork} from "@core/models";
+import {EventTypesService, WorksService} from "@core/abstracts";
+import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 import {SpinnerComponent, TableComponent} from "@ui/widgets";
 import {Spinner, withSpinner} from "@core/utils";
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {SubscriptionController} from "@core/controllers";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
+import {MatInput} from "@angular/material/input";
 
 @Component({
   selector: 'app-reports-tabs',
@@ -22,14 +25,25 @@ import {MatIcon} from "@angular/material/icon";
     SpinnerComponent,
     TableComponent,
     MatIconButton,
-    MatIcon
+    MatIcon,
+    MatLabel,
+    MatButton,
+    NgSwitchCase,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    MatFormField,
+    MatInput,
+    MatOption,
+    ReactiveFormsModule,
+    NgSwitch
   ],
   templateUrl: 'reports-tabs.component.html',
   styleUrl: 'reports-tabs.component.scss'
 })
 export class ReportsTabsComponent extends SubscriptionController {
   constructor(
-    private readonly _worksService: WorksService
+    private readonly _worksService: WorksService,
+    private readonly _eventTypesService: EventTypesService
   ) {
     super();
   }
@@ -48,6 +62,42 @@ export class ReportsTabsComponent extends SubscriptionController {
       refCount: true
     })
   );
+
+  protected readonly tabChanged$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+  protected readonly currentWork$: Observable<IWork> = this.tabChanged$.pipe(
+    switchMap((index) => this.works$.pipe(map((works) => works[index]))),
+    shareReplay({bufferSize: 1, refCount: true})
+  );
+
+  protected readonly events$: Observable<IEventType[]> = this.currentWork$.pipe(
+    switchMap((work) => this._eventTypesService.getAllForReport(this.id(), work.id)),
+    shareReplay({bufferSize: 1, refCount: true})
+  );
+
+  protected readonly ReportItemField = ReportItemField;
+
+  protected addEventForm(): void {
+    const eventForm: FormGroup<IEventForm> = new FormGroup<IEventForm>({
+      eventType: new FormControl<string | null>(null),
+      startDate: new FormControl<Date>(new Date(), {nonNullable: true}),
+      endDate: new FormControl<Date>(new Date(), {nonNullable: true})
+    });
+
+    const formGroup: IEventFormGroup = new FormGroup({
+      event: eventForm,
+      lessons: new FormArray<FormControl<ILessonForm>>([])
+    });
+
+    this.workForm.push(formGroup);
+  }
+
+  protected displayFn(opts: IEventType[]) {
+    return (id: string) => {
+      const eventType = opts.find(v => v.id === id);
+      return eventType ? eventType.name : '';
+    }
+  }
 }
 
 export interface IEventForm {
@@ -63,7 +113,7 @@ export interface ILessonForm {
 }
 
 export type IEventFormGroup = FormGroup<{
-  event: FormControl<IEventForm>;
+  event: FormGroup<IEventForm>;
   lessons: FormArray<FormControl<ILessonForm>>
 }>;
 

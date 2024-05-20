@@ -25,6 +25,10 @@ export class EventTypesImplService extends EventTypesService {
     return this._eventTypes$;
   }
 
+  public override getAllForReport(reportId: string, workId: string): Observable<IEventType[]> {
+    return this._httpClient.get<IEventType[]>(`/api/EventType/getAll/${reportId}/${workId}`);
+  }
+
   public search(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {
     return concat(of(0), this.activityEvent$(activityId)).pipe(
       switchMap(() => this._getSearchRequest(activityId, req))
