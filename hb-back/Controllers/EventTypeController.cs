@@ -47,7 +47,7 @@ public class EventTypeController : CRUDControllerBase<EventType, EventTypeDto>
         }
     }
 
-    [HttpPost("assign")]
+    [HttpPost("[action]")]
     public async Task<ActionResult<bool>> Assign([FromBody] EventTypeAssignDto dto)
     {
         try
