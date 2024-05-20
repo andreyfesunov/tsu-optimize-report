@@ -3,7 +3,7 @@
   <mat-tab *ngFor="let work of works; index as index" [disabled]="index !== 0" [label]="work.name">
     <app-scrollable class="tabs__scrollable" [horizontalScroll]="true">
       <div class="tabs__content">
-        <table *ngFor="let event of workForm.controls" app-table [cols]="defaultCols"
+        <table *ngFor="let event of workForm.controls; index as index" app-table [cols]="defaultCols"
                [itemsCount]="workForm.controls.length" [bordered]="true">
           <tr>
             <td
@@ -13,7 +13,7 @@
             >
               <ng-container [ngSwitch]="col.id">
                 <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
-                  <mat-form-field *ngIf="events$ | async as eventTypes" appearance="outline">
+                  <mat-form-field *ngIf="availableEvents$(index) | async as eventTypes" appearance="outline">
                     <input [formControl]="event.controls.event.controls.eventType" [matAutocomplete]="auto" matInput>
 
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
@@ -39,14 +39,17 @@
                     <mat-datepicker #dp2></mat-datepicker>
                   </mat-form-field>
                 </ng-container>
-
-                <ng-container *ngSwitchCase="ReportItemField.PLAN"></ng-container>
-
-                <ng-container *ngSwitchCase="ReportItemField.FACT"></ng-container>
               </ng-container>
             </td>
           </tr>
-
+          <tr *ngFor="let lesson of event.controls.lessons.controls">
+            <td
+              *ngFor="let col of defaultCols"
+              class="tsu-table-td"
+              [class.tsu-table-td--center]="col.align === 'center'"
+            >
+            </td>
+          </tr>
           <tr>
             <td
               class="tsu-table-td"

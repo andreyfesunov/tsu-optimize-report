@@ -8,7 +8,7 @@
   // min-height: 160px;
   max-height: 90vh;
 
-  padding: variables.$padding-lg-2;
+  padding: variables.$padding-xl;
 
   &__title {
     @include typography.body-large;

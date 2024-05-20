@@ -1,6 +1,6 @@
 import {Component, input} from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
-import {BehaviorSubject, map, Observable, shareReplay, switchMap} from "rxjs";
+import {BehaviorSubject, concat, distinctUntilChanged, map, Observable, of, shareReplay, switchMap, tap} from "rxjs";
 import {IEventType, ITableColumn, IWork} from "@core/models";
 import {EventTypesService, WorksService} from "@core/abstracts";
 import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
@@ -81,6 +81,29 @@ export class ReportsTabsComponent extends SubscriptionController {
     shareReplay({bufferSize: 1, refCount: true})
   );
 
+  protected readonly eventControlsChanges$: Observable<(string | null)[]> = concat(of(this.workForm.value), this.workForm.valueChanges).pipe(
+    distinctUntilChanged((prev, curr) => prev.length === curr.length),
+    tap((forms) => console.log(forms, 'im here')),
+    map(() => new FormArray(this.workForm.controls.map(form => form.controls.event.controls.eventType))),
+    switchMap((control) => concat(of(control.value), control.valueChanges)),
+    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+    shareReplay({
+      bufferSize: 1,
+      refCount: true
+    })
+  );
+
+  private readonly _eventsMemo$: { [key: number]: Observable<IEventType[]> } = {};
+
+  protected readonly availableEvents$ = (index: number) => (index in this._eventsMemo$) ? this._eventsMemo$[index] : (this._eventsMemo$[index] = this.eventControlsChanges$.pipe(
+    switchMap((eventChanges) => this.events$.pipe(map((events) => {
+      const selectedEvents = eventChanges.filter((v): v is string => !!v);
+
+      return events.filter((event) => !selectedEvents.includes(event.id) || eventChanges[index] === event.id);
+    }))),
+    shareReplay({refCount: true, bufferSize: 1})
+  ));
+
   protected readonly ReportItemField = ReportItemField;
 
   protected addEventForm(): void {
@@ -90,12 +113,10 @@ export class ReportsTabsComponent extends SubscriptionController {
       endDate: new FormControl<Date>(new Date(), {nonNullable: true})
     });
 
-    const formGroup: IEventFormGroup = new FormGroup({
+    this.workForm.push(new FormGroup({
       event: eventForm,
-      lessons: new FormArray<FormControl<ILessonForm>>([])
-    });
-
-    this.workForm.push(formGroup);
+      lessons: new FormArray<FormGroup<ILessonForm>>([])
+    }));
   }
 
   protected displayFn(opts: IEventType[]) {
@@ -120,7 +141,7 @@ export interface ILessonForm {
 
 export type IEventFormGroup = FormGroup<{
   event: FormGroup<IEventForm>;
-  lessons: FormArray<FormControl<ILessonForm>>
+  lessons: FormArray<FormGroup<ILessonForm>>
 }>;
 
 export type IWorkForm = FormArray<IEventFormGroup>;

@@ -52,7 +52,7 @@ import {switchMap} from "rxjs";
       align-items: center;
 
       gap: variables.$padding-md;
-      margin-top: variables.$padding-lg-2;
+      margin-top: variables.$padding-xl;
     }
   `],
   host: {class: 'host-class'}
