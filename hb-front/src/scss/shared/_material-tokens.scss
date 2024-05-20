@@ -1,4 +1,14 @@
 body {
     // для изменения исходных переменных angular-material
     --mat-dialog-container-max-width: 1100px;
+
+    mat-form-field {
+        margin-top: 12px;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      &.mat-mdc-form-field-bottom-align {
+        height: 0px;
+      }  
+    }
 }
