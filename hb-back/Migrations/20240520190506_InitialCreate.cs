@@ -23,6 +23,18 @@ namespace BackendBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Degrees",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Degrees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Institutes",
                 columns: table => new
                 {
@@ -59,7 +71,7 @@ namespace BackendBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "Ranks",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -67,22 +79,7 @@ namespace BackendBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Firstname = table.Column<string>(type: "text", nullable: false),
-                    Lastname = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Ranks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +87,8 @@ namespace BackendBase.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Order = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,28 +115,31 @@ namespace BackendBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolesUsers",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    Firstname = table.Column<string>(type: "text", nullable: false),
+                    Lastname = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    RankId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DegreeId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolesUsers", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RolesUsers_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Users_Degrees_DegreeId",
+                        column: x => x.DegreeId,
+                        principalTable: "Degrees",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_RolesUsers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Users_Ranks_RankId",
+                        column: x => x.RankId,
+                        principalTable: "Ranks",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -147,7 +148,8 @@ namespace BackendBase.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     WorkId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -221,8 +223,7 @@ namespace BackendBase.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     StateId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Rate = table.Column<double>(type: "double precision", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false)
+                    Rate = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -444,16 +445,6 @@ namespace BackendBase.Migrations
                 column: "StateUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolesUsers_RoleId",
-                table: "RolesUsers",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolesUsers_UserId",
-                table: "RolesUsers",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_States_DepartmentId",
                 table: "States",
                 column: "DepartmentId");
@@ -472,6 +463,16 @@ namespace BackendBase.Migrations
                 name: "IX_StatesUsers_UserId",
                 table: "StatesUsers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DegreeId",
+                table: "Users",
+                column: "DegreeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RankId",
+                table: "Users",
+                column: "RankId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -489,9 +490,6 @@ namespace BackendBase.Migrations
                 name: "Records");
 
             migrationBuilder.DropTable(
-                name: "RolesUsers");
-
-            migrationBuilder.DropTable(
                 name: "Files");
 
             migrationBuilder.DropTable(
@@ -502,9 +500,6 @@ namespace BackendBase.Migrations
 
             migrationBuilder.DropTable(
                 name: "LessonTypes");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "EventsTypes");
@@ -526,6 +521,12 @@ namespace BackendBase.Migrations
 
             migrationBuilder.DropTable(
                 name: "Jobs");
+
+            migrationBuilder.DropTable(
+                name: "Degrees");
+
+            migrationBuilder.DropTable(
+                name: "Ranks");
 
             migrationBuilder.DropTable(
                 name: "Institutes");

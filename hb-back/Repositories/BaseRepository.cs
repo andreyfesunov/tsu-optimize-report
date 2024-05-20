@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-using BackendBase.Data;
+﻿using BackendBase.Data;
 using BackendBase.Dto;
+using BackendBase.Extensions;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1;
 using StudentHubBackend.Exceptions;
-using System.Linq;
 
 namespace BackendBase.Repositories;
 
@@ -85,34 +83,12 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
 
     public async Task<PaginationDto<TEntity>> SearchRoot(SearchDto searchDto)
     {
-        var count = await dbset.CountAsync();
-        var items = await dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
-            .ToListAsync();
-
-        return new PaginationDto<TEntity>
-        {
-            PageNumber = searchDto.PageNumber,
-            PageSize = searchDto.PageSize,
-            TotalPages = (count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0),
-            Entities = items
-        };
+        return await dbset.Search(searchDto);
     }
 
     public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
     {
-        var count = await dbset.CountAsync();
-        var itemsQuery = dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
-            .AsQueryable();
-
-        itemsQuery = IncludeChildren(itemsQuery);
-
-        return new PaginationDto<TEntity>
-        {
-            PageNumber = searchDto.PageNumber,
-            PageSize = searchDto.PageSize,
-            TotalPages = count / searchDto.PageSize + count % searchDto.PageSize != 0 ? 1 : 0,
-            Entities = await itemsQuery.ToListAsync()
-        };
+        return await IncludeChildren(dbset).Search(searchDto);
     }
 
     protected virtual IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query)

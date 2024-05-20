@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendBase.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240510115316_ChangeRolesStructure")]
-    partial class ChangeRolesStructure
+    [Migration("20240520190506_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,6 +61,21 @@ namespace BackendBase.Migrations
                     b.HasIndex("EventTypeId");
 
                     b.ToTable("ActivitiesEventsTypes");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Degree", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Degrees");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Department", b =>
@@ -136,6 +151,10 @@ namespace BackendBase.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -246,6 +265,21 @@ namespace BackendBase.Migrations
                     b.ToTable("LessonTypes");
                 });
 
+            modelBuilder.Entity("BackendBase.Models.Rank", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ranks");
+                });
+
             modelBuilder.Entity("BackendBase.Models.Record", b =>
                 {
                     b.Property<Guid>("Id")
@@ -320,10 +354,6 @@ namespace BackendBase.Migrations
                     b.Property<Guid>("StateId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
@@ -342,6 +372,9 @@ namespace BackendBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("DegreeId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -358,10 +391,17 @@ namespace BackendBase.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("RankId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DegreeId");
+
+                    b.HasIndex("RankId");
 
                     b.ToTable("Users");
                 });
@@ -375,6 +415,9 @@ namespace BackendBase.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -555,11 +598,31 @@ namespace BackendBase.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BackendBase.Models.User", b =>
+                {
+                    b.HasOne("BackendBase.Models.Degree", "Degree")
+                        .WithMany("Users")
+                        .HasForeignKey("DegreeId");
+
+                    b.HasOne("BackendBase.Models.Rank", "Rank")
+                        .WithMany("Users")
+                        .HasForeignKey("RankId");
+
+                    b.Navigation("Degree");
+
+                    b.Navigation("Rank");
+                });
+
             modelBuilder.Entity("BackendBase.Models.Activity", b =>
                 {
                     b.Navigation("ActivitiesEventsTypes");
 
                     b.Navigation("Records");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Degree", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Department", b =>
@@ -596,6 +659,11 @@ namespace BackendBase.Migrations
                     b.Navigation("Lessons");
 
                     b.Navigation("Records");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Rank", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("BackendBase.Models.State", b =>
