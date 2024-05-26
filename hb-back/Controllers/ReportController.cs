@@ -49,4 +49,18 @@ public class ReportController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<ReportDetailDto>> Detail(Guid id)
+    {
+        try
+        {
+            var result = await _stateUserService.Detail(id);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

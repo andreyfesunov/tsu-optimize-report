@@ -1,4 +1,4 @@
-import {IState} from "@core/models";
+import {IEvent, IState} from "@core/models";
 
 export enum ReportStatus {
   NOT_ACTIVE = 0,
@@ -23,9 +23,13 @@ export const reportStatusStyles = (status: ReportStatus) => ({
   'report-status--finished': status === ReportStatus.FINISHED,
 });
 
-export interface IReport {
+export interface IReportListItem {
   readonly id: string;
   readonly state: IState;
   readonly rate: number;
   readonly status: ReportStatus;
+}
+
+export interface IReportDetail extends IReportListItem {
+  readonly events: readonly IEvent[];
 }

@@ -1,10 +1,10 @@
-<mat-tab-group *ngIf="works$ | async as works" class="tabs" animationDuration="0ms"
+<mat-tab-group *ngIf="state().states$ | async as states" class="tabs" animationDuration="0ms"
                (selectedTabChange)="tabChanged$.next($event.index)">
-  <mat-tab *ngFor="let work of works; index as index" [disabled]="index !== 0" [label]="work.name">
+  <mat-tab *ngFor="let state of states; index as index" [disabled]="index !== 0" [label]="state.work.name">
     <app-scrollable class="tabs__scrollable" [horizontalScroll]="true">
-      <div class="tabs__content">
-        <table *ngFor="let event of workForm.controls; index as index" app-table [cols]="defaultCols"
-               [itemsCount]="workForm.controls.length" [bordered]="true">
+      <div *ngIf="state.states$ | async as eventStates" class="tabs__content">
+        <table *ngFor="let event of eventStates; index as index" app-table [cols]="defaultCols"
+               [itemsCount]="eventStates.length" [bordered]="true">
           <tr>
             <td
               *ngFor="let col of defaultCols"
@@ -13,8 +13,9 @@
             >
               <ng-container [ngSwitch]="col.id">
                 <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
-                  <mat-form-field *ngIf="availableEvents$(index) | async as eventTypes" appearance="outline">
-                    <input [formControl]="event.controls.event.controls.eventType" [matAutocomplete]="auto" matInput>
+                  <mat-form-field *ngIf="event.events$ | async as eventTypes" appearance="outline">
+                    <input [formControl]="event.formControl.controls.event.controls.eventType" [matAutocomplete]="auto"
+                           matInput>
 
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
                       <mat-option *ngFor="let eventType of eventTypes"
@@ -26,7 +27,8 @@
 
                 <ng-container *ngSwitchCase="ReportItemField.START_DATE">
                   <mat-form-field appearance="outline">
-                    <input [formControl]="event.controls.event.controls.startDate" [matDatepicker]="dp1" matInput>
+                    <input [formControl]="event.formControl.controls.event.controls.startDate" [matDatepicker]="dp1"
+                           matInput>
                     <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
                     <mat-datepicker #dp1></mat-datepicker>
                   </mat-form-field>
@@ -34,7 +36,8 @@
 
                 <ng-container *ngSwitchCase="ReportItemField.END_DATE">
                   <mat-form-field appearance="outline">
-                    <input [formControl]="event.controls.event.controls.startDate" [matDatepicker]="dp2" matInput>
+                    <input [formControl]="event.formControl.controls.event.controls.startDate" [matDatepicker]="dp2"
+                           matInput>
                     <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
                     <mat-datepicker #dp2></mat-datepicker>
                   </mat-form-field>
@@ -42,7 +45,7 @@
               </ng-container>
             </td>
           </tr>
-          <tr *ngFor="let lesson of event.controls.lessons.controls">
+          <tr *ngFor="let lesson of event.formControl.controls.lessons.controls">
             <td
               *ngFor="let col of defaultCols"
               class="tsu-table-td"
@@ -62,7 +65,7 @@
           </tr>
         </table>
 
-        <button mat-button (click)="addEventForm()">
+        <button mat-button (click)="state.addState()">
           <mat-icon>add_circle</mat-icon>
           Добавить событие
         </button>

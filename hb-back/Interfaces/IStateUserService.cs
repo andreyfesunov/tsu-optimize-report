@@ -2,9 +2,9 @@
 using BackendBase.Helpers.CRUD;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces
+namespace BackendBase.Interfaces;
+
+public interface IStateUserService : ICRUDServiceBase<StateUser, ReportListDto>
 {
-    public interface IStateUserService : ICRUDServiceBase<StateUser, ReportListDto>
-    {
-    }
+    Task<ReportDetailDto> Detail(Guid id);
 }

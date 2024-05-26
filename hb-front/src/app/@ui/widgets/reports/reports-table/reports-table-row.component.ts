@@ -1,5 +1,5 @@
 import {TableRowController} from "@core/controllers";
-import {IReport, reportStatusStyles, reportStatusToString} from "@core/models";
+import {IReportListItem, reportStatusStyles, reportStatusToString} from "@core/models";
 import {Component} from "@angular/core";
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 
@@ -52,7 +52,7 @@ export enum ReportsTableRowItemField {
     </td>
   `
 })
-export class ReportsTableRowComponent extends TableRowController<IReport, ReportsTableRowItemField> {
+export class ReportsTableRowComponent extends TableRowController<IReportListItem, ReportsTableRowItemField> {
   protected readonly ReportsTableRowItemField = ReportsTableRowItemField;
   protected readonly reportStatusToString = reportStatusToString;
   protected readonly reportStatusStyles = reportStatusStyles;

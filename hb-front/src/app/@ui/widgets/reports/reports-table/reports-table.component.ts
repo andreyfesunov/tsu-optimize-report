@@ -1,7 +1,7 @@
 import {ITableConfig, TableController} from "@core/controllers";
 import {IPaginationRequest} from "@core/dtos";
 import {Observable} from "rxjs";
-import {IPagination, IReport, ITableColumn, ReportStatus} from "@core/models";
+import {IPagination, IReportListItem, ITableColumn, ReportStatus} from "@core/models";
 import {Component, input, output} from "@angular/core";
 import {
   PaginatorComponent,
@@ -40,8 +40,8 @@ import {getDefaultPaginationRequest} from "@core/utils";
     </ng-container>
   `
 })
-export class ReportsTableComponent extends TableController<IReport> {
-  public readonly loadFn = input.required<(req: IPaginationRequest) => Observable<IPagination<IReport>>>();
+export class ReportsTableComponent extends TableController<IReportListItem> {
+  public readonly loadFn = input.required<(req: IPaginationRequest) => Observable<IPagination<IReportListItem>>>();
 
   public readonly edit = output<{ id: string, status: ReportStatus }>();
 
@@ -53,7 +53,7 @@ export class ReportsTableComponent extends TableController<IReport> {
     };
   }
 
-  protected load(request: IPaginationRequest): Observable<IPagination<IReport>> {
+  protected load(request: IPaginationRequest): Observable<IPagination<IReportListItem>> {
     return this.loadFn()(request);
   }
 }

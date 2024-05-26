@@ -21,6 +21,12 @@ public class MappingProfiles : Profile
                 src.State.EndDate <= DateTime.Now ? StateUserStatus.Finished :
                 src.Records.Count > 0 ? StateUserStatus.Active : StateUserStatus.NotActive)
         );
+        CreateMap<StateUser, ReportDetailDto>().ForMember(
+            dest => dest.Status,
+            opt => opt.MapFrom(src =>
+                src.State.EndDate <= DateTime.Now ? StateUserStatus.Finished :
+                src.Records.Count > 0 ? StateUserStatus.Active : StateUserStatus.NotActive)
+        );
         CreateMap<ReportListDto, StateUser>();
         CreateMap<State, StateDto>();
         CreateMap<StateDto, State>();

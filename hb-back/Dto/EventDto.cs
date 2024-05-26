@@ -7,7 +7,6 @@ namespace BackendBase.Dto
     {
         public string Id { get; set; }
         public EventTypeDto EventType { get; set; }
-        public ReportListDto StateUser { get; set; }
         public DateTime StartedAt { get; set; }
         public DateTime EndedAt { get; set; }
     }
