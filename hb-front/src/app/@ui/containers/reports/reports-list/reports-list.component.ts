@@ -1,11 +1,11 @@
 import {Component} from "@angular/core";
 import {ContentComponent, ReportsTableComponent, SpinnerComponent} from "@ui/widgets";
-import {ReportsDialogService, ReportsService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
 import {exists, Spinner, switchMapSpinner, withSpinner} from "@core/utils";
 import {NgIf} from "@angular/common";
 import {ReportStatus} from "@core/models";
 import {SubscriptionController} from "@core/controllers";
+import {ReportsDialogService, ReportsService} from "@core/services";
 
 @Component({
   selector: 'app-reports-list',

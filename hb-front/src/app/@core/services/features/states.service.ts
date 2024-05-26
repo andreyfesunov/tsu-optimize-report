@@ -1,16 +1,14 @@
-import {StatesService} from "@core/abstracts";
 import {IPaginationRequest, IStateAssignRequest, IStateCreateRequest} from "@core/dtos";
 import {concat, Observable, of, Subject, switchMap, tap} from "rxjs";
 import {IPagination, IState} from "@core/models";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 
-@Injectable()
-export class StatesImplService extends StatesService {
+@Injectable({providedIn: "root"})
+export class StatesService {
   constructor(
     private readonly _httpClient: HttpClient
   ) {
-    super();
   }
 
   private readonly _reload$: Subject<void> = new Subject<void>();
@@ -21,7 +19,7 @@ export class StatesImplService extends StatesService {
     );
   }
 
-  public override assign(dto: IStateAssignRequest): Observable<boolean> {
+  public assign(dto: IStateAssignRequest): Observable<boolean> {
     return this._httpClient.post<boolean>('/api/State/assign', dto).pipe(
       tap(() => this._reload$.next())
     );

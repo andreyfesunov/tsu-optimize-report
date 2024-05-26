@@ -1,7 +1,6 @@
 import {Component, Inject} from "@angular/core";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalDialogActionComponent, ModalDialogComponent} from "@ui/widgets";
-import {EventTypesService} from "@core/abstracts";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -10,6 +9,7 @@ import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angula
 import {IEventType} from "@core/models";
 import {IActivitiesAssignEventRequest} from "@core/dtos";
 import {concat, map, of, switchMap} from "rxjs";
+import {EventTypesService} from "@core/services";
 
 @Component({
   selector: "app-activities-event-dialog",

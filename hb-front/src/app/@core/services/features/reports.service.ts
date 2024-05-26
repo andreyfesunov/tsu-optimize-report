@@ -1,16 +1,14 @@
-import {ReportsService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {IPaginationRequest} from "@core/dtos";
 import {concat, Observable, of, Subject, switchMap, tap} from "rxjs";
 import {IPagination, IReport} from "@core/models";
 import {HttpClient} from "@angular/common/http";
 
-@Injectable()
-export class ReportsImplService extends ReportsService {
+@Injectable({providedIn: "root"})
+export class ReportsService {
   constructor(
     private readonly _httpClient: HttpClient
   ) {
-    super();
   }
 
   private readonly _reload$: Subject<void> = new Subject<void>();

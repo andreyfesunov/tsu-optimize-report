@@ -8,9 +8,9 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/mater
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {IStateCreateRequest} from "@core/dtos";
-import {JobsService} from "@core/abstracts";
 import {ModalDialogActionComponent, ModalDialogComponent} from "@ui/widgets";
 import {MatDialogRef} from "@angular/material/dialog";
+import {JobsService} from "@core/services";
 
 @Component({
   selector: 'app-states-create-dialog',

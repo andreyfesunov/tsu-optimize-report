@@ -1,10 +1,10 @@
 import {Component} from "@angular/core";
 import {ContentComponent, SpinnerComponent, StatesTableComponent, StatesTableHeaderComponent} from "@ui/widgets";
-import {StatesDialogService, StatesService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
 import {SubscriptionController} from "@core/controllers";
 import {exists, Spinner, switchMapSpinner, withSpinner} from "@core/utils";
 import {NgIf} from "@angular/common";
+import {StatesDialogService, StatesService} from "@core/services";
 
 @Component({
   selector: 'app-states-list',

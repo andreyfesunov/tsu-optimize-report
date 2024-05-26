@@ -1,10 +1,10 @@
 import {Component} from "@angular/core";
-import {RouterService} from "@core/abstracts/services/features/router.service";
-import {ITokenModel, toMain, toReg} from "@core/models";
+import {toMain, toReg} from "@core/models";
 import {AuthLoginFormComponent} from "@ui/widgets";
-import {AuthService, AuthState} from "@core/abstracts";
 import {ILoginRegDto} from "@core/dtos";
 import {SubscriptionController} from "@core/controllers";
+import {AuthService, RouterService} from "@core/services";
+import {AuthState} from "@core/states";
 
 @Component({
   standalone: true,
@@ -19,7 +19,7 @@ import {SubscriptionController} from "@core/controllers";
 export class AuthLoginComponent extends SubscriptionController {
   public constructor(
     private readonly _authService: AuthService,
-    private readonly _authState: AuthState<ITokenModel>,
+    private readonly _authState: AuthState,
     private readonly _routerService: RouterService
   ) {
     super();

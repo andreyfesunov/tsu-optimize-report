@@ -3,11 +3,11 @@ import {ActivitiesTableComponent, ContentComponent, SpinnerComponent} from "@ui/
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {exists, Spinner, withSpinner} from "@core/utils";
 import {IPaginationRequest} from "@core/dtos";
-import {ActivitiesDialogService, ActivitiesService, EventTypesService} from "@core/abstracts";
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {SubscriptionController} from "@core/controllers";
 import {switchMap} from "rxjs";
+import {ActivitiesDialogService, ActivitiesService, EventTypesService} from "@core/services";
 
 @Component({
   selector: 'app-activities-list',

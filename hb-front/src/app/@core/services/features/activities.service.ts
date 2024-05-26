@@ -1,15 +1,13 @@
-import {ActivitiesService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IActivity} from "@core/models";
 
-@Injectable()
-export class ActivitiesImplService extends ActivitiesService {
+@Injectable({providedIn: "root"})
+export class ActivitiesService {
   constructor(
     private readonly _httpClient: HttpClient
   ) {
-    super();
   }
 
   public getAll(): Observable<IActivity[]> {

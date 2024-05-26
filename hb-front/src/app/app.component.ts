@@ -4,10 +4,10 @@ import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatListModule} from "@angular/material/list";
 import {MatButtonModule} from "@angular/material/button";
-import {AuthState} from "@core/abstracts";
-import {ITokenModel, Navigation, toActivities, toLogin, toReports, toStates, toUsers} from "@core/models";
+import {Navigation, toActivities, toLogin, toReports, toStates, toUsers} from "@core/models";
 import {NavigationBarComponent} from "@ui/widgets";
 import {map} from "rxjs";
+import {AuthState} from "@core/states";
 
 @Component({
   selector: "app-root",
@@ -28,7 +28,7 @@ export class AppComponent {
   @HostBinding('class.host-class') addHostClass = true;
 
   constructor(
-    private readonly _authState: AuthState<ITokenModel>,
+    private readonly _authState: AuthState,
   ) {
   }
 

@@ -1,10 +1,9 @@
 import {Component} from "@angular/core";
-import {RouterService} from "@core/abstracts/services/features/router.service";
 import {AuthRegFormComponent} from "@ui/widgets";
 import {toLogin} from "@core/models";
-import {AuthService} from "@core/abstracts";
 import {ILoginRegDto} from "@core/dtos";
 import {SubscriptionController} from "@core/controllers";
+import {AuthService, RouterService} from "@core/services";
 
 @Component({
   standalone: true,

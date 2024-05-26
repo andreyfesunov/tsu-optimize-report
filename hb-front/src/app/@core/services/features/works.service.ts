@@ -2,12 +2,10 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IWork} from "@core/models";
 import {Injectable} from "@angular/core";
-import {WorksService} from "@core/abstracts";
 
-@Injectable()
-export class WorksImplService extends WorksService {
+@Injectable({providedIn: "root"})
+export class WorksService {
   constructor(private readonly _httpClient: HttpClient) {
-    super();
   }
 
   public getAll(): Observable<IWork[]> {

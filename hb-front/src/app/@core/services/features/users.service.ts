@@ -1,16 +1,14 @@
-import {UsersService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {IPaginationRequest} from "@core/dtos";
 import {Observable, shareReplay} from "rxjs";
 import {IPagination, IUser} from "@core/models";
 
-@Injectable()
-export class UsersImplService extends UsersService {
+@Injectable({providedIn: "root"})
+export class UsersService {
   constructor(
     private readonly _httpClient: HttpClient
   ) {
-    super();
   }
 
   private readonly _users$ = this._httpClient.get<IUser[]>('/api/User/getAll').pipe(

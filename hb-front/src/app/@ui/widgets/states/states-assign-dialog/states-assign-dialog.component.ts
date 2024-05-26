@@ -6,10 +6,10 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/mater
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {ModalDialogActionComponent, ModalDialogComponent} from "@ui/widgets";
-import {UsersService} from "@core/abstracts";
 import {concat, map, of, switchMap} from "rxjs";
 import {IUser} from "@core/models";
 import {IStateAssignRequest} from "@core/dtos";
+import {UsersService} from "@core/services";
 
 @Component({
   selector: 'app-states-assign-dialog',

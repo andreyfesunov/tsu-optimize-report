@@ -2,7 +2,6 @@ import {Component, input} from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
 import {BehaviorSubject, concat, distinctUntilChanged, map, Observable, of, shareReplay, switchMap} from "rxjs";
 import {IEventType, ITableColumn, IWork} from "@core/models";
-import {EventTypesService, WorksService} from "@core/abstracts";
 import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 import {ScrollableComponent, SpinnerComponent, TableComponent} from "@ui/widgets";
 import {Spinner, withSpinner} from "@core/utils";
@@ -14,6 +13,7 @@ import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatInput} from "@angular/material/input";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
+import {EventTypesService, WorksService} from "@core/services";
 
 @Component({
   selector: 'app-reports-tabs',

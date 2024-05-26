@@ -1,14 +1,12 @@
-import {ReportsDialogService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {IReportsDetailDialogData, ReportsDetailDialogComponent, ReportsStartDialogComponent} from "@ui/widgets";
 
-@Injectable()
-export class ReportsDialogImplService extends ReportsDialogService {
+@Injectable({providedIn: "root"})
+export class ReportsDialogService {
   constructor(
     private readonly _dialog: MatDialog
   ) {
-    super();
   }
 
   public openDetail(id: string): MatDialogRef<ReportsDetailDialogComponent> {

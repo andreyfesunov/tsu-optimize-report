@@ -1,16 +1,14 @@
-import {EventTypesService} from "@core/abstracts";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {IActivitiesAssignEventRequest, IPaginationRequest} from "@core/dtos";
 import {concat, filter, map, Observable, of, shareReplay, Subject, switchMap, take, tap} from "rxjs";
 import {IEventType, IPagination} from "@core/models";
 
-@Injectable()
-export class EventTypesImplService extends EventTypesService {
+@Injectable({providedIn: "root"})
+export class EventTypesService {
   constructor(
     private readonly _httpClient: HttpClient
   ) {
-    super();
   }
 
   private readonly _activityId$: Subject<string> = new Subject<string>();
@@ -25,7 +23,7 @@ export class EventTypesImplService extends EventTypesService {
     return this._eventTypes$;
   }
 
-  public override getAllForReport(reportId: string, workId: string): Observable<IEventType[]> {
+  public getAllForReport(reportId: string, workId: string): Observable<IEventType[]> {
     return this._httpClient.get<IEventType[]>(`/api/EventType/getAll/${reportId}/${workId}`);
   }
 

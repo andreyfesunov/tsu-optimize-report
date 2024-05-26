@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
 import {ContentComponent, SpinnerComponent, UsersTableComponent} from "@ui/widgets";
-import {UsersService} from "@core/abstracts";
 import {IPaginationRequest} from "@core/dtos";
 import {NgIf} from "@angular/common";
 import {Spinner, withSpinner} from "@core/utils";
+import {UsersService} from "@core/services";
 
 @Component({
   selector: 'app-users-list',
