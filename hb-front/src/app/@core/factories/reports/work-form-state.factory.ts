@@ -2,6 +2,7 @@ import {EventTypesService} from "@core/services";
 import {WorkFormState} from "@core/states";
 import {IReportDetail, IWork} from "@core/models";
 import {DestroyRef, Injectable} from "@angular/core";
+import {Spinner} from "@core/utils";
 
 @Injectable({providedIn: "root"})
 export class WorkFormStateFactory {
@@ -10,11 +11,12 @@ export class WorkFormStateFactory {
   ) {
   }
 
-  public create(report: IReportDetail, work: IWork, destroyRef: DestroyRef): WorkFormState {
+  public create(report: IReportDetail, work: IWork, spinner: Spinner, destroyRef: DestroyRef): WorkFormState {
     return new WorkFormState(
       work,
       report,
       this._eventTypesService,
+      spinner,
       destroyRef
     );
   }

@@ -1,5 +1,5 @@
 import {Component, computed, DestroyRef, input} from '@angular/core';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
 import {BehaviorSubject} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {SpinnerComponent, WorkFormComponent} from "@ui/widgets";
@@ -17,7 +17,8 @@ import {ReportsFormStateFactory} from "@core/factories";
     MatTab,
     SpinnerComponent,
     AsyncPipe,
-    WorkFormComponent
+    WorkFormComponent,
+    MatTabContent
 
   ],
   template: `
@@ -25,7 +26,9 @@ import {ReportsFormStateFactory} from "@core/factories";
                    (selectedTabChange)="tabChanged$.next($event.index)">
       <mat-tab *ngFor="let workState of workStates; index as index" [disabled]="index !== 0"
                [label]="workState.work.name">
-        <app-report-work-form [state]="workState"></app-report-work-form>
+        <ng-template matTabContent>
+          <app-report-work-form [state]="workState"></app-report-work-form>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
 
@@ -53,9 +56,13 @@ export class ReportFormComponent extends SubscriptionController {
 
   public readonly id = input.required<string>();
 
-  protected readonly state = computed(() => this._reportStateFactory.create(this.id(), this._destroyRef));
-
   protected readonly spinner = new Spinner();
+
+  protected readonly state = computed(() => this._reportStateFactory.create(
+    this.id(),
+    this.spinner,
+    this._destroyRef
+  ));
 
   protected readonly tabChanged$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 }

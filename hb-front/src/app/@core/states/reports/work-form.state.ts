@@ -15,19 +15,21 @@ import {EventFormState} from "@core/states";
 import {FormArray} from "@angular/forms";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {DestroyRef} from "@angular/core";
+import {Spinner, withSpinner} from "@core/utils";
 
 export class WorkFormState {
   public constructor(
     public readonly work: IWork,
     private readonly _report: IReportDetail,
     private readonly _eventTypesService: EventTypesService,
+    private readonly _spinner: Spinner,
     private readonly _destroyRef: DestroyRef
   ) {
   }
 
   private readonly _eventsMemo$: { [key: number]: Observable<IEventType[]> } = {};
 
-  private readonly _events$: Observable<IEventType[]> = this._eventTypesService.getAllForReport(this._report.id, this.work.id).pipe(
+  private readonly _events$: Observable<IEventType[]> = withSpinner(this._eventTypesService.getAllForReport(this._report.id, this.work.id), this._spinner).pipe(
     shareReplay({
       bufferSize: 1,
       refCount: true
