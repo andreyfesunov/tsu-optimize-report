@@ -1,6 +1,16 @@
 import {EventTypesService} from "@core/services";
 import {IEventType, IReportDetail, IWork} from "@core/models";
-import {BehaviorSubject, concat, distinctUntilChanged, map, Observable, of, shareReplay, switchMap} from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  concat,
+  distinctUntilChanged,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  switchMap
+} from "rxjs";
 import {EventFormState} from "@core/states";
 import {FormArray} from "@angular/forms";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
@@ -54,4 +64,8 @@ export class WorkFormState {
 
     this.states$.next([...this.states$.value, state]);
   }
+
+  public readonly addStateDisabled$: Observable<boolean> = combineLatest([this._events$, this._eventControlsChanges$]).pipe(
+    map(([events, selectedEvents]) => events.length === selectedEvents.length)
+  )
 }

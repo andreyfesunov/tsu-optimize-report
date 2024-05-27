@@ -1,5 +1,5 @@
 import {Component, Inject} from "@angular/core";
-import {ModalDialogComponent, ReportsTabsComponent} from "@ui/widgets";
+import {ModalDialogComponent, ReportFormComponent} from "@ui/widgets";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 
 @Component({
@@ -7,13 +7,13 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
   standalone: true,
   imports: [
     ModalDialogComponent,
-    ReportsTabsComponent
+    ReportFormComponent
   ],
   template: `
     <app-modal-dialog
       [title]="'Заполнение отчёта'"
     >
-      <app-reports-tabs [id]="id"></app-reports-tabs>
+      <app-report-form [id]="id"></app-report-form>
     </app-modal-dialog>
   `
 })
