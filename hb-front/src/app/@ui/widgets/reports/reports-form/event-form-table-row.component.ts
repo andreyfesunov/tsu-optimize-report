@@ -7,6 +7,7 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/mater
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
+import {MatSelect} from "@angular/material/select";
 
 @Component({
   selector: "tr[app-event-form-table-row]",
@@ -14,8 +15,6 @@ import {MatInput} from "@angular/material/input";
   imports: [
     AsyncPipe,
     FormsModule,
-    MatAutocomplete,
-    MatAutocompleteTrigger,
     MatDatepicker,
     MatDatepickerInput,
     MatDatepickerToggle,
@@ -27,7 +26,10 @@ import {MatInput} from "@angular/material/input";
     NgIf,
     NgSwitchCase,
     NgSwitch,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelect,
+    MatAutocomplete,
+    MatAutocompleteTrigger
   ],
   template: `
     <td
@@ -37,21 +39,25 @@ import {MatInput} from "@angular/material/input";
     >
       <ng-container [ngSwitch]="col.id">
         <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
-          <mat-form-field *ngIf="state().events$ | async as eventTypes" appearance="outline">
-            <input [formControl]="state().formControl.controls.event.controls.eventType" [matAutocomplete]="auto"
-                   matInput>
+          <ng-container *ngIf="state().eventForm.controls.eventType as control">
+            <ng-container *ngIf="state().events$ | async as eventTypes">
+              <mat-form-field *ngIf="eventTypes.length !== 0" appearance="outline" style="width: 100%">
+                <input [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
+                       placeholder="Выберите событие" matInput>
 
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
-              <mat-option *ngFor="let eventType of eventTypes"
-                          [value]="eventType.id">{{ displayFn(eventTypes)(eventType.id) }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
+                  <mat-option *ngFor="let eventType of eventTypes"
+                              [value]="eventType.id">{{ eventType.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </ng-container>
+          </ng-container>
         </ng-container>
 
         <ng-container *ngSwitchCase="ReportItemField.START_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="state().formControl.controls.event.controls.startDate" [matDatepicker]="dp1"
+            <input [formControl]="state().eventForm.controls.startDate" [matDatepicker]="dp1"
                    matInput>
             <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
             <mat-datepicker #dp1></mat-datepicker>
@@ -60,7 +66,7 @@ import {MatInput} from "@angular/material/input";
 
         <ng-container *ngSwitchCase="ReportItemField.END_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="state().formControl.controls.event.controls.startDate" [matDatepicker]="dp2"
+            <input [formControl]="state().eventForm.controls.endDate" [matDatepicker]="dp2"
                    matInput>
             <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
             <mat-datepicker #dp2></mat-datepicker>

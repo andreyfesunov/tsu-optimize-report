@@ -1,5 +1,5 @@
 import {EventTypesService} from "@core/services";
-import {IEventType, IReportDetail, IWork} from "@core/models";
+import {IEvent, IEventType, IReportDetail, IWork} from "@core/models";
 import {
   BehaviorSubject,
   combineLatest,
@@ -16,15 +16,20 @@ import {FormArray} from "@angular/forms";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {DestroyRef} from "@angular/core";
 import {Spinner, withSpinner} from "@core/utils";
+import {EventFormStateFactory} from "@core/factories";
 
 export class WorkFormState {
   public constructor(
     public readonly work: IWork,
     private readonly _report: IReportDetail,
     private readonly _eventTypesService: EventTypesService,
+    private readonly _eventStateFactory: EventFormStateFactory,
     private readonly _spinner: Spinner,
     private readonly _destroyRef: DestroyRef
   ) {
+    this._report.events
+      .filter(x => x.eventType.work.id === this.work.id)
+      .forEach((event) => this.addEvent(event));
   }
 
   private readonly _eventsMemo$: { [key: number]: Observable<IEventType[]> } = {};
@@ -40,7 +45,7 @@ export class WorkFormState {
 
   private readonly _eventControlsChanges$: Observable<(string | null)[]> = this.states$.pipe(
     distinctUntilChanged((prev, curr) => prev.length === curr.length),
-    map((states) => new FormArray(states.map(state => state.formControl.controls.event.controls.eventType))),
+    map((states) => new FormArray(states.map((state) => state.eventForm.controls.eventType))),
     switchMap((control) => concat(of(control.value), control.valueChanges)),
     distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
     shareReplay({
@@ -53,18 +58,30 @@ export class WorkFormState {
     switchMap((eventChanges) => this._events$.pipe(map((events) => {
       const selectedEvents = eventChanges.filter((v): v is string => !!v);
 
-      return events.filter((event) => !selectedEvents.includes(event.id) || eventChanges[index] === event.id);
+      console.log(selectedEvents);
+
+      const tmp = events.filter((event) => !selectedEvents.includes(event.id) || eventChanges[index] === event.id);
+
+      console.log(123, tmp);
+
+      return tmp;
     }))),
     shareReplay({refCount: true, bufferSize: 1})
   ));
 
-  public addState(): void {
+  public addEvent(event: IEvent | null = null): void {
     const index = this.states$.value.length;
-    const state = new EventFormState();
+    const state = this._eventStateFactory.create(
+      this._report.id,
+      event,
+      this._destroyRef
+    );
 
     this._availableEvents$(index).pipe(takeUntilDestroyed(this._destroyRef)).subscribe(state.events$);
 
-    this.states$.next([...this.states$.value, state]);
+    const states = [...this.states$.value, state];
+
+    this.states$.next(states);
   }
 
   public readonly addStateDisabled$: Observable<boolean> = combineLatest([this._events$, this._eventControlsChanges$]).pipe(

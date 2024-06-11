@@ -3,11 +3,13 @@ import {WorkFormState} from "@core/states";
 import {IReportDetail, IWork} from "@core/models";
 import {DestroyRef, Injectable} from "@angular/core";
 import {Spinner} from "@core/utils";
+import {EventFormStateFactory} from "@core/factories";
 
 @Injectable({providedIn: "root"})
 export class WorkFormStateFactory {
   constructor(
-    private readonly _eventTypesService: EventTypesService
+    private readonly _eventTypesService: EventTypesService,
+    private readonly _eventStateFactory: EventFormStateFactory
   ) {
   }
 
@@ -16,6 +18,7 @@ export class WorkFormStateFactory {
       work,
       report,
       this._eventTypesService,
+      this._eventStateFactory,
       spinner,
       destroyRef
     );
