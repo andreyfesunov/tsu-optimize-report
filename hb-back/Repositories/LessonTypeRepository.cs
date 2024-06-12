@@ -1,25 +1,23 @@
-﻿using AutoMapper;
-using BackendBase.Data;
-using BackendBase.Dto;
+﻿using BackendBase.Data;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BackendBase.Repositories
+namespace BackendBase.Repositories;
+
+public class LessonTypeRepository : BaseRepository<LessonType>
 {
-    public class LessonTypeRepository : BaseRepository<LessonType>
+    public LessonTypeRepository(DataContext context) : base(context)
     {
-        public LessonTypeRepository(DataContext context) : base(context)
-        {
-        }
+    }
 
-        public Task<LessonType?> GetLessonTypeByName(string name)
-        {
-            return context.LessonTypes.Where(x => x.Name == name).FirstOrDefaultAsync();
-        }
+    public Task<LessonType?> GetLessonTypeByName(string name)
+    {
+        return context.LessonTypes.Where(x => x.Name == name).FirstOrDefaultAsync();
+    }
 
-        protected override IQueryable<LessonType> IncludeChildren(IQueryable<LessonType> query)
-        {
-            return query;
-        }
+    public async Task<ICollection<LessonType>> GetAllForReport(Guid stateUserId)
+    {
+        return await dbset.Where(x => x.Records.Count(x => x.StateUserId == stateUserId) != 0)
+            .ToListAsync();
     }
 }

@@ -55,6 +55,7 @@ builder.Services.AddScoped<IWorkService, WorkService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IRecordService, RecordService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

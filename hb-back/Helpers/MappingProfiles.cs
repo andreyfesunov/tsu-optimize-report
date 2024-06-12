@@ -2,6 +2,7 @@
 using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
 using BackendBase.Dto.Event;
+using BackendBase.Dto.Lesson;
 using BackendBase.Dto.Report;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
@@ -47,6 +48,8 @@ public class MappingProfiles : Profile
         CreateMap<JobDto, Job>();
         CreateMap<Rank, RankDto>();
         CreateMap<Degree, DegreeDto>();
+        CreateMap<Comment, CommentDto>();
+        CreateMap<LessonCreateDto, Lesson>();
 
         CreateMap<StateCreateDto, State>();
         CreateMap<State, StateCreateDto>();

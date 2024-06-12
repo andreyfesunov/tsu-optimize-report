@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendBase.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240520190506_InitialCreate")]
+    [Migration("20240612170735_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,32 @@ namespace BackendBase.Migrations
                     b.HasIndex("EventTypeId");
 
                     b.ToTable("ActivitiesEventsTypes");
+                });
+
+            modelBuilder.Entity("BackendBase.Models.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("FactDate")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PlanDate")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("BackendBase.Models.Degree", b =>
@@ -232,14 +258,14 @@ namespace BackendBase.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("FactDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int?>("FactDate")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("LessonTypeId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("PlanDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int?>("PlanDate")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -443,6 +469,17 @@ namespace BackendBase.Migrations
                     b.Navigation("EventType");
                 });
 
+            modelBuilder.Entity("BackendBase.Models.Comment", b =>
+                {
+                    b.HasOne("BackendBase.Models.Event", "Event")
+                        .WithMany("Comments")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("BackendBase.Models.Department", b =>
                 {
                     b.HasOne("BackendBase.Models.Institute", "Institute")
@@ -632,6 +669,8 @@ namespace BackendBase.Migrations
 
             modelBuilder.Entity("BackendBase.Models.Event", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("EventsFiles");
 
                     b.Navigation("Lessons");

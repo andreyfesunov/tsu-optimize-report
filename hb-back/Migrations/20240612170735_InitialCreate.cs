@@ -323,14 +323,35 @@ namespace BackendBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    FactDate = table.Column<int>(type: "integer", nullable: true),
+                    PlanDate = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comment_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Lessons",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
                     LessonTypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FactDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PlanDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    FactDate = table.Column<int>(type: "integer", nullable: true),
+                    PlanDate = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -383,6 +404,11 @@ namespace BackendBase.Migrations
                 name: "IX_ActivitiesEventsTypes_EventTypeId",
                 table: "ActivitiesEventsTypes",
                 column: "EventTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_EventId",
+                table: "Comment",
+                column: "EventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_InstituteId",
@@ -479,6 +505,9 @@ namespace BackendBase.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ActivitiesEventsTypes");
+
+            migrationBuilder.DropTable(
+                name: "Comment");
 
             migrationBuilder.DropTable(
                 name: "EventsFiles");

@@ -1,7 +1,7 @@
 import {DestroyRef, Injectable} from "@angular/core";
 import {EventsService} from "@core/services";
-import {EventFormState} from "@core/states";
-import {IEvent} from "@core/models";
+import {CommentFormState, EventFormState, LessonFormState} from "@core/states";
+import {IComment, IEvent, ILesson} from "@core/models";
 
 @Injectable({providedIn: "root"})
 export class EventFormStateFactory {
@@ -19,7 +19,34 @@ export class EventFormStateFactory {
       reportId,
       event,
       this._eventsService,
+      this,
       destroyRef
     );
+  }
+
+  public createLesson(
+    eventId: string,
+    lesson: ILesson | null = null,
+    destroyRef: DestroyRef
+  ): LessonFormState {
+    return new LessonFormState(
+      eventId,
+      lesson,
+      this._eventsService,
+      destroyRef
+    )
+  }
+
+  public createComment(
+    eventId: string,
+    comment: IComment | null = null,
+    destroyRef: DestroyRef
+  ): CommentFormState {
+    return new CommentFormState(
+      eventId,
+      comment,
+      this._eventsService,
+      destroyRef
+    )
   }
 }

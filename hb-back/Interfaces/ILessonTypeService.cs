@@ -2,9 +2,9 @@
 using BackendBase.Helpers.CRUD;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces
+namespace BackendBase.Interfaces;
+
+public interface ILessonTypeService : ICRUDServiceBase<LessonType, LessonTypeDto>
 {
-    public interface ILessonTypeService : ICRUDServiceBase<LessonType, LessonTypeDto>
-    {
-    }
+    Task<ICollection<LessonTypeDto>> GetAllForEvent(Guid stateUserId);
 }

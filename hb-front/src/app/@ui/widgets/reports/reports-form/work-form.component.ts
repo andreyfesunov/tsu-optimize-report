@@ -24,6 +24,7 @@ import {EventFormComponent, ScrollableComponent} from "@ui/widgets";
         <app-report-event-form
           *ngFor="let eventState of eventStates"
           [state]="eventState"
+          [index]="index()"
         ></app-report-event-form>
 
         <button mat-button (click)="state().addEvent()" [disabled]="state().addStateDisabled$ | async">
@@ -56,5 +57,6 @@ import {EventFormComponent, ScrollableComponent} from "@ui/widgets";
 })
 export class WorkFormComponent {
   public readonly state = input.required<WorkFormState>();
+  public readonly index = input.required<number>();
 }
 

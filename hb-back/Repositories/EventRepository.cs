@@ -12,6 +12,9 @@ public class EventRepository : BaseRepository<Event>
 
     protected override IQueryable<Event> IncludeChildren(IQueryable<Event> query)
     {
-        return query.Include(x => x.EventType);
+        return query
+            .Include(x => x.Lessons)
+            .Include(x => x.Comments)
+            .Include(x => x.EventType);
     }
 }

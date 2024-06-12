@@ -24,9 +24,15 @@ public class StateUserRepository : BaseRepository<StateUser>
 
     protected override IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)
     {
-        return query.Include(x => x.Events)
+        return query
+            .Include(x => x.Events)
             .ThenInclude(x => x.EventType)
             .ThenInclude(x => x.Work)
+            .Include(x => x.Events)
+            .ThenInclude(x => x.Comments)
+            .Include(x => x.Events)
+            .ThenInclude(x => x.Lessons)
+            .ThenInclude(x => x.LessonType)
             .Include(x => x.User)
             .Include(x => x.Files)
             .Include(x => x.Records)

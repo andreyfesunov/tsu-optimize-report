@@ -3,6 +3,8 @@
 public class Event : Base
 {
     public ICollection<Lesson> Lessons { get; set; }
+    public ICollection<Comment> Comments { get; set; }
+
     public ICollection<EventFile> EventsFiles { get; set; }
     public Guid EventTypeId { get; set; }
     public EventType EventType { get; set; }

@@ -8,7 +8,7 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {EventFormTableRowComponent, ReportItemField, TableComponent} from "@ui/widgets";
+import {EventFormTableRowComponent, LessonFormTableRowComponent, ReportItemField, TableComponent} from "@ui/widgets";
 import {ITableColumn} from "@core/models";
 
 @Component({
@@ -34,7 +34,8 @@ import {ITableColumn} from "@core/models";
     TableComponent,
     ReactiveFormsModule,
     NgSwitch,
-    EventFormTableRowComponent
+    EventFormTableRowComponent,
+    LessonFormTableRowComponent
   ],
   template: `
     <table app-table [cols]="defaultCols" [itemsCount]="1" [bordered]="true">
@@ -43,11 +44,18 @@ import {ITableColumn} from "@core/models";
         [defaultCols]="defaultCols"
         [state]="state()"
       ></tr>
-      <tr>
+      <tr
+        *ngFor="let state of state().lessonFormStates$ | async"
+        app-lesson-form-table-row
+        [defaultCols]="defaultCols"
+        [state]="state"
+      ></tr>
+      <tr *ngIf="state().editable$ | async">
         <td
+          *ngIf="index() === 0"
           class="tsu-table-td"
         >
-          <button mat-button>
+          <button mat-button (click)="state().addLesson()">
             <mat-icon>add_circle</mat-icon>
             Добавить учебную дисциплину
           </button>
@@ -58,6 +66,7 @@ import {ITableColumn} from "@core/models";
 })
 export class EventFormComponent {
   public readonly state = input.required<EventFormState>();
+  public readonly index = input.required<number>();
 
   protected readonly defaultCols = defaultCols;
 }

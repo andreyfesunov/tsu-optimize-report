@@ -26,7 +26,10 @@ import {ReportsFormStateFactory} from "@core/factories";
       <mat-tab *ngFor="let workState of workStates; index as index" [disabled]="index !== 0"
                [label]="workState.work.name">
         <ng-template matTabContent>
-          <app-report-work-form [state]="workState"></app-report-work-form>
+          <app-report-work-form
+            [state]="workState"
+            [index]="index"
+          ></app-report-work-form>
         </ng-template>
       </mat-tab>
     </mat-tab-group>
