@@ -23,4 +23,20 @@ export abstract class TableController<TEntity> {
   );
 
   protected readonly items$: Observable<TEntity[]> = this.page$.pipe(map((page) => page.entities));
+
+  protected nextPage(): void {
+    const req = this.request$.value;
+
+    req.pageNumber += 1;
+
+    this.request$.next(req);
+  }
+
+  protected prevPage(): void {
+    const req = this.request$.value;
+
+    req.pageNumber -= 1;
+
+    this.request$.next(req);
+  }
 }

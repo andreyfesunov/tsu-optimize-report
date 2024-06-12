@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
+using BackendBase.Dto.Event;
 using BackendBase.Dto.Report;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
@@ -52,5 +53,7 @@ public class MappingProfiles : Profile
         CreateMap<StateUser, StateUserCreateDto>();
         CreateMap<StateUserCreateDto, StateUser>();
         CreateMap<EventTypeAssignDto, ActivityEventType>();
+
+        CreateMap<EventCreateDto, Event>();
     }
 }

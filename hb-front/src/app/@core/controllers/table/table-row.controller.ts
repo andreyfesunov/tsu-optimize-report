@@ -7,8 +7,8 @@ export class TableRowController<TEntity, TCol extends string> {
   @Input({required: true}) cols: ITableColumn<TCol>[] = [];
   @Input() clickable: boolean = true;
 
-  @HostListener('mouseenter') onMouseEnter = () => this.hovered = true;
-  @HostListener('mouseleave') onMouseLeave = () => this.hovered = false;
+  @HostListener('mouseenter') onMouseEnter = () => this.clickable && (this.hovered = true);
+  @HostListener('mouseleave') onMouseLeave = () => this.clickable && (this.hovered = false);
 
   @HostBinding('style.cursor') get cursor(): string {
     return this.clickable ? 'pointer' : 'default';

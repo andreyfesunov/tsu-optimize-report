@@ -1,4 +1,6 @@
 ﻿using BackendBase.Data;
+using BackendBase.Dto;
+using BackendBase.Extensions;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,18 +8,25 @@ namespace BackendBase.Repositories;
 
 public class StateUserRepository : BaseRepository<StateUser>
 {
-    public StateUserRepository(DataContext context) : base(context)
+    private readonly UserInfo _userInfo;
+
+    public StateUserRepository(DataContext context, UserInfo userInfo) : base(context)
     {
+        _userInfo = userInfo;
     }
 
-    //public async Task<bool> ExistStateUser(StateUserCreateDto stateUserCreateDto)
-    //{
-    //    return _context.Set<StateUser>().FirstOrDefault(x => x.StateId == Guid.Parse(stateUserCreateDto.StateId) && x.UserId == Guid.Parse(stateUserCreateDto.UserId)) == null;
-    //}
+    public override async Task<PaginationDto<StateUser>> Search(SearchDto searchDto)
+    {
+        return await IncludeChildren(dbset)
+            .Where(x => x.User.Id.ToString() == _userInfo.GetUserId())
+            .Search(searchDto);
+    }
 
     protected override IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)
     {
         return query.Include(x => x.Events)
+            .ThenInclude(x => x.EventType)
+            .ThenInclude(x => x.Work)
             .Include(x => x.User)
             .Include(x => x.Files)
             .Include(x => x.Records)

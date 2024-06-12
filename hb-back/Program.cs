@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using BackendBase.Data;
+using BackendBase.Dto;
 using BackendBase.Extensions;
 using BackendBase.Interfaces;
 using BackendBase.Middlewares;
@@ -20,6 +21,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<UserInfo>();
 
 builder.Services.AddScoped<ActivityEventTypeRepository>();
 builder.Services.AddScoped<ActivityRepository>();
@@ -50,6 +53,8 @@ builder.Services.AddScoped<IStateUserService, StateUserService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IWorkService, WorkService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IRecordService, RecordService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -110,12 +115,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<UserInfoMiddleware>();
-
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<UserInfoMiddleware>();
 
 app.Run();

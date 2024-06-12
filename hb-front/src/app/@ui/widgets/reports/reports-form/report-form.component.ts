@@ -1,4 +1,4 @@
-import {Component, computed, DestroyRef, input} from '@angular/core';
+import {Component, computed, DestroyRef, input, ViewEncapsulation} from '@angular/core';
 import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
 import {BehaviorSubject} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -19,10 +19,9 @@ import {ReportsFormStateFactory} from "@core/factories";
     AsyncPipe,
     WorkFormComponent,
     MatTabContent
-
   ],
   template: `
-    <mat-tab-group *ngIf="state().states$ | async as workStates" class="reports-form" animationDuration="0ms"
+    <mat-tab-group *ngIf="state().states$ | async as workStates" class="reports-form host-class" animationDuration="0ms"
                    (selectedTabChange)="tabChanged$.next($event.index)">
       <mat-tab *ngFor="let workState of workStates; index as index" [disabled]="index !== 0"
                [label]="workState.work.name">
@@ -34,17 +33,24 @@ import {ReportsFormStateFactory} from "@core/factories";
 
     <app-spinner *ngIf="spinner.active$"></app-spinner>
   `,
+  encapsulation: ViewEncapsulation.None,
   styles: [
     `
-      .reports-form {
-        background-color: white;
+      mat-tab-group.reports-form {
+        > div,
+        mat-tab-body > div {
+          display: flex;
+          flex-direction: column;
+          flex: 1 1 1px;
+        }
       }
 
       h1 {
         margin: 0;
       }
     `
-  ]
+  ],
+  host: {class: 'host-class'}
 })
 export class ReportFormComponent extends SubscriptionController {
   constructor(

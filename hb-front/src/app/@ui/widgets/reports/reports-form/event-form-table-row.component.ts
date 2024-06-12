@@ -7,7 +7,6 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/mater
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {MatSelect} from "@angular/material/select";
 
 @Component({
   selector: "tr[app-event-form-table-row]",
@@ -27,7 +26,6 @@ import {MatSelect} from "@angular/material/select";
     NgSwitchCase,
     NgSwitch,
     ReactiveFormsModule,
-    MatSelect,
     MatAutocomplete,
     MatAutocompleteTrigger
   ],

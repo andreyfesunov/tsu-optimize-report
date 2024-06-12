@@ -58,13 +58,7 @@ export class WorkFormState {
     switchMap((eventChanges) => this._events$.pipe(map((events) => {
       const selectedEvents = eventChanges.filter((v): v is string => !!v);
 
-      console.log(selectedEvents);
-
-      const tmp = events.filter((event) => !selectedEvents.includes(event.id) || eventChanges[index] === event.id);
-
-      console.log(123, tmp);
-
-      return tmp;
+      return events.filter((event) => !selectedEvents.includes(event.id) || eventChanges[index] === event.id);
     }))),
     shareReplay({refCount: true, bufferSize: 1})
   ));
@@ -79,9 +73,7 @@ export class WorkFormState {
 
     this._availableEvents$(index).pipe(takeUntilDestroyed(this._destroyRef)).subscribe(state.events$);
 
-    const states = [...this.states$.value, state];
-
-    this.states$.next(states);
+    this.states$.next([...this.states$.value, state]);
   }
 
   public readonly addStateDisabled$: Observable<boolean> = combineLatest([this._events$, this._eventControlsChanges$]).pipe(

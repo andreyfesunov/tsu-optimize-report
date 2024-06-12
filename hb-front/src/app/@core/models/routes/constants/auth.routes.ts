@@ -1,5 +1,5 @@
-import {toAuth} from "@core/models/routes/constants/app.routes";
 import {AuthRoutes} from "../enums";
+import {toAuth} from "@core/models";
 
 export const toLogin = [...toAuth, AuthRoutes.LOGIN];
 

@@ -1,0 +1,14 @@
+@use "../../../../../scss/shared/variables";
+
+.report-detail {
+  display: flex;
+  flex-direction: row;
+
+  gap: variables.$padding-lg;
+}
+
+.report-table {
+  background-color: variables.$table-background-color--accent;
+  border-radius: variables.$padding-lg;
+  padding: variables.$padding-lg;
+}

@@ -2,5 +2,16 @@
 
 public class UserInfo
 {
-    public string UserId { get; set; }
+    private string? UserId { get; set; }
+
+    public string GetUserId()
+    {
+        if (UserId != null) return UserId;
+        throw new Exception("UserInfo not initialized.");
+    }
+
+    public void SetUserId(string userId)
+    {
+        UserId = userId;
+    }
 }

@@ -1,4 +1,4 @@
-import {Component, input} from "@angular/core";
+import {Component, input, output} from "@angular/core";
 import {IPagination} from "@core/models";
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
@@ -15,11 +15,11 @@ import {MatIcon} from "@angular/material/icon";
           из {{ page().totalPages }}
         </div>
         <div class="paginator-item__actions">
-          <button mat-icon-button [disabled]="prevDisabled">
+          <button (click)="prev.emit()" mat-icon-button [disabled]="prevDisabled">
             <mat-icon>chevron_left</mat-icon>
           </button>
 
-          <button mat-icon-button [disabled]="nextDisabled">
+          <button (click)="next.emit()" mat-icon-button [disabled]="nextDisabled">
             <mat-icon>chevron_right</mat-icon>
           </button>
         </div>
@@ -33,6 +33,9 @@ import {MatIcon} from "@angular/material/icon";
 })
 export class PaginatorComponent {
   public readonly page = input.required<IPagination<unknown>>();
+
+  public readonly next = output();
+  public readonly prev = output();
 
   protected get paginationDisabled(): boolean {
     return this.page().totalPages <= 1;

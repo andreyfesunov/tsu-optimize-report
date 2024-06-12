@@ -86,7 +86,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         return await dbset.Search(searchDto);
     }
 
-    public async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
+    public virtual async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
     {
         return await IncludeChildren(dbset).Search(searchDto);
     }

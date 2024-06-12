@@ -1,3 +1,5 @@
+export * from "./activities";
+export * from "./lesson-type";
 export * from "./users";
 export * from "./navigation";
 export * from "./routes";
@@ -9,6 +11,6 @@ export * from "./jobs"
 export * from "./departments"
 export * from "./institutes"
 export * from "./works"
-export * from "./activities"
 export * from "./event-type"
 export * from "./events"
+export * from "./records"

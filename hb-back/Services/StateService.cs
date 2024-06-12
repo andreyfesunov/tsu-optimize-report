@@ -5,16 +5,15 @@ using BackendBase.Helpers.CRUD;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Services;
 
 public class StateService : CRUDServiceBase<State, StateDto>, IStateService
 {
-    DepartmentRepository _departmentRepository;
-    StateRepository _stateRepository;
-    UserRepository _userRepository;
-    StateUserRepository _stateUserRepository;
+    private readonly DepartmentRepository _departmentRepository;
+    private readonly StateRepository _stateRepository;
+    private readonly StateUserRepository _stateUserRepository;
+    private readonly UserRepository _userRepository;
 
     public StateService(
         StateRepository repository,
@@ -22,7 +21,7 @@ public class StateService : CRUDServiceBase<State, StateDto>, IStateService
         UserRepository userRepository,
         StateUserRepository stateUserRepository,
         IMapper mapper
-        ) : base(mapper)
+    ) : base(mapper)
     {
         _repository = repository;
         _departmentRepository = departmentRepository;
@@ -43,7 +42,7 @@ public class StateService : CRUDServiceBase<State, StateDto>, IStateService
     public async Task<bool> Assign(StateUserCreateDto stateUserCreateDto)
     {
         var state = await _stateRepository.GetByIdRoot(Guid.Parse(stateUserCreateDto.StateId));
-        var userDto = _userRepository.GetById(Guid.Parse(stateUserCreateDto.UserId));
+        var userDto = await _userRepository.GetById(Guid.Parse(stateUserCreateDto.UserId));
         if (state == null || userDto == null)
             return false;
         if (state.Count < 1)

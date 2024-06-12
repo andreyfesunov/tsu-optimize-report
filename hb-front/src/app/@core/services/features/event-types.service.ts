@@ -44,8 +44,10 @@ export class EventTypesService {
   );
 
   private _getSearchRequest(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {
+    const defaultRequest = this._httpClient.post<IPagination<IEventType>>(`/api/EventType/${activityId}/search`, req);
+
     if (req.pageNumber !== 1) {
-      return this._httpClient.post<IPagination<IEventType>>(`/api/EventType/${activityId}/search`, req)
+      return defaultRequest;
     }
 
     return (this._eventTypesMap$ ?? (this._eventTypesMap$ = concat(of(0), this._activityId$).pipe(

@@ -48,7 +48,7 @@ export class TableComponent {
   @Input() public bordered: boolean = false;
   @Input() public sticky: boolean = false;
 
-  public readonly itemsCount = input.required<number>();
+  public readonly itemsCount = input<number>(1);
 
   @Input({required: true}) public cols: ITableColumn[] = [];
 }

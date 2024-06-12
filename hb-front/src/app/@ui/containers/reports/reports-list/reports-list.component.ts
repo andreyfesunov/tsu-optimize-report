@@ -3,9 +3,9 @@ import {ContentComponent, ReportsTableComponent, SpinnerComponent} from "@ui/wid
 import {IPaginationRequest} from "@core/dtos";
 import {exists, Spinner, switchMapSpinner, withSpinner} from "@core/utils";
 import {NgIf} from "@angular/common";
-import {ReportStatus} from "@core/models";
+import {ReportStatus, toReport} from "@core/models";
 import {SubscriptionController} from "@core/controllers";
-import {ReportsDialogService, ReportsService} from "@core/services";
+import {ReportsDialogService, ReportsService, RouterService} from "@core/services";
 
 @Component({
   selector: 'app-reports-list',
@@ -31,7 +31,8 @@ import {ReportsDialogService, ReportsService} from "@core/services";
 export class ReportsListComponent extends SubscriptionController {
   constructor(
     private readonly _reportService: ReportsService,
-    private readonly _reportDialogService: ReportsDialogService
+    private readonly _reportDialogService: ReportsDialogService,
+    private readonly _routerService: RouterService
   ) {
     super();
   }
@@ -46,7 +47,7 @@ export class ReportsListComponent extends SubscriptionController {
   }
 
   private _openDetail(id: string): void {
-    this._reportDialogService.openDetail(id);
+    this._routerService.navigate(toReport(id));
   }
 
   private _openStart(id: string): void {

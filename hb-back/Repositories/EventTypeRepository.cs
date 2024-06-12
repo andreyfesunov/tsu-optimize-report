@@ -2,6 +2,7 @@
 using BackendBase.Dto;
 using BackendBase.Extensions;
 using BackendBase.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
@@ -13,7 +14,7 @@ public class EventTypeRepository : BaseRepository<EventType>
 
     protected override IQueryable<EventType> IncludeChildren(IQueryable<EventType> query)
     {
-        return query;
+        return query.Include(x => x.Work);
     }
 
     public async Task<PaginationDto<EventType>> Search(Guid activityId, SearchDto searchDto)

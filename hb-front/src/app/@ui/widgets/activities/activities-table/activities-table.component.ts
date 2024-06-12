@@ -34,7 +34,10 @@ import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
         ></tr>
       </table>
 
-      <app-paginator *ngIf="page$ | async as page" [page]="page"></app-paginator>
+      <app-paginator (next)="nextPage()"
+                     (prev)="prevPage()"
+                     *ngIf="page$ | async as page"
+                     [page]="page"></app-paginator>
     </ng-container>
   `
 })
