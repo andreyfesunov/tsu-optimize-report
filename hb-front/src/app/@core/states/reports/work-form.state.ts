@@ -20,6 +20,7 @@ import {EventFormStateFactory} from "@core/factories";
 
 export class WorkFormState {
   public constructor(
+    public readonly index: number,
     public readonly work: IWork,
     private readonly _report: IReportDetail,
     private readonly _eventTypesService: EventTypesService,
@@ -34,7 +35,11 @@ export class WorkFormState {
 
   private readonly _eventsMemo$: { [key: number]: Observable<IEventType[]> } = {};
 
-  private readonly _events$: Observable<IEventType[]> = withSpinner(this._eventTypesService.getAllForReport(this._report.id, this.work.id), this._spinner).pipe(
+  private readonly _events$: Observable<IEventType[]> = withSpinner(this._eventTypesService.getAllForReport(
+    this._report.id,
+    this.work.id,
+    this.index === 0
+  ), this._spinner).pipe(
     shareReplay({
       bufferSize: 1,
       refCount: true

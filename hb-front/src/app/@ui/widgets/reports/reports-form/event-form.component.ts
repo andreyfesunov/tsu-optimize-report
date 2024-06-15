@@ -8,7 +8,13 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {EventFormTableRowComponent, LessonFormTableRowComponent, ReportItemField, TableComponent} from "@ui/widgets";
+import {
+  CommentFormTableRowComponent,
+  EventFormTableRowComponent,
+  LessonFormTableRowComponent,
+  ReportItemField,
+  TableComponent
+} from "@ui/widgets";
 import {ITableColumn} from "@core/models";
 
 @Component({
@@ -35,7 +41,8 @@ import {ITableColumn} from "@core/models";
     ReactiveFormsModule,
     NgSwitch,
     EventFormTableRowComponent,
-    LessonFormTableRowComponent
+    LessonFormTableRowComponent,
+    CommentFormTableRowComponent
   ],
   template: `
     <table app-table [cols]="defaultCols" [itemsCount]="1" [bordered]="true">
@@ -50,14 +57,26 @@ import {ITableColumn} from "@core/models";
         [defaultCols]="defaultCols"
         [state]="state"
       ></tr>
-      <tr *ngIf="state().editable$ | async">
+      <tr
+        *ngFor="let state of state().commentFormStates$ | async"
+        app-comment-form-table-row
+        [defaultCols]="defaultCols"
+        [state]="state"
+      ></tr>
+      <tr>
         <td
-          *ngIf="index() === 0"
+          *ngIf="{ editable: state().editable$ | async } as permissions"
           class="tsu-table-td"
         >
-          <button mat-button (click)="state().addLesson()">
+          <button *ngIf="index() === 0" [disabled]="!permissions.editable || (state().canAddLesson$ | async) === false"
+                  mat-button
+                  (click)="state().addLesson()">
             <mat-icon>add_circle</mat-icon>
             Добавить учебную дисциплину
+          </button>
+          <button *ngIf="index() !== 0" [disabled]="!permissions.editable" mat-button (click)="state().addComment()">
+            <mat-icon>add_circle</mat-icon>
+            Добавить запись
           </button>
         </td>
       </tr>

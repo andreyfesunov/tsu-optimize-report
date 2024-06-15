@@ -25,11 +25,12 @@ export interface ILessonUpdateDto {
 }
 
 export interface ICommentCreateDto {
+  readonly eventId: string;
   readonly content: string;
   readonly planDate: number | null;
   readonly factDate: number | null;
 }
 
-export interface ICommentUpdateDto extends ICommentCreateDto {
+export interface ICommentUpdateDto extends Omit<ICommentCreateDto, 'eventId'> {
   readonly id: string;
 }

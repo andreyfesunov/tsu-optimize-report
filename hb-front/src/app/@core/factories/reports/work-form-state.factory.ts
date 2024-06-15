@@ -13,8 +13,9 @@ export class WorkFormStateFactory {
   ) {
   }
 
-  public create(report: IReportDetail, work: IWork, spinner: Spinner, destroyRef: DestroyRef): WorkFormState {
+  public create(index: number, report: IReportDetail, work: IWork, spinner: Spinner, destroyRef: DestroyRef): WorkFormState {
     return new WorkFormState(
+      index,
       work,
       report,
       this._eventTypesService,

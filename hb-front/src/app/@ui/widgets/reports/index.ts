@@ -1,5 +1,6 @@
 export * from "@ui/widgets/reports/reports-form/event-form-table-row.component";
 export * from "@ui/widgets/reports/reports-form/lesson-form-table-row.component";
+export * from "@ui/widgets/reports/reports-form/comment-form-table-row.component";
 export * from "@ui/widgets/reports/reports-form/event-form.component";
 export * from "@ui/widgets/reports/reports-form/work-form.component";
 export * from "@ui/widgets/reports/reports-form/report-form.component";

@@ -32,7 +32,8 @@ export class ReportFormState {
   );
 
   public readonly states$: Observable<WorkFormState[]> = combineLatest([this._report$, this.works$]).pipe(
-    map(([report, works]) => works.map((work) => this._workStateFactory.create(
+    map(([report, works]) => works.map((work, index) => this._workStateFactory.create(
+      index,
       report,
       work,
       this._spinner,

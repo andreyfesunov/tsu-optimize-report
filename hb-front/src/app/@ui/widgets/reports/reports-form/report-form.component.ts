@@ -23,7 +23,7 @@ import {ReportsFormStateFactory} from "@core/factories";
   template: `
     <mat-tab-group *ngIf="state().states$ | async as workStates" class="reports-form host-class" animationDuration="0ms"
                    (selectedTabChange)="tabChanged$.next($event.index)">
-      <mat-tab *ngFor="let workState of workStates; index as index" [disabled]="index !== 0"
+      <mat-tab *ngFor="let workState of workStates; index as index"
                [label]="workState.work.name">
         <ng-template matTabContent>
           <app-report-work-form

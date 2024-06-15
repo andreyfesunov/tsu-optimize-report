@@ -23,8 +23,8 @@ export class EventTypesService {
     return this._eventTypes$;
   }
 
-  public getAllForReport(reportId: string, workId: string): Observable<IEventType[]> {
-    return this._httpClient.get<IEventType[]>(`/api/EventType/getAll/${reportId}/${workId}`);
+  public getAllForReport(reportId: string, workId: string, first: boolean): Observable<IEventType[]> {
+    return this._httpClient.get<IEventType[]>(`/api/EventType/getAll/${reportId}/${workId}/${first}`);
   }
 
   public search(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {

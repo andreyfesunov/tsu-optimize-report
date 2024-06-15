@@ -1,4 +1,15 @@
-import {BehaviorSubject, concat, distinctUntilChanged, map, merge, Observable, of, shareReplay, switchMap} from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  concat,
+  distinctUntilChanged,
+  map,
+  merge,
+  Observable,
+  of,
+  shareReplay,
+  switchMap
+} from "rxjs";
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {IComment, IEvent, IEventType, ILesson, ILessonType} from "@core/models";
 import {EventsService} from "@core/services";
@@ -38,6 +49,8 @@ export class EventFormState {
   );
 
   private readonly _types$ = this._eventsService.getLessonTypes(this._reportId);
+
+  public readonly canAddLesson$: Observable<boolean> = combineLatest([this.lessonFormStates$, this._types$]).pipe(map(([states, types]) => states.length < types.length));
 
   private readonly _availableTypes$ = (index: number) => (index in this._typesMemo$) ? this._typesMemo$[index] : (this._typesMemo$[index] = this._lessonControlsChanges$.pipe(
     switchMap((typeChanges) => this._types$.pipe(map((types) => {
@@ -116,10 +129,17 @@ export class EventFormState {
   }
 
   private _bindComments(comments: readonly IComment[]): void {
-    comments.forEach((comment) => this.commentFormStates$.next([
+    comments.forEach((comment) => this.addComment(comment));
+  }
+
+  public addComment(comment: IComment | null = null): void {
+    const eventId = required(this._id$.value);
+    const state = this._eventStateFactory.createComment(eventId, comment, this._destroyRef);
+
+    this.commentFormStates$.next([
       ...this.commentFormStates$.value,
-      this._eventStateFactory.createComment(required(this._id$.value), comment, this._destroyRef)
-    ]));
+      state
+    ]);
   }
 
   private _create(): Observable<IEvent> | null {
