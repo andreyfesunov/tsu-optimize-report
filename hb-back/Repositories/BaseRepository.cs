@@ -32,6 +32,12 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         return await Save();
     }
 
+    public async Task<bool> DeleteBatch(IEnumerable<TEntity> entities)
+    {
+        context.RemoveRange(entities);
+        return await Save();
+    }
+
     public async Task<bool> DeleteById(Guid entityId)
     {
         var entity = await GetById(entityId);

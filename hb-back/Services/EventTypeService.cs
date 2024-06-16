@@ -48,7 +48,8 @@ public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEvent
         var stateUser = await _stateUserRepository.GetById(stateUserId);
         var activityIds = stateUser.Records.Select(x => x.Activity.Id);
         var eventTypeIds =
-            (await _activityEventTypeRepository.GetAll(x => activityIds.Contains(x.ActivityId))).Select(x => x.EventTypeId);
+            (await _activityEventTypeRepository.GetAll(x => activityIds.Contains(x.ActivityId))).Select(x =>
+                x.EventTypeId);
 
         return (await _eventRepository.GetAll(x => x.WorkId == workId && (eventTypeIds.Contains(x.Id) || !first)))
             .Select(x => _mapper.Map<EventTypeDto>(x))
@@ -67,5 +68,16 @@ public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEvent
             throw new Exception("Связь уже существует");
 
         return await _activityEventTypeRepository.AddEntity(model);
+    }
+
+    public async Task<bool> Delete(Guid activityId, Guid entityTypeId)
+    {
+        var links = await _activityEventTypeRepository
+            .GetAll(
+                x => x.ActivityId == activityId &&
+                     x.EventTypeId == entityTypeId
+            );
+
+        return await _activityEventTypeRepository.DeleteBatch(links);
     }
 }

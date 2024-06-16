@@ -28,7 +28,7 @@ import {ReportsFormStateFactory} from "@core/factories";
         <ng-template matTabContent>
           <app-report-work-form
             [state]="workState"
-            [index]="index"
+            [workIndex]="index"
           ></app-report-work-form>
         </ng-template>
       </mat-tab>

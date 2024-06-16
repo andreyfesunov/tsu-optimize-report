@@ -1,4 +1,4 @@
-import {EventTypesService} from "@core/services";
+import {EventsService, EventTypesService} from "@core/services";
 import {IEvent, IEventType, IReportDetail, IWork} from "@core/models";
 import {
   BehaviorSubject,
@@ -25,6 +25,7 @@ export class WorkFormState {
     private readonly _report: IReportDetail,
     private readonly _eventTypesService: EventTypesService,
     private readonly _eventStateFactory: EventFormStateFactory,
+    private readonly _eventService: EventsService,
     private readonly _spinner: Spinner,
     private readonly _destroyRef: DestroyRef
   ) {
@@ -79,6 +80,19 @@ export class WorkFormState {
     this._availableEvents$(index).pipe(takeUntilDestroyed(this._destroyRef)).subscribe(state.events$);
 
     this.states$.next([...this.states$.value, state]);
+  }
+
+  public deleteState(index: number): void {
+    const states = this.states$.value;
+    const deleted = states[index].event;
+
+    if (deleted) {
+      this._eventService.delete(deleted.id).pipe(
+        takeUntilDestroyed(this._destroyRef)
+      ).subscribe(() => this.states$.next(this.states$.value.filter((_, arrIndex) => arrIndex !== index)));
+    } else {
+      this.states$.next(this.states$.value.filter((_, arrIndex) => arrIndex !== index));
+    }
   }
 
   public readonly addStateDisabled$: Observable<boolean> = combineLatest([this._events$, this._eventControlsChanges$]).pipe(

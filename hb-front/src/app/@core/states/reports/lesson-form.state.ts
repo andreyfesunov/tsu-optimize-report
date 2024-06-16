@@ -10,7 +10,7 @@ import {ILessonCreateDto, ILessonUpdateDto} from "@core/dtos";
 export class LessonFormState {
   constructor(
     private readonly _eventId: string,
-    private readonly _lesson: ILesson | null,
+    public readonly lesson: ILesson | null,
     private readonly _eventsService: EventsService,
     private readonly _destroyRef: DestroyRef
   ) {
@@ -28,8 +28,8 @@ export class LessonFormState {
   })
 
   private _init(): void {
-    this._lesson && this._bindForm(this._lesson);
-    this._lesson && this._id$.next(this._lesson.id);
+    this.lesson && this._bindForm(this.lesson);
+    this.lesson && this._id$.next(this.lesson.id);
 
     merge(
       this.form.valueChanges,

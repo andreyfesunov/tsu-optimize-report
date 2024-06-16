@@ -1,12 +1,13 @@
-import {Component, input} from "@angular/core";
-import {IEventType, ITableColumn} from "@core/models";
+import {Component} from "@angular/core";
+import {IEventType} from "@core/models";
 import {EventFormState} from "@core/states";
-import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
+import {TableRowController} from "@core/controllers";
 
 @Component({
   selector: "tr[app-event-form-table-row]",
@@ -27,18 +28,19 @@ import {MatInput} from "@angular/material/input";
     NgSwitch,
     ReactiveFormsModule,
     MatAutocomplete,
-    MatAutocompleteTrigger
+    MatAutocompleteTrigger,
+    NgTemplateOutlet
   ],
   template: `
     <td
-      *ngFor="let col of defaultCols()"
+      *ngFor="let col of cols"
       class="tsu-table-td"
       [class.tsu-table-td--center]="col.align === 'center'"
     >
-      <ng-container [ngSwitch]="col.id">
+      <ng-container *ngIf="item" [ngSwitch]="col.id">
         <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
-          <ng-container *ngIf="state().eventForm.controls.eventType as control">
-            <ng-container *ngIf="state().events$ | async as eventTypes">
+          <ng-container *ngIf="item.eventForm.controls.eventType as control">
+            <ng-container *ngIf="item.events$ | async as eventTypes">
               <mat-form-field *ngIf="eventTypes.length !== 0" appearance="outline" style="width: 100%">
                 <input [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
                        placeholder="Выберите событие" matInput>
@@ -55,7 +57,7 @@ import {MatInput} from "@angular/material/input";
 
         <ng-container *ngSwitchCase="ReportItemField.START_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="state().eventForm.controls.startDate" [matDatepicker]="dp1"
+            <input [formControl]="item.eventForm.controls.startDate" [matDatepicker]="dp1"
                    matInput>
             <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
             <mat-datepicker #dp1></mat-datepicker>
@@ -64,20 +66,21 @@ import {MatInput} from "@angular/material/input";
 
         <ng-container *ngSwitchCase="ReportItemField.END_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="state().eventForm.controls.endDate" [matDatepicker]="dp2"
+            <input [formControl]="item.eventForm.controls.endDate" [matDatepicker]="dp2"
                    matInput>
             <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
             <mat-datepicker #dp2></mat-datepicker>
           </mat-form-field>
         </ng-container>
+
+        <ng-container *ngSwitchCase="ReportItemField.ACTIONS">
+          <ng-container [ngTemplateOutlet]="actionsRef()"></ng-container>
+        </ng-container>
       </ng-container>
     </td>
   `
 })
-export class EventFormTableRowComponent {
-  public readonly state = input.required<EventFormState>();
-  public readonly defaultCols = input.required<ITableColumn<ReportItemField>[]>();
-
+export class EventFormTableRowComponent extends TableRowController<EventFormState, ReportItemField> {
   protected readonly ReportItemField = ReportItemField;
 
   protected displayFn(opts: IEventType[]) {
@@ -89,6 +92,7 @@ export class EventFormTableRowComponent {
 }
 
 export enum ReportItemField {
+  ACTIONS = 'ACTIONS',
   ENTITY_NAME = 'ENTITY_NAME',
   START_DATE = 'START_DATE',
   END_DATE = 'END_DATE',

@@ -22,13 +22,14 @@ import {EventFormComponent, ScrollableComponent} from "@ui/widgets";
     <app-scrollable class="work-form__scrollable" [horizontalScroll]="true">
       <div *ngIf="state().states$ | async as eventStates" class="work-form__content">
         <app-report-event-form
-          *ngFor="let eventState of eventStates"
+          *ngFor="let eventState of eventStates; index as index"
           [state]="eventState"
-          [index]="index()"
+          [workIndex]="workIndex()"
+          (deleteState)="state().deleteState(index)"
         ></app-report-event-form>
 
         <button mat-button (click)="state().addEvent()" [disabled]="state().addStateDisabled$ | async">
-          <mat-icon>add_circle</mat-icon>
+          <mat-icаon>add_circle</mat-icаon>
           Добавить событие
         </button>
       </div>
@@ -57,6 +58,6 @@ import {EventFormComponent, ScrollableComponent} from "@ui/widgets";
 })
 export class WorkFormComponent {
   public readonly state = input.required<WorkFormState>();
-  public readonly index = input.required<number>();
+  public readonly workIndex = input.required<number>();
 }
 

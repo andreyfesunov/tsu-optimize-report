@@ -10,7 +10,7 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 export class CommentFormState {
   constructor(
     private readonly _eventId: string,
-    private readonly _comment: IComment | null,
+    public readonly comment: IComment | null,
     private readonly _eventsService: EventsService,
     private readonly _destroyRef: DestroyRef
   ) {
@@ -28,8 +28,8 @@ export class CommentFormState {
   })
 
   private _init(): void {
-    this._comment && this._bindForm(this._comment);
-    this._comment && this._id$.next(this._comment.id);
+    this.comment && this._bindForm(this.comment);
+    this.comment && this._id$.next(this.comment.id);
 
     merge(
       this.form.controls.plan.valueChanges,

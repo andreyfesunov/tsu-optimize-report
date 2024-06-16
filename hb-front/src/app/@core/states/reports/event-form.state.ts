@@ -23,7 +23,7 @@ import {EventFormStateFactory} from "@core/factories";
 export class EventFormState {
   constructor(
     private readonly _reportId: string,
-    private readonly _event: IEvent | null,
+    public readonly event: IEvent | null,
     private readonly _eventsService: EventsService,
     private readonly _eventStateFactory: EventFormStateFactory,
     private readonly _destroyRef: DestroyRef
@@ -67,6 +67,10 @@ export class EventFormState {
 
   /** Event data */
 
+  public readonly deleteDisabled$ = combineLatest([this.commentFormStates$, this.lessonFormStates$]).pipe(
+    map(([comments, lessons]) => (comments.length + lessons.length) > 0)
+  )
+
   private readonly _id$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   public readonly editable$: Observable<boolean> = this._id$.pipe(map((v) => !!v));
@@ -80,8 +84,8 @@ export class EventFormState {
   });
 
   private _init(): void {
-    this._event && this._id$.next(this._event.id);
-    this._event && this._bindForm(this._event);
+    this.event && this._id$.next(this.event.id);
+    this.event && this._bindForm(this.event);
 
     merge(
       this.eventForm.valueChanges,
@@ -140,6 +144,32 @@ export class EventFormState {
       ...this.commentFormStates$.value,
       state
     ]);
+  }
+
+  public deleteComment(index: number): void {
+    const comments = this.commentFormStates$.value;
+    const deleted = comments[index].comment;
+
+    if (deleted) {
+      this._eventsService.deleteComment(deleted.id).pipe(
+        takeUntilDestroyed(this._destroyRef)
+      ).subscribe(() => this.commentFormStates$.next(this.commentFormStates$.value.filter((_, arrIndex) => arrIndex !== index)))
+    } else {
+      this.commentFormStates$.next(this.commentFormStates$.value.filter((_, arrIndex) => arrIndex !== index));
+    }
+  }
+
+  public deleteLesson(index: number): void {
+    const lessons = this.lessonFormStates$.value;
+    const deleted = lessons[index].lesson;
+
+    if (deleted) {
+      this._eventsService.deleteLesson(deleted.id).pipe(
+        takeUntilDestroyed(this._destroyRef)
+      ).subscribe(() => this.lessonFormStates$.next(this.lessonFormStates$.value.filter((_, arrIndex) => arrIndex !== index)));
+    } else {
+      this.lessonFormStates$.next(this.lessonFormStates$.value.filter((_, arrIndex) => arrIndex !== index));
+    }
   }
 
   private _create(): Observable<IEvent> | null {

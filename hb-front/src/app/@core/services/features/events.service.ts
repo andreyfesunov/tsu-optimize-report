@@ -28,6 +28,10 @@ export class EventsService {
     return this._httpClient.post<IEvent>('/api/Event/update', dto);
   }
 
+  public delete(id: string): Observable<boolean> {
+    return this._httpClient.delete<boolean>(`/api/Event/${id}`);
+  }
+
   public getLessonTypes(reportId: string): Observable<ILessonType[]> {
     return (reportId in this._lessonTypesMemo) ?
       this._lessonTypesMemo[reportId] :
@@ -43,11 +47,19 @@ export class EventsService {
     return this._httpClient.post<ILesson>('/api/Lesson/update', dto);
   }
 
+  public deleteLesson(id: string): Observable<boolean> {
+    return this._httpClient.delete<boolean>(`/api/Lesson/${id}`);
+  }
+
   public createComment(dto: ICommentCreateDto): Observable<IComment> {
     return this._httpClient.post<IComment>('/api/Comment/create', dto);
   }
 
   public updateComment(dto: ICommentUpdateDto): Observable<IComment> {
     return this._httpClient.post<IComment>('/api/Comment/update', dto);
+  }
+
+  public deleteComment(id: string): Observable<boolean> {
+    return this._httpClient.delete<boolean>(`/api/Comment/${id}`);
   }
 }

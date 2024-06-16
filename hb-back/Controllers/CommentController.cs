@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.Comment;
-using BackendBase.Dto.Lesson;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +41,20 @@ public class CommentController : ControllerBase
         try
         {
             var result = await _service.Update(dto);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("{entityId}")]
+    public async Task<ActionResult<bool>> DeleteById(Guid entityId)
+    {
+        try
+        {
+            var result = await _service.DeleteById(entityId);
             return Ok(result);
         }
         catch (Exception ex)

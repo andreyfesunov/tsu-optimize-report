@@ -1,13 +1,14 @@
-import {ILessonType, ITableColumn} from "@core/models";
+import {ILessonType} from "@core/models";
 import {ReportItemField} from "@ui/widgets";
-import {Component, input} from "@angular/core";
+import {Component} from "@angular/core";
 import {LessonFormState} from "@core/states";
-import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
+import {TableRowController} from "@core/controllers";
 
 @Component({
   selector: "tr[app-lesson-form-table-row]",
@@ -28,19 +29,20 @@ import {MatInput} from "@angular/material/input";
     NgIf,
     NgSwitchCase,
     NgSwitch,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgTemplateOutlet
   ],
   template:
     `
       <td
-        *ngFor="let col of defaultCols()"
+        *ngFor="let col of cols"
         class="tsu-table-td"
         [class.tsu-table-td--center]="col.align === 'center'"
       >
-        <ng-container [ngSwitch]="col.id">
+        <ng-container *ngIf="item" [ngSwitch]="col.id">
           <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
-            <ng-container *ngIf="state().form.controls.lessonType as control">
-              <ng-container *ngIf="state().types$ | async as types">
+            <ng-container *ngIf="item.form.controls.lessonType as control">
+              <ng-container *ngIf="item.types$ | async as types">
                 <mat-form-field *ngIf="types.length !== 0" appearance="outline" style="width: 100%">
                   <input [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
                          placeholder="Выберите дисциплину" matInput>
@@ -57,7 +59,7 @@ import {MatInput} from "@angular/material/input";
 
           <ng-container *ngSwitchCase="ReportItemField.PLAN">
             <mat-form-field appearance="outline">
-              <input [formControl]="state().form.controls.plan"
+              <input [formControl]="item.form.controls.plan"
                      [min]="0"
                      type="number"
                      matInput>
@@ -66,20 +68,21 @@ import {MatInput} from "@angular/material/input";
 
           <ng-container *ngSwitchCase="ReportItemField.FACT">
             <mat-form-field appearance="outline">
-              <input [formControl]="state().form.controls.fact"
+              <input [formControl]="item.form.controls.fact"
                      [min]="0"
                      type="number"
                      matInput>
             </mat-form-field>
           </ng-container>
+
+          <ng-container *ngSwitchCase="ReportItemField.ACTIONS">
+            <ng-container [ngTemplateOutlet]="actionsRef()"></ng-container>
+          </ng-container>
         </ng-container>
       </td>
     `
 })
-export class LessonFormTableRowComponent {
-  public readonly state = input.required<LessonFormState>();
-  public readonly defaultCols = input.required<ITableColumn<ReportItemField>[]>();
-
+export class LessonFormTableRowComponent extends TableRowController<LessonFormState, ReportItemField> {
   protected readonly ReportItemField = ReportItemField;
 
   protected displayFn(opts: ILessonType[]) {
