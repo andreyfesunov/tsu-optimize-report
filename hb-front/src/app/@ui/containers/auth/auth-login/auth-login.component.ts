@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {toMain, toReg} from "@core/models";
 import {AuthLoginFormComponent} from "@ui/widgets";
-import {ILoginRegDto} from "@core/dtos";
+import {ILoginDto} from "@core/dtos";
 import {SubscriptionController} from "@core/controllers";
 import {AuthService, RouterService} from "@core/services";
 import {AuthState} from "@core/states";
@@ -25,7 +25,7 @@ export class AuthLoginComponent extends SubscriptionController {
     super();
   }
 
-  protected onSubmit(eventData: ILoginRegDto): void {
+  protected onSubmit(eventData: ILoginDto): void {
     this.subscription.add(this._authService.logIn(eventData).subscribe((res) => {
       this._authState.setToken(res.token);
       this._routerService.navigate(toMain);

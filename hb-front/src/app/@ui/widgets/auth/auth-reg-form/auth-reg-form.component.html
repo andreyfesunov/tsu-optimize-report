@@ -14,6 +14,14 @@
         <!-- <mat-error *ngIf="email.hasError("email")">Email не валидный</mat-error>     -->
       </mat-form-field>
       <mat-form-field appearance="outline">
+        <mat-label>Имя</mat-label>
+        <input matInput [formControl]="form.controls.firstname">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Фамилия</mat-label>
+        <input matInput [formControl]="form.controls.lastname">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Пароль</mat-label>
         <!-- <mat-error *ngIf="password.hasError("required")">Пароль обязательное поле</mat-error> -->
         <input type="password" matInput [formControl]="form.controls.password">

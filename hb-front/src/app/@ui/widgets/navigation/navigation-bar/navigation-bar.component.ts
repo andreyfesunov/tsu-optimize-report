@@ -19,15 +19,20 @@ import {Navigation} from "@core/models";
   template: `
     <div class="navigation">
       <nav class="navigation__category">
-        <a *ngFor="let item of items" mat-button class="item-wrapper" [routerLink]="item.path"
-           routerLinkActive="active" (click)="item.fn()">
-          <div class="navigation__category__item">
-            <mat-icon
-              class="navigation__category__item__icon material-symbols-outlined">{{ item.icon }}
-            </mat-icon>
-            <span>{{ item.text }}</span>
-          </div>
-        </a>
+        <ng-container *ngFor="let item of items">
+          <a mat-button class="item-wrapper"
+             *ngIf="item.canActivate$ | async"
+             routerLinkActive="active"
+             [routerLink]="item.path"
+             (click)="item.fn()">
+            <div class="navigation__category__item">
+              <mat-icon
+                class="navigation__category__item__icon material-symbols-outlined">{{ item.icon }}
+              </mat-icon>
+              <span>{{ item.text }}</span>
+            </div>
+          </a>
+        </ng-container>
       </nav>
     </div>
   `,

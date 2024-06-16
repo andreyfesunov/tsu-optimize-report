@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {AuthRegFormComponent} from "@ui/widgets";
 import {toLogin} from "@core/models";
-import {ILoginRegDto} from "@core/dtos";
+import {ILoginDto} from "@core/dtos";
 import {SubscriptionController} from "@core/controllers";
 import {AuthService, RouterService} from "@core/services";
 
@@ -24,7 +24,7 @@ export class AuthRegComponent extends SubscriptionController {
     super();
   }
 
-  protected onSubmit(params: ILoginRegDto): void {
+  protected onSubmit(params: ILoginDto): void {
     this.subscription.add(this._authService.reg(params).subscribe(() => this.onLogin()));
   }
 

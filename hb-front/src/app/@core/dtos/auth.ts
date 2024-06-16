@@ -1,8 +1,13 @@
 export interface ITokenDto {
-    token: string
+  token: string
 }
 
-export interface ILoginRegDto {
-    email: string;
-    password: string;
+export interface ILoginDto {
+  email: string;
+  password: string;
+}
+
+export interface IRegDto extends ILoginDto {
+  firstname: string;
+  lastname: string;
 }

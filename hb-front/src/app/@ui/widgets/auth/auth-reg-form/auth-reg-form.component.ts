@@ -3,7 +3,7 @@ import {MatInputModule} from "@angular/material/input";
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {ILoginRegDto} from "@core/dtos";
+import {ILoginDto, IRegDto} from "@core/dtos";
 
 @Component({
   selector: "app-auth-reg-form",
@@ -25,7 +25,7 @@ export class AuthRegFormComponent {
   ) {
   }
 
-  @Output() public readonly submitEvent: EventEmitter<ILoginRegDto> = new EventEmitter<ILoginRegDto>()
+  @Output() public readonly submitEvent: EventEmitter<ILoginDto> = new EventEmitter<ILoginDto>()
 
   @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
 
@@ -34,6 +34,8 @@ export class AuthRegFormComponent {
   private _buildForm(): FormGroup<IAuthRegForm> {
     return this._fb.group<IAuthRegForm>({
       email: this._fb.control<string>("", [Validators.required, Validators.email]),
+      firstname: this._fb.control<string>("", [Validators.required]),
+      lastname: this._fb.control<string>("", [Validators.required]),
       password: this._fb.control<string>("", Validators.required)
     })
   }
@@ -47,8 +49,10 @@ export class AuthRegFormComponent {
       return this.form.markAllAsTouched();
     }
 
-    const request: ILoginRegDto = {
+    const request: IRegDto = {
       email: this.form.controls.email.value,
+      firstname: this.form.controls.firstname.value,
+      lastname: this.form.controls.lastname.value,
       password: this.form.controls.password.value
     };
 
@@ -58,5 +62,7 @@ export class AuthRegFormComponent {
 
 export interface IAuthRegForm {
   email: FormControl<string>;
+  firstname: FormControl<string>;
+  lastname: FormControl<string>;
   password: FormControl<string>;
 }
