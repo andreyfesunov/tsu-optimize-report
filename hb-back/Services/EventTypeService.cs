@@ -43,14 +43,14 @@ public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEvent
         return searchMap;
     }
 
-    public async Task<ICollection<EventTypeDto>> GetAllForReport(Guid stateUserId, Guid workId)
+    public async Task<ICollection<EventTypeDto>> GetAllForReport(Guid stateUserId, Guid workId, bool first)
     {
         var stateUser = await _stateUserRepository.GetById(stateUserId);
         var activityIds = stateUser.Records.Select(x => x.Activity.Id);
         var eventTypeIds =
             (await _activityEventTypeRepository.GetAll(x => activityIds.Contains(x.ActivityId))).Select(x => x.EventTypeId);
 
-        return (await _eventRepository.GetAll(x => x.WorkId == workId && eventTypeIds.Contains(x.Id)))
+        return (await _eventRepository.GetAll(x => x.WorkId == workId && (eventTypeIds.Contains(x.Id) || !first)))
             .Select(x => _mapper.Map<EventTypeDto>(x))
             .ToList();
     }

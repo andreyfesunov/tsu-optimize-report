@@ -61,12 +61,12 @@ public class EventTypeController : CRUDControllerBase<EventType, EventTypeDto>
         }
     }
 
-    [HttpGet("getAll/{stateUserId:guid}/{workId:guid}")]
-    public async Task<ActionResult<ICollection<EventTypeDto>>> GetAllForReport(Guid stateUserId, Guid workId)
+    [HttpGet("getAll/{stateUserId:guid}/{workId:guid}/{first:bool}")]
+    public async Task<ActionResult<ICollection<EventTypeDto>>> GetAllForReport(Guid stateUserId, Guid workId, bool first)
     {
         try
         {
-            var eventTypes = await _service.GetAllForReport(stateUserId, workId);
+            var eventTypes = await _service.GetAllForReport(stateUserId, workId, first);
             return Ok(eventTypes);
         }
         catch (Exception ex)

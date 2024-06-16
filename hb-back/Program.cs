@@ -41,6 +41,7 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<WorkRepository>();
 builder.Services.AddScoped<LessonTypeRepository>();
 builder.Services.AddScoped<RecordRepository>();
+builder.Services.AddScoped<CommentRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReportService, ReportService>();
@@ -56,6 +57,7 @@ builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IRecordService, RecordService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

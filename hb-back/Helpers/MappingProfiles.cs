@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
+using BackendBase.Dto.Comment;
 using BackendBase.Dto.CreateDto;
 using BackendBase.Dto.Event;
 using BackendBase.Dto.Lesson;
@@ -56,6 +57,9 @@ public class MappingProfiles : Profile
         CreateMap<StateUser, StateUserCreateDto>();
         CreateMap<StateUserCreateDto, StateUser>();
         CreateMap<EventTypeAssignDto, ActivityEventType>();
+
+        CreateMap<CommentCreateDto, Comment>();
+        CreateMap<Comment, CommentDto>();
 
         CreateMap<EventCreateDto, Event>();
     }
