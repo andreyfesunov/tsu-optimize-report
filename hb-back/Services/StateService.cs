@@ -1,19 +1,22 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
-using BackendBase.Helpers.CRUD;
+using BackendBase.Helpers;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
 namespace BackendBase.Services;
 
-public class StateService : CRUDServiceBase<State, StateDto>, IStateService
+public class StateService : IStateService
 {
     private readonly DepartmentRepository _departmentRepository;
     private readonly StateRepository _stateRepository;
     private readonly StateUserRepository _stateUserRepository;
     private readonly UserRepository _userRepository;
+    protected readonly IMapper _mapper;
+    protected MappingHelper<State, StateDto> _mappingHelper;
+    protected StateRepository _repository;
 
     public StateService(
         StateRepository repository,
@@ -21,13 +24,45 @@ public class StateService : CRUDServiceBase<State, StateDto>, IStateService
         UserRepository userRepository,
         StateUserRepository stateUserRepository,
         IMapper mapper
-    ) : base(mapper)
+    )
     {
         _repository = repository;
         _departmentRepository = departmentRepository;
         _stateRepository = repository;
         _userRepository = userRepository;
         _stateUserRepository = stateUserRepository;
+        _mapper = mapper;
+        _mappingHelper = new MappingHelper<State, StateDto>(_mapper);
+    }
+
+    public async Task<State> AddEntity(State entity)
+    {
+        return await _repository.AddEntity(entity);
+    }
+
+    public async Task<StateDto> GetById(Guid id)
+    {
+        return _mappingHelper.toDto(await _repository.GetById(id));
+    }
+
+    public async Task<ICollection<StateDto>> GetAll()
+    {
+        return _mappingHelper.toDto(await _repository.GetAll());
+    }
+
+    public async Task<State> Update(State entity)
+    {
+        return await _repository.UpdateEntity(entity);
+    }
+
+    public async Task<bool> DeleteById(Guid entityId)
+    {
+        return await _repository.DeleteById(entityId);
+    }
+
+    public async Task<PaginationDto<StateDto>> Search(SearchDto searchDto)
+    {
+        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
     }
 
     public async Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto)

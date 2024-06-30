@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
-using BackendBase.Helpers.CRUD;
+using BackendBase.Helpers;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
 namespace BackendBase.Services;
 
-public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEventTypeService
+public class EventTypeService : IEventTypeService
 {
     private readonly ActivityEventTypeRepository _activityEventTypeRepository;
     private readonly ActivityRepository _activityRepository;
-    private readonly EventTypeRepository _eventRepository;
+    private readonly EventTypeRepository _repository;
     private readonly IMapper _mapper;
+    protected MappingHelper<EventType, EventTypeDto> _mappingHelper;
     private readonly StateUserRepository _stateUserRepository;
 
     public EventTypeService(
@@ -21,14 +22,43 @@ public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEvent
         ActivityRepository activityRepository,
         StateUserRepository stateUserRepository,
         IMapper mapper
-    ) : base(mapper)
+    )
     {
         _repository = repository;
-        _eventRepository = repository;
         _activityEventTypeRepository = activityEventTypeRepository;
         _activityRepository = activityRepository;
         _stateUserRepository = stateUserRepository;
         _mapper = mapper;
+    }
+
+    public async Task<EventType> AddEntity(EventType entity)
+    {
+        return await _repository.AddEntity(entity);
+    }
+
+    public async Task<EventTypeDto> GetById(Guid id)
+    {
+        return _mappingHelper.toDto(await _repository.GetById(id));
+    }
+
+    public async Task<ICollection<EventTypeDto>> GetAll()
+    {
+        return _mappingHelper.toDto(await _repository.GetAll());
+    }
+
+    public async Task<EventType> Update(EventType entity)
+    {
+        return await _repository.UpdateEntity(entity);
+    }
+
+    public async Task<bool> DeleteById(Guid entityId)
+    {
+        return await _repository.DeleteById(entityId);
+    }
+
+    public async Task<PaginationDto<EventTypeDto>> Search(SearchDto searchDto)
+    {
+        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
     }
 
     public async Task<Dictionary<string, PaginationDto<EventTypeDto>>> SearchMap(SearchDto searchDto)
@@ -51,14 +81,14 @@ public class EventTypeService : CRUDServiceBase<EventType, EventTypeDto>, IEvent
             (await _activityEventTypeRepository.GetAll(x => activityIds.Contains(x.ActivityId))).Select(x =>
                 x.EventTypeId);
 
-        return (await _eventRepository.GetAll(x => x.WorkId == workId && (eventTypeIds.Contains(x.Id) || !first)))
+        return (await _repository.GetAll(x => x.WorkId == workId && (eventTypeIds.Contains(x.Id) || !first)))
             .Select(x => _mapper.Map<EventTypeDto>(x))
             .ToList();
     }
 
     public async Task<PaginationDto<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _eventRepository.Search(activityId, searchDto));
+        return _mappingHelper.paginationToDto(await _repository.Search(activityId, searchDto));
     }
 
     public async Task<ActivityEventType> Assign(EventTypeAssignDto dto)

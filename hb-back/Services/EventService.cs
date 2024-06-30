@@ -1,18 +1,54 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.Event;
-using BackendBase.Helpers.CRUD;
+using BackendBase.Helpers;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
 namespace BackendBase.Services;
 
-public class EventService : CRUDServiceBase<Event, EventDto>, IEventService
+public class EventService : IEventService
 {
-    public EventService(EventRepository repository, IMapper mapper) : base(mapper)
+    protected readonly IMapper _mapper;
+    protected MappingHelper<Event, EventDto> _mappingHelper;
+    protected IBaseRepository<Event> _repository;
+
+    public EventService(EventRepository repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
+        _mappingHelper = new MappingHelper<Event, EventDto>(_mapper);
+    }
+
+    public async Task<Event> AddEntity(Event entity)
+    {
+        return await _repository.AddEntity(entity);
+    }
+
+    public async Task<EventDto> GetById(Guid id)
+    {
+        return _mappingHelper.toDto(await _repository.GetById(id));
+    }
+
+    public async Task<ICollection<EventDto>> GetAll()
+    {
+        return _mappingHelper.toDto(await _repository.GetAll());
+    }
+
+    public async Task<Event> Update(Event entity)
+    {
+        return await _repository.UpdateEntity(entity);
+    }
+
+    public async Task<bool> DeleteById(Guid entityId)
+    {
+        return await _repository.DeleteById(entityId);
+    }
+
+    public async Task<PaginationDto<EventDto>> Search(SearchDto searchDto)
+    {
+        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
     }
 
     public async Task<Event> Update(EventUpdateDto entity)

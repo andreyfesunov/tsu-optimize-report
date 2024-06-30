@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using BackendBase.Dto;
-using BackendBase.Helpers.CRUD;
+using BackendBase.Helpers;
 using BackendBase.Interfaces;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
@@ -13,22 +13,57 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BackendBase.Services;
 
-public class UserService : CRUDServiceBase<User, UserDto>, IUserService
+public class UserService : IUserService
 {
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
     private readonly UserRepository _userRepository;
+    protected MappingHelper<User, UserDto> _mappingHelper;
+    protected IBaseRepository<User> _repository;
+
+    public async Task<User> AddEntity(User entity)
+    {
+        return await _repository.AddEntity(entity);
+    }
+
+    public async Task<UserDto> GetById(Guid id)
+    {
+        return _mappingHelper.toDto(await _repository.GetById(id));
+    }
+
+    public async Task<ICollection<UserDto>> GetAll()
+    {
+        return _mappingHelper.toDto(await _repository.GetAll());
+    }
+
+    public async Task<User> Update(User entity)
+    {
+        return await _repository.UpdateEntity(entity);
+    }
+
+    public async Task<bool> DeleteById(Guid entityId)
+    {
+        return await _repository.DeleteById(entityId);
+    }
+
+    public async Task<PaginationDto<UserDto>> Search(SearchDto searchDto)
+    {
+        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
+    }
 
     public UserService(
         IConfiguration configuration,
         UserRepository userRepository,
-        IMapper mapper
-    ) : base(mapper)
+        IMapper mapper,
+        UserRepository repository
+    )
     {
         _userRepository = userRepository;
         _repository = userRepository;
         _configuration = configuration;
         _mapper = mapper;
+        _repository = repository;
+        _mappingHelper = new MappingHelper<User, UserDto>(_mapper);
     }
 
     public async Task<List<UserDto>> GetAllUsers()
