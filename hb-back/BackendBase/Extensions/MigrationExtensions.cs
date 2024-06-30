@@ -11,6 +11,6 @@ public static class MigrationExtensions
 
         using DataContext dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
 
-        dbContext.Database.Migrate();
+        //dbContext.Database.Migrate();
     }
 }
