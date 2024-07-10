@@ -7,10 +7,10 @@ namespace BackendBase.Interfaces;
 public interface IStateUserService
 {
     Task<StateUser> AddEntity(StateUser entity);
-    Task<StateUserDto> GetById(Guid id);
-    Task<ICollection<StateUserDto>> GetAll();
+    Task<ReportListDto> GetById(Guid id);
+    Task<ICollection<ReportListDto>> GetAll();
     Task<StateUser> Update(StateUser entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<StateUserDto>> Search(SearchDto searchDto);
+    Task<PaginationDto<ReportListDto>> Search(SearchDto searchDto);
     Task<ReportDetailDto> Detail(Guid id);
 }

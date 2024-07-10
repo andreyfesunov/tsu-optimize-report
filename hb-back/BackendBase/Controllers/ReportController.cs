@@ -2,6 +2,7 @@
 using BackendBase.Dto;
 using BackendBase.Dto.Report;
 using BackendBase.Interfaces;
+using BackendBase.Interfaces.Report;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,19 @@ namespace BackendBase.Controllers;
 public class ReportController : ControllerBase
 {
     private readonly IMapper _mapper;
-    private readonly IReportService _reportService;
+    private readonly IReportCreateService _reportCreateService;
+    private readonly IReportExportService _reportExportService;
     private readonly IStateUserService _stateUserService;
 
-    public ReportController(IReportService reportService, IStateUserService stateUserService, IMapper mapper)
+    public ReportController(
+        IReportCreateService reportCreateService,
+        IReportExportService reportExportService,
+        IStateUserService stateUserService,
+        IMapper mapper
+    )
     {
-        _reportService = reportService;
+        _reportCreateService = reportCreateService;
+        _reportExportService = reportExportService;
         _stateUserService = stateUserService;
         _mapper = mapper;
     }
@@ -27,7 +35,23 @@ public class ReportController : ControllerBase
     [HttpPost("{stateUserId:guid}/[action]")]
     public async Task<bool> CreateReport(Guid stateUserId, IFormFile file)
     {
-        return await _reportService.CreateReport(stateUserId, file);
+        return await _reportCreateService.CreateReport(stateUserId, file);
+    }
+
+    [HttpGet("{stateUserId:guid}/[action]")]
+    public async Task<FileContentResult> ExportReport(Guid stateUserId)
+    {
+        var workbook = await _reportExportService.ExportReport(stateUserId.ToString());
+
+        using var stream = new MemoryStream();
+        workbook.Write(stream);
+
+        var result = new FileContentResult(stream.ToArray(), "application/vnd.ms-excel")
+        {
+            FileDownloadName = "individual-plan.xls"
+        };
+
+        return result;
     }
 
     [HttpPost("search")]

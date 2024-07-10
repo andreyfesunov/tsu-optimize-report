@@ -1,6 +1,10 @@
 @use "../../../../../scss/shared/variables";
 
-.report-detail {
+.report-detail-actions {
+  margin-bottom: variables.$padding-lg;
+}
+
+.report-detail-tabs {
   display: flex;
   flex-direction: row;
 

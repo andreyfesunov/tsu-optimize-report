@@ -10,9 +10,9 @@ namespace BackendBase.Services;
 
 public class EventService : IEventService
 {
-    protected readonly IMapper _mapper;
-    protected MappingHelper<Event, EventDto> _mappingHelper;
-    protected IBaseRepository<Event> _repository;
+    private readonly IMapper _mapper;
+    private readonly MappingHelper<Event, EventDto> _mappingHelper;
+    private readonly IBaseRepository<Event> _repository;
 
     public EventService(EventRepository repository, IMapper mapper)
     {

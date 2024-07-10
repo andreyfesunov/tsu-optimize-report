@@ -1,23 +1,21 @@
 ﻿using AutoMapper;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Report;
 using BackendBase.Models;
 using BackendBase.Repositories;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
-namespace BackendBase.Services;
+namespace BackendBase.Services.Report;
 
-public class ReportService : IReportService
+public class ReportCreateService : IReportCreateService
 {
     private readonly ActivityRepository _activityRepository;
-    private readonly FileRepository _fileRepository;
     private readonly LessonTypeRepository _lessonTypeRepository;
     private readonly IMapper _mapper;
     private readonly RecordRepository _recordRepository;
     private readonly StateUserRepository _stateUserRepository;
 
-    public ReportService(
-        FileRepository fileRepository,
+    public ReportCreateService(
         ActivityRepository activityRepository,
         LessonTypeRepository lessonTypeRepository,
         RecordRepository recordRepository,
@@ -25,7 +23,6 @@ public class ReportService : IReportService
         IMapper mapper
     )
     {
-        _fileRepository = fileRepository;
         _activityRepository = activityRepository;
         _lessonTypeRepository = lessonTypeRepository;
         _recordRepository = recordRepository;
