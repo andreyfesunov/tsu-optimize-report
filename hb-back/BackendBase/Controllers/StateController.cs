@@ -1,6 +1,5 @@
 ﻿using BackendBase.Dto;
-using BackendBase.Dto.CreateDto;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -89,7 +88,7 @@ public class StateController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<PaginationDto<StateDto>>> Search([FromBody] SearchDto searchDto)
+    public async Task<ActionResult<Pagination<StateDto>>> Search([FromBody] SearchDto searchDto)
     {
         try
         {

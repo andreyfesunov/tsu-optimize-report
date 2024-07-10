@@ -1,8 +1,7 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IActivityService
 {
@@ -11,5 +10,5 @@ public interface IActivityService
     Task<ICollection<ActivityDto>> GetAll();
     Task<Activity> Update(Activity entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<ActivityDto>> Search(SearchDto searchDto);
+    Task<Pagination<ActivityDto>> Search(SearchDto searchDto);
 }

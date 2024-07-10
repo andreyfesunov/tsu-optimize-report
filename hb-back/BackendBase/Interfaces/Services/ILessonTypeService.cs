@@ -1,7 +1,7 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface ILessonTypeService
 {
@@ -10,6 +10,6 @@ public interface ILessonTypeService
     Task<ICollection<LessonTypeDto>> GetAll();
     Task<LessonType> Update(LessonType entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<LessonTypeDto>> Search(SearchDto searchDto);
+    Task<Pagination<LessonTypeDto>> Search(SearchDto searchDto);
     Task<ICollection<LessonTypeDto>> GetAllForEvent(Guid stateUserId);
 }

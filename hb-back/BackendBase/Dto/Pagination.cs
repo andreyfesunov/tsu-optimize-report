@@ -1,6 +1,6 @@
 ﻿namespace BackendBase.Models;
 
-public class PaginationDto<TEntity>
+public class Pagination<TEntity>
 {
     public int PageNumber { get; set; }
     public int PageSize { get; set; }

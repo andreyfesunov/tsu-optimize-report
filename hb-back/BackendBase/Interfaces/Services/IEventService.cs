@@ -2,7 +2,7 @@
 using BackendBase.Dto.Event;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IEventService
 {
@@ -11,6 +11,6 @@ public interface IEventService
     Task<ICollection<EventDto>> GetAll();
     Task<Event> Update(Event entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<EventDto>> Search(SearchDto searchDto);
+    Task<Pagination<EventDto>> Search(SearchDto searchDto);
     Task<Event> Update(EventUpdateDto entity);
 }

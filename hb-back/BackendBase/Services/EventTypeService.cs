@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
@@ -11,10 +11,10 @@ public class EventTypeService : IEventTypeService
 {
     private readonly ActivityEventTypeRepository _activityEventTypeRepository;
     private readonly ActivityRepository _activityRepository;
-    private readonly EventTypeRepository _repository;
     private readonly IMapper _mapper;
-    protected MappingHelper<EventType, EventTypeDto> _mappingHelper;
+    private readonly EventTypeRepository _repository;
     private readonly StateUserRepository _stateUserRepository;
+    protected MappingHelper<EventType, EventTypeDto> _mappingHelper;
 
     public EventTypeService(
         EventTypeRepository repository,
@@ -38,12 +38,12 @@ public class EventTypeService : IEventTypeService
 
     public async Task<EventTypeDto> GetById(Guid id)
     {
-        return _mappingHelper.toDto(await _repository.GetById(id));
+        return _mappingHelper.ToDto(await _repository.GetById(id));
     }
 
     public async Task<ICollection<EventTypeDto>> GetAll()
     {
-        return _mappingHelper.toDto(await _repository.GetAll());
+        return _mappingHelper.ToDto(await _repository.GetAll());
     }
 
     public async Task<EventType> Update(EventType entity)
@@ -56,14 +56,14 @@ public class EventTypeService : IEventTypeService
         return await _repository.DeleteById(entityId);
     }
 
-    public async Task<PaginationDto<EventTypeDto>> Search(SearchDto searchDto)
+    public async Task<Pagination<EventTypeDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
+        return _mappingHelper.ToDto(await _repository.Search(searchDto));
     }
 
-    public async Task<Dictionary<string, PaginationDto<EventTypeDto>>> SearchMap(SearchDto searchDto)
+    public async Task<Dictionary<string, Pagination<EventTypeDto>>> SearchMap(SearchDto searchDto)
     {
-        var searchMap = new Dictionary<string, PaginationDto<EventTypeDto>>();
+        var searchMap = new Dictionary<string, Pagination<EventTypeDto>>();
 
         var activities = await _activityRepository.GetAll();
 
@@ -86,9 +86,9 @@ public class EventTypeService : IEventTypeService
             .ToList();
     }
 
-    public async Task<PaginationDto<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
+    public async Task<Pagination<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _repository.Search(activityId, searchDto));
+        return _mappingHelper.ToDto(await _repository.Search(activityId, searchDto));
     }
 
     public async Task<ActivityEventType> Assign(EventTypeAssignDto dto)

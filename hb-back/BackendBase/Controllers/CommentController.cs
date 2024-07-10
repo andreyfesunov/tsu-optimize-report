@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.Comment;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
 

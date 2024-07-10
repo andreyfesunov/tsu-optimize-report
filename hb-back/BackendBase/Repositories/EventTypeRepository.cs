@@ -17,9 +17,9 @@ public class EventTypeRepository : BaseRepository<EventType>
         return query.Include(x => x.Work);
     }
 
-    public async Task<PaginationDto<EventType>> Search(Guid activityId, SearchDto searchDto)
+    public async Task<Pagination<EventType>> Search(Guid activityId, SearchDto searchDto)
     {
-        var queryable = context.Set<ActivityEventType>().AsQueryable().Where(x => x.ActivityId == activityId)
+        var queryable = Context.Set<ActivityEventType>().AsQueryable().Where(x => x.ActivityId == activityId)
             .Select(x => x.EventType);
 
         return await queryable.Search(searchDto);

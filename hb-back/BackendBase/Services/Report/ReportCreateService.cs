@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BackendBase.Interfaces.Report;
+using BackendBase.Interfaces.Services.Report;
 using BackendBase.Models;
 using BackendBase.Repositories;
 using NPOI.HSSF.UserModel;

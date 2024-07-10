@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Repositories.Common;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
-using MathNet.Numerics.Statistics.Mcmc;
 
 namespace BackendBase.Services;
 
@@ -28,12 +28,12 @@ public class ActivityService : IActivityService
 
     public async Task<ActivityDto> GetById(Guid id)
     {
-        return _mappingHelper.toDto(await _repository.GetById(id));
+        return _mappingHelper.ToDto(await _repository.GetById(id));
     }
 
     public async Task<ICollection<ActivityDto>> GetAll()
     {
-        return _mappingHelper.toDto(await _repository.GetAll());
+        return _mappingHelper.ToDto(await _repository.GetAll());
     }
 
     public async Task<Activity> Update(Activity entity)
@@ -46,8 +46,8 @@ public class ActivityService : IActivityService
         return await _repository.DeleteById(entityId);
     }
 
-    public async Task<PaginationDto<ActivityDto>> Search(SearchDto searchDto)
+    public async Task<Pagination<ActivityDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
+        return _mappingHelper.ToDto(await _repository.Search(searchDto));
     }
 }

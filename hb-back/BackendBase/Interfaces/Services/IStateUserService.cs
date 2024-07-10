@@ -2,7 +2,7 @@
 using BackendBase.Dto.Report;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IStateUserService
 {
@@ -11,6 +11,6 @@ public interface IStateUserService
     Task<ICollection<ReportListDto>> GetAll();
     Task<StateUser> Update(StateUser entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<ReportListDto>> Search(SearchDto searchDto);
+    Task<Pagination<ReportListDto>> Search(SearchDto searchDto);
     Task<ReportDetailDto> Detail(Guid id);
 }

@@ -15,9 +15,9 @@ public class StateUserRepository : BaseRepository<StateUser>
         _userInfo = userInfo;
     }
 
-    public override async Task<PaginationDto<StateUser>> Search(SearchDto searchDto)
+    public override async Task<Pagination<StateUser>> Search(SearchDto searchDto)
     {
-        return await IncludeChildren(dbset)
+        return await IncludeChildren(DbSet)
             .Where(x => x.User.Id.ToString() == _userInfo.GetUserId())
             .Search(searchDto);
     }

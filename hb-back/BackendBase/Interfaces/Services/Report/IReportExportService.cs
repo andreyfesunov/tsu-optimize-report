@@ -1,6 +1,6 @@
 ﻿using NPOI.SS.UserModel;
 
-namespace BackendBase.Interfaces.Report;
+namespace BackendBase.Interfaces.Services.Report;
 
 public interface IReportExportService
 {

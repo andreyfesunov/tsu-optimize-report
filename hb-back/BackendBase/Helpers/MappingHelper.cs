@@ -1,38 +1,35 @@
 ﻿using AutoMapper;
 using BackendBase.Models;
 
-namespace BackendBase.Helpers
+namespace BackendBase.Helpers;
+
+public class MappingHelper<TEntity, TEntityDto>
 {
-    public class MappingHelper<TEntity, TEntityDto>
+    private readonly IMapper _mapper;
+
+    public MappingHelper(IMapper mapper)
     {
-        private readonly IMapper _mapper;
+        _mapper = mapper;
+    }
 
-        public MappingHelper(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
+    public TEntityDto ToDto(TEntity entity)
+    {
+        return _mapper.Map<TEntityDto>(entity);
+    }
 
-        public TEntityDto toDto(TEntity entity)
-        {
-            return _mapper.Map<TEntityDto>(entity);
-        }
+    public ICollection<TEntityDto> ToDto(IEnumerable<TEntity> entities)
+    {
+        return entities.Select(ToDto).ToList();
+    }
 
-        public ICollection<TEntityDto> toDto(ICollection<TEntity> entities)
+    public Pagination<TEntityDto> ToDto(Pagination<TEntity> pagination)
+    {
+        return new Pagination<TEntityDto>
         {
-            var result = entities.Select(x => toDto(x)).ToList();
-            return (ICollection<TEntityDto>)result;
-        }
-
-        public PaginationDto<TEntityDto> paginationToDto(PaginationDto<TEntity> pagination)
-        {
-            PaginationDto<TEntityDto> result = new PaginationDto<TEntityDto>
-            {
-                PageNumber = pagination.PageNumber,
-                PageSize = pagination.PageSize,
-                TotalPages = pagination.TotalPages,
-                Entities = toDto(pagination.Entities)
-            };
-            return result;
-        }
+            PageNumber = pagination.PageNumber,
+            PageSize = pagination.PageSize,
+            TotalPages = pagination.TotalPages,
+            Entities = ToDto(pagination.Entities)
+        };
     }
 }

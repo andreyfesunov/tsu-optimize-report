@@ -1,7 +1,7 @@
 ﻿using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Extensions;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentHubBackend.Exceptions;
@@ -10,105 +10,97 @@ namespace BackendBase.Repositories;
 
 public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : Base
 {
-    protected readonly DataContext context;
-    protected readonly DbSet<TEntity> dbset;
+    protected readonly DataContext Context;
+    protected readonly DbSet<TEntity> DbSet;
 
     protected BaseRepository(DataContext context)
     {
-        this.context = context;
-        dbset = this.context.Set<TEntity>();
+        Context = context;
+        DbSet = Context.Set<TEntity>();
     }
 
     public async Task<TEntity> AddEntity(TEntity entity)
     {
-        var model = await context.AddAsync(entity);
+        var model = await DbSet.AddAsync(entity);
         await Save();
         return model.Entity;
     }
 
     public async Task<bool> Delete(TEntity entity)
     {
-        context.Remove(entity);
+        Context.Remove(entity);
         return await Save();
     }
 
     public async Task<bool> DeleteBatch(IEnumerable<TEntity> entities)
     {
-        context.RemoveRange(entities);
+        Context.RemoveRange(entities);
         return await Save();
     }
 
     public async Task<bool> DeleteById(Guid entityId)
     {
         var entity = await GetById(entityId);
-        if (entity == null) throw new EntityNotFoundException();
-        context.Remove(entity);
+        if (entity == null) throw new AppException("Entity not found");
+        Context.Remove(entity);
         return await Save();
     }
 
     public async Task<bool> DoesExist(Guid id)
     {
-        return await dbset.FindAsync(id) != null;
+        return await DbSet.FindAsync(id) != null;
     }
 
     public async Task<ICollection<TEntity>> GetAll()
     {
-        var itemsQuery = dbset.AsNoTracking().AsQueryable();
+        var itemsQuery = DbSet.AsNoTracking().AsQueryable();
         return await IncludeChildren(itemsQuery).ToListAsync();
     }
 
     public async Task<TEntity> GetById(Guid id)
     {
-        var entityQuery = dbset.AsQueryable().Where(e => e.Id == id);
-        var dtoEntity = (await IncludeChildren(entityQuery).ToListAsync())[0];
-        return dtoEntity;
+        var entityQuery = DbSet.AsQueryable().Where(e => e.Id == id);
+        return (await IncludeChildren(entityQuery).ToListAsync())[0];
     }
 
     public async Task<TEntity> GetByIdRoot(Guid id)
     {
-        return await dbset.FindAsync(id);
+        return await DbSet.FindAsync(id);
     }
 
     public async Task<bool> Save()
     {
-        var saved = await context.SaveChangesAsync();
+        var saved = await Context.SaveChangesAsync();
         return saved > 0;
     }
 
     public ICollection<TEntity> SearchEntity(Func<TEntity, bool> predicate)
     {
-        return dbset.Where(predicate).ToList();
+        return DbSet.Where(predicate).ToList();
     }
 
     public async Task<TEntity> UpdateEntity(TEntity entity)
     {
-        var model = context.Update(entity).Entity;
+        var model = Context.Update(entity).Entity;
         await Save();
         return model;
     }
 
-    public async Task<PaginationDto<TEntity>> SearchRoot(SearchDto searchDto)
+    public async Task<Pagination<TEntity>> SearchRoot(SearchDto searchDto)
     {
-        return await dbset.Search(searchDto);
+        return await DbSet.Search(searchDto);
     }
 
-    public virtual async Task<PaginationDto<TEntity>> Search(SearchDto searchDto)
+    public virtual async Task<Pagination<TEntity>> Search(SearchDto searchDto)
     {
-        return await IncludeChildren(dbset).Search(searchDto);
+        return await IncludeChildren(DbSet).Search(searchDto);
     }
 
     public async Task<ICollection<TEntity>> GetAll(Func<TEntity, bool> predicate)
     {
-        var queryWithIncludes = IncludeChildren(dbset.Where(predicate).AsQueryable());
+        var queryWithIncludes = IncludeChildren(DbSet.Where(predicate).AsQueryable());
 
         return queryWithIncludes.ToList();
-    }
-
-    public async Task<ICollection<TEntity>> GetByIds(ICollection<Guid> ids)
-    {
-        var query = dbset.AsQueryable().Where(e => ids.Contains(e.Id));
-        var entities = await IncludeChildren(query).ToListAsync();
-        return entities;
     }
 
     protected virtual IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query)

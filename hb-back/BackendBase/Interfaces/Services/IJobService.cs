@@ -1,7 +1,7 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IJobService
 {
@@ -10,5 +10,5 @@ public interface IJobService
     Task<ICollection<JobDto>> GetAll();
     Task<Job> Update(Job entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<JobDto>> Search(SearchDto searchDto);
+    Task<Pagination<JobDto>> Search(SearchDto searchDto);
 }

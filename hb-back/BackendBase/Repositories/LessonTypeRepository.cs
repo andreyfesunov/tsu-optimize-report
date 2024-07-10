@@ -12,12 +12,12 @@ public class LessonTypeRepository : BaseRepository<LessonType>
 
     public Task<LessonType?> GetLessonTypeByName(string name)
     {
-        return context.LessonTypes.Where(x => x.Name == name).FirstOrDefaultAsync();
+        return Context.LessonTypes.Where(x => x.Name == name).FirstOrDefaultAsync();
     }
 
     public async Task<ICollection<LessonType>> GetAllForReport(Guid stateUserId)
     {
-        return await dbset.Where(x => x.Records.Count(x => x.StateUserId == stateUserId) != 0)
+        return await DbSet.Where(x => x.Records.Count(x => x.StateUserId == stateUserId) != 0)
             .ToListAsync();
     }
 }

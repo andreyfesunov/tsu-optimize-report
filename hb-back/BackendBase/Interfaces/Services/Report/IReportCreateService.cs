@@ -1,4 +1,4 @@
-﻿namespace BackendBase.Interfaces.Report;
+﻿namespace BackendBase.Interfaces.Services.Report;
 
 public interface IReportCreateService
 {

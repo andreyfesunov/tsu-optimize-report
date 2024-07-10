@@ -1,6 +1,6 @@
 ﻿using BackendBase.Dto;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IRecordService
 {

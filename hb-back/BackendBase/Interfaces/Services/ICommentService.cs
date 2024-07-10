@@ -2,7 +2,7 @@
 using BackendBase.Dto.Comment;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface ICommentService
 {
@@ -11,6 +11,6 @@ public interface ICommentService
     Task<ICollection<CommentDto>> GetAll();
     Task<Comment> Update(Comment entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<CommentDto>> Search(SearchDto searchDto);
+    Task<Pagination<CommentDto>> Search(SearchDto searchDto);
     Task<CommentDto> Update(CommentUpdateDto entity);
 }

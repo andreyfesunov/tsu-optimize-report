@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
-using BackendBase.Interfaces;
+using BackendBase.Helpers;
+using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +13,15 @@ namespace BackendBase.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly IUserService _userService;
+    private readonly MappingHelper<User, UserDto> _mapper;
+    private readonly IUserRepository _repository;
+    private readonly IUserService _service;
 
-    public UserController(IUserService userService, IMapper mapper)
+    public UserController(IUserService service, IUserRepository repository, IMapper mapper)
     {
-        _userService = userService;
-        _mapper = mapper;
+        _service = service;
+        _repository = repository;
+        _mapper = new MappingHelper<User, UserDto>(mapper);
     }
 
     [HttpGet("getAll")]
@@ -25,8 +29,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            var users = await _userService.GetAllUsers();
-            return Ok(users);
+            var users = await _repository.GetAll();
+            return Ok(_mapper.ToDto(users));
         }
         catch (Exception ex)
         {
@@ -39,8 +43,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = await _userService.GetUserById(userId);
-            return Ok(user);
+            var user = await _repository.GetById(userId);
+            return Ok(_mapper.ToDto(user));
         }
         catch (Exception ex)
         {
@@ -53,8 +57,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            var userLoginDto = await _userService.LogIn(loginDto);
-            return Ok(userLoginDto);
+            var token = await _service.LogIn(loginDto);
+            return Ok(new UserLoginDto { Token = token });
         }
         catch (Exception ex)
         {
@@ -67,8 +71,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            var userId = await _userService.Reg(registrationDto);
-            return Ok(userId);
+            var role = await _service.Reg(registrationDto);
+            return Ok(role);
         }
         catch (Exception ex)
         {
@@ -77,18 +81,12 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<PaginationDto<UserDto>>> Search(SearchDto searchDto)
+    public async Task<ActionResult<Pagination<UserDto>>> Search(SearchDto searchDto)
     {
         try
         {
-            var result = await _userService.Search(searchDto);
-            return Ok(new PaginationDto<UserDto>
-            {
-                PageNumber = result.PageNumber,
-                PageSize = result.PageSize,
-                TotalPages = result.TotalPages,
-                Entities = result.Entities.Select(x => _mapper.Map<UserDto>(x)).ToList()
-            });
+            var result = await _repository.Search(searchDto);
+            return Ok(_mapper.ToDto(result));
         }
         catch (Exception ex)
         {

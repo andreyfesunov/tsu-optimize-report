@@ -3,8 +3,9 @@ using System.Text.Json.Serialization;
 using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Extensions;
-using BackendBase.Interfaces;
-using BackendBase.Interfaces.Report;
+using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.Services;
+using BackendBase.Interfaces.Services.Report;
 using BackendBase.Middlewares;
 using BackendBase.Repositories;
 using BackendBase.Services;
@@ -39,11 +40,12 @@ builder.Services.AddScoped<LessonRepository>();
 builder.Services.AddScoped<LessonTypeRepository>();
 builder.Services.AddScoped<StateRepository>();
 builder.Services.AddScoped<StateUserRepository>();
-builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<WorkRepository>();
 builder.Services.AddScoped<LessonTypeRepository>();
 builder.Services.AddScoped<RecordRepository>();
 builder.Services.AddScoped<CommentRepository>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReportCreateService, ReportCreateService>();

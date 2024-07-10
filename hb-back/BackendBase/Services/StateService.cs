@@ -2,7 +2,7 @@
 using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
@@ -11,10 +11,10 @@ namespace BackendBase.Services;
 public class StateService : IStateService
 {
     private readonly DepartmentRepository _departmentRepository;
+    protected readonly IMapper _mapper;
     private readonly StateRepository _stateRepository;
     private readonly StateUserRepository _stateUserRepository;
     private readonly UserRepository _userRepository;
-    protected readonly IMapper _mapper;
     protected MappingHelper<State, StateDto> _mappingHelper;
     protected StateRepository _repository;
 
@@ -42,12 +42,12 @@ public class StateService : IStateService
 
     public async Task<StateDto> GetById(Guid id)
     {
-        return _mappingHelper.toDto(await _repository.GetById(id));
+        return _mappingHelper.ToDto(await _repository.GetById(id));
     }
 
     public async Task<ICollection<StateDto>> GetAll()
     {
-        return _mappingHelper.toDto(await _repository.GetAll());
+        return _mappingHelper.ToDto(await _repository.GetAll());
     }
 
     public async Task<State> Update(State entity)
@@ -60,9 +60,9 @@ public class StateService : IStateService
         return await _repository.DeleteById(entityId);
     }
 
-    public async Task<PaginationDto<StateDto>> Search(SearchDto searchDto)
+    public async Task<Pagination<StateDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
+        return _mappingHelper.ToDto(await _repository.Search(searchDto));
     }
 
     public async Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto)

@@ -1,5 +1,5 @@
 ﻿using BackendBase.Dto;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

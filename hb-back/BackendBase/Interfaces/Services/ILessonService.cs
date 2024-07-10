@@ -2,7 +2,7 @@
 using BackendBase.Dto.Lesson;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface ILessonService
 {
@@ -11,6 +11,6 @@ public interface ILessonService
     Task<ICollection<LessonDto>> GetAll();
     Task<Lesson> Update(Lesson entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<LessonDto>> Search(SearchDto searchDto);
+    Task<Pagination<LessonDto>> Search(SearchDto searchDto);
     Task<LessonDto> Update(LessonUpdateDto entity);
 }

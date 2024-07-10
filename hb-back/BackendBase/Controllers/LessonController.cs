@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.Lesson;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

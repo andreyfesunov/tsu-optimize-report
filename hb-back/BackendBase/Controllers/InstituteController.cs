@@ -1,103 +1,102 @@
-﻿using BackendBase.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using BackendBase.Dto;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
-using BackendBase.Dto;
+using Microsoft.AspNetCore.Mvc;
 
-namespace BackendBase.Controllers
+namespace BackendBase.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class InstituteController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class InstituteController : ControllerBase
+    private readonly IInstituteService _service;
+
+    public InstituteController(IInstituteService service)
     {
-        private readonly IInstituteService _service;
+        _service = service;
+    }
 
-        public InstituteController(IInstituteService service)
+    [HttpPost("create")]
+    public async Task<ActionResult<Institute>> Create(Institute entity)
+    {
+        try
         {
-            _service = service;
+            var result = await _service.AddEntity(entity);
+            return Ok(result);
         }
-
-        [HttpPost("create")]
-        public async Task<ActionResult<Institute>> Create(Institute entity)
+        catch (Exception ex)
         {
-            try
-            {
-                var result = await _service.AddEntity(entity);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("{Id}")]
-        public async Task<ActionResult<InstituteDto>> GetById(Guid Id)
+    [HttpGet("{Id}")]
+    public async Task<ActionResult<InstituteDto>> GetById(Guid Id)
+    {
+        try
         {
-            try
-            {
-                var result = await _service.GetById(Id);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await _service.GetById(Id);
+            return Ok(result);
         }
-
-        [HttpGet("getAll")]
-        public async Task<ActionResult<ICollection<InstituteDto>>> GetAll()
+        catch (Exception ex)
         {
-            try
-            {
-                var result = await _service.GetAll();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpPut("update")]
-        public async Task<ActionResult<Institute>> Update(Institute entity)
+    [HttpGet("getAll")]
+    public async Task<ActionResult<ICollection<InstituteDto>>> GetAll()
+    {
+        try
         {
-            try
-            {
-                var result = await _service.Update(entity);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await _service.GetAll();
+            return Ok(result);
         }
-
-        [HttpDelete("{entityId}")]
-        public async Task<ActionResult<bool>> DeleteById(Guid entityId)
+        catch (Exception ex)
         {
-            try
-            {
-                var result = await _service.DeleteById(entityId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpPost("search")]
-        public async Task<ActionResult<PaginationDto<InstituteDto>>> Search([FromBody] SearchDto searchDto)
+    [HttpPut("update")]
+    public async Task<ActionResult<Institute>> Update(Institute entity)
+    {
+        try
         {
-            try
-            {
-                var result = await _service.Search(searchDto);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await _service.Update(entity);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("{entityId}")]
+    public async Task<ActionResult<bool>> DeleteById(Guid entityId)
+    {
+        try
+        {
+            var result = await _service.DeleteById(entityId);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("search")]
+    public async Task<ActionResult<Pagination<InstituteDto>>> Search([FromBody] SearchDto searchDto)
+    {
+        try
+        {
+            var result = await _service.Search(searchDto);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

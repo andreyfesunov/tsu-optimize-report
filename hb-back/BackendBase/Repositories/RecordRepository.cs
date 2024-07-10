@@ -12,7 +12,7 @@ public class RecordRepository : BaseRepository<Record>
 
     public async Task<Record[]> Get(Guid stateUserId)
     {
-        return await IncludeChildren(dbset).Where(x => x.StateUserId == stateUserId).ToArrayAsync();
+        return await IncludeChildren(DbSet).Where(x => x.StateUserId == stateUserId).ToArrayAsync();
     }
 
     protected override IQueryable<Record> IncludeChildren(IQueryable<Record> query)

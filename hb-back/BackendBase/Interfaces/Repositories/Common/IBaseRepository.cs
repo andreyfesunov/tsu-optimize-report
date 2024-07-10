@@ -1,8 +1,11 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Repositories.Common;
 
+/**
+ * @deprecated
+ */
 public interface IBaseRepository<TEntity> where TEntity : Base
 {
     Task<TEntity> GetById(Guid id);
@@ -16,6 +19,6 @@ public interface IBaseRepository<TEntity> where TEntity : Base
     Task<bool> DeleteBatch(IEnumerable<TEntity> entities);
     Task<bool> DeleteById(Guid entityId);
     Task<bool> Save();
-    Task<PaginationDto<TEntity>> SearchRoot(SearchDto searchDto);
-    Task<PaginationDto<TEntity>> Search(SearchDto searchDto);
+    Task<Pagination<TEntity>> SearchRoot(SearchDto searchDto);
+    Task<Pagination<TEntity>> Search(SearchDto searchDto);
 }

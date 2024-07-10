@@ -2,7 +2,7 @@
 using BackendBase.Dto.CreateDto;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IStateService
 {
@@ -11,7 +11,7 @@ public interface IStateService
     Task<ICollection<StateDto>> GetAll();
     Task<State> Update(State entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<StateDto>> Search(SearchDto searchDto);
+    Task<Pagination<StateDto>> Search(SearchDto searchDto);
     Task<State> AddStateWithCreateDto(StateCreateDto stateCreateDto);
     Task<bool> Assign(StateUserCreateDto stateUserCreateDto);
 }

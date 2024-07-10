@@ -1,14 +1,13 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IEventTypeService
 {
-    Task<PaginationDto<EventTypeDto>> Search(Guid activityId, SearchDto searchDto);
+    Task<Pagination<EventTypeDto>> Search(Guid activityId, SearchDto searchDto);
     Task<ActivityEventType> Assign(EventTypeAssignDto dto);
-    Task<Dictionary<string, PaginationDto<EventTypeDto>>> SearchMap(SearchDto searchDto);
+    Task<Dictionary<string, Pagination<EventTypeDto>>> SearchMap(SearchDto searchDto);
     Task<ICollection<EventTypeDto>> GetAllForReport(Guid stateUserId, Guid workId, bool first);
     Task<bool> Delete(Guid activityId, Guid entityTypeId);
     Task<EventType> AddEntity(EventType entity);
@@ -16,5 +15,5 @@ public interface IEventTypeService
     Task<ICollection<EventTypeDto>> GetAll();
     Task<EventType> Update(EventType entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<EventTypeDto>> Search(SearchDto searchDto);
+    Task<Pagination<EventTypeDto>> Search(SearchDto searchDto);
 }

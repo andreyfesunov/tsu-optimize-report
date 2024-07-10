@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Repositories.Common;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
@@ -27,12 +28,12 @@ public class WorkService : IWorkService
 
     public async Task<WorkDto> GetById(Guid id)
     {
-        return _mappingHelper.toDto(await _repository.GetById(id));
+        return _mappingHelper.ToDto(await _repository.GetById(id));
     }
 
     public async Task<ICollection<WorkDto>> GetAll()
     {
-        return _mappingHelper.toDto(await _repository.GetAll());
+        return _mappingHelper.ToDto(await _repository.GetAll());
     }
 
     public async Task<Work> Update(Work entity)
@@ -45,8 +46,8 @@ public class WorkService : IWorkService
         return await _repository.DeleteById(entityId);
     }
 
-    public async Task<PaginationDto<WorkDto>> Search(SearchDto searchDto)
+    public async Task<Pagination<WorkDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
+        return _mappingHelper.ToDto(await _repository.Search(searchDto));
     }
 }

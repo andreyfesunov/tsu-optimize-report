@@ -2,7 +2,8 @@
 using BackendBase.Dto;
 using BackendBase.Dto.Report;
 using BackendBase.Helpers;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Repositories.Common;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
@@ -28,12 +29,12 @@ public class StateUserService : IStateUserService
 
     public async Task<ReportListDto> GetById(Guid id)
     {
-        return _mappingHelper.toDto(await _repository.GetById(id));
+        return _mappingHelper.ToDto(await _repository.GetById(id));
     }
 
     public async Task<ICollection<ReportListDto>> GetAll()
     {
-        return _mappingHelper.toDto(await _repository.GetAll());
+        return _mappingHelper.ToDto(await _repository.GetAll());
     }
 
     public async Task<StateUser> Update(StateUser entity)
@@ -46,9 +47,9 @@ public class StateUserService : IStateUserService
         return await _repository.DeleteById(entityId);
     }
 
-    public async Task<PaginationDto<ReportListDto>> Search(SearchDto searchDto)
+    public async Task<Pagination<ReportListDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
+        return _mappingHelper.ToDto(await _repository.Search(searchDto));
     }
 
     public async Task<ReportDetailDto> Detail(Guid id)

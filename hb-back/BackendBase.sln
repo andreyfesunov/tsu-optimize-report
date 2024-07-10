@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendBase", "BackendBase\BackendBase.csproj", "{76C23AAA-4863-4273-A4F9-8C1BE941F555}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TsuImportTests", "TsuImportTests\TsuImportTests.csproj", "{C3A44079-772B-4140-9275-9E8773FF3DBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{49D2EE4D-44A2-47F5-95DC-AF3284624832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49D2EE4D-44A2-47F5-95DC-AF3284624832}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49D2EE4D-44A2-47F5-95DC-AF3284624832}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3A44079-772B-4140-9275-9E8773FF3DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3A44079-772B-4140-9275-9E8773FF3DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3A44079-772B-4140-9275-9E8773FF3DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3A44079-772B-4140-9275-9E8773FF3DBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

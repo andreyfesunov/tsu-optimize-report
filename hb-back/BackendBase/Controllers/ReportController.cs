@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.Report;
-using BackendBase.Interfaces;
-using BackendBase.Interfaces.Report;
+using BackendBase.Interfaces.Services;
+using BackendBase.Interfaces.Services.Report;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,12 +55,12 @@ public class ReportController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<PaginationDto<ReportListDto>>> Search(SearchDto searchDto)
+    public async Task<ActionResult<Pagination<ReportListDto>>> Search(SearchDto searchDto)
     {
         try
         {
             var result = await _stateUserService.Search(searchDto);
-            return Ok(new PaginationDto<ReportListDto>
+            return Ok(new Pagination<ReportListDto>
             {
                 PageNumber = result.PageNumber,
                 PageSize = result.PageSize,

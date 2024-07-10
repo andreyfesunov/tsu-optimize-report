@@ -2,7 +2,8 @@
 using BackendBase.Dto;
 using BackendBase.Dto.Event;
 using BackendBase.Helpers;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Repositories.Common;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
 
@@ -28,12 +29,12 @@ public class EventService : IEventService
 
     public async Task<EventDto> GetById(Guid id)
     {
-        return _mappingHelper.toDto(await _repository.GetById(id));
+        return _mappingHelper.ToDto(await _repository.GetById(id));
     }
 
     public async Task<ICollection<EventDto>> GetAll()
     {
-        return _mappingHelper.toDto(await _repository.GetAll());
+        return _mappingHelper.ToDto(await _repository.GetAll());
     }
 
     public async Task<Event> Update(Event entity)
@@ -46,9 +47,9 @@ public class EventService : IEventService
         return await _repository.DeleteById(entityId);
     }
 
-    public async Task<PaginationDto<EventDto>> Search(SearchDto searchDto)
+    public async Task<Pagination<EventDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.paginationToDto(await _repository.Search(searchDto));
+        return _mappingHelper.ToDto(await _repository.Search(searchDto));
     }
 
     public async Task<Event> Update(EventUpdateDto entity)

@@ -1,7 +1,6 @@
 ﻿using BackendBase.Dto;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendBase.Controllers;
@@ -89,7 +88,7 @@ public class ActivityController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<PaginationDto<ActivityDto>>> Search([FromBody] SearchDto searchDto)
+    public async Task<ActionResult<Pagination<ActivityDto>>> Search([FromBody] SearchDto searchDto)
     {
         try
         {

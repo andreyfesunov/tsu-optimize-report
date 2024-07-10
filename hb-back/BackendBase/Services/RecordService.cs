@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Repositories;
 
 namespace BackendBase.Services;

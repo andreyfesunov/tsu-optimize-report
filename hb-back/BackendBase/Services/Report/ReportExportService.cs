@@ -1,4 +1,4 @@
-﻿using BackendBase.Interfaces.Report;
+﻿using BackendBase.Interfaces.Services.Report;
 using BackendBase.Repositories;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -20,7 +20,7 @@ public class ReportExportService : IReportExportService
 
     public async Task<IWorkbook> ExportReport(string reportId)
     {
-        var user = await _userRepo.GetUserByEmail("");
+        var user = await _userRepo.GetByEmail("");
         var workbook = new XSSFWorkbook();
         return workbook;
     }

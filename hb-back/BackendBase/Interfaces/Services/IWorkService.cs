@@ -1,7 +1,7 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
 
-namespace BackendBase.Interfaces;
+namespace BackendBase.Interfaces.Services;
 
 public interface IWorkService
 {
@@ -10,5 +10,5 @@ public interface IWorkService
     Task<ICollection<WorkDto>> GetAll();
     Task<Work> Update(Work entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<PaginationDto<WorkDto>> Search(SearchDto searchDto);
+    Task<Pagination<WorkDto>> Search(SearchDto searchDto);
 }

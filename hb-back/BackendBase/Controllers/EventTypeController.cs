@@ -1,5 +1,5 @@
 ﻿using BackendBase.Dto;
-using BackendBase.Interfaces;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -87,7 +87,7 @@ public class EventTypeController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<PaginationDto<EventTypeDto>>> Search([FromBody] SearchDto searchDto)
+    public async Task<ActionResult<Pagination<EventTypeDto>>> Search([FromBody] SearchDto searchDto)
     {
         try
         {
@@ -101,9 +101,8 @@ public class EventTypeController : ControllerBase
     }
 
 
-
     [HttpPost("searchMap")]
-    public async Task<ActionResult<Dictionary<string, PaginationDto<EventTypeDto>>>> SearchMap(
+    public async Task<ActionResult<Dictionary<string, Pagination<EventTypeDto>>>> SearchMap(
         [FromBody] SearchDto searchDto)
     {
         try
@@ -118,7 +117,7 @@ public class EventTypeController : ControllerBase
     }
 
     [HttpPost("{activityId:guid}/search")]
-    public async Task<ActionResult<PaginationDto<EventTypeDto>>> Search(Guid activityId, [FromBody] SearchDto searchDto)
+    public async Task<ActionResult<Pagination<EventTypeDto>>> Search(Guid activityId, [FromBody] SearchDto searchDto)
     {
         try
         {

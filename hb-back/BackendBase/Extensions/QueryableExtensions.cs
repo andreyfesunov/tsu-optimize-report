@@ -6,13 +6,13 @@ namespace BackendBase.Extensions;
 
 public static class QueryableExtensions
 {
-    public static async Task<PaginationDto<T>> Search<T>(this IQueryable<T> dbset, SearchDto searchDto)
+    public static async Task<Pagination<T>> Search<T>(this IQueryable<T> dbset, SearchDto searchDto)
     {
         var count = dbset.Count();
         var itemsQuery = dbset.Skip((searchDto.PageNumber - 1) * searchDto.PageSize).Take(searchDto.PageSize)
             .AsQueryable();
 
-        return new PaginationDto<T>
+        return new Pagination<T>
         {
             PageNumber = searchDto.PageNumber,
             PageSize = searchDto.PageSize,
