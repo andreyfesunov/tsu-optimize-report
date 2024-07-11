@@ -1,12 +1,18 @@
 ﻿using BackendBase.Data;
 using BackendBase.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class EventFileRepository : BaseRepository<EventFile>
+    public class EventFileRepository : IEventFileRepository
     {
-        public EventFileRepository(DataContext context) : base(context)
+        protected readonly DataContext Context;
+        protected readonly DbSet<EventFile> DbSet;
+
+        public EventFileRepository(DataContext context)
         {
+            Context = context;
+            DbSet = Context.Set<EventFile>();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -12,9 +11,9 @@ public class WorkService : IWorkService
 {
     protected readonly IMapper _mapper;
     protected MappingHelper<Work, WorkDto> _mappingHelper;
-    protected IBaseRepository<Work> _repository;
+    protected IWorkRepository _repository;
 
-    public WorkService(WorkRepository repository, IMapper mapper)
+    public WorkService(IWorkRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

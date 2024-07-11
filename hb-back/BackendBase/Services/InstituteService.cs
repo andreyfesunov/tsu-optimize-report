@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -12,9 +11,9 @@ public class InstituteService : IInstituteService
 {
     protected readonly IMapper _mapper;
     protected MappingHelper<Institute, InstituteDto> _mappingHelper;
-    protected IBaseRepository<Institute> _repository;
+    protected IInstituteRepository _repository;
 
-    public InstituteService(InstituteRepository repository, IMapper mapper)
+    public InstituteService(IInstituteRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

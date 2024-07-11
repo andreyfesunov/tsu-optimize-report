@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -12,9 +11,9 @@ public class ActivityService : IActivityService
 {
     protected readonly IMapper _mapper;
     protected MappingHelper<Activity, ActivityDto> _mappingHelper;
-    protected IBaseRepository<Activity> _repository;
+    protected IActivityRepository _repository;
 
-    public ActivityService(ActivityRepository repository, IMapper mapper)
+    public ActivityService(IActivityRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

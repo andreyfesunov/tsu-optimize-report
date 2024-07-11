@@ -2,7 +2,6 @@
 using BackendBase.Dto;
 using BackendBase.Dto.Comment;
 using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -13,9 +12,9 @@ public class CommentService : ICommentService
 {
     protected readonly IMapper _mapper;
     protected MappingHelper<Comment, CommentDto> _mappingHelper;
-    protected IBaseRepository<Comment> _repository;
+    protected ICommentRepository _repository;
 
-    public CommentService(CommentRepository repository, IMapper mapper)
+    public CommentService(ICommentRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

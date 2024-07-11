@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -12,9 +11,9 @@ public class JobService : IJobService
 {
     protected readonly IMapper _mapper;
     protected MappingHelper<Job, JobDto> _mappingHelper;
-    protected IBaseRepository<Job> _repository;
+    protected IJobRepository _repository;
 
-    public JobService(JobRepository repository, IMapper mapper)
+    public JobService(IJobRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

@@ -1,7 +1,13 @@
-﻿using BackendBase.Interfaces.Repositories.Common;
+﻿using BackendBase.Dto;
 using BackendBase.Models;
+using MathNet.Numerics.Statistics.Mcmc;
 
 namespace BackendBase.Interfaces.Repositories;
 
-public interface IStateUserRepository : IGetRepository<StateUser>, ICreateRepository<StateUser>, ISearchRepository<StateUser> {
+public interface IStateUserRepository
+{
+    Task<StateUser> GetById(Guid id);
+    Task<ICollection<StateUser>> GetAll();
+    public Task<StateUser> AddEntity(StateUser entity);
+    Task<Pagination<StateUser>> Search(SearchDto searchDto);
 }

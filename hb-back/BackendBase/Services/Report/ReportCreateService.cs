@@ -10,16 +10,16 @@ namespace BackendBase.Services.Report;
 
 public class ReportCreateService : IReportCreateService
 {
-    private readonly ActivityRepository _activityRepository;
-    private readonly LessonTypeRepository _lessonTypeRepository;
+    private readonly IActivityRepository _activityRepository;
+    private readonly ILessonTypeRepository _lessonTypeRepository;
     private readonly IMapper _mapper;
-    private readonly RecordRepository _recordRepository;
+    private readonly IRecordRepository _recordRepository;
     private readonly IStateUserRepository _stateUserRepository;
 
     public ReportCreateService(
-        ActivityRepository activityRepository,
-        LessonTypeRepository lessonTypeRepository,
-        RecordRepository recordRepository,
+        IActivityRepository activityRepository,
+        ILessonTypeRepository lessonTypeRepository,
+        IRecordRepository recordRepository,
         IStateUserRepository stateUserRepository,
         IMapper mapper
     )

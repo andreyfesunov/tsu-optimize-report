@@ -11,9 +11,9 @@ public class LessonTypeService : ILessonTypeService
 {
     protected readonly IMapper _mapper;
     protected MappingHelper<LessonType, LessonTypeDto> _mappingHelper;
-    protected LessonTypeRepository _repository;
+    protected ILessonTypeRepository _repository;
 
-    public LessonTypeService(LessonTypeRepository repository, IMapper mapper)
+    public LessonTypeService(ILessonTypeRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

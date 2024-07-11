@@ -7,23 +7,52 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
-public class StateUserRepository : BaseRepository<StateUser>, IStateUserRepository
+public class StateUserRepository : IStateUserRepository
 {
+    protected readonly DataContext Context;
+    protected readonly DbSet<StateUser> DbSet;
     private readonly UserInfo _userInfo;
 
-    public StateUserRepository(DataContext context, UserInfo userInfo) : base(context)
+    public StateUserRepository(DataContext context, UserInfo userInfo)
     {
+        Context = context;
+        DbSet = Context.Set<StateUser>();
         _userInfo = userInfo;
     }
 
-    public override async Task<Pagination<StateUser>> Search(SearchDto searchDto)
+    public async Task<StateUser> GetById(Guid id)
+    {
+        var entityQuery = DbSet.AsQueryable().Where(e => e.Id == id);
+        return (await IncludeChildren(entityQuery).ToListAsync())[0];
+    }
+
+    public async Task<ICollection<StateUser>> GetAll()
+    {
+        var itemsQuery = DbSet.AsNoTracking().AsQueryable();
+        return await IncludeChildren(itemsQuery).ToListAsync();
+    }
+
+    public async Task<StateUser> AddEntity(StateUser entity)
+    {
+        var model = await DbSet.AddAsync(entity);
+        await Save();
+        return model.Entity;
+    }
+
+    public async Task<bool> Save()
+    {
+        var saved = await Context.SaveChangesAsync();
+        return saved > 0;
+    }
+
+    public async Task<Pagination<StateUser>> Search(SearchDto searchDto)
     {
         return await IncludeChildren(DbSet)
             .Where(x => x.User.Id.ToString() == _userInfo.GetUserId())
             .Search(searchDto);
     }
 
-    protected override IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)
+    protected IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)
     {
         return query
             .Include(x => x.Events)

@@ -8,9 +8,9 @@ namespace BackendBase.Services;
 public class RecordService : IRecordService
 {
     private readonly IMapper _mapper;
-    private readonly RecordRepository _recordRepository;
+    private readonly IRecordRepository _recordRepository;
 
-    public RecordService(RecordRepository recordRepository, IMapper mapper)
+    public RecordService(IRecordRepository recordRepository, IMapper mapper)
     {
         _recordRepository = recordRepository;
         _mapper = mapper;

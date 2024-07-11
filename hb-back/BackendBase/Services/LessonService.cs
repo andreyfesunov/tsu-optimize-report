@@ -2,7 +2,6 @@
 using BackendBase.Dto;
 using BackendBase.Dto.Lesson;
 using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -13,9 +12,9 @@ public class LessonService : ILessonService
 {
     protected readonly IMapper _mapper;
     protected MappingHelper<Lesson, LessonDto> _mappingHelper;
-    protected IBaseRepository<Lesson> _repository;
+    protected ILessonRepository _repository;
 
-    public LessonService(LessonRepository repository, IMapper mapper)
+    public LessonService(ILessonRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

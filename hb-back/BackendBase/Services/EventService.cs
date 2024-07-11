@@ -2,7 +2,6 @@
 using BackendBase.Dto;
 using BackendBase.Dto.Event;
 using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -13,9 +12,9 @@ public class EventService : IEventService
 {
     private readonly IMapper _mapper;
     private readonly MappingHelper<Event, EventDto> _mappingHelper;
-    private readonly IBaseRepository<Event> _repository;
+    private readonly IEventRepository _repository;
 
-    public EventService(EventRepository repository, IMapper mapper)
+    public EventService(IEventRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

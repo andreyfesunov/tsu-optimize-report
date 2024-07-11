@@ -1,14 +1,14 @@
 ﻿using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Extensions;
-using BackendBase.Interfaces.Repositories.Common;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories;
 
-public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : Base
+//obsolete
+public sealed class BaseRepository<TEntity> where TEntity : Base
 {
     protected readonly DataContext Context;
     protected readonly DbSet<TEntity> DbSet;
@@ -91,7 +91,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         return await DbSet.Search(searchDto);
     }
 
-    public virtual async Task<Pagination<TEntity>> Search(SearchDto searchDto)
+    public async Task<Pagination<TEntity>> Search(SearchDto searchDto)
     {
         return await IncludeChildren(DbSet).Search(searchDto);
     }
@@ -103,7 +103,7 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         return queryWithIncludes.ToList();
     }
 
-    protected virtual IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query)
+    protected IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> query)
     {
         return query;
     }

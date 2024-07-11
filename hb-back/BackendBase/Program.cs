@@ -27,20 +27,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<UserInfo>();
 
-builder.Services.AddScoped<ActivityEventTypeRepository>();
-builder.Services.AddScoped<ActivityRepository>();
-builder.Services.AddScoped<EventFileRepository>();
-builder.Services.AddScoped<EventRepository>();
-builder.Services.AddScoped<EventTypeRepository>();
-builder.Services.AddScoped<FileRepository>();
-builder.Services.AddScoped<InstituteRepository>();
-builder.Services.AddScoped<JobRepository>();
-builder.Services.AddScoped<LessonRepository>();
-builder.Services.AddScoped<LessonTypeRepository>();
-builder.Services.AddScoped<WorkRepository>();
-builder.Services.AddScoped<LessonTypeRepository>();
-builder.Services.AddScoped<RecordRepository>();
-builder.Services.AddScoped<CommentRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IActivityEventTypeRepository, ActivityEventTypeRepository>();
+builder.Services.AddScoped<IEventFileRepository, EventFileRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventTypeRepository, EventTypeRepository>();
+builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<IInstituteRepository, InstituteRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<ILessonRepository, LessonRepository>();
+builder.Services.AddScoped<ILessonTypeRepository, LessonTypeRepository>();
+builder.Services.AddScoped<IWorkRepository, WorkRepository>();
+builder.Services.AddScoped<IRecordRepository, RecordRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStateRepository, StateRepository>();

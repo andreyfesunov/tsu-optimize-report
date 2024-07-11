@@ -1,19 +1,32 @@
 ﻿using BackendBase.Data;
+using BackendBase.Dto;
+using BackendBase.Extensions;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class DepartmentRepository : BaseRepository<Department>, IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
-        public DepartmentRepository(DataContext context) : base(context)
-        { }
+        protected readonly DataContext Context;
+        protected readonly DbSet<Department> DbSet;
 
-        protected override IQueryable<Department> IncludeChildren(IQueryable<Department> query)
+        public DepartmentRepository(DataContext context)
+        {
+            Context = context;
+            DbSet = Context.Set<Department>();
+        }
+
+        public IQueryable<Department> IncludeChildren(IQueryable<Department> query)
         {
             return query
                     .Include(x => x.Institute);
+        }
+
+        public async Task<Pagination<Department>> Search(SearchDto searchDto)
+        {
+            return await IncludeChildren(DbSet).Search(searchDto);
         }
     }
 }

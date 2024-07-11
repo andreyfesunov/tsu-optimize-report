@@ -10,17 +10,17 @@ namespace BackendBase.Services;
 
 public class EventTypeService : IEventTypeService
 {
-    private readonly ActivityEventTypeRepository _activityEventTypeRepository;
-    private readonly ActivityRepository _activityRepository;
+    private readonly IActivityEventTypeRepository _activityEventTypeRepository;
+    private readonly IActivityRepository _activityRepository;
     private readonly IMapper _mapper;
-    private readonly EventTypeRepository _repository;
+    private readonly IEventTypeRepository _repository;
     private readonly IStateUserRepository _stateUserRepository;
     protected MappingHelper<EventType, EventTypeDto> _mappingHelper;
 
     public EventTypeService(
-        EventTypeRepository repository,
-        ActivityEventTypeRepository activityEventTypeRepository,
-        ActivityRepository activityRepository,
+        IEventTypeRepository repository,
+        IActivityEventTypeRepository activityEventTypeRepository,
+        IActivityRepository activityRepository,
         IStateUserRepository stateUserRepository,
         IMapper mapper
     )
