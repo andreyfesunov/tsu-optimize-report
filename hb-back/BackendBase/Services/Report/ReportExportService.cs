@@ -1,5 +1,5 @@
-﻿using BackendBase.Interfaces.Services.Report;
-using BackendBase.Repositories;
+﻿using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.Services.Report;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
@@ -9,10 +9,10 @@ public class ReportExportService : IReportExportService
 {
     private readonly List<Action> _sheetBuilders = new();
 
-    private readonly UserRepository _userRepo;
+    private readonly IUserRepository _userRepo;
 
     public ReportExportService(
-        UserRepository userRepo
+        IUserRepository userRepo
     )
     {
         _userRepo = userRepo;

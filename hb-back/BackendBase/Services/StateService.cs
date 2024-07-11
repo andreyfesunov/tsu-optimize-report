@@ -2,6 +2,7 @@
 using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
 using BackendBase.Helpers;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -14,14 +15,14 @@ public class StateService : IStateService
     protected readonly IMapper _mapper;
     private readonly StateRepository _stateRepository;
     private readonly StateUserRepository _stateUserRepository;
-    private readonly UserRepository _userRepository;
+    private readonly IUserRepository _userRepository;
     protected MappingHelper<State, StateDto> _mappingHelper;
     protected StateRepository _repository;
 
     public StateService(
         StateRepository repository,
         DepartmentRepository departmentRepository,
-        UserRepository userRepository,
+        IUserRepository userRepository,
         StateUserRepository stateUserRepository,
         IMapper mapper
     )
