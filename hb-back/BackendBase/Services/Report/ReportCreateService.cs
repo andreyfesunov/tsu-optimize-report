@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services.Report;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -13,13 +14,13 @@ public class ReportCreateService : IReportCreateService
     private readonly LessonTypeRepository _lessonTypeRepository;
     private readonly IMapper _mapper;
     private readonly RecordRepository _recordRepository;
-    private readonly StateUserRepository _stateUserRepository;
+    private readonly IStateUserRepository _stateUserRepository;
 
     public ReportCreateService(
         ActivityRepository activityRepository,
         LessonTypeRepository lessonTypeRepository,
         RecordRepository recordRepository,
-        StateUserRepository stateUserRepository,
+        IStateUserRepository stateUserRepository,
         IMapper mapper
     )
     {

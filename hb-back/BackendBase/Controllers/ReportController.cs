@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.Report;
-using BackendBase.Interfaces.Services;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services.Report;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -17,18 +17,18 @@ public class ReportController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IReportCreateService _reportCreateService;
     private readonly IReportExportService _reportExportService;
-    private readonly IStateUserService _stateUserService;
-
+    private readonly IStateUserRepository _repository;
+    
     public ReportController(
         IReportCreateService reportCreateService,
         IReportExportService reportExportService,
-        IStateUserService stateUserService,
+        IStateUserRepository repository,
         IMapper mapper
     )
     {
         _reportCreateService = reportCreateService;
         _reportExportService = reportExportService;
-        _stateUserService = stateUserService;
+        _repository = repository;
         _mapper = mapper;
     }
 
@@ -59,7 +59,7 @@ public class ReportController : ControllerBase
     {
         try
         {
-            var result = await _stateUserService.Search(searchDto);
+            var result = await _repository.Search(searchDto);
             return Ok(new Pagination<ReportListDto>
             {
                 PageNumber = result.PageNumber,
@@ -79,8 +79,8 @@ public class ReportController : ControllerBase
     {
         try
         {
-            var result = await _stateUserService.Detail(id);
-            return Ok(result);
+            var result = await _repository.GetById(id);
+            return Ok(_mapper.Map<ReportDetailDto>(result));
         }
         catch (Exception ex)
         {

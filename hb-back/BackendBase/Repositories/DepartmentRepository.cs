@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using BackendBase.Data;
-using BackendBase.Dto;
+﻿using BackendBase.Data;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories
 {
-    public class DepartmentRepository : BaseRepository<Department>
+    public class DepartmentRepository : BaseRepository<Department>, IDepartmentRepository
     {
         public DepartmentRepository(DataContext context) : base(context)
         { }

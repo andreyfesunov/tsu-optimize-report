@@ -29,7 +29,6 @@ builder.Services.AddScoped<UserInfo>();
 
 builder.Services.AddScoped<ActivityEventTypeRepository>();
 builder.Services.AddScoped<ActivityRepository>();
-builder.Services.AddScoped<DepartmentRepository>();
 builder.Services.AddScoped<EventFileRepository>();
 builder.Services.AddScoped<EventRepository>();
 builder.Services.AddScoped<EventTypeRepository>();
@@ -38,24 +37,23 @@ builder.Services.AddScoped<InstituteRepository>();
 builder.Services.AddScoped<JobRepository>();
 builder.Services.AddScoped<LessonRepository>();
 builder.Services.AddScoped<LessonTypeRepository>();
-builder.Services.AddScoped<StateRepository>();
-builder.Services.AddScoped<StateUserRepository>();
 builder.Services.AddScoped<WorkRepository>();
 builder.Services.AddScoped<LessonTypeRepository>();
 builder.Services.AddScoped<RecordRepository>();
 builder.Services.AddScoped<CommentRepository>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IStateRepository, StateRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IStateUserRepository, StateUserRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReportCreateService, ReportCreateService>();
 builder.Services.AddScoped<IReportExportService, ReportExportService>();
-builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IEventTypeService, EventTypeService>();
 builder.Services.AddScoped<IInstituteService, InstituteService>();
 builder.Services.AddScoped<ILessonTypeService, LessonTypeService>();
 builder.Services.AddScoped<IStateService, StateService>();
-builder.Services.AddScoped<IStateUserService, StateUserService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IWorkService, WorkService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();

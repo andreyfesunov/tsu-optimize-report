@@ -25,8 +25,8 @@ export class StatesService {
     );
   }
 
-  public create(dto: IStateCreateRequest): Observable<boolean> {
-    return this._httpClient.post<boolean>('/api/State/createWithDto', dto).pipe(
+  public create(dto: IStateCreateRequest): Observable<string> {
+    return this._httpClient.put<string>('/api/State', dto).pipe(
       tap(() => this._reload$.next())
     )
   }

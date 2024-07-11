@@ -1,4 +1,8 @@
-﻿using BackendBase.Dto;
+﻿using AutoMapper;
+using BackendBase.Dto;
+using BackendBase.Dto.CreateDto;
+using BackendBase.Helpers;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,19 +14,27 @@ namespace BackendBase.Controllers;
 public class StateController : ControllerBase
 {
     private readonly IStateService _service;
+    private readonly IStateRepository _repository;
+    private readonly MappingHelper<State, StateDto> _mapper;
 
-    public StateController(IStateService service)
+    public StateController(
+            IStateService service,
+            IStateRepository repository,
+            IMapper mapper
+            )
     {
         _service = service;
+        _repository = repository;
+        _mapper = new MappingHelper<State, StateDto>(mapper);
     }
 
 
-    [HttpPost("create")]
-    public async Task<ActionResult<State>> Create(State entity)
+    [HttpPut("")]
+    public async Task<ActionResult<string>> Create(StateCreateDto entity)
     {
         try
         {
-            var result = await _service.AddEntity(entity);
+            var result = await _service.Create(entity);
             return Ok(result);
         }
         catch (Exception ex)
@@ -31,58 +43,13 @@ public class StateController : ControllerBase
         }
     }
 
-    [HttpGet("{Id}")]
-    public async Task<ActionResult<StateDto>> GetById(Guid Id)
-    {
-        try
-        {
-            var result = await _service.GetById(Id);
+    [HttpPost("assign")]
+    public async Task<ActionResult<bool>> Assign(StateUserCreateDto dto) {
+        try {
+            var result = await _service.Assign(dto);
             return Ok(result);
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpGet("getAll")]
-    public async Task<ActionResult<ICollection<StateDto>>> GetAll()
-    {
-        try
-        {
-            var result = await _service.GetAll();
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPut("update")]
-    public async Task<ActionResult<State>> Update(State entity)
-    {
-        try
-        {
-            var result = await _service.Update(entity);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpDelete("{entityId}")]
-    public async Task<ActionResult<bool>> DeleteById(Guid entityId)
-    {
-        try
-        {
-            var result = await _service.DeleteById(entityId);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             return BadRequest(ex.Message);
         }
     }
@@ -92,8 +59,8 @@ public class StateController : ControllerBase
     {
         try
         {
-            var result = await _service.Search(searchDto);
-            return Ok(result);
+            var result = await _repository.Search(searchDto);
+            return Ok(_mapper.ToDto(result));
         }
         catch (Exception ex)
         {

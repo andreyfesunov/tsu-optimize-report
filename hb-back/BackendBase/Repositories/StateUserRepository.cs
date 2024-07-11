@@ -1,12 +1,13 @@
 ﻿using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Extensions;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
-public class StateUserRepository : BaseRepository<StateUser>
+public class StateUserRepository : BaseRepository<StateUser>, IStateUserRepository
 {
     private readonly UserInfo _userInfo;
 

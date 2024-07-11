@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Helpers;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Repositories;
@@ -13,14 +14,14 @@ public class EventTypeService : IEventTypeService
     private readonly ActivityRepository _activityRepository;
     private readonly IMapper _mapper;
     private readonly EventTypeRepository _repository;
-    private readonly StateUserRepository _stateUserRepository;
+    private readonly IStateUserRepository _stateUserRepository;
     protected MappingHelper<EventType, EventTypeDto> _mappingHelper;
 
     public EventTypeService(
         EventTypeRepository repository,
         ActivityEventTypeRepository activityEventTypeRepository,
         ActivityRepository activityRepository,
-        StateUserRepository stateUserRepository,
+        IStateUserRepository stateUserRepository,
         IMapper mapper
     )
     {

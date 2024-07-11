@@ -1,13 +1,11 @@
-﻿using AutoMapper;
-using BackendBase.Data;
-using BackendBase.Dto;
-using BackendBase.Dto.CreateDto;
+﻿using BackendBase.Data;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Repositories;
 
-public class StateRepository : BaseRepository<State>
+public class StateRepository : BaseRepository<State>, IStateRepository
 {
     public StateRepository(
         DataContext context
