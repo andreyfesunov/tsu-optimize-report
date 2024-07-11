@@ -9,6 +9,7 @@ WORKDIR /src
 
 COPY *.sln .
 COPY BackendBase/*.csproj ./BackendBase/
+COPY TsuImportTests/*.csproj ./TsuImportTests/
 
 RUN dotnet restore
 
