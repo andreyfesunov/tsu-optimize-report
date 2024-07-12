@@ -11,14 +11,12 @@ namespace BackendBase.Services;
 public class LessonService : ILessonService
 {
     protected readonly IMapper _mapper;
-    protected MappingHelper<Lesson, LessonDto> _mappingHelper;
     protected ILessonRepository _repository;
 
     public LessonService(ILessonRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _mappingHelper = new MappingHelper<Lesson, LessonDto>(_mapper);
     }
 
     public async Task<Lesson> AddEntity(Lesson entity)
@@ -28,12 +26,12 @@ public class LessonService : ILessonService
 
     public async Task<LessonDto> GetById(Guid id)
     {
-        return _mappingHelper.ToDto(await _repository.GetById(id));
+        return _mapper.Map<LessonDto>(await _repository.GetById(id));
     }
 
     public async Task<ICollection<LessonDto>> GetAll()
     {
-        return _mappingHelper.ToDto(await _repository.GetAll());
+        return (await _repository.GetAll()).Select(u => _mapper.Map<LessonDto>(u)).ToList();
     }
 
     public async Task<Lesson> Update(Lesson entity)
@@ -48,7 +46,14 @@ public class LessonService : ILessonService
 
     public async Task<Pagination<LessonDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.ToDto(await _repository.Search(searchDto));
+        var result = await _repository.Search(searchDto);
+        return new Pagination<LessonDto>
+        {
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalPages = result.TotalPages,
+            Entities = result.Entities.Select(u => _mapper.Map<LessonDto>(u)).ToList()
+        };
     }
 
     public async Task<LessonDto> Update(LessonUpdateDto dto)

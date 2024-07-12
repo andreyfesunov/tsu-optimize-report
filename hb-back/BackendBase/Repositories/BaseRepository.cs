@@ -7,7 +7,7 @@ using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories;
 
-//obsolete
+[Obsolete]
 public sealed class BaseRepository<TEntity> where TEntity : Base
 {
     protected readonly DataContext Context;

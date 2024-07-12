@@ -15,7 +15,6 @@ public class EventTypeService : IEventTypeService
     private readonly IMapper _mapper;
     private readonly IEventTypeRepository _repository;
     private readonly IStateUserRepository _stateUserRepository;
-    protected MappingHelper<EventType, EventTypeDto> _mappingHelper;
 
     public EventTypeService(
         IEventTypeRepository repository,
@@ -39,12 +38,12 @@ public class EventTypeService : IEventTypeService
 
     public async Task<EventTypeDto> GetById(Guid id)
     {
-        return _mappingHelper.ToDto(await _repository.GetById(id));
+        return _mapper.Map<EventTypeDto>(await _repository.GetById(id));
     }
 
     public async Task<ICollection<EventTypeDto>> GetAll()
     {
-        return _mappingHelper.ToDto(await _repository.GetAll());
+        return (await _repository.GetAll()).Select(u => _mapper.Map<EventTypeDto>(u)).ToList();
     }
 
     public async Task<EventType> Update(EventType entity)
@@ -59,7 +58,14 @@ public class EventTypeService : IEventTypeService
 
     public async Task<Pagination<EventTypeDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.ToDto(await _repository.Search(searchDto));
+        var result = await _repository.Search(searchDto);
+        return new Pagination<EventTypeDto>
+        {
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalPages = result.TotalPages,
+            Entities = result.Entities.Select(u => _mapper.Map<EventTypeDto>(u)).ToList()
+        };
     }
 
     public async Task<Dictionary<string, Pagination<EventTypeDto>>> SearchMap(SearchDto searchDto)
@@ -89,7 +95,14 @@ public class EventTypeService : IEventTypeService
 
     public async Task<Pagination<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
     {
-        return _mappingHelper.ToDto(await _repository.Search(activityId, searchDto));
+        var result = await _repository.Search(activityId, searchDto);
+        return new Pagination<EventTypeDto>
+        {
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalPages = result.TotalPages,
+            Entities = result.Entities.Select(u => _mapper.Map<EventTypeDto>(u)).ToList()
+        };
     }
 
     public async Task<ActivityEventType> Assign(EventTypeAssignDto dto)

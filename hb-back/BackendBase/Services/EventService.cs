@@ -11,14 +11,12 @@ namespace BackendBase.Services;
 public class EventService : IEventService
 {
     private readonly IMapper _mapper;
-    private readonly MappingHelper<Event, EventDto> _mappingHelper;
     private readonly IEventRepository _repository;
 
     public EventService(IEventRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _mappingHelper = new MappingHelper<Event, EventDto>(_mapper);
     }
 
     public async Task<Event> AddEntity(Event entity)
@@ -28,12 +26,12 @@ public class EventService : IEventService
 
     public async Task<EventDto> GetById(Guid id)
     {
-        return _mappingHelper.ToDto(await _repository.GetById(id));
+        return _mapper.Map<EventDto>(await _repository.GetById(id));
     }
 
     public async Task<ICollection<EventDto>> GetAll()
     {
-        return _mappingHelper.ToDto(await _repository.GetAll());
+        return (await _repository.GetAll()).Select(u => _mapper.Map<EventDto>(u)).ToList();
     }
 
     public async Task<Event> Update(Event entity)
@@ -48,7 +46,14 @@ public class EventService : IEventService
 
     public async Task<Pagination<EventDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.ToDto(await _repository.Search(searchDto));
+        var result = await _repository.Search(searchDto);
+        return new Pagination<EventDto>
+        {
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalPages = result.TotalPages,
+            Entities = result.Entities.Select(u => _mapper.Map<EventDto>(u)).ToList()
+        };
     }
 
     public async Task<Event> Update(EventUpdateDto entity)

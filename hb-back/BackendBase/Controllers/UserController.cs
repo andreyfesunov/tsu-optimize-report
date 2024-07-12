@@ -6,6 +6,7 @@ using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.SS.Formula.Functions;
 
 namespace BackendBase.Controllers;
 
@@ -13,13 +14,13 @@ namespace BackendBase.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly MappingHelper<User, UserDto> _mapper;
     private readonly IUserService _service;
+    private readonly IMapper _mapper;
 
     public UserController(IUserService service, IMapper mapper)
     {
         _service = service;
-        _mapper = new MappingHelper<User, UserDto>(mapper);
+        _mapper = mapper;
     }
 
     [HttpGet("getAll")]
@@ -28,7 +29,7 @@ public class UserController : ControllerBase
         try
         {
             var users = await _service.GetAll();
-            return Ok(_mapper.ToDto(users));
+            return Ok(users.Select(u => _mapper.Map<UserDto>(u)).ToList());
         }
         catch (Exception ex)
         {
@@ -42,7 +43,7 @@ public class UserController : ControllerBase
         try
         {
             var user = await _service.GetById(userId);
-            return Ok(_mapper.ToDto(user));
+            return Ok(_mapper.Map<UserDto>(user));
         }
         catch (Exception ex)
         {
@@ -84,7 +85,14 @@ public class UserController : ControllerBase
         try
         {
             var result = await _service.Search(searchDto);
-            return Ok(_mapper.ToDto(result));
+
+            return Ok(new Pagination<UserDto>
+            {
+                PageNumber = result.PageNumber,
+                PageSize = result.PageSize,
+                TotalPages = result.TotalPages,
+                Entities = result.Entities.Select(u => _mapper.Map<UserDto>(u)).ToList()
+            });
         }
         catch (Exception ex)
         {

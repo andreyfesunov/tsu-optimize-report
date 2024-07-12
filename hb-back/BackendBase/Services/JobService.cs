@@ -10,14 +10,12 @@ namespace BackendBase.Services;
 public class JobService : IJobService
 {
     protected readonly IMapper _mapper;
-    protected MappingHelper<Job, JobDto> _mappingHelper;
     protected IJobRepository _repository;
 
     public JobService(IJobRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _mappingHelper = new MappingHelper<Job, JobDto>(_mapper);
     }
 
     public async Task<Job> AddEntity(Job entity)
@@ -27,12 +25,12 @@ public class JobService : IJobService
 
     public async Task<JobDto> GetById(Guid id)
     {
-        return _mappingHelper.ToDto(await _repository.GetById(id));
+        return _mapper.Map<JobDto>(await _repository.GetById(id));
     }
 
     public async Task<ICollection<JobDto>> GetAll()
     {
-        return _mappingHelper.ToDto(await _repository.GetAll());
+        return (await _repository.GetAll()).Select(u => _mapper.Map<JobDto>(u)).ToList();
     }
 
     public async Task<Job> Update(Job entity)
@@ -47,6 +45,13 @@ public class JobService : IJobService
 
     public async Task<Pagination<JobDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.ToDto(await _repository.Search(searchDto));
+        var result = await _repository.Search(searchDto);
+        return new Pagination<JobDto>
+        {
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalPages = result.TotalPages,
+            Entities = result.Entities.Select(u => _mapper.Map<JobDto>(u)).ToList()
+        };
     }
 }

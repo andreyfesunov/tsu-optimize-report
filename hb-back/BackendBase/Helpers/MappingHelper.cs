@@ -3,6 +3,7 @@ using BackendBase.Models;
 
 namespace BackendBase.Helpers;
 
+[Obsolete]
 public class MappingHelper<TEntity, TEntityDto>
 {
     private readonly IMapper _mapper;

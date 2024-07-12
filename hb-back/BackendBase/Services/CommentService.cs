@@ -11,14 +11,12 @@ namespace BackendBase.Services;
 public class CommentService : ICommentService
 {
     protected readonly IMapper _mapper;
-    protected MappingHelper<Comment, CommentDto> _mappingHelper;
     protected ICommentRepository _repository;
 
     public CommentService(ICommentRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _mappingHelper = new MappingHelper<Comment, CommentDto>(_mapper);
     }
 
     public async Task<Comment> AddEntity(Comment entity)
@@ -28,12 +26,12 @@ public class CommentService : ICommentService
 
     public async Task<CommentDto> GetById(Guid id)
     {
-        return _mappingHelper.ToDto(await _repository.GetById(id));
+        return _mapper.Map<CommentDto>(await _repository.GetById(id));
     }
 
     public async Task<ICollection<CommentDto>> GetAll()
     {
-        return _mappingHelper.ToDto(await _repository.GetAll());
+        return (await _repository.GetAll()).Select(u => _mapper.Map<CommentDto>(u)).ToList();
     }
 
     public async Task<Comment> Update(Comment entity)
@@ -48,7 +46,14 @@ public class CommentService : ICommentService
 
     public async Task<Pagination<CommentDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.ToDto(await _repository.Search(searchDto));
+        var result = await _repository.Search(searchDto);
+        return new Pagination<CommentDto>
+        {
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalPages = result.TotalPages,
+            Entities = result.Entities.Select(u => _mapper.Map<CommentDto>(u)).ToList()
+        };
     }
 
     public async Task<CommentDto> Update(CommentUpdateDto dto)

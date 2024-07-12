@@ -14,7 +14,7 @@ namespace BackendBase.Controllers;
 public class StateController : ControllerBase
 {
     private readonly IStateService _service;
-    private readonly MappingHelper<State, StateDto> _mapper;
+    private readonly IMapper _mapper;
 
     public StateController(
             IStateService service,
@@ -22,7 +22,7 @@ public class StateController : ControllerBase
             )
     {
         _service = service;
-        _mapper = new MappingHelper<State, StateDto>(mapper);
+        _mapper = mapper;
     }
 
 
@@ -57,7 +57,13 @@ public class StateController : ControllerBase
         try
         {
             var result = await _service.Search(searchDto);
-            return Ok(_mapper.ToDto(result));
+            return Ok(new Pagination<UserDto>
+            {
+                PageNumber = result.PageNumber,
+                PageSize = result.PageSize,
+                TotalPages = result.TotalPages,
+                Entities = result.Entities.Select(u => _mapper.Map<UserDto>(u)).ToList()
+            });
         }
         catch (Exception ex)
         {

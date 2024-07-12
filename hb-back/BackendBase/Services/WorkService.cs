@@ -10,14 +10,12 @@ namespace BackendBase.Services;
 public class WorkService : IWorkService
 {
     protected readonly IMapper _mapper;
-    protected MappingHelper<Work, WorkDto> _mappingHelper;
     protected IWorkRepository _repository;
 
     public WorkService(IWorkRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _mappingHelper = new MappingHelper<Work, WorkDto>(_mapper);
     }
 
     public async Task<Work> AddEntity(Work entity)
@@ -27,12 +25,12 @@ public class WorkService : IWorkService
 
     public async Task<WorkDto> GetById(Guid id)
     {
-        return _mappingHelper.ToDto(await _repository.GetById(id));
+        return _mapper.Map<WorkDto>(await _repository.GetById(id));
     }
 
     public async Task<ICollection<WorkDto>> GetAll()
     {
-        return _mappingHelper.ToDto(await _repository.GetAll());
+        return (await _repository.GetAll()).Select(u => _mapper.Map<WorkDto>(u)).ToList();
     }
 
     public async Task<Work> Update(Work entity)
@@ -47,6 +45,13 @@ public class WorkService : IWorkService
 
     public async Task<Pagination<WorkDto>> Search(SearchDto searchDto)
     {
-        return _mappingHelper.ToDto(await _repository.Search(searchDto));
+        var result = await _repository.Search(searchDto);
+        return new Pagination<WorkDto>
+        {
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalPages = result.TotalPages,
+            Entities = result.Entities.Select(u => _mapper.Map<WorkDto>(u)).ToList()
+        };
     }
 }
