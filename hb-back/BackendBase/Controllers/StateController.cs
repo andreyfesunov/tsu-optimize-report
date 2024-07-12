@@ -14,17 +14,14 @@ namespace BackendBase.Controllers;
 public class StateController : ControllerBase
 {
     private readonly IStateService _service;
-    private readonly IStateRepository _repository;
     private readonly MappingHelper<State, StateDto> _mapper;
 
     public StateController(
             IStateService service,
-            IStateRepository repository,
             IMapper mapper
             )
     {
         _service = service;
-        _repository = repository;
         _mapper = new MappingHelper<State, StateDto>(mapper);
     }
 
@@ -59,7 +56,7 @@ public class StateController : ControllerBase
     {
         try
         {
-            var result = await _repository.Search(searchDto);
+            var result = await _service.Search(searchDto);
             return Ok(_mapper.ToDto(result));
         }
         catch (Exception ex)

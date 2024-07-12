@@ -7,6 +7,7 @@ using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
 using BackendBase.Utils;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BackendBase.Services;
@@ -76,4 +77,15 @@ public class UserService : IUserService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public async Task<User> GetById(Guid id)
+        => await _repository.GetById(id);
+
+
+    public async Task<ICollection<User>> GetAll()
+        => await _repository.GetAll();
+
+
+    public async Task<Pagination<User>> Search(SearchDto searchDto)
+        => await _repository.Search(searchDto);
 }

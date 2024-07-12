@@ -60,6 +60,8 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IRecordService, RecordService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IStateUserService, StateUserService>();
+
 
 builder.Services.AddAutoMapper(typeof(Program));
 

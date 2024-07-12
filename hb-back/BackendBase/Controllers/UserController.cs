@@ -14,13 +14,11 @@ namespace BackendBase.Controllers;
 public class UserController : ControllerBase
 {
     private readonly MappingHelper<User, UserDto> _mapper;
-    private readonly IUserRepository _repository;
     private readonly IUserService _service;
 
-    public UserController(IUserService service, IUserRepository repository, IMapper mapper)
+    public UserController(IUserService service, IMapper mapper)
     {
         _service = service;
-        _repository = repository;
         _mapper = new MappingHelper<User, UserDto>(mapper);
     }
 
@@ -29,7 +27,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var users = await _repository.GetAll();
+            var users = await _service.GetAll();
             return Ok(_mapper.ToDto(users));
         }
         catch (Exception ex)
@@ -43,7 +41,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = await _repository.GetById(userId);
+            var user = await _service.GetById(userId);
             return Ok(_mapper.ToDto(user));
         }
         catch (Exception ex)
@@ -85,7 +83,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var result = await _repository.Search(searchDto);
+            var result = await _service.Search(searchDto);
             return Ok(_mapper.ToDto(result));
         }
         catch (Exception ex)

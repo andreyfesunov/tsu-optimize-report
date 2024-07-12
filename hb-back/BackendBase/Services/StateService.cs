@@ -3,6 +3,7 @@ using BackendBase.Dto.CreateDto;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendBase.Services;
 
@@ -65,4 +66,7 @@ public class StateService : IStateService
 
         return true;
     }
+
+    public async Task<Pagination<State>> Search(SearchDto searchDto)
+        => await _stateRepository.Search(searchDto);
 }
