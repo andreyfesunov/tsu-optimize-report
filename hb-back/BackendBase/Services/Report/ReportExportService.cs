@@ -40,6 +40,7 @@ public class ReportExportService : IReportExportService
         _addTitlePage(workbook, user, stateUser, records);
         _addAcademicWorkPage(workbook, user, stateUser);
         _addScienceWorkPage(workbook, user, stateUser);
+        _addGuidanceWorkPage(workbook, user, stateUser);
 
         return workbook;
     }
@@ -67,6 +68,71 @@ public class ReportExportService : IReportExportService
         public readonly ICellStyle? Style;
         public readonly CellRangeAddress? Merge;
     }
+
+    /* Delegates for different types of pages */
+    delegate List<CellData> WriteEvent(Event ev, int offset, ICellStyle style);
+    delegate List<CellData> WriteLesson(Lesson lesson, int offset, ICellStyle style);
+    delegate List<CellData> WriteComment(Comment comment, int offset, ICellStyle style);
+
+    /* Academic and Science pages */
+    private readonly WriteEvent _writeEventLarge = (ev, offset, style) => new List<CellData>{
+                new(offset, 0, ev.EventType.Name, style),
+                new(offset, 1, ev.StartedAt.ToString("d"), style),
+                new(offset, 2, ev.EndedAt.ToString("d"), style),
+                new(offset, 3, "", style, new CellRangeAddress(offset, offset, 3, 5))
+    };
+    private readonly WriteLesson _writeLessonLarge = (lesson, offset, style) => new List<CellData>{
+                new(offset, 0, lesson.LessonType.Name, style),
+                new(offset, 1, "", style),
+                new(offset, 2, "", style),
+                new(offset, 3, lesson.PlanDate.ToString() ?? "", style),
+                new(offset, 4, lesson.FactDate.ToString() ?? "", style),
+                new(offset, 5, "", style),
+    };
+    private readonly WriteComment _writeCommentLarge = (comment, offset, style) => new List<CellData>{
+                new(offset, 0, comment.Content, style),
+                new(offset, 1, "", style),
+                new(offset, 2, "", style),
+                new(offset, 3, comment.PlanDate.ToString() ?? "", style),
+                new(offset, 4, comment.FactDate.ToString() ?? "", style),
+                new(offset, 5, "", style),
+    };
+
+    /* Guidance page */
+    private readonly WriteEvent _writeEventGuidance = (ev, offset, style) => new List<CellData>
+    {
+        new(offset, 0, ev.EventType.Name, style),
+        new(offset, 1, "", style),
+        new(offset, 2, "", style),
+        new(offset, 3, "", style),
+        new(offset, 4, "", style),
+    };
+    private readonly WriteLesson _writeLessonGuidance = (lesson, offset, style) => new List<CellData> { };
+    private readonly WriteComment _writeCommentGuidance = (comment, offset, style) => new List<CellData>
+    {
+        new(offset, 0, comment.Content, style),
+        new(offset, 1, "", style),
+        new(offset, 2, comment.PlanDate.ToString() ?? "", style),
+        new(offset, 3, comment.FactDate.ToString() ?? "", style),
+        new(offset, 4, "", style),
+    };
+
+    /* Others pages */
+    private readonly WriteEvent _writeEventShort = (ev, offset, style) => new List<CellData>
+    {
+        new(offset, 0, ev.EventType.Name, style, new CellRangeAddress(offset, offset, 0, 1)),
+        new(offset, 2, "", style),
+        new(offset, 3, "", style),
+        new(offset, 4, "", style),
+    };
+    private readonly WriteLesson _writeLessonShort = (ev, offset, style) => new List<CellData>{};
+    private readonly WriteComment _writeCommentShort = (comment, offset, style) => new List<CellData>
+    {
+        new(offset, 0, comment.Content, style, new CellRangeAddress(offset, offset, 0, 1)),
+        new(offset, 2, comment.PlanDate.ToString() ?? "", style),
+        new(offset, 3, comment.FactDate.ToString() ?? "", style),
+        new(offset, 4, "", style),
+    };
 
     private void _addTitlePage(IWorkbook workbook, User user, StateUser stateUser, ICollection<Record> records)
     {
@@ -139,7 +205,7 @@ public class ReportExportService : IReportExportService
 
     private void _addAcademicWorkPage(IWorkbook workbook, User user, StateUser stateUser)
     {
-        ISheet sheet = workbook.CreateSheet("4-УЧ_МЕТ");
+        ISheet sheet = workbook.CreateSheet("4_УЧ-МЕТ");
 
         var headerStyle = workbook.CreateCellStyle();
         headerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
@@ -168,12 +234,18 @@ public class ReportExportService : IReportExportService
 
         var events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.AcademicMethodicalWorkId).ToList();
 
-        _applyEventsData(pageData, events, ref offset, centeredStyle);
+        _applyEventsData(
+                pageData,
+                events,
+                ref offset,
+                centeredStyle,
+                _writeEventLarge,
+                _writeLessonLarge,
+                _writeCommentLarge
+        );
 
-        var planHours = events.Select(x => x.Lessons.Select(l => l.PlanDate).Select(l => l ?? 0).Sum()).Sum() +
-            events.Select(x => x.Comments.Select(c => c.PlanDate).Select(c => c ?? 0).Sum()).Sum();
-        var factHours = events.Select(x => x.Lessons.Select(l => l.FactDate).Select(l => l ?? 0).Sum()).Sum() +
-            events.Select(x => x.Comments.Select(c => c.FactDate).Select(c => c ?? 0).Sum()).Sum();
+        var planHours = _getPlanHours(events);
+        var factHours = _getFactHours(events);
 
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "Итого за год", centeredStyle, new CellRangeAddress(offset, offset, 0, 2)),
@@ -187,7 +259,7 @@ public class ReportExportService : IReportExportService
 
     private void _addScienceWorkPage(IWorkbook workbook, User user, StateUser stateUser)
     {
-        ISheet sheet = workbook.CreateSheet("5-НДиНМД");
+        ISheet sheet = workbook.CreateSheet("5_НДиНМД");
 
         var headerStyle = workbook.CreateCellStyle();
         headerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
@@ -216,12 +288,18 @@ public class ReportExportService : IReportExportService
 
         var events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.ScienceWorkId).ToList();
 
-        _applyEventsData(pageData, events, ref offset, centeredStyle);
+        _applyEventsData(
+                pageData,
+                events,
+                ref offset,
+                centeredStyle,
+                _writeEventLarge,
+                _writeLessonLarge,
+                _writeCommentLarge
+        );
 
-        var planHours = events.Select(x => x.Lessons.Select(l => l.PlanDate).Select(l => l ?? 0).Sum()).Sum() +
-            events.Select(x => x.Comments.Select(c => c.PlanDate).Select(c => c ?? 0).Sum()).Sum();
-        var factHours = events.Select(x => x.Lessons.Select(l => l.FactDate).Select(l => l ?? 0).Sum()).Sum() +
-            events.Select(x => x.Comments.Select(c => c.FactDate).Select(c => c ?? 0).Sum()).Sum();
+        var planHours = _getPlanHours(events);
+        var factHours = _getFactHours(events);
 
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "Итого за год", centeredStyle, new CellRangeAddress(offset, offset, 0, 2)),
@@ -231,6 +309,112 @@ public class ReportExportService : IReportExportService
         });
 
         _applyPageData(sheet, pageData);
+    }
+
+    private void _addGuidanceWorkPage(IWorkbook workbook, User user, StateUser stateUser)
+    {
+        ISheet sheet = workbook.CreateSheet("6_НИРС.ОМР");
+
+        var headerStyle = workbook.CreateCellStyle();
+        headerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+
+        var centeredStyle = workbook.CreateCellStyle();
+        centeredStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+        centeredStyle.WrapText = true;
+        centeredStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+
+        var offset = 0;
+        var pageData = new List<CellData> { };
+
+        var events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.GuidanceWorkId).ToList();
+        _applyGuidanceTable(events, pageData, ref offset, headerStyle, centeredStyle);
+        events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.OrganizationalMethodicalWorkId).ToList();
+        _applyOrganizationalTable(events, pageData, ref offset, headerStyle, centeredStyle);
+
+        _applyPageData(sheet, pageData);
+    }
+
+    private void _applyGuidanceTable(ICollection<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    {
+        pageData.AddRange(new List<CellData>{
+            new(offset, 0, "IV. РУКОВОДСТВО НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ РАБОТОЙ СТУДЕНТОВ", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
+            new(offset + 1, 0, "Виды работ", tableStyle, new CellRangeAddress(offset + 1, offset + 2, 0, 0)),
+            new(offset + 1, 1, "Ф.И.О. студента,  № группы", tableStyle, new CellRangeAddress(offset + 1, offset + 2, 1, 1)),
+            new(offset + 1, 2, "Затраты времени, час", tableStyle, new CellRangeAddress(offset + 1, offset + 1, 2, 3)),
+            new(offset + 1, 4, "Отметка зав.каф. о выполнении", tableStyle, new CellRangeAddress(offset + 1, offset + 2, 4, 4)),
+            new(offset + 2, 2, "План", tableStyle),
+            new(offset + 2, 3, "Факт.", tableStyle),
+        });
+
+        offset += 3;
+
+        _applyEventsData(
+            pageData,
+            events,
+            ref offset,
+            tableStyle,
+            _writeEventGuidance,
+            _writeLessonGuidance,
+            _writeCommentGuidance
+        );
+
+        pageData.AddRange(new List<CellData>{
+            new(offset, 0, "Итого за год", tableStyle, new CellRangeAddress(offset, offset, 0, 1)),
+            new(offset, 2, _getPlanHours(events).ToString(), tableStyle),
+            new(offset, 3, _getFactHours(events).ToString(), tableStyle),
+            new(offset, 4, "", tableStyle),
+        });
+
+        offset += 1;
+    }
+
+    private void _applyOrganizationalTable(ICollection<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    {
+        pageData.AddRange(new List<CellData>{
+            new(offset, 0, "V. ОРГАНИЗАЦИОННО-МЕТОДИЧЕСКАЯ РАБОТА", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
+            new(offset + 1, 0, "Виды работ", tableStyle, new CellRangeAddress(offset + 1, offset + 2, 0, 1)),
+            new(offset + 1, 2, "Затраты времени, час", tableStyle, new CellRangeAddress(offset + 1, offset + 1, 2, 3)),
+            new(offset + 1, 4, "Отметка зав.каф. о выполнении", tableStyle, new CellRangeAddress(offset + 1, offset + 2, 4, 4)),
+            new(offset + 2, 2, "План", tableStyle),
+            new(offset + 2, 3, "Факт.", tableStyle),
+        });
+
+        offset += 3;
+
+        _applyEventsData(
+            pageData,
+            events,
+            ref offset,
+            tableStyle,
+            _writeEventShort,
+            _writeLessonShort,
+            _writeCommentShort
+        );
+
+        pageData.AddRange(new List<CellData>{
+            new(offset, 0, "Итого за год", tableStyle, new CellRangeAddress(offset, offset, 0, 1)),
+            new(offset, 2, _getPlanHours(events).ToString(), tableStyle),
+            new(offset, 3, _getFactHours(events).ToString(), tableStyle),
+            new(offset, 4, "", tableStyle),
+        });
+
+        offset += 1;
+    }
+
+
+    private int _getPlanHours(ICollection<Event> events)
+    {
+        return events.Select(x => x.Lessons.Select(l => l.PlanDate).Select(l => l ?? 0).Sum()).Sum() +
+            events.Select(x => x.Comments.Select(c => c.PlanDate).Select(c => c ?? 0).Sum()).Sum();
+    }
+
+    private int _getFactHours(ICollection<Event> events)
+    {
+        return events.Select(x => x.Lessons.Select(l => l.FactDate).Select(l => l ?? 0).Sum()).Sum() +
+            events.Select(x => x.Comments.Select(c => c.FactDate).Select(c => c ?? 0).Sum()).Sum();
     }
 
     private void _applyPageData(ISheet sheet, ICollection<CellData> pageData)
@@ -263,45 +447,29 @@ public class ReportExportService : IReportExportService
         }
     }
 
-    private void _applyEventsData(List<CellData> pageData, ICollection<Event> events, ref int offset, ICellStyle centeredStyle)
+    private void _applyEventsData(
+            List<CellData> pageData,
+            ICollection<Event> events,
+            ref int offset,
+            ICellStyle style,
+            WriteEvent writeEvent,
+            WriteLesson writeLesson,
+            WriteComment writeComment
+    )
     {
         foreach (var ev in events)
         {
-            pageData.AddRange(new List<CellData>{
-                new(offset, 0, ev.EventType.Name, centeredStyle),
-                new(offset, 1, ev.StartedAt.ToString("d"), centeredStyle),
-                new(offset, 2, ev.EndedAt.ToString("d"), centeredStyle),
-                new(offset, 3, "", centeredStyle, new CellRangeAddress(offset, offset, 3, 5))
-            });
-
+            pageData.AddRange(writeEvent(ev, offset, style));
             offset += 1;
 
             foreach (var comment in ev.Comments)
             {
-                pageData.AddRange(new List<CellData>
-                {
-                    new(offset, 0, comment.Content, centeredStyle),
-                    new(offset, 1, "", centeredStyle),
-                    new(offset, 2, "", centeredStyle),
-                    new(offset, 3, comment.PlanDate.ToString() ?? "", centeredStyle),
-                    new(offset, 4, comment.FactDate.ToString() ?? "", centeredStyle),
-                    new(offset, 5, "", centeredStyle),
-                });
-
+                pageData.AddRange(writeComment(comment, offset, style));
                 offset += 1;
             }
             foreach (var lesson in ev.Lessons)
             {
-                pageData.AddRange(new List<CellData>
-                {
-                    new(offset, 0, lesson.LessonType.Name, centeredStyle),
-                    new(offset, 1, "", centeredStyle),
-                    new(offset, 2, "", centeredStyle),
-                    new(offset, 3, lesson.PlanDate.ToString() ?? "", centeredStyle),
-                    new(offset, 4, lesson.FactDate.ToString() ?? "", centeredStyle),
-                    new(offset, 5, "", centeredStyle),
-                });
-
+                pageData.AddRange(writeLesson(lesson, offset, style));
                 offset += 1;
             }
         }
