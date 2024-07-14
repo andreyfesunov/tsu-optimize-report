@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.Report;
-using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Interfaces.Services.Report;
 using BackendBase.Models;
@@ -23,11 +22,13 @@ public class ReportController : ControllerBase
     public ReportController(
         IReportCreateService reportCreateService,
         IReportExportService reportExportService,
+        IStateUserService service,
         IMapper mapper
     )
     {
         _reportCreateService = reportCreateService;
         _reportExportService = reportExportService;
+        _service = service;
         _mapper = mapper;
     }
 

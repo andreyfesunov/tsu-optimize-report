@@ -57,12 +57,12 @@ public class StateController : ControllerBase
         try
         {
             var result = await _service.Search(searchDto);
-            return Ok(new Pagination<UserDto>
+            return Ok(new Pagination<StateDto>
             {
                 PageNumber = result.PageNumber,
                 PageSize = result.PageSize,
                 TotalPages = result.TotalPages,
-                Entities = result.Entities.Select(u => _mapper.Map<UserDto>(u)).ToList()
+                Entities = result.Entities.Select(u => _mapper.Map<StateDto>(u)).ToList()
             });
         }
         catch (Exception ex)
