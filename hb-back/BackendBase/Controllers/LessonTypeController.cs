@@ -36,7 +36,7 @@ public class LessonTypeController : ControllerBase
     {
         try
         {
-            var result = await _service.GetById(Id);
+            var result = await _service.GetAllForEvent(Id);
             return Ok(result);
         }
         catch (Exception ex)

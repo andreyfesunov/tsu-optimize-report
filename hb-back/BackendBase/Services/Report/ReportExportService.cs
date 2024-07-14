@@ -1,4 +1,5 @@
 ﻿using BackendBase.Dto;
+using BackendBase.Extensions;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services.Report;
 using BackendBase.Models;
@@ -37,18 +38,22 @@ public class ReportExportService : IReportExportService
         var workbook = new XSSFWorkbook();
 
         _addTitlePage(workbook, user, stateUser, records);
+        _addAcademicWorkPage(workbook, user, stateUser);
+        _addScienceWorkPage(workbook, user, stateUser);
 
         return workbook;
     }
 
-    class StaticTitleData {
-        public StaticTitleData(
+    class CellData
+    {
+        public CellData(
             int row,
             int col,
             string content,
             ICellStyle? style = null,
-            CellRangeAddress? merge = null 
-        ) {
+            CellRangeAddress? merge = null
+        )
+        {
             Row = row;
             Col = col;
             Content = content;
@@ -63,7 +68,8 @@ public class ReportExportService : IReportExportService
         public readonly CellRangeAddress? Merge;
     }
 
-    private void _addTitlePage(IWorkbook workbook, User user, StateUser stateUser, ICollection<Record> records) {
+    private void _addTitlePage(IWorkbook workbook, User user, StateUser stateUser, ICollection<Record> records)
+    {
         ISheet sheet = workbook.CreateSheet("1_Тит");
 
         var centeredStyle = workbook.CreateCellStyle();
@@ -86,7 +92,7 @@ public class ReportExportService : IReportExportService
         var secondHalfHours = stateUser.Events.Select(x => x.Lessons).Select(x => x.Select(v => v.PlanDate).Sum()).Sum() +
             stateUser.Events.Select(x => x.Comments).Select(x => x.Select(v => v.PlanDate).Sum()).Sum() ?? 0;
 
-        var staticData = new List<StaticTitleData> {
+        var pageData = new List<CellData> {
             new(2, 2, "МИНОБРАНАУКИ РОССИИ", centeredStyle, new CellRangeAddress(2, 2, 2, 8)),
             new(3, 2, "ФГБОУ ВО \"Тульский государственный университет\"", centeredStyle, new CellRangeAddress(3, 3, 2, 8)),
             new(5, 1, "Кафедра________________________________________________________", centeredStyle, new CellRangeAddress(5, 5, 1, 9)),
@@ -128,17 +134,175 @@ public class ReportExportService : IReportExportService
             new(44, 6, "часов")
         };
 
-        foreach (StaticTitleData data in staticData) {
-            var row = sheet.GetRow(data.Row) ?? sheet.CreateRow(data.Row);
-            var cell = row.GetCell(data.Col) ?? row.CreateCell(data.Col);
+        _applyPageData(sheet, pageData);
+    }
+
+    private void _addAcademicWorkPage(IWorkbook workbook, User user, StateUser stateUser)
+    {
+        ISheet sheet = workbook.CreateSheet("4-УЧ_МЕТ");
+
+        var headerStyle = workbook.CreateCellStyle();
+        headerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+
+        var centeredStyle = workbook.CreateCellStyle();
+        centeredStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+        centeredStyle.WrapText = true;
+        centeredStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+
+        var pageData = new List<CellData>{
+            new(0, 0, "II.  УЧЕБНО-МЕТОДИЧЕСКАЯ РАБОТА", headerStyle, new CellRangeAddress(0, 0, 0, 5)),
+            new(2, 0, "Наименование работы", centeredStyle, new CellRangeAddress(2, 3, 0, 0)),
+            new(2, 1, "Срок выполнения", centeredStyle, new CellRangeAddress(2, 2, 1, 2)),
+            new(2, 3, "Затраты времени, час", centeredStyle, new CellRangeAddress(2, 2, 3, 4)),
+            new(2, 5, "Отметка зав.каф.о выполнении", centeredStyle, new CellRangeAddress(2, 3, 5, 5)),
+            new(3, 1, "Начало", centeredStyle),
+            new(3, 2, "Конец", centeredStyle),
+            new(3, 3, "План", centeredStyle),
+            new(3, 4, "Факт.", centeredStyle),
+        };
+
+        var offset = 4;
+
+        var events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.AcademicMethodicalWorkId).ToList();
+
+        _applyEventsData(pageData, events, ref offset, centeredStyle);
+
+        var planHours = events.Select(x => x.Lessons.Select(l => l.PlanDate).Select(l => l ?? 0).Sum()).Sum() +
+            events.Select(x => x.Comments.Select(c => c.PlanDate).Select(c => c ?? 0).Sum()).Sum();
+        var factHours = events.Select(x => x.Lessons.Select(l => l.FactDate).Select(l => l ?? 0).Sum()).Sum() +
+            events.Select(x => x.Comments.Select(c => c.FactDate).Select(c => c ?? 0).Sum()).Sum();
+
+        pageData.AddRange(new List<CellData>{
+            new(offset, 0, "Итого за год", centeredStyle, new CellRangeAddress(offset, offset, 0, 2)),
+            new(offset, 3, planHours.ToString(), centeredStyle),
+            new(offset, 4, factHours.ToString(), centeredStyle),
+            new(offset, 5, "", centeredStyle)
+        });
+
+        _applyPageData(sheet, pageData);
+    }
+
+    private void _addScienceWorkPage(IWorkbook workbook, User user, StateUser stateUser)
+    {
+        ISheet sheet = workbook.CreateSheet("5-НДиНМД");
+
+        var headerStyle = workbook.CreateCellStyle();
+        headerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+
+        var centeredStyle = workbook.CreateCellStyle();
+        centeredStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+        centeredStyle.WrapText = true;
+        centeredStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+        centeredStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+
+        var pageData = new List<CellData>{
+            new(0, 0, "III.  НАУЧНАЯ И НАУЧНО-МЕТОДИЧЕСКАЯ ДЕЯТЕЛЬНОСТЬ", headerStyle, new CellRangeAddress(0, 0, 0, 5)),
+            new(2, 0, "Наименование работы", centeredStyle, new CellRangeAddress(2, 3, 0, 0)),
+            new(2, 1, "Срок выполнения", centeredStyle, new CellRangeAddress(2, 2, 1, 2)),
+            new(2, 3, "Затраты времени, час", centeredStyle, new CellRangeAddress(2, 2, 3, 4)),
+            new(2, 5, "Отметка зав.каф.о выполнении", centeredStyle, new CellRangeAddress(2, 3, 5, 5)),
+            new(3, 1, "Начало", centeredStyle),
+            new(3, 2, "Конец", centeredStyle),
+            new(3, 3, "План", centeredStyle),
+            new(3, 4, "Факт.", centeredStyle),
+        };
+
+        var offset = 4;
+
+        var events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.ScienceWorkId).ToList();
+
+        _applyEventsData(pageData, events, ref offset, centeredStyle);
+
+        var planHours = events.Select(x => x.Lessons.Select(l => l.PlanDate).Select(l => l ?? 0).Sum()).Sum() +
+            events.Select(x => x.Comments.Select(c => c.PlanDate).Select(c => c ?? 0).Sum()).Sum();
+        var factHours = events.Select(x => x.Lessons.Select(l => l.FactDate).Select(l => l ?? 0).Sum()).Sum() +
+            events.Select(x => x.Comments.Select(c => c.FactDate).Select(c => c ?? 0).Sum()).Sum();
+
+        pageData.AddRange(new List<CellData>{
+            new(offset, 0, "Итого за год", centeredStyle, new CellRangeAddress(offset, offset, 0, 2)),
+            new(offset, 3, planHours.ToString(), centeredStyle),
+            new(offset, 4, factHours.ToString(), centeredStyle),
+            new(offset, 5, "", centeredStyle)
+        });
+
+        _applyPageData(sheet, pageData);
+    }
+
+    private void _applyPageData(ISheet sheet, ICollection<CellData> pageData)
+    {
+        foreach (CellData data in pageData)
+        {
+            var row = sheet.GetRowSafe(data.Row);
+            var cell = row.GetCellSafe(data.Col);
 
             cell.SetCellValue(data.Content);
 
-            if (data.Style != null) {
+            if (data.Merge != null)
+            {
+                sheet.AddMergedRegion(data.Merge);
+
+                for (int i = data.Merge.FirstRow; i <= data.Merge.LastRow; i++)
+                {
+                    var tmpRow = sheet.GetRowSafe(i);
+                    for (int j = data.Merge.FirstColumn; j <= data.Merge.LastColumn; j++)
+                    {
+                        var tmpCol = tmpRow.GetCellSafe(j);
+                        tmpCol.CellStyle = data.Style;
+                    }
+                }
+            }
+            if (data.Style != null)
+            {
                 cell.CellStyle = data.Style;
             }
-            if (data.Merge != null) {
-                sheet.AddMergedRegion(data.Merge);
+        }
+    }
+
+    private void _applyEventsData(List<CellData> pageData, ICollection<Event> events, ref int offset, ICellStyle centeredStyle)
+    {
+        foreach (var ev in events)
+        {
+            pageData.AddRange(new List<CellData>{
+                new(offset, 0, ev.EventType.Name, centeredStyle),
+                new(offset, 1, ev.StartedAt.ToString("d"), centeredStyle),
+                new(offset, 2, ev.EndedAt.ToString("d"), centeredStyle),
+                new(offset, 3, "", centeredStyle, new CellRangeAddress(offset, offset, 3, 5))
+            });
+
+            offset += 1;
+
+            foreach (var comment in ev.Comments)
+            {
+                pageData.AddRange(new List<CellData>
+                {
+                    new(offset, 0, comment.Content, centeredStyle),
+                    new(offset, 1, "", centeredStyle),
+                    new(offset, 2, "", centeredStyle),
+                    new(offset, 3, comment.PlanDate.ToString() ?? "", centeredStyle),
+                    new(offset, 4, comment.FactDate.ToString() ?? "", centeredStyle),
+                    new(offset, 5, "", centeredStyle),
+                });
+
+                offset += 1;
+            }
+            foreach (var lesson in ev.Lessons)
+            {
+                pageData.AddRange(new List<CellData>
+                {
+                    new(offset, 0, lesson.LessonType.Name, centeredStyle),
+                    new(offset, 1, "", centeredStyle),
+                    new(offset, 2, "", centeredStyle),
+                    new(offset, 3, lesson.PlanDate.ToString() ?? "", centeredStyle),
+                    new(offset, 4, lesson.FactDate.ToString() ?? "", centeredStyle),
+                    new(offset, 5, "", centeredStyle),
+                });
+
+                offset += 1;
             }
         }
     }

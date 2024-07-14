@@ -12,7 +12,7 @@ public static class WorkAndEventTypeFactory
 
         var w1 = new Work
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(SystemWorks.AcademicMethodicalWorkId),
             Name = "Учебно-методичечкая работа",
             Order = 1
         };
@@ -424,7 +424,7 @@ public static class WorkAndEventTypeFactory
 
         var w2 = new Work
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(SystemWorks.ScienceWorkId),
             Name = "Научная и научно-методическая деятельность",
             Order = 2
         };
@@ -573,7 +573,7 @@ public static class WorkAndEventTypeFactory
 
         var w3 = new Work
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(SystemWorks.GuidanceWorkId),
             Name = "Руководство научно-исследовательской работой студентов",
             Order = 3
         };
@@ -604,7 +604,7 @@ public static class WorkAndEventTypeFactory
 
         var w4 = new Work
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(SystemWorks.OrganizationalMethodicalWorkId),
             Name = "Организационно-методическая работа",
             Order = 4
         };
@@ -764,7 +764,7 @@ public static class WorkAndEventTypeFactory
 
         var w5 = new Work
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(SystemWorks.EducationalWorkId),
             Name = "Воспитательная работа",
             Order = 5
         };
@@ -792,7 +792,7 @@ public static class WorkAndEventTypeFactory
 
         var w6 = new Work
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(SystemWorks.MedicalWorkId),
             Name = "Осуществление медицинской деятельности, необходимой для практической подготовки обучающихся",
             Order = 6
         };
@@ -847,7 +847,7 @@ public static class WorkAndEventTypeFactory
 
         var w7 = new Work
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(SystemWorks.ExtraWorkId),
             Name = "Дополнительное профессиональное образованию по профилю педагогической деятельности",
             Order = 7
         };
