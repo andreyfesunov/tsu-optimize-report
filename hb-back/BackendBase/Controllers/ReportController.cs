@@ -18,7 +18,7 @@ public class ReportController : ControllerBase
     private readonly IReportCreateService _reportCreateService;
     private readonly IReportExportService _reportExportService;
     private readonly IStateUserService _service;
-    
+
     public ReportController(
         IReportCreateService reportCreateService,
         IReportExportService reportExportService,

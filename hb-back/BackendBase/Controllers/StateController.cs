@@ -41,12 +41,15 @@ public class StateController : ControllerBase
     }
 
     [HttpPost("assign")]
-    public async Task<ActionResult<bool>> Assign(StateUserCreateDto dto) {
-        try {
+    public async Task<ActionResult<bool>> Assign(StateUserCreateDto dto)
+    {
+        try
+        {
             var result = await _service.Assign(dto);
             return Ok(result);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             return BadRequest(ex.Message);
         }
     }

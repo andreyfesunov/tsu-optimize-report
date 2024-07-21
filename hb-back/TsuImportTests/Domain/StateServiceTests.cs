@@ -11,8 +11,10 @@ using NUnit.Framework;
 namespace TsuImportTests.Domain;
 
 [TestFixture]
-public class StateServiceTests {
-    public StateServiceTests() {
+public class StateServiceTests
+{
+    public StateServiceTests()
+    {
         _service = new StateService(
             _stateRepo.Object,
             _departmentRepo.Object,
@@ -25,25 +27,29 @@ public class StateServiceTests {
     private readonly Mock<IStateUserRepository> _stateUserRepo = new();
     private readonly Mock<IUserRepository> _userRepo = new();
     private readonly Mock<IDepartmentRepository> _departmentRepo = new();
-    private readonly StateService _service; 
+    private readonly StateService _service;
 
     [SetUp]
-    public void MockReset() {
+    public void MockReset()
+    {
         _stateRepo.Reset();
         _stateUserRepo.Reset();
     }
 
     [Test]
-    public async Task STATE_Create() {
-        var dto = new StateCreateDto{
+    public async Task STATE_Create()
+    {
+        var dto = new StateCreateDto
+        {
             JobId = Guid.NewGuid().ToString(),
             Count = 1,
             Hours = 1485,
             EndDate = new System.DateTime(2024, 1, 1),
-            StartDate = new System.DateTime(2023, 12, 31) 
+            StartDate = new System.DateTime(2023, 12, 31)
         };
 
-        _departmentRepo.Setup(x => x.Search(It.IsAny<SearchDto>())).ReturnsAsync(new Pagination<Department>{
+        _departmentRepo.Setup(x => x.Search(It.IsAny<SearchDto>())).ReturnsAsync(new Pagination<Department>
+        {
             PageSize = 1,
             PageNumber = 1,
             TotalPages = 1,
@@ -54,17 +60,19 @@ public class StateServiceTests {
         var stateId = await _service.Create(dto);
 
         Assert.Pass("No errors was thrown");
-    } 
+    }
 
     [Test]
-    public async Task ASSIGN_Success() {
+    public async Task ASSIGN_Success()
+    {
         var userId = Guid.NewGuid();
         var stateId = Guid.NewGuid();
 
-        _stateRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new State{ Id = stateId, Count = 1 });
-        _userRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new User{ Id = userId });
+        _stateRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new State { Id = stateId, Count = 1 });
+        _userRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new User { Id = userId });
 
-        var dto = new StateUserCreateDto {
+        var dto = new StateUserCreateDto
+        {
             UserId = userId.ToString(),
             StateId = stateId.ToString()
         };
@@ -74,21 +82,23 @@ public class StateServiceTests {
         Assert.True(success);
     }
 
-    [Test] 
-    public async Task ASSIGN_CountIsLessThanOne() {
+    [Test]
+    public async Task ASSIGN_CountIsLessThanOne()
+    {
         var userId = Guid.NewGuid();
         var stateId = Guid.NewGuid();
 
-        _stateRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new State{ Id = stateId, Count = 0 });
-        _userRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new User{ Id = userId });
+        _stateRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new State { Id = stateId, Count = 0 });
+        _userRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new User { Id = userId });
 
-        var dto = new StateUserCreateDto {
+        var dto = new StateUserCreateDto
+        {
             UserId = userId.ToString(),
             StateId = stateId.ToString()
         };
 
         var success = await _service.Assign(dto);
 
-        Assert.False(success);   
+        Assert.False(success);
     }
 }

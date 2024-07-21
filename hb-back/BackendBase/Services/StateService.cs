@@ -29,7 +29,8 @@ public class StateService : IStateService
 
     public async Task<string> Create(StateCreateDto dto)
     {
-        var state = new State {
+        var state = new State
+        {
             JobId = Guid.Parse(dto.JobId),
             Count = dto.Count,
             Hours = dto.Hours,
@@ -56,7 +57,8 @@ public class StateService : IStateService
         state.Count -= 1;
         await _stateRepository.UpdateEntity(state);
 
-        var stateUser = new StateUser {
+        var stateUser = new StateUser
+        {
             StateId = Guid.Parse(stateUserCreateDto.StateId),
             UserId = Guid.Parse(stateUserCreateDto.UserId)
         };

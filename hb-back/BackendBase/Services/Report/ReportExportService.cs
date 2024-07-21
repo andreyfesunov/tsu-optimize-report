@@ -578,7 +578,7 @@ public class ReportExportService : IReportExportService
     }
 
     private void _addSignsTable(List<CellData> pageData, ref int offset, ICellStyle underlineStyle)
-    { 
+    {
         pageData.AddRange(new List<CellData>{
             new(offset, 1, "План обсужден на заседании кафедры", merge: new CellRangeAddress(offset, offset, 1, 3)),
             new(offset + 1, 1, "____ __________20__ г.       протокол №  ______", merge: new CellRangeAddress(offset + 1, offset + 1, 1, 3)),
@@ -623,7 +623,8 @@ public class ReportExportService : IReportExportService
         return style;
     }
 
-    private ICellStyle _getUnderlineStyle(IWorkbook workbook) {
+    private ICellStyle _getUnderlineStyle(IWorkbook workbook)
+    {
         var style = workbook.CreateCellStyle();
         style.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
         style.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
