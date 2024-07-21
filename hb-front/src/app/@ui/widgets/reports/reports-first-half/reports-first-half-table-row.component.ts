@@ -35,7 +35,7 @@ export class ReportsFirstHalfTableRowComponent extends TableRowController<IRecor
 
     if (item === null) return 0;
 
-    return item.activities.find((v) => v.id === id)?.hours ?? 0;
+    return item.activities.filter((v) => v.id === id).reduce((acc, cur) => acc + cur.hours, 0);
   }
 }
 
