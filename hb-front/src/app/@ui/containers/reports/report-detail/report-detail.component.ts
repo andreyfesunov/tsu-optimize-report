@@ -5,6 +5,11 @@ import {map} from "rxjs";
 import {ParamsRoutes} from "@core/models";
 import {exists} from "@core/utils";
 import {AsyncPipe, NgIf} from "@angular/common";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatIcon} from "@angular/material/icon";
+import {ReportsService} from "@core/services";
+import {SubscriptionController} from "@core/controllers";
+import FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-report-detail',
@@ -15,12 +20,22 @@ import {AsyncPipe, NgIf} from "@angular/common";
     AsyncPipe,
     NgIf,
     ScrollableComponent,
-    ReportsFirstHalfTableComponent
+    ReportsFirstHalfTableComponent,
+    MatButton,
+    MatIconButton,
+    MatIcon
   ],
   template:
     `
-      <app-content>
-        <div *ngIf="id$ | async as id" class="report-detail host-class">
+      <app-content *ngIf="id$ | async as id" class="report-detail">
+        <div class="report-detail-actions">
+          <button mat-flat-button (click)="export(id)">
+            <mat-icon>download</mat-icon>
+            <span>Скачать</span>
+          </button>
+        </div>
+
+        <div class="report-detail-tabs host-class">
 
           <app-scrollable
             class="host-class report-table"
@@ -51,14 +66,24 @@ import {AsyncPipe, NgIf} from "@angular/common";
   host: {class: 'host-class'},
   styleUrls: ['report-detail.component.scss']
 })
-export class ReportDetailComponent {
+export class ReportDetailComponent extends SubscriptionController {
   constructor(
-    private readonly _route: ActivatedRoute
+    private readonly _route: ActivatedRoute,
+    private readonly _reportsService: ReportsService
   ) {
+    super();
   }
 
   protected readonly id$ = this._route.paramMap.pipe(
     map((v) => v.get(ParamsRoutes.ID)),
     exists()
   )
+
+  protected export(id: string): void {
+    this.subscription.add(
+      this._reportsService.export(id).subscribe((data) => {
+        FileSaver.saveAs(new Blob([data]), "ind-plan.xls");
+      })
+    )
+  }
 }

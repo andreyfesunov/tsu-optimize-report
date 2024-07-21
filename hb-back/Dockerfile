@@ -6,10 +6,16 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BackendBase.csproj", "./"]
-RUN dotnet restore "BackendBase.csproj"
+
+COPY *.sln .
+COPY BackendBase/*.csproj ./BackendBase/
+COPY TsuImportTests/*.csproj ./TsuImportTests/
+
+RUN dotnet restore
+
 COPY . .
-WORKDIR "/src/"
+
+WORKDIR /src/BackendBase/
 RUN dotnet build "BackendBase.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
