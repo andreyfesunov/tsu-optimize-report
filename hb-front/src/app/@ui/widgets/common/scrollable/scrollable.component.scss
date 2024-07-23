@@ -25,7 +25,7 @@ $scroll-thumb-color: #830100;
   /* Width */
   &::-webkit-scrollbar {
     width: 6px;
-    height: 6px;
+    height: 10px;
   }
 
   /* Arrows */
@@ -41,6 +41,8 @@ $scroll-thumb-color: #830100;
   /* Handle */
   &::-webkit-scrollbar-thumb {
     background: $scroll-thumb-color;
+    border-radius: 16px;
+    cursor: grab;
   }
 
   /* Handle on hover */

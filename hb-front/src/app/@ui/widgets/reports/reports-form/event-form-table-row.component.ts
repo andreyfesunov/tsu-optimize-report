@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {IEventType} from "@core/models";
 import {EventFormState} from "@core/states";
-import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet} from "@angular/common";
+import {AsyncPipe, CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
@@ -29,7 +29,8 @@ import {TableRowController} from "@core/controllers";
     ReactiveFormsModule,
     MatAutocomplete,
     MatAutocompleteTrigger,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    CommonModule
   ],
   template: `
     <td
@@ -57,8 +58,8 @@ import {TableRowController} from "@core/controllers";
 
         <ng-container *ngSwitchCase="ReportItemField.START_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="item.eventForm.controls.startDate" [matDatepicker]="dp1"
-                   matInput>
+            <input [formControl]="item.eventForm.controls.startDate" [matDatepicker]="dp1" matInput style="display: none;">
+            <div> {{ item.eventForm.controls.startDate.value | date: 'dd.MM.yyyy' }} </div>
             <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
             <mat-datepicker #dp1></mat-datepicker>
           </mat-form-field>
@@ -66,8 +67,8 @@ import {TableRowController} from "@core/controllers";
 
         <ng-container *ngSwitchCase="ReportItemField.END_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="item.eventForm.controls.endDate" [matDatepicker]="dp2"
-                   matInput>
+            <input [formControl]="item.eventForm.controls.endDate" [matDatepicker]="dp2" matInput style="display: none;">
+            <div> {{ item.eventForm.controls.endDate.value | date: 'dd.MM.yyyy' }} </div>
             <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
             <mat-datepicker #dp2></mat-datepicker>
           </mat-form-field>
