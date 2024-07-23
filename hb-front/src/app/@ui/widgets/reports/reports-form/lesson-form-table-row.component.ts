@@ -1,14 +1,15 @@
-import {ILessonType} from "@core/models";
-import {ReportItemField} from "@ui/widgets";
-import {Component} from "@angular/core";
-import {LessonFormState} from "@core/states";
-import {AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet} from "@angular/common";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {MatFormField, MatSuffix} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {TableRowController} from "@core/controllers";
+import { ILessonType } from "@core/models";
+import { ReportItemField } from "@ui/widgets";
+import { Component } from "@angular/core";
+import { LessonFormState } from "@core/states";
+import { AsyncPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from "@angular/material/autocomplete";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
+import { MatFormField, MatSuffix } from "@angular/material/form-field";
+import { MatInput } from "@angular/material/input";
+import { TableRowController } from "@core/controllers";
+import { MatTooltip } from "@angular/material/tooltip";
 
 @Component({
   selector: "tr[app-lesson-form-table-row]",
@@ -30,7 +31,8 @@ import {TableRowController} from "@core/controllers";
     NgSwitchCase,
     NgSwitch,
     ReactiveFormsModule,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    MatTooltip
   ],
   template:
     `
@@ -44,7 +46,7 @@ import {TableRowController} from "@core/controllers";
             <ng-container *ngIf="item.form.controls.lessonType as control">
               <ng-container *ngIf="item.types$ | async as types">
                 <mat-form-field *ngIf="types.length !== 0" appearance="outline" style="width: 100%">
-                  <input [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
+                  <input [matTooltip]="getTooltip(control.value, types)" [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
                          placeholder="Выберите дисциплину" matInput>
 
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(types)">
@@ -90,5 +92,17 @@ export class LessonFormTableRowComponent extends TableRowController<LessonFormSt
       const lessonType = opts.find(v => v.id === id);
       return lessonType ? lessonType.name : '';
     }
+  }
+
+  protected getTooltip(id: string | null, opts: ILessonType[]): string {
+    if (!id) return "Выберите событие";
+    let test = "";
+    opts.forEach((opt) => {
+      if (opt.id === id) {
+        test = opt.name;
+      }
+    });
+
+    return test;
   }
 }

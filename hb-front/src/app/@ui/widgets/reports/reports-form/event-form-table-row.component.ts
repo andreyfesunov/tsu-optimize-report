@@ -8,6 +8,7 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {TableRowController} from "@core/controllers";
+import { MatTooltip } from "@angular/material/tooltip";
 
 @Component({
   selector: "tr[app-event-form-table-row]",
@@ -30,7 +31,8 @@ import {TableRowController} from "@core/controllers";
     MatAutocomplete,
     MatAutocompleteTrigger,
     NgTemplateOutlet,
-    CommonModule
+    CommonModule,
+    MatTooltip
   ],
   template: `
     <td
@@ -43,7 +45,7 @@ import {TableRowController} from "@core/controllers";
           <ng-container *ngIf="item.eventForm.controls.eventType as control">
             <ng-container *ngIf="item.events$ | async as eventTypes">
               <mat-form-field *ngIf="eventTypes.length !== 0" appearance="outline" style="width: 100%">
-                <input [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
+                <input [matTooltip]="getTooltip(control.value, eventTypes)" [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
                        placeholder="Выберите событие" matInput>
 
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
@@ -86,9 +88,23 @@ export class EventFormTableRowComponent extends TableRowController<EventFormStat
 
   protected displayFn(opts: IEventType[]) {
     return (id: string) => {
+      // console.log(opts[1].id);
       const eventType = opts.find(v => v.id === id);
       return eventType ? eventType.name : '';
     }
+  }
+
+  protected getTooltip(id: string | null, opts: IEventType[]): string {
+    if(!id) return "Выберите событие";
+    let test = "";
+    opts.forEach((opt) => {
+      if (opt.id === id) {
+        test = opt.name;
+      }
+    });
+    
+
+    return test;
   }
 }
 
