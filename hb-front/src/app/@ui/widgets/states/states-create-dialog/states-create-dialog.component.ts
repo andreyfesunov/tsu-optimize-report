@@ -1,16 +1,16 @@
-import {Component} from "@angular/core";
-import {MatButton} from "@angular/material/button";
-import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {IJob} from "@core/models";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {IStateCreateRequest} from "@core/dtos";
-import {ModalDialogActionComponent, ModalDialogComponent} from "@ui/widgets";
-import {MatDialogRef} from "@angular/material/dialog";
-import {JobsService} from "@core/services";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { MatButton } from "@angular/material/button";
+import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
+import { MatInput } from "@angular/material/input";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { IJob } from "@core/models";
+import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from "@angular/material/autocomplete";
+import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
+import { IStateCreateRequest } from "@core/dtos";
+import { ModalDialogActionComponent, ModalDialogComponent } from "@ui/widgets";
+import { MatDialogRef } from "@angular/material/dialog";
+import { JobsService } from "@core/services";
 
 @Component({
   selector: 'app-states-create-dialog',
@@ -35,6 +35,7 @@ import {JobsService} from "@core/services";
     ModalDialogActionComponent,
     ModalDialogComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-modal-dialog
       [title]="'Создание ставки'"
@@ -98,10 +99,10 @@ export class StatesCreateDialogComponent {
   }
 
   protected readonly form: FormGroup<IStatesDialogForm> = new FormGroup<IStatesDialogForm>({
-    hours: new FormControl<number>(1485, {nonNullable: true, validators: [Validators.min(1), Validators.required]}),
-    count: new FormControl<number>(1, {nonNullable: true, validators: [Validators.min(0), Validators.required]}),
-    job: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
-    startDate: new FormControl<Date>(new Date(), {nonNullable: true, validators: [Validators.required]}),
+    hours: new FormControl<number>(1485, { nonNullable: true, validators: [Validators.min(1), Validators.required] }),
+    count: new FormControl<number>(1, { nonNullable: true, validators: [Validators.min(0), Validators.required] }),
+    job: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    startDate: new FormControl<Date>(new Date(), { nonNullable: true, validators: [Validators.required] }),
     endDate: new FormControl<Date>(this._endDate, {
       nonNullable: true,
       validators: [Validators.required]
