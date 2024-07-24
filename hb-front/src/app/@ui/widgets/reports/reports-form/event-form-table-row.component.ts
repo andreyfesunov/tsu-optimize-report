@@ -45,7 +45,7 @@ import { MatTooltip } from "@angular/material/tooltip";
           <ng-container *ngIf="item.eventForm.controls.eventType as control">
             <ng-container *ngIf="item.events$ | async as eventTypes">
               <mat-form-field *ngIf="eventTypes.length !== 0" appearance="outline" style="width: 100%">
-                <input [matTooltip]="getTooltip(control.value, eventTypes)" [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
+                <input [matTooltip]="getPropertyEvent(control.value, EventTypeProperies.name, eventTypes)" [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
                        placeholder="Выберите событие" matInput>
 
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
@@ -54,6 +54,21 @@ import { MatTooltip } from "@angular/material/tooltip";
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
+              <p *ngIf="control.valid" style="
+                position: absolute;
+                left: 768px;
+                top: 4px;
+                font-size: 16px;
+                color: #830100;
+                background-color: #fbdfdf;
+                padding: 8px;
+                box-sizing: border-box;
+                border-radius: 8px;
+                border: 1px solid #830100;
+                font-weight: 500;"
+              >
+                {{getPropertyEvent(control.value, EventTypeProperies.description, eventTypes)}}
+              </p>
             </ng-container>
           </ng-container>
         </ng-container>
@@ -75,7 +90,7 @@ import { MatTooltip } from "@angular/material/tooltip";
             <mat-datepicker #dp2></mat-datepicker>
           </mat-form-field>
         </ng-container>
-
+  
         <ng-container *ngSwitchCase="ReportItemField.ACTIONS">
           <ng-container [ngTemplateOutlet]="actionsRef()"></ng-container>
         </ng-container>
@@ -85,6 +100,7 @@ import { MatTooltip } from "@angular/material/tooltip";
 })
 export class EventFormTableRowComponent extends TableRowController<EventFormState, ReportItemField> {
   protected readonly ReportItemField = ReportItemField;
+  protected readonly EventTypeProperies = EventTypeProperties;
 
   protected displayFn(opts: IEventType[]) {
     return (id: string) => {
@@ -94,12 +110,12 @@ export class EventFormTableRowComponent extends TableRowController<EventFormStat
     }
   }
 
-  protected getTooltip(id: string | null, opts: IEventType[]): string {
+  protected getPropertyEvent(id: string | null, property: EventTypeProperties, opts: IEventType[]): string {
     if(!id) return "Выберите событие";
     let test = "";
     opts.forEach((opt) => {
       if (opt.id === id) {
-        test = opt.name;
+        test = opt[property];
       }
     });
     
@@ -115,4 +131,9 @@ export enum ReportItemField {
   END_DATE = 'END_DATE',
   PLAN = 'PLAN',
   FACT = 'FACT'
+}
+
+export enum EventTypeProperties {
+  name = 'name',
+  description = 'description',
 }

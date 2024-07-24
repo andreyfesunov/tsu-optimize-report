@@ -34,8 +34,7 @@ import { MatTooltip } from "@angular/material/tooltip";
     NgTemplateOutlet,
     MatTooltip
   ],
-  template:
-    `
+  template: `
       <td
         *ngFor="let col of cols"
         class="tsu-table-td"
@@ -46,12 +45,16 @@ import { MatTooltip } from "@angular/material/tooltip";
             <ng-container *ngIf="item.form.controls.lessonType as control">
               <ng-container *ngIf="item.types$ | async as types">
                 <mat-form-field *ngIf="types.length !== 0" appearance="outline" style="width: 100%">
-                  <input [matTooltip]="getTooltip(control.value, types)" [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
-                         placeholder="Выберите дисциплину" matInput>
-
+                  <input 
+                    [matTooltip]="getTooltip(control.value, types)" 
+                    [readonly]="control.value !== null" 
+                    [formControl]="control" 
+                    [matAutocomplete]="auto"
+                    placeholder="Выберите дисциплину" matInput
+                  >
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(types)">
-                    <mat-option *ngFor="let type of types"
-                                [value]="type.id">{{ type.name }}
+                    <mat-option *ngFor="let type of types" [value]="type.id">
+                      {{ type.name }}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -82,7 +85,7 @@ import { MatTooltip } from "@angular/material/tooltip";
           </ng-container>
         </ng-container>
       </td>
-    `
+  `
 })
 export class LessonFormTableRowComponent extends TableRowController<LessonFormState, ReportItemField> {
   protected readonly ReportItemField = ReportItemField;
