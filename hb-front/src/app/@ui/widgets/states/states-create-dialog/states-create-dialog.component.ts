@@ -11,21 +11,6 @@ import { IStateCreateRequest } from "@core/dtos";
 import { ModalDialogActionComponent, ModalDialogComponent } from "@ui/widgets";
 import { MatDialogRef } from "@angular/material/dialog";
 import { JobsService } from "@core/services";
-import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
-
-// const moment = _rollupMoment || _moment;
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'DD.MM.YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @Component({
   selector: 'app-states-create-dialog',
@@ -51,9 +36,6 @@ export const MY_FORMATS = {
     ModalDialogComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    provideMomentDateAdapter(MY_FORMATS),
-  ],
   template: `
     <app-modal-dialog
       [title]="'Создание ставки'"
