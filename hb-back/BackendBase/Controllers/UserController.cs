@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
-using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
-using NPOI.SS.Formula.Functions;
 
 namespace BackendBase.Controllers;
 
@@ -23,13 +20,13 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("getAll")]
-    public async Task<ActionResult<List<UserDto>>> GetAll()
+    [HttpGet]
+    public async Task<ActionResult<ICollection<UserDto>>> GetAll()
     {
         try
         {
             var users = await _service.GetAll();
-            return Ok(users.Select(u => _mapper.Map<UserDto>(u)).ToList());
+            return Ok(users.Select(_mapper.Map<UserDto>));
         }
         catch (Exception ex)
         {
@@ -37,12 +34,12 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpGet("{userId:guid}")]
-    public async Task<ActionResult<UserDto>> GetById(Guid userId)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<UserDto>> GetById(Guid id)
     {
         try
         {
-            var user = await _service.GetById(userId);
+            var user = await _service.GetById(id);
             return Ok(_mapper.Map<UserDto>(user));
         }
         catch (Exception ex)

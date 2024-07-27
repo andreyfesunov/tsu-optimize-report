@@ -21,11 +21,11 @@ export class EventsService {
   private readonly _lessonTypesMemo: { [key: string]: Observable<ILessonType[]> } = {};
 
   public create(dto: IEventCreateDto): Observable<IEvent> {
-    return this._httpClient.post<IEvent>('/api/Event/create', dto);
+    return this._httpClient.post<IEvent>('/api/Event', dto);
   }
 
   public update(dto: IEventUpdateDto): Observable<IEvent> {
-    return this._httpClient.post<IEvent>('/api/Event/update', dto);
+    return this._httpClient.put<IEvent>('/api/Event', dto);
   }
 
   public delete(id: string): Observable<boolean> {
@@ -52,11 +52,11 @@ export class EventsService {
   }
 
   public createComment(dto: ICommentCreateDto): Observable<IComment> {
-    return this._httpClient.post<IComment>('/api/Comment/create', dto);
+    return this._httpClient.post<IComment>('/api/Comment', dto);
   }
 
   public updateComment(dto: ICommentUpdateDto): Observable<IComment> {
-    return this._httpClient.post<IComment>('/api/Comment/update', dto);
+    return this._httpClient.put<IComment>('/api/Comment', dto);
   }
 
   public deleteComment(id: string): Observable<boolean> {

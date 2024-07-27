@@ -11,7 +11,7 @@ export class UsersService {
   ) {
   }
 
-  private readonly _users$ = this._httpClient.get<IUser[]>('/api/User/getAll').pipe(
+  private readonly _users$ = this._httpClient.get<IUser[]>('/api/User').pipe(
     shareReplay(1)
   );
 

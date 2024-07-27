@@ -1,4 +1,4 @@
-﻿namespace StudentHubBackend.Exceptions;
+﻿namespace BackendBase.Exceptions;
 
 public class AppException : Exception
 {

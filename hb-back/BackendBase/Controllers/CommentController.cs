@@ -20,14 +20,13 @@ public class CommentController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<ActionResult<CommentDto>> Create(CommentCreateDto dto)
     {
         try
         {
             var comment = await _service.AddEntity(_mapper.Map<Comment>(dto));
-            var res = _mapper.Map<CommentDto>(comment);
-            return Ok(res);
+            return Ok(_mapper.Map<CommentDto>(comment));
         }
         catch (Exception ex)
         {
@@ -35,13 +34,13 @@ public class CommentController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPut]
     public async Task<ActionResult<CommentDto>> Update(CommentUpdateDto dto)
     {
         try
         {
-            var result = await _service.Update(dto);
-            return Ok(result);
+            var comment = await _service.Update(dto);
+            return Ok(_mapper.Map<CommentDto>(comment));
         }
         catch (Exception ex)
         {

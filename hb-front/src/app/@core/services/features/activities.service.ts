@@ -10,7 +10,7 @@ export class ActivitiesService {
   ) {
   }
 
-  public getAll(): Observable<IActivity[]> {
-    return this._httpClient.get<IActivity[]>('/api/Activity/getAll');
+  public getAll(): Observable<readonly IActivity[]> {
+    return this._httpClient.get<readonly IActivity[]>('/api/Activity');
   }
 }

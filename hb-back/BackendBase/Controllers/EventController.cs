@@ -20,13 +20,13 @@ public class EventController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<ActionResult<EventDto>> Create([FromBody] EventCreateDto dto)
     {
         try
         {
-            var result = await _service.AddEntity(_mapper.Map<Event>(dto));
-            return Ok(result);
+            var entity = await _service.AddEntity(_mapper.Map<Event>(dto));
+            return Ok(_mapper.Map<EventDto>(entity));
         }
         catch (Exception ex)
         {
@@ -34,13 +34,13 @@ public class EventController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPut]
     public async Task<ActionResult<EventDto>> Update([FromBody] EventUpdateDto dto)
     {
         try
         {
-            var result = await _service.Update(dto);
-            return Ok(result);
+            var entity = await _service.Update(dto);
+            return Ok(_mapper.Map<EventDto>(entity));
         }
         catch (Exception ex)
         {

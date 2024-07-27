@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using BackendBase.Data;
+﻿using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Extensions;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 using Microsoft.EntityFrameworkCore;
-using StudentHubBackend.Exceptions;
+using BackendBase.Exceptions;
 
 namespace BackendBase.Repositories;
 

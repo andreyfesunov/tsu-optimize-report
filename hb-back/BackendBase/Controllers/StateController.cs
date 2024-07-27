@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
-using BackendBase.Helpers;
-using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +24,7 @@ public class StateController : ControllerBase
     }
 
 
-    [HttpPut("")]
+    [HttpPost]
     public async Task<ActionResult<string>> Create(StateCreateDto entity)
     {
         try

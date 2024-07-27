@@ -1,7 +1,8 @@
-﻿using BackendBase.Dto;
+﻿using AutoMapper;
+using BackendBase.Dto;
 using BackendBase.Interfaces.Services;
-using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
+using BackendBase.Extensions.Entities;
 
 namespace BackendBase.Controllers;
 
@@ -16,84 +17,13 @@ public class ActivityController : ControllerBase
         _service = service;
     }
 
-
-    [HttpPost("create")]
-    public async Task<ActionResult<Activity>> Create(Activity entity)
-    {
-        try
-        {
-            var result = await _service.AddEntity(entity);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpGet("{Id}")]
-    public async Task<ActionResult<ActivityDto>> GetById(Guid Id)
-    {
-        try
-        {
-            var result = await _service.GetById(Id);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpGet("getAll")]
+    [HttpGet]
     public async Task<ActionResult<ICollection<ActivityDto>>> GetAll()
     {
         try
         {
             var result = await _service.GetAll();
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPut("update")]
-    public async Task<ActionResult<Activity>> Update(Activity entity)
-    {
-        try
-        {
-            var result = await _service.Update(entity);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpDelete("{entityId}")]
-    public async Task<ActionResult<bool>> DeleteById(Guid entityId)
-    {
-        try
-        {
-            var result = await _service.DeleteById(entityId);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPost("search")]
-    public async Task<ActionResult<Pagination<ActivityDto>>> Search([FromBody] SearchDto searchDto)
-    {
-        try
-        {
-            var result = await _service.Search(searchDto);
-            return Ok(result);
+            return Ok(result.Select(v => v.toDTO()));
         }
         catch (Exception ex)
         {

@@ -1,6 +1,5 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 
 namespace BackendBase.Interfaces.Repositories;
 

@@ -2,10 +2,8 @@
 using BackendBase.Dto;
 using BackendBase.Extensions;
 using BackendBase.Models;
-using MathNet.Numerics.Statistics.Mcmc;
 using Microsoft.EntityFrameworkCore;
-using StudentHubBackend.Exceptions;
-using System.Linq;
+using BackendBase.Exceptions;
 
 namespace BackendBase.Repositories;
 

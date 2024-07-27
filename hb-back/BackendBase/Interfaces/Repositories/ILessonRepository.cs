@@ -1,8 +1,5 @@
-﻿using BackendBase.Data;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Models;
-using Microsoft.EntityFrameworkCore;
-using StudentHubBackend.Exceptions;
 
 namespace BackendBase.Repositories
 {

@@ -3,7 +3,7 @@ using BackendBase.Dto;
 using BackendBase.Extensions;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
-using StudentHubBackend.Exceptions;
+using BackendBase.Exceptions;
 
 namespace BackendBase.Repositories;
 

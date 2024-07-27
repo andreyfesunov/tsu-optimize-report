@@ -4,7 +4,7 @@ using BackendBase.Extensions;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
-using StudentHubBackend.Exceptions;
+using BackendBase.Exceptions;
 
 namespace BackendBase.Repositories;
 

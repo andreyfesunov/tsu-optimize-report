@@ -4,10 +4,12 @@ using BackendBase.Data;
 using BackendBase.Dto;
 using BackendBase.Extensions;
 using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.SecurityServices;
 using BackendBase.Interfaces.Services;
 using BackendBase.Interfaces.Services.Report;
 using BackendBase.Middlewares;
 using BackendBase.Repositories;
+using BackendBase.SecurityServices;
 using BackendBase.Services;
 using BackendBase.Services.Report;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,6 +29,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<UserInfo>();
 
+// Repositories
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IActivityEventTypeRepository, ActivityEventTypeRepository>();
 builder.Services.AddScoped<IEventFileRepository, EventFileRepository>();
@@ -40,12 +43,12 @@ builder.Services.AddScoped<ILessonTypeRepository, LessonTypeRepository>();
 builder.Services.AddScoped<IWorkRepository, WorkRepository>();
 builder.Services.AddScoped<IRecordRepository, RecordRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IStateUserRepository, StateUserRepository>();
 
+// Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReportCreateService, ReportCreateService>();
 builder.Services.AddScoped<IReportExportService, ReportExportService>();
@@ -62,6 +65,8 @@ builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IStateUserService, StateUserService>();
 
+// Security Services
+builder.Services.AddScoped<IEventSecurityService, EventSecurityService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

@@ -26,7 +26,7 @@ export class StatesService {
   }
 
   public create(dto: IStateCreateRequest): Observable<string> {
-    return this._httpClient.put<string>('/api/State', dto).pipe(
+    return this._httpClient.post<string>('/api/State', dto).pipe(
       tap(() => this._reload$.next())
     )
   }
