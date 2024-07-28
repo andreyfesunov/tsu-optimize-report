@@ -4,6 +4,7 @@ using BackendBase.Extensions;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 using BackendBase.Exceptions;
+using BackendBase.Interfaces.Repositories;
 
 namespace BackendBase.Repositories;
 

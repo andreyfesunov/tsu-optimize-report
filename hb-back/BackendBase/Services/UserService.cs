@@ -7,7 +7,6 @@ using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
 using BackendBase.Utils;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BackendBase.Services;

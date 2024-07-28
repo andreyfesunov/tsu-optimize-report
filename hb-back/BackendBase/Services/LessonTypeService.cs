@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using BackendBase.Dto;
-using BackendBase.Helpers;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
-using BackendBase.Repositories;
 
 namespace BackendBase.Services;
 
 public class LessonTypeService : ILessonTypeService
 {
     protected readonly IMapper _mapper;
-    protected ILessonTypeRepository _repository;
+    protected readonly ILessonTypeRepository _repository;
 
     public LessonTypeService(ILessonTypeRepository repository, IMapper mapper)
     {

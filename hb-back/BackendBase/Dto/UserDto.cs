@@ -10,6 +10,6 @@ public class UserDto
     public string Firstname { get; set; }
     public string Lastname { get; set; }
     public string Email { get; set; }
-    public Rank Rank { get; set; }
-    public Degree Degree { get; set; }
+    public Rank? Rank { get; set; }
+    public Degree? Degree { get; set; }
 }

@@ -40,11 +40,11 @@ export class EventsService {
   }
 
   public createLesson(dto: ILessonCreateDto): Observable<ILesson> {
-    return this._httpClient.post<ILesson>('/api/Lesson/create', dto);
+    return this._httpClient.post<ILesson>('/api/Lesson', dto);
   }
 
   public updateLesson(dto: ILessonUpdateDto): Observable<ILesson> {
-    return this._httpClient.post<ILesson>('/api/Lesson/update', dto);
+    return this._httpClient.put<ILesson>('/api/Lesson', dto);
   }
 
   public deleteLesson(id: string): Observable<boolean> {

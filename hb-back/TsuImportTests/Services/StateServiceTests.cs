@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
 using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Services;
 using Moq;
 using NUnit.Framework;
 
-namespace TsuImportTests.Domain;
+namespace TsuImportTests.Services;
 
 [TestFixture]
 public class StateServiceTests
@@ -27,7 +28,7 @@ public class StateServiceTests
     private readonly Mock<IStateUserRepository> _stateUserRepo = new();
     private readonly Mock<IUserRepository> _userRepo = new();
     private readonly Mock<IDepartmentRepository> _departmentRepo = new();
-    private readonly StateService _service;
+    private readonly IStateService _service;
 
     [SetUp]
     public void MockReset()

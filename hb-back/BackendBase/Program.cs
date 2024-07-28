@@ -67,6 +67,8 @@ builder.Services.AddScoped<IStateUserService, StateUserService>();
 
 // Security Services
 builder.Services.AddScoped<IEventSecurityService, EventSecurityService>();
+builder.Services.AddScoped<ILessonSecurityService, LessonSecurityService>();
+builder.Services.AddScoped<ICommentSecurityService, CommentSecurityService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

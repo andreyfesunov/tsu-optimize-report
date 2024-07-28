@@ -1,7 +1,5 @@
 ﻿using BackendBase.Data;
-using BackendBase.Dto;
-using BackendBase.Exceptions;
-using BackendBase.Extensions;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,12 +30,6 @@ public class CommentRepository : ICommentRepository
         return (await IncludeChildren(entityQuery).ToListAsync())[0];
     }
 
-    public async Task<ICollection<Comment>> GetAll()
-    {
-        var itemsQuery = DbSet.AsNoTracking().AsQueryable();
-        return await IncludeChildren(itemsQuery).ToListAsync();
-    }
-
     public async Task<Comment> UpdateEntity(Comment entity)
     {
         var model = Context.Update(entity).Entity;
@@ -45,17 +37,10 @@ public class CommentRepository : ICommentRepository
         return model;
     }
 
-    public async Task<bool> DeleteById(Guid entityId)
+    public async Task<bool> Delete(Comment entity)
     {
-        var entity = await GetById(entityId);
-        if (entity == null) throw new AppException("Entity not found");
         Context.Remove(entity);
         return await Save();
-    }
-
-    public virtual async Task<Pagination<Comment>> Search(SearchDto searchDto)
-    {
-        return await IncludeChildren(DbSet).Search(searchDto);
     }
 
     public async Task<bool> Save()

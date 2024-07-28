@@ -1,8 +1,8 @@
 ﻿using BackendBase.Dto.Event;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.SecurityServices;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
-using BackendBase.Repositories;
 
 namespace BackendBase.Services;
 

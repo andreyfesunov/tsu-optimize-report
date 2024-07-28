@@ -1,22 +1,27 @@
 ﻿using BackendBase.Dto.Comment;
+using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.SecurityServices;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
-using BackendBase.Repositories;
 
 namespace BackendBase.Services;
 
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _repository;
+    private readonly ICommentSecurityService _security;
 
-    public CommentService(ICommentRepository repository)
+    public CommentService(ICommentRepository repository, ICommentSecurityService security)
     {
         _repository = repository;
+        _security = security;
     }
 
     public async Task<Comment> Update(CommentUpdateDto dto)
     {
         var comment = await _repository.GetById(Guid.Parse(dto.Id));
+        await _security.validateCanUse(comment);
+        // ****
 
         comment.Content = dto.Content;
         comment.FactDate = dto.FactDate;
@@ -25,7 +30,19 @@ public class CommentService : ICommentService
         return await _repository.UpdateEntity(comment);
     }
 
-    public Task<bool> DeleteById(Guid id) => _repository.DeleteById(id);
+    public async Task<bool> DeleteById(Guid id) {
+       var comment = await _repository.GetById(id);
+       await _security.validateCanUse(comment);
+       // ****
+       
+       return await _repository.Delete(comment);
+    }
 
-    public Task<Comment> AddEntity(Comment entity) => _repository.AddEntity(entity); 
+    public async Task<Comment> AddEntity(Comment entity) {
+        await _security.validateCanUse(entity);
+        await _security.validateCanCreate(entity);
+        // ****
+        
+        return await _repository.AddEntity(entity);
+    } 
 }

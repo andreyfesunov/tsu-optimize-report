@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using BackendBase.Models.Enum;
@@ -12,12 +12,10 @@ namespace BackendBase.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _service;
-    private readonly IMapper _mapper;
 
-    public UserController(IUserService service, IMapper mapper)
+    public UserController(IUserService service)
     {
         _service = service;
-        _mapper = mapper;
     }
 
     [HttpGet]
@@ -26,7 +24,7 @@ public class UserController : ControllerBase
         try
         {
             var users = await _service.GetAll();
-            return Ok(users.Select(_mapper.Map<UserDto>));
+            return Ok(users.Select(u => u.toDTO()));
         }
         catch (Exception ex)
         {
@@ -40,7 +38,7 @@ public class UserController : ControllerBase
         try
         {
             var user = await _service.GetById(id);
-            return Ok(_mapper.Map<UserDto>(user));
+            return Ok(user.toDTO());
         }
         catch (Exception ex)
         {
@@ -49,7 +47,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("log-in")]
-    public async Task<ActionResult<UserLoginDto>> Login([FromBody] LoginDto loginDto)
+    public async Task<ActionResult<UserLoginDto>> LogIn([FromBody] LoginDto loginDto)
     {
         try
         {
@@ -88,7 +86,7 @@ public class UserController : ControllerBase
                 PageNumber = result.PageNumber,
                 PageSize = result.PageSize,
                 TotalPages = result.TotalPages,
-                Entities = result.Entities.Select(u => _mapper.Map<UserDto>(u)).ToList()
+                Entities = result.Entities.Select(u => u.toDTO()).ToList()
             });
         }
         catch (Exception ex)

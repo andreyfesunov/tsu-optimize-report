@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Dto.CreateDto;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,15 +12,10 @@ namespace BackendBase.Controllers;
 public class StateController : ControllerBase
 {
     private readonly IStateService _service;
-    private readonly IMapper _mapper;
 
-    public StateController(
-            IStateService service,
-            IMapper mapper
-            )
+    public StateController(IStateService service)
     {
         _service = service;
-        _mapper = mapper;
     }
 
 
@@ -63,7 +58,7 @@ public class StateController : ControllerBase
                 PageNumber = result.PageNumber,
                 PageSize = result.PageSize,
                 TotalPages = result.TotalPages,
-                Entities = result.Entities.Select(u => _mapper.Map<StateDto>(u)).ToList()
+                Entities = result.Entities.Select(u => u.toDTO()).ToList()
             });
         }
         catch (Exception ex)

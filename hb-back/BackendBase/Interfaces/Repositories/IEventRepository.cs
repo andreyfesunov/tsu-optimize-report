@@ -1,6 +1,6 @@
 ﻿using BackendBase.Models;
 
-namespace BackendBase.Repositories;
+namespace BackendBase.Interfaces.Repositories;
 
 public interface IEventRepository
 {

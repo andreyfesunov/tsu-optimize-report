@@ -2,6 +2,7 @@
 using BackendBase.Dto;
 using BackendBase.Exceptions;
 using BackendBase.Extensions;
+using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,10 +46,8 @@ namespace BackendBase.Repositories
             return model;
         }
 
-        public async Task<bool> DeleteById(Guid entityId)
+        public async Task<bool> Delete(Lesson entity)
         {
-            var entity = await GetById(entityId);
-            if (entity == null) throw new AppException("Entity not found");
             Context.Remove(entity);
             return await Save();
         }

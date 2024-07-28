@@ -1,7 +1,7 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Models;
 
-namespace BackendBase.Repositories;
+namespace BackendBase.Interfaces.Repositories;
 
 public interface IWorkRepository
 {

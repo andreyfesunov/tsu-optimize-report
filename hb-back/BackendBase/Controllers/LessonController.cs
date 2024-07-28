@@ -22,14 +22,13 @@ public class LessonController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<ActionResult<LessonDto>> Create(LessonCreateDto dto)
     {
         try
         {
-            var lesson = await _service.AddEntity(_mapper.Map<Lesson>(dto));
-            var res = _mapper.Map<LessonDto>(lesson);
-            return Ok(res);
+            var entity = await _service.AddEntity(_mapper.Map<Lesson>(dto));
+            return Ok(_mapper.Map<LessonDto>(entity));
         }
         catch (Exception ex)
         {
@@ -37,13 +36,13 @@ public class LessonController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPut]
     public async Task<ActionResult<LessonDto>> Update(LessonUpdateDto dto)
     {
         try
         {
-            var result = await _service.Update(dto);
-            return Ok(result);
+            var entity = await _service.Update(dto);
+            return Ok(_mapper.Map<LessonDto>(entity));
         }
         catch (Exception ex)
         {

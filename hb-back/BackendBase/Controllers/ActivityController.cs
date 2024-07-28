@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using BackendBase.Extensions.Entities;

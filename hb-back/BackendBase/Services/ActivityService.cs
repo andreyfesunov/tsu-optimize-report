@@ -1,6 +1,6 @@
-﻿using BackendBase.Interfaces.Services;
+﻿using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.Services;
 using BackendBase.Models;
-using BackendBase.Repositories;
 
 namespace BackendBase.Services;
 

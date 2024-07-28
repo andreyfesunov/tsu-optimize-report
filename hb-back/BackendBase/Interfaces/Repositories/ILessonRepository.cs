@@ -1,17 +1,12 @@
-﻿using BackendBase.Dto;
-using BackendBase.Models;
+﻿using BackendBase.Models;
 
-namespace BackendBase.Repositories
+namespace BackendBase.Interfaces.Repositories
 {
     public interface ILessonRepository
     {
         Task<Lesson> AddEntity(Lesson entity);
         Task<Lesson> GetById(Guid id);
-        Task<ICollection<Lesson>> GetAll();
         Task<Lesson> UpdateEntity(Lesson entity);
-        Task<bool> DeleteById(Guid entityId);
-        Task<Pagination<Lesson>> Search(SearchDto searchDto);
-        Task<bool> Save();
-        IQueryable<Lesson> IncludeChildren(IQueryable<Lesson> query);
+        Task<bool> Delete(Lesson entity);
     }
 }
