@@ -5,7 +5,7 @@ namespace BackendBase.Extensions.Entities;
 
 public static class StateExtensions
 {
-    public static StateDto toDTO(this State entity) => new StateDto 
+    public static StateDto toDTO(this State entity) => new StateDto
     {
         Id = entity.Id.ToString(),
         Count = entity.Count,

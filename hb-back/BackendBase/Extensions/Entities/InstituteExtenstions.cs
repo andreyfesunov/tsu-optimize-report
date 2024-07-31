@@ -5,7 +5,7 @@ namespace BackendBase.Extensions.Entities;
 
 public static class InstituteExtensions
 {
-    public static InstituteDto toDTO(this Institute entity) => new InstituteDto 
+    public static InstituteDto toDTO(this Institute entity) => new InstituteDto
     {
         Id = entity.Id.ToString(),
         Name = entity.Name,

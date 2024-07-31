@@ -75,7 +75,7 @@ public class ReportCreateService : IReportCreateService
         var fileName = _userInfo.GetUserId() + "/" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         var path = await _storage.SaveFileAsync(file, fileName);
 
-        return await _fileService.AddEntity(new File{ Path = fileName, StateUserId = stateUserId });
+        return await _fileService.AddEntity(new File { Path = fileName, StateUserId = stateUserId });
     }
 
     private async Task _handleWorksheet(ISheet worksheet, StateUser stateUser, ICollection<Activity> activities)

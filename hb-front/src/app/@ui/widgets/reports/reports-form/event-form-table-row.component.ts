@@ -65,7 +65,11 @@ import { MatTooltip } from "@angular/material/tooltip";
                 box-sizing: border-box;
                 border-radius: 8px;
                 border: 1px solid #830100;
-                font-weight: 500;"
+                font-weight: 500;
+                max-width: 400px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;"
               >
                 {{getPropertyEvent(control.value, EventTypeProperies.description, eventTypes)}}
               </p>
@@ -91,6 +95,17 @@ import { MatTooltip } from "@angular/material/tooltip";
           </mat-form-field>
         </ng-container>
   
+        <ng-container>
+          <div [matTooltip]="actualDescriptionEventType">
+            <ng-container *ngSwitchCase="ReportItemField.PLAN">
+              <div  style="width: 212px; height: 20px"></div>
+            </ng-container>
+            <ng-container  *ngSwitchCase="ReportItemField.FACT">
+              <div style="width: 212px; height: 20px"></div>
+            </ng-container>
+          </div>  
+        </ng-container>
+
         <ng-container *ngSwitchCase="ReportItemField.ACTIONS">
           <ng-container [ngTemplateOutlet]="actionsRef()"></ng-container>
         </ng-container>
@@ -101,6 +116,7 @@ import { MatTooltip } from "@angular/material/tooltip";
 export class EventFormTableRowComponent extends TableRowController<EventFormState, ReportItemField> {
   protected readonly ReportItemField = ReportItemField;
   protected readonly EventTypeProperies = EventTypeProperties;
+  protected actualDescriptionEventType: string = "";
 
   protected displayFn(opts: IEventType[]) {
     return (id: string) => {
@@ -119,6 +135,9 @@ export class EventFormTableRowComponent extends TableRowController<EventFormStat
       }
     });
     
+    if (property == this.EventTypeProperies.description) {
+      this.actualDescriptionEventType = test;
+    }
 
     return test;
   }

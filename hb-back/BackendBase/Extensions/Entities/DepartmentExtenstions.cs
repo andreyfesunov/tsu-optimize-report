@@ -5,7 +5,7 @@ namespace BackendBase.Extensions.Entities;
 
 public static class DepartmentExtensions
 {
-    public static DepartmentDto toDTO(this Department entity) => new DepartmentDto 
+    public static DepartmentDto toDTO(this Department entity) => new DepartmentDto
     {
         Id = entity.Id.ToString(),
         Name = entity.Name,

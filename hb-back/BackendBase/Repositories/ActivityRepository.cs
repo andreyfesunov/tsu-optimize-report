@@ -26,5 +26,5 @@ namespace BackendBase.Repositories
             var saved = await Context.SaveChangesAsync();
             return saved > 0;
         }
-   }
+    }
 }

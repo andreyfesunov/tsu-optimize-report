@@ -34,7 +34,8 @@ public class EventSecurityService : BaseSecurityService<Event>, IEventSecuritySe
     {
         var stateUser = await _repository.GetById(item.StateUserId);
 
-        if (stateUser.Events.Where(ev => ev.EventTypeId == item.EventTypeId).Count() != 0) {
+        if (stateUser.Events.Where(ev => ev.EventTypeId == item.EventTypeId).Count() != 0)
+        {
             throw new AppException("Event with given type already exists");
         }
     }

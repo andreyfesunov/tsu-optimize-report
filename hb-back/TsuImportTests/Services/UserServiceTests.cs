@@ -16,7 +16,8 @@ namespace TsuImportTests.Services;
 [TestFixture]
 public class UserServiceTests
 {
-    public UserServiceTests() {
+    public UserServiceTests()
+    {
         _service = new UserService(_configuration, _repository.Object);
     }
 

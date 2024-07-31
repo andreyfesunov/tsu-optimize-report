@@ -5,7 +5,7 @@ namespace BackendBase.Extensions.Entities;
 
 public static class UserExtensions
 {
-    public static UserDto toDTO(this User entity) => new UserDto 
+    public static UserDto toDTO(this User entity) => new UserDto
     {
         Id = entity.Id.ToString(),
         Rank = entity.Rank,

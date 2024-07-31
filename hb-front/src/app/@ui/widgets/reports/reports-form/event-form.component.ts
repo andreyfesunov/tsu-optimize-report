@@ -74,6 +74,7 @@ import {MatTooltip} from "@angular/material/tooltip";
           </button>
         </ng-template>
       </tr>
+
       <tr
         *ngFor="let lessonState of state().lessonFormStates$ | async; index as index"
         app-lesson-form-table-row
@@ -87,6 +88,7 @@ import {MatTooltip} from "@angular/material/tooltip";
           </button>
         </ng-template>
       </tr>
+      
       <tr
         *ngFor="let commentState of state().commentFormStates$ | async; index as index"
         app-comment-form-table-row

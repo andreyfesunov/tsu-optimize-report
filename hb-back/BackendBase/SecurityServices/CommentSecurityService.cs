@@ -6,7 +6,7 @@ using BackendBase.Models;
 
 namespace BackendBase.SecurityServices;
 
-public class CommentSecurityService : BaseSecurityService<Comment>, ICommentSecurityService 
+public class CommentSecurityService : BaseSecurityService<Comment>, ICommentSecurityService
 {
     private readonly UserInfo _userInfo;
     private readonly IStateUserRepository _reportRepository;
@@ -39,8 +39,9 @@ public class CommentSecurityService : BaseSecurityService<Comment>, ICommentSecu
     {
         var @event = await _eventRepository.GetById(item.EventId);
 
-        if (@event.EventType.WorkId.ToString() == SystemWorks.AcademicMethodicalWorkId) {
+        if (@event.EventType.WorkId.ToString() == SystemWorks.AcademicMethodicalWorkId)
+        {
             throw new AppException("Comment cannot be created inside Academical Methodical Work");
-        } 
+        }
     }
 }

@@ -30,19 +30,21 @@ public class CommentService : ICommentService
         return await _repository.UpdateEntity(comment);
     }
 
-    public async Task<bool> DeleteById(Guid id) {
-       var comment = await _repository.GetById(id);
-       await _security.validateCanUse(comment);
-       // ****
-       
-       return await _repository.Delete(comment);
+    public async Task<bool> DeleteById(Guid id)
+    {
+        var comment = await _repository.GetById(id);
+        await _security.validateCanUse(comment);
+        // ****
+
+        return await _repository.Delete(comment);
     }
 
-    public async Task<Comment> AddEntity(Comment entity) {
+    public async Task<Comment> AddEntity(Comment entity)
+    {
         await _security.validateCanUse(entity);
         await _security.validateCanCreate(entity);
         // ****
-        
+
         return await _repository.AddEntity(entity);
-    } 
+    }
 }

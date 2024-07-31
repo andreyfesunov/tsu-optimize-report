@@ -39,7 +39,8 @@ public class LessonSecurityService : BaseSecurityService<Lesson>, ILessonSecurit
     {
         var @event = await _eventRepository.GetById(item.EventId);
 
-        if (@event.EventType.WorkId.ToString() != SystemWorks.AcademicMethodicalWorkId) {
+        if (@event.EventType.WorkId.ToString() != SystemWorks.AcademicMethodicalWorkId)
+        {
             throw new AppException("Lesson can only be created within Academical Methodical work");
         }
         if (@event.Lessons.Where(v => v.LessonTypeId == item.LessonTypeId).Count() != 0)

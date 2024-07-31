@@ -23,7 +23,8 @@ namespace BackendBase.Repositories
             return model.Entity;
         }
 
-        private async Task<bool> Save() {
+        private async Task<bool> Save()
+        {
             var saved = await Context.SaveChangesAsync();
             return saved > 0;
         }

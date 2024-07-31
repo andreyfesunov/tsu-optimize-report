@@ -11,7 +11,7 @@ public class FileService : IFileService, IStorage
     private readonly IFileRepository _repository;
 
     public FileService(
-            IWebHostEnvironment env, 
+            IWebHostEnvironment env,
             IConfiguration conf,
             IFileRepository repository
             )
@@ -24,16 +24,17 @@ public class FileService : IFileService, IStorage
     {
         var path = Path.Combine(_root, name ?? file.FileName);
         var dir = Path.GetDirectoryName(path);
-        if (dir != null && !Directory.Exists(dir)) {
+        if (dir != null && !Directory.Exists(dir))
+        {
             Directory.CreateDirectory(dir);
         }
-        
+
         using var stream = new FileStream(path, FileMode.Create);
 
         await file.CopyToAsync(stream);
 
         return path;
-    } 
+    }
 
     public Task<File> AddEntity(File entity) => _repository.AddEntity(entity);
 }
