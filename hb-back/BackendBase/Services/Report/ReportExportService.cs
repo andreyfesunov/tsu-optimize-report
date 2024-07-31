@@ -3,7 +3,6 @@ using BackendBase.Extensions;
 using BackendBase.Extensions.Lib;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services.Report;
-using BackendBase.Interfaces.Utils;
 using BackendBase.Models;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -41,9 +40,9 @@ public class ReportExportService : IReportExportService
 
         _addTitlePage(workbook, user, stateUser, records);
         await _addFirstHalfPages(workbook, user, stateUser);
-        _addAcademicWorkPage(workbook, user, stateUser);
-        _addScienceWorkPage(workbook, user, stateUser);
-        _addGuidanceWorkPage(workbook, user, stateUser);
+        _addAcademicWorkPage(workbook, user, stateUser, 54);
+        _addScienceWorkPage(workbook, user, stateUser, 54);
+        _addGuidanceWorkPage(workbook, user, stateUser, 26);
         _addEducationalWorkPage(workbook, user, stateUser);
         _addChangesWorkPage(workbook, user, stateUser);
 
@@ -78,6 +77,7 @@ public class ReportExportService : IReportExportService
     delegate List<CellData> WriteEvent(Event ev, int offset, ICellStyle style);
     delegate List<CellData> WriteLesson(Lesson lesson, int offset, ICellStyle style);
     delegate List<CellData> WriteComment(Comment comment, int offset, ICellStyle style);
+    delegate List<CellData> WriteEmpty(int offset, ICellStyle style);
 
     /* Academic and Science pages */
     private readonly WriteEvent _writeEventLarge = (ev, offset, style) => new List<CellData>{
@@ -102,6 +102,14 @@ public class ReportExportService : IReportExportService
                 new(offset, 4, comment.FactDate.ToString() ?? "", style),
                 new(offset, 5, "", style),
     };
+    private readonly WriteEmpty _writeEmptyLarge = (offset, style) => new List<CellData>{
+        new(offset, 0, "", style),
+        new(offset, 1, "", style),
+        new(offset, 2, "", style),
+        new(offset, 3, "", style),
+        new(offset, 4, "", style),
+        new(offset, 5, "", style),
+    };
 
     /* Guidance page */
     private readonly WriteEvent _writeEventGuidance = (ev, offset, style) => new List<CellData>
@@ -121,6 +129,13 @@ public class ReportExportService : IReportExportService
         new(offset, 3, comment.FactDate.ToString() ?? "", style),
         new(offset, 4, "", style),
     };
+    private readonly WriteEmpty _writeEmptyGuidance = (offset, style) => new List<CellData>{
+        new(offset, 0, "", style),
+        new(offset, 1, "", style),
+        new(offset, 2, "", style),
+        new(offset, 3, "", style),
+        new(offset, 4, "", style),
+    };
 
     /* Others pages */
     private readonly WriteEvent _writeEventShort = (ev, offset, style) => new List<CellData>
@@ -136,6 +151,12 @@ public class ReportExportService : IReportExportService
         new(offset, 0, comment.Content, style, new CellRangeAddress(offset, offset, 0, 1)),
         new(offset, 2, comment.PlanDate.ToString() ?? "", style),
         new(offset, 3, comment.FactDate.ToString() ?? "", style),
+        new(offset, 4, "", style),
+    };
+    private readonly WriteEmpty _writeEmptyShort = (offset, style) => new List<CellData>{
+        new(offset, 0, "", style, new CellRangeAddress(offset, offset, 0, 1)),
+        new(offset, 2, "", style),
+        new(offset, 3, "", style),
         new(offset, 4, "", style),
     };
 
@@ -250,7 +271,7 @@ public class ReportExportService : IReportExportService
         }
     }
 
-    private void _addAcademicWorkPage(IWorkbook workbook, User user, StateUser stateUser)
+    private void _addAcademicWorkPage(IWorkbook workbook, User user, StateUser stateUser, int minCount)
     {
         ISheet sheet = workbook.CreateSheet("4_УЧ-МЕТ");
 
@@ -280,10 +301,12 @@ public class ReportExportService : IReportExportService
                 pageData,
                 events,
                 ref offset,
+                minCount,
                 tableStyle,
                 _writeEventLarge,
                 _writeLessonLarge,
-                _writeCommentLarge
+                _writeCommentLarge,
+                _writeEmptyLarge
         );
 
         var planHours = _getPlanHours(events);
@@ -299,7 +322,7 @@ public class ReportExportService : IReportExportService
         _applyPageData(sheet, pageData);
     }
 
-    private void _addScienceWorkPage(IWorkbook workbook, User user, StateUser stateUser)
+    private void _addScienceWorkPage(IWorkbook workbook, User user, StateUser stateUser, int minCount)
     {
         ISheet sheet = workbook.CreateSheet("5_НДиНМД");
 
@@ -329,10 +352,12 @@ public class ReportExportService : IReportExportService
                 pageData,
                 events,
                 ref offset,
+                minCount,
                 tableStyle,
                 _writeEventLarge,
                 _writeLessonLarge,
-                _writeCommentLarge
+                _writeCommentLarge,
+                _writeEmptyLarge
         );
 
         var planHours = _getPlanHours(events);
@@ -348,7 +373,7 @@ public class ReportExportService : IReportExportService
         _applyPageData(sheet, pageData);
     }
 
-    private void _addGuidanceWorkPage(IWorkbook workbook, User user, StateUser stateUser)
+    private void _addGuidanceWorkPage(IWorkbook workbook, User user, StateUser stateUser, int minCount)
     {
         ISheet sheet = workbook.CreateSheet("6_НИРС.ОМР");
 
@@ -363,14 +388,14 @@ public class ReportExportService : IReportExportService
         var pageData = new List<CellData> { };
 
         var events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.GuidanceWorkId).ToList();
-        _applyGuidanceTable(events, pageData, ref offset, headerStyle, tableStyle);
+        _applyGuidanceTable(events, pageData, ref offset, headerStyle, tableStyle, minCount);
         events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.OrganizationalMethodicalWorkId).ToList();
-        _applyOrganizationalTable(events, pageData, ref offset, headerStyle, tableStyle);
+        _applyOrganizationalTable(events, pageData, ref offset, headerStyle, tableStyle, minCount);
 
         _applyPageData(sheet, pageData);
     }
 
-    private void _applyGuidanceTable(ICollection<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    private void _applyGuidanceTable(ICollection<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle, int minCount)
     {
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "IV. РУКОВОДСТВО НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ РАБОТОЙ СТУДЕНТОВ", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
@@ -388,10 +413,12 @@ public class ReportExportService : IReportExportService
             pageData,
             events,
             ref offset,
+            minCount,
             tableStyle,
             _writeEventGuidance,
             _writeLessonGuidance,
-            _writeCommentGuidance
+            _writeCommentGuidance,
+            _writeEmptyGuidance
         );
 
         pageData.AddRange(new List<CellData>{
@@ -404,7 +431,7 @@ public class ReportExportService : IReportExportService
         offset += 1;
     }
 
-    private void _applyOrganizationalTable(ICollection<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    private void _applyOrganizationalTable(ICollection<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle, int minCount)
     {
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "V. ОРГАНИЗАЦИОННО-МЕТОДИЧЕСКАЯ РАБОТА", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
@@ -421,10 +448,12 @@ public class ReportExportService : IReportExportService
             pageData,
             events,
             ref offset,
+            minCount,
             tableStyle,
             _writeEventShort,
             _writeLessonShort,
-            _writeCommentShort
+            _writeCommentShort,
+            _writeEmptyShort
         );
 
         pageData.AddRange(new List<CellData>{
@@ -451,17 +480,17 @@ public class ReportExportService : IReportExportService
         var pageData = new List<CellData> { };
 
         var events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.EducationalWorkId).ToList();
-        _applyEducationalTable(events, pageData, ref offset, headerStyle, tableStyle);
+        _applyEducationalTable(events, pageData, ref offset, headerStyle, tableStyle, 14);
         events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.MedicalWorkId).ToList();
-        _applyMedicalTable(events, pageData, ref offset, headerStyle, tableStyle);
+        _applyMedicalTable(events, pageData, ref offset, headerStyle, tableStyle, 15);
         events = stateUser.Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.ExtraWorkId).ToList();
-        _applyExtraTable(events, pageData, ref offset, headerStyle, tableStyle);
-        _applyRecommendationsTable(pageData, ref offset, headerStyle, tableStyle);
+        _applyExtraTable(events, pageData, ref offset, headerStyle, tableStyle, 7);
+        _applyRecommendationsTable(pageData, ref offset, headerStyle, tableStyle, 21);
 
         _applyPageData(sheet, pageData);
     }
 
-    private void _applyEducationalTable(List<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    private void _applyEducationalTable(List<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle, int minCount)
     {
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "VI. ВОСПИТАТЕЛЬНАЯ РАБОТА", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
@@ -478,10 +507,12 @@ public class ReportExportService : IReportExportService
             pageData,
             events,
             ref offset,
+            minCount,
             tableStyle,
             _writeEventShort,
             _writeLessonShort,
-            _writeCommentShort
+            _writeCommentShort,
+            _writeEmptyShort
         );
 
         pageData.AddRange(new List<CellData>{
@@ -494,7 +525,7 @@ public class ReportExportService : IReportExportService
         offset += 1;
     }
 
-    private void _applyMedicalTable(List<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    private void _applyMedicalTable(List<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle, int minCount)
     {
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "VII. ОСУЩЕСТВЛЕНИЕ МЕДИЦИНСКОЙ ДЕЯТЕЛЬНОСТИ, НЕОБХОДИМОЙ ДЛЯ ПРАКТИЧЕСКОЙ ПОДГОТОВКИ ОБУЧАЮЩИХСЯ", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
@@ -506,10 +537,12 @@ public class ReportExportService : IReportExportService
             pageData,
             events,
             ref offset,
+            minCount,
             tableStyle,
             _writeEventShort,
             _writeLessonShort,
-            _writeCommentShort
+            _writeCommentShort,
+            _writeEmptyShort
         );
 
         pageData.AddRange(new List<CellData>{
@@ -522,7 +555,7 @@ public class ReportExportService : IReportExportService
         offset += 1;
     }
 
-    private void _applyExtraTable(List<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    private void _applyExtraTable(List<Event> events, List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle, int minCount)
     {
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "VIII. ДОПОЛНИТЕЛЬНОЕ ПРОФЕССИОНАЛЬНОЕ ОБРАЗОВАНИЕ ПО ПРОФИЛЮ ПЕДАГОГИЧЕСКОЙ ДЕЯТЕЛЬНОСТИ", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
@@ -539,10 +572,12 @@ public class ReportExportService : IReportExportService
             pageData,
             events,
             ref offset,
+            minCount,
             tableStyle,
             _writeEventShort,
             _writeLessonShort,
-            _writeCommentShort
+            _writeCommentShort,
+            _writeEmptyShort
         );
 
         pageData.AddRange(new List<CellData>{
@@ -555,7 +590,7 @@ public class ReportExportService : IReportExportService
         offset += 1;
     }
 
-    private void _applyRecommendationsTable(List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle)
+    private void _applyRecommendationsTable(List<CellData> pageData, ref int offset, ICellStyle headerStyle, ICellStyle tableStyle, int minCount)
     {
         pageData.AddRange(new List<CellData>{
             new(offset, 0, "IX. РЕКОМЕНДАЦИИ КАФЕДРЫ ПО ОТЧЕТУ ПРЕПОДАВАТЕЛЯ", headerStyle, new CellRangeAddress(offset, offset, 0, 4)),
@@ -563,6 +598,14 @@ public class ReportExportService : IReportExportService
         });
 
         offset += 2;
+
+        for (int i = 0; i < minCount; i++)
+        {
+            pageData.AddRange(new List<CellData>{
+                        new(offset, 0, "", tableStyle, new CellRangeAddress(offset, offset, 0, 4))
+                        });
+            offset += 1;
+        }
     }
 
     private void _addChangesWorkPage(IWorkbook workbook, User user, StateUser stateUser)
@@ -596,7 +639,7 @@ public class ReportExportService : IReportExportService
 
         offset += 2;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 30; i++)
         {
             pageData.AddRange(new List<CellData>{
                 new(offset, 0, "", tableStyle, new CellRangeAddress(offset, offset, 0, 1)),
@@ -619,7 +662,7 @@ public class ReportExportService : IReportExportService
 
         offset += 2;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 12; i++)
         {
             pageData.AddRange(new List<CellData>{
                 new(offset, 0, "", tableStyle),
@@ -744,12 +787,16 @@ public class ReportExportService : IReportExportService
             List<CellData> pageData,
             ICollection<Event> events,
             ref int offset,
+            int minCount,
             ICellStyle style,
             WriteEvent writeEvent,
             WriteLesson writeLesson,
-            WriteComment writeComment
+            WriteComment writeComment,
+            WriteEmpty writeEmpty
     )
     {
+        var startOffset = offset;
+
         foreach (var ev in events)
         {
             pageData.AddRange(writeEvent(ev, offset, style));
@@ -765,6 +812,14 @@ public class ReportExportService : IReportExportService
                 pageData.AddRange(writeLesson(lesson, offset, style));
                 offset += 1;
             }
+        }
+
+        var endOffset = offset;
+
+        for (int i = 0; i < minCount - (endOffset - startOffset); i++)
+        {
+            pageData.AddRange(writeEmpty(offset, style));
+            offset += 1;
         }
     }
 }
