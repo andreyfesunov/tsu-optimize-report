@@ -1,8 +1,11 @@
 ﻿using BackendBase.Dto;
 using BackendBase.Extensions;
+using BackendBase.Extensions.Lib;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services.Report;
+using BackendBase.Interfaces.Utils;
 using BackendBase.Models;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
@@ -37,6 +40,7 @@ public class ReportExportService : IReportExportService
         var workbook = new XSSFWorkbook();
 
         _addTitlePage(workbook, user, stateUser, records);
+        await _addFirstHalfPages(workbook, user, stateUser);
         _addAcademicWorkPage(workbook, user, stateUser);
         _addScienceWorkPage(workbook, user, stateUser);
         _addGuidanceWorkPage(workbook, user, stateUser);
@@ -193,6 +197,57 @@ public class ReportExportService : IReportExportService
         };
 
         _applyPageData(sheet, pageData);
+    }
+
+    private async Task _addFirstHalfPages(IWorkbook workbook, User user, StateUser stateUser)
+    {
+        var path = stateUser.Files.ToList()[0].Path;
+        using var fs = new FileStream(path, FileMode.Open);
+        var formFile = new FormFile(fs, 0, fs.Length, Path.GetFileName(path), Path.GetFileName(path));
+
+        using var stream = new MemoryStream();
+        await formFile.CopyToAsync(stream);
+        stream.Position = 0;
+
+        using var package = new HSSFWorkbook(stream);
+        for (int i = 1; i < package.NumberOfSheets; i++)
+        {
+            var sourceSheet = package.GetSheetAt(i);
+            var newSheet = workbook.CreateSheet(i == 1 ? "2_Осень" : "3_Весна");
+
+            for (int rowIndex = sourceSheet.FirstRowNum; rowIndex <= sourceSheet.LastRowNum; rowIndex++)
+            {
+                IRow sourceRow = sourceSheet.GetRow(rowIndex);
+
+                if (sourceRow != null)
+                {
+                    IRow newRow = newSheet.CreateRow(rowIndex);
+
+                    for (int cellIndex = sourceRow.FirstCellNum; cellIndex < sourceRow.LastCellNum; cellIndex++)
+                    {
+
+                        ICell sourceCell = sourceRow.GetCell(cellIndex);
+                        ICell newCell = newRow.CreateCell(cellIndex);
+
+                        if (sourceCell != null)
+                        {
+                            newCell.SetCellValue(sourceCell.ToString());
+                            newCell.CellStyle = ((HSSFCellStyle)sourceCell.CellStyle).toXSSF(workbook);
+                        }
+                    }
+                }
+            }
+
+            for (int j = 0; j < sourceSheet.NumMergedRegions; j++)
+            {
+                var mergedRegion = sourceSheet.GetMergedRegion(j);
+                newSheet.AddMergedRegion(new CellRangeAddress(
+                    mergedRegion.FirstRow,
+                    mergedRegion.LastRow,
+                    mergedRegion.FirstColumn,
+                    mergedRegion.LastColumn));
+            }
+        }
     }
 
     private void _addAcademicWorkPage(IWorkbook workbook, User user, StateUser stateUser)

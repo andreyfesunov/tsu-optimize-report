@@ -23,7 +23,7 @@
         - action: rebuild
           path: ../hb-back
     volumes:
-      - xlsx:/app/xlsx
+      - storage:/app/Storage
     depends_on:
       - tsu-psql
   tsu-psql:
@@ -39,4 +39,4 @@
 
 volumes:
   tsu_db:
-  xlsx:
+  storage:

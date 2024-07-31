@@ -71,6 +71,7 @@ public class StateUserRepository : IStateUserRepository
             .ThenInclude(x => x.Job)
             .Include(x => x.State)
             .ThenInclude(x => x.Department)
-            .ThenInclude(x => x.Institute);
+            .ThenInclude(x => x.Institute)
+            .Include(x => x.Files);
     }
 }

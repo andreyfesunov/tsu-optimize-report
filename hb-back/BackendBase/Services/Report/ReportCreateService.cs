@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using BackendBase.Dto;
 using BackendBase.Interfaces.Repositories;
+using BackendBase.Interfaces.Services;
 using BackendBase.Interfaces.Services.Report;
+using BackendBase.Interfaces.Utils;
 using BackendBase.Models;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using File = BackendBase.Models.File;
 
 namespace BackendBase.Services.Report;
 
@@ -14,12 +18,18 @@ public class ReportCreateService : IReportCreateService
     private readonly IMapper _mapper;
     private readonly IRecordRepository _recordRepository;
     private readonly IStateUserRepository _stateUserRepository;
+    private readonly IFileService _fileService;
+    private readonly IStorage _storage;
+    private readonly UserInfo _userInfo;
 
     public ReportCreateService(
         IActivityRepository activityRepository,
         ILessonTypeRepository lessonTypeRepository,
         IRecordRepository recordRepository,
         IStateUserRepository stateUserRepository,
+        IFileService fileService,
+        IStorage storage,
+        UserInfo userInfo,
         IMapper mapper
     )
     {
@@ -27,12 +37,15 @@ public class ReportCreateService : IReportCreateService
         _lessonTypeRepository = lessonTypeRepository;
         _recordRepository = recordRepository;
         _stateUserRepository = stateUserRepository;
+        _fileService = fileService;
+        _storage = storage;
+        _userInfo = userInfo;
         _mapper = mapper;
     }
 
     public async Task<bool> CreateReport(Guid stateUserId, IFormFile file)
     {
-        // TODO add validation of stateUser
+        // TODO add validation of StateUserId
 
         if (!file.FileName.EndsWith(".xls")) throw new Exception("Please, put '.xls' document");
 
@@ -52,9 +65,17 @@ public class ReportCreateService : IReportCreateService
         for (var worksheetNumber = 1; worksheetNumber < worksheetCount; worksheetNumber++)
             await _handleWorksheet(package.GetSheetAt(worksheetNumber), stateUser, activities);
 
-        // TODO add file saving
+        await _saveFile(file, stateUser.Id);
 
         return true;
+    }
+
+    private async Task<File> _saveFile(IFormFile file, Guid stateUserId)
+    {
+        var fileName = _userInfo.GetUserId() + "/" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        var path = await _storage.SaveFileAsync(file, fileName);
+
+        return await _fileService.AddEntity(new File{ Path = fileName, StateUserId = stateUserId });
     }
 
     private async Task _handleWorksheet(ISheet worksheet, StateUser stateUser, ICollection<Activity> activities)

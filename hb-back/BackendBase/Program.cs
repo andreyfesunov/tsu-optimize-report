@@ -7,6 +7,7 @@ using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.SecurityServices;
 using BackendBase.Interfaces.Services;
 using BackendBase.Interfaces.Services.Report;
+using BackendBase.Interfaces.Utils;
 using BackendBase.Middlewares;
 using BackendBase.Repositories;
 using BackendBase.SecurityServices;
@@ -64,11 +65,15 @@ builder.Services.AddScoped<IRecordService, RecordService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IStateUserService, StateUserService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 // Security Services
 builder.Services.AddScoped<IEventSecurityService, EventSecurityService>();
 builder.Services.AddScoped<ILessonSecurityService, LessonSecurityService>();
 builder.Services.AddScoped<ICommentSecurityService, CommentSecurityService>();
+
+// Utils
+builder.Services.AddScoped<IStorage, FileService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
