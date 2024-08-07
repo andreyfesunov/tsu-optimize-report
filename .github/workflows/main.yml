@@ -21,4 +21,3 @@ jobs:
             git pull;
             docker-compose --file docker-compose.yml --file docker-compose.override.yml down;
             docker-compose --file docker-compose.yml --file docker-compose.override.yml up -d;
-            docker system prune --all --force;
