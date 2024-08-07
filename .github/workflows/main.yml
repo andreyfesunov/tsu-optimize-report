@@ -14,8 +14,8 @@ jobs:
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
-          password: ${{secrets.SSH_PASSWORD}}
-          command: |
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
             cd ${{ secrets.PROJECT_FOLDER }};
             git checkout master;
             git pull;
