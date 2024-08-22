@@ -1,5 +1,4 @@
 ﻿using BackendBase.Models;
-using BackendBase.Factories;
 using Microsoft.EntityFrameworkCore;
 using DBFile = BackendBase.Models.File;
 
@@ -33,7 +32,7 @@ namespace BackendBase.Data
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<Degree> Degrees { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
     }
 }

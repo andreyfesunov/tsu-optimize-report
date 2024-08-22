@@ -26,8 +26,8 @@ public class LessonSecurityService : BaseSecurityService<Lesson>, ILessonSecurit
     public override async Task validateCanUse(Lesson item)
     {
         // TODO n+1 problem
-        var @event = await _eventRepository.GetById(item.EventId);
-        var report = await _reportRepository.GetById(@event.StateUserId);
+        var planEvent = await _eventRepository.GetById(item.EventId);
+        var report = await _reportRepository.GetById(planEvent.StateUserId);
 
         if (report.UserId.ToString() != _userInfo.GetUserId())
         {
@@ -37,13 +37,13 @@ public class LessonSecurityService : BaseSecurityService<Lesson>, ILessonSecurit
 
     public async Task validateCanCreate(Lesson item)
     {
-        var @event = await _eventRepository.GetById(item.EventId);
+        var planEvent = await _eventRepository.GetById(item.EventId);
 
-        if (@event.EventType.WorkId.ToString() != SystemWorks.AcademicMethodicalWorkId)
+        if (planEvent.WorkId.ToString() != SystemWorks.AcademicMethodicalWorkId)
         {
             throw new AppException("Lesson can only be created within Academical Methodical work");
         }
-        if (@event.Lessons.Where(v => v.LessonTypeId == item.LessonTypeId).Count() != 0)
+        if (planEvent.HasLessonType(item.LessonTypeId))
         {
             throw new AppException("Lesson with given type already exists");
         }

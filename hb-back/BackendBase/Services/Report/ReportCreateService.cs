@@ -47,7 +47,8 @@ public class ReportCreateService : IReportCreateService
     {
         // TODO add validation of StateUserId
 
-        if (!file.FileName.EndsWith(".xls")) throw new Exception("Please, put '.xls' document");
+        if (!file.FileName.EndsWith(".xls"))
+            throw new Exception("Please, put '.xls' document");
 
         using var stream = new MemoryStream();
         await file.CopyToAsync(stream);
@@ -56,7 +57,8 @@ public class ReportCreateService : IReportCreateService
         using var package = new HSSFWorkbook(stream);
         var worksheetCount = package.NumberOfSheets;
 
-        if (worksheetCount <= 1) throw new Exception("Workbook is incorrect, too few worksheets");
+        if (worksheetCount <= 1)
+            throw new Exception("Workbook is incorrect, too few worksheets");
 
         var activitiesDto = await _activityRepository.GetAll();
         var activities = activitiesDto.Select(x => _mapper.Map<Activity>(x)).ToList();
@@ -72,13 +74,23 @@ public class ReportCreateService : IReportCreateService
 
     private async Task<File> _saveFile(IFormFile file, Guid stateUserId)
     {
-        var fileName = _userInfo.GetUserId() + "/" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        var fileName =
+            _userInfo.GetUserId()
+            + "/"
+            + Guid.NewGuid().ToString()
+            + Path.GetExtension(file.FileName);
         var path = await _storage.SaveFileAsync(file, fileName);
 
-        return await _fileService.AddEntity(new File { Path = fileName, StateUserId = stateUserId });
+        return await _fileService.AddEntity(
+            new File(Path: fileName, StateUserId: stateUserId, CreatedDate: DateTime.UtcNow)
+        );
     }
 
-    private async Task _handleWorksheet(ISheet worksheet, StateUser stateUser, ICollection<Activity> activities)
+    private async Task _handleWorksheet(
+        ISheet worksheet,
+        StateUser stateUser,
+        ICollection<Activity> activities
+    )
     {
         /*
          * TODO get rid of HARDCODE
@@ -102,20 +114,22 @@ public class ReportCreateService : IReportCreateService
             {
                 var contentCell = worksheet.GetRow(row).GetCell(activity.Column);
 
-                if (contentCell is not { CellType: CellType.String }) continue;
+                if (contentCell is not { CellType: CellType.String })
+                    continue;
 
                 var hours = int.Parse(contentCell.StringCellValue);
 
-                if (hours <= 0) continue;
+                if (hours <= 0)
+                    continue;
 
-                await _recordRepository.AddEntity(new Record
-                {
-                    LessonTypeId = lessonType.Id,
-                    ActivityId = activity.Id,
-                    Hours = hours,
-                    Id = Guid.NewGuid(),
-                    StateUserId = stateUser.Id
-                });
+                await _recordRepository.AddEntity(
+                    new Record(
+                        LessonTypeId: lessonType.Id,
+                        ActivityId: activity.Id,
+                        Hours: hours,
+                        StateUserId: stateUser.Id
+                    )
+                );
             }
 
             row += 1;
@@ -130,7 +144,7 @@ public class ReportCreateService : IReportCreateService
          */
         var lessonType = await _lessonTypeRepository.GetLessonTypeByName(lessonName);
 
-        return lessonType ??
-               await _lessonTypeRepository.AddEntity(new LessonType { Name = lessonName, Id = Guid.NewGuid() });
+        return lessonType
+            ?? await _lessonTypeRepository.AddEntity(new LessonType(Name: lessonName));
     }
 }

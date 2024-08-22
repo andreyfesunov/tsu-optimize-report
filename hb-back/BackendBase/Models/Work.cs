@@ -1,8 +1,19 @@
-﻿namespace BackendBase.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BackendBase.Models;
 
 public class Work : Base
 {
-    public List<EventType> EventsTypes { get; set; }
-    public string Name { get; set; }
-    public int Order { get; set; }
+    protected Work() { }
+
+    [SetsRequiredMembers]
+    public Work(string Name, int Order, Guid? Id = null)
+        : base(Id)
+    {
+        this.Name = Name;
+        this.Order = Order;
+    }
+
+    public required string Name { get; init; }
+    public required int Order { get; init; }
 }

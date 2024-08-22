@@ -26,18 +26,14 @@ public class EventTypeRepository : IEventTypeRepository
 
     public async Task<Pagination<EventType>> Search(Guid activityId, SearchDto searchDto)
     {
-        var queryable = Context.Set<ActivityEventType>().AsQueryable().Where(x => x.ActivityId == activityId)
-            .Select(x => x.EventType);
+        var queryable = Context
+            .Set<ActivityEventType>()
+            .AsQueryable()
+            .Where(x => x.ActivityId == activityId)
+            .Select(x => x.EventType)
+            .OfType<EventType>();
 
         return await queryable.Search(searchDto);
-    }
-
-
-    public async Task<EventType> AddEntity(EventType entity)
-    {
-        var model = await DbSet.AddAsync(entity);
-        await Save();
-        return model.Entity;
     }
 
     public async Task<EventType> GetById(Guid id)
@@ -62,7 +58,8 @@ public class EventTypeRepository : IEventTypeRepository
     public async Task<bool> DeleteById(Guid entityId)
     {
         var entity = await GetById(entityId);
-        if (entity == null) throw new AppException("Entity not found");
+        if (entity == null)
+            throw new AppException("Entity not found");
         Context.Remove(entity);
         return await Save();
     }

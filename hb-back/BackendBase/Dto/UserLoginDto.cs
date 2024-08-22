@@ -1,7 +1,8 @@
-﻿namespace BackendBase.Dto
+﻿namespace BackendBase.Dto;
+
+public class UserLoginDto
 {
-    public class UserLoginDto
-    {
-        public string Token { get; set; }
-    }
+    public UserLoginDto(string Token) => this.Token = Token;
+
+    public readonly string Token;
 }

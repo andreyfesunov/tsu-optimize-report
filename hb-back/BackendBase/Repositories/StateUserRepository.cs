@@ -45,11 +45,11 @@ public class StateUserRepository : IStateUserRepository
         return saved > 0;
     }
 
-    public async Task<Pagination<StateUser>> Search(SearchDto searchDto)
+    public async Task<Pagination<StateUser>> Search(SearchDto dto)
     {
         return await IncludeChildren(DbSet)
-            .Where(x => x.User.Id.ToString() == _userInfo.GetUserId())
-            .Search(searchDto);
+            .Where(x => x.User != null && x.User.Id.ToString() == _userInfo.GetUserId())
+            .Search(dto);
     }
 
     protected IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)

@@ -1,6 +1,5 @@
 ﻿using BackendBase.Data;
 using BackendBase.Dto;
-using BackendBase.Exceptions;
 using BackendBase.Extensions;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
@@ -18,7 +17,6 @@ namespace BackendBase.Repositories
             Context = context;
             DbSet = Context.Set<Lesson>();
         }
-
 
         public async Task<Lesson> AddEntity(Lesson entity)
         {

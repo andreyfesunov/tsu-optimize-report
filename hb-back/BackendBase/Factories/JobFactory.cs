@@ -4,15 +4,5 @@ namespace BackendBase.Factories;
 
 public static class JobFactory
 {
-    public static List<Job> Make()
-    {
-        return new List<Job>
-        {
-            new()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Доцент"
-            }
-        };
-    }
+    public static List<Job> Make() => new List<Job> { new(Name: "Доцент") };
 }

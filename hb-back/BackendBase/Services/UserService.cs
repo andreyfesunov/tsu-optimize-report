@@ -16,10 +16,7 @@ public class UserService : IUserService
     private readonly IConfiguration _configuration;
     private readonly IUserRepository _repository;
 
-    public UserService(
-        IConfiguration configuration,
-        IUserRepository repository
-    )
+    public UserService(IConfiguration configuration, IUserRepository repository)
     {
         _configuration = configuration;
         _repository = repository;
@@ -44,15 +41,13 @@ public class UserService : IUserService
         if (userExistsCheck != null)
             throw new UnauthorizedAccessException();
 
-        var user = new User
-        {
-            Id = new Guid(),
-            Password = PasswordUtils.GetPasswordHash(registrationDto.Password),
-            Email = registrationDto.Email,
-            Firstname = registrationDto.Firstname,
-            Lastname = registrationDto.Lastname,
-            Role = RoleUserEnum.User
-        };
+        var user = new User(
+            Password: PasswordUtils.GetPasswordHash(registrationDto.Password),
+            Email: registrationDto.Email,
+            Firstname: registrationDto.Firstname,
+            Lastname: registrationDto.Lastname,
+            Role: RoleUserEnum.User
+        );
         var userAdded = await _repository.AddEntity(user);
 
         return userAdded.Role;
@@ -60,31 +55,30 @@ public class UserService : IUserService
 
     private string GenerateJwt(User user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var securityKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)
+        );
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new[]
         {
             new Claim("id", user.Id.ToString()),
             new Claim("role", user.Role.ToString("D"))
         };
-        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+        var token = new JwtSecurityToken(
+            _configuration["Jwt:Issuer"],
             _configuration["Jwt:Audience"],
             claims,
             expires: DateTime.Now.AddDays(7),
-            signingCredentials: credentials);
-
+            signingCredentials: credentials
+        );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public async Task<User> GetById(Guid id)
-        => await _repository.GetById(id);
+    public async Task<User> GetById(Guid id) => await _repository.GetById(id);
 
+    public async Task<ICollection<User>> GetAll() => await _repository.GetAll();
 
-    public async Task<ICollection<User>> GetAll()
-        => await _repository.GetAll();
-
-
-    public async Task<Pagination<User>> Search(SearchDto searchDto)
-        => await _repository.Search(searchDto);
+    public async Task<Pagination<User>> Search(SearchDto searchDto) =>
+        await _repository.Search(searchDto);
 }

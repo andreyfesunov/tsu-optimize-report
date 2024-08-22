@@ -11,10 +11,7 @@ public class EventService : IEventService
     private readonly IEventRepository _repository;
     private readonly IEventSecurityService _security;
 
-    public EventService(
-            IEventRepository repository,
-            IEventSecurityService security
-            )
+    public EventService(IEventRepository repository, IEventSecurityService security)
     {
         _repository = repository;
         _security = security;
@@ -22,7 +19,7 @@ public class EventService : IEventService
 
     public async Task<Event> Update(EventUpdateDto dto)
     {
-        var entity = await _repository.GetById(Guid.Parse(dto.Id));
+        var entity = await _repository.GetById(dto.Id);
         await _security.validateCanUse(entity);
         // ****
 

@@ -45,12 +45,11 @@ public class JobService : IJobService
     public async Task<Pagination<JobDto>> Search(SearchDto searchDto)
     {
         var result = await _repository.Search(searchDto);
-        return new Pagination<JobDto>
-        {
-            PageNumber = result.PageNumber,
-            PageSize = result.PageSize,
-            TotalPages = result.TotalPages,
-            Entities = result.Entities.Select(u => _mapper.Map<JobDto>(u)).ToList()
-        };
+        return new Pagination<JobDto>(
+            PageNumber: result.PageNumber,
+            PageSize: result.PageSize,
+            TotalPages: result.TotalPages,
+            Entities: result.Entities.Select(u => _mapper.Map<JobDto>(u)).ToList()
+        );
     }
 }

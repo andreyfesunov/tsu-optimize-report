@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -20,7 +19,8 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Activities", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Degrees",
@@ -32,7 +32,8 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Degrees", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Institutes",
@@ -44,7 +45,8 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Institutes", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Jobs",
@@ -56,7 +58,8 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "LessonTypes",
@@ -68,7 +71,8 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LessonTypes", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Ranks",
@@ -80,7 +84,8 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ranks", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Work",
@@ -93,7 +98,8 @@ namespace BackendBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Work", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Departments",
@@ -111,8 +117,10 @@ namespace BackendBase.Migrations
                         column: x => x.InstituteId,
                         principalTable: "Institutes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Users",
@@ -134,13 +142,16 @@ namespace BackendBase.Migrations
                         name: "FK_Users_Degrees_DegreeId",
                         column: x => x.DegreeId,
                         principalTable: "Degrees",
-                        principalColumn: "Id");
+                        principalColumn: "Id"
+                    );
                     table.ForeignKey(
                         name: "FK_Users_Ranks_RankId",
                         column: x => x.RankId,
                         principalTable: "Ranks",
-                        principalColumn: "Id");
-                });
+                        principalColumn: "Id"
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "EventsTypes",
@@ -159,8 +170,10 @@ namespace BackendBase.Migrations
                         column: x => x.WorkId,
                         principalTable: "Work",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "States",
@@ -171,8 +184,14 @@ namespace BackendBase.Migrations
                     JobId = table.Column<Guid>(type: "uuid", nullable: false),
                     Count = table.Column<int>(type: "integer", nullable: false),
                     Hours = table.Column<int>(type: "integer", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    StartDate = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    ),
+                    EndDate = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    )
                 },
                 constraints: table =>
                 {
@@ -182,14 +201,17 @@ namespace BackendBase.Migrations
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_States_Jobs_JobId",
                         column: x => x.JobId,
                         principalTable: "Jobs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "ActivitiesEventsTypes",
@@ -207,14 +229,17 @@ namespace BackendBase.Migrations
                         column: x => x.ActivityId,
                         principalTable: "Activities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_ActivitiesEventsTypes_EventsTypes_EventTypeId",
                         column: x => x.EventTypeId,
                         principalTable: "EventsTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "StatesUsers",
@@ -233,14 +258,17 @@ namespace BackendBase.Migrations
                         column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_StatesUsers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Events",
@@ -249,8 +277,14 @@ namespace BackendBase.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventTypeId = table.Column<Guid>(type: "uuid", nullable: false),
                     StateUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    StartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    StartedAt = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    ),
+                    EndedAt = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    )
                 },
                 constraints: table =>
                 {
@@ -260,14 +294,17 @@ namespace BackendBase.Migrations
                         column: x => x.EventTypeId,
                         principalTable: "EventsTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_Events_StatesUsers_StateUserId",
                         column: x => x.StateUserId,
                         principalTable: "StatesUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Files",
@@ -276,7 +313,10 @@ namespace BackendBase.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     StateUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Path = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedDate = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    )
                 },
                 constraints: table =>
                 {
@@ -286,8 +326,10 @@ namespace BackendBase.Migrations
                         column: x => x.StateUserId,
                         principalTable: "StatesUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Records",
@@ -307,20 +349,24 @@ namespace BackendBase.Migrations
                         column: x => x.ActivityId,
                         principalTable: "Activities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_Records_LessonTypes_LessonTypeId",
                         column: x => x.LessonTypeId,
                         principalTable: "LessonTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_Records_StatesUsers_StateUserId",
                         column: x => x.StateUserId,
                         principalTable: "StatesUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Comment",
@@ -340,8 +386,10 @@ namespace BackendBase.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Lessons",
@@ -361,14 +409,17 @@ namespace BackendBase.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_Lessons_LessonTypes_LessonTypeId",
                         column: x => x.LessonTypeId,
                         principalTable: "LessonTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "EventsFiles",
@@ -386,179 +437,176 @@ namespace BackendBase.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_EventsFiles_Files_FileId",
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_ActivitiesEventsTypes_ActivityId",
                 table: "ActivitiesEventsTypes",
-                column: "ActivityId");
+                column: "ActivityId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_ActivitiesEventsTypes_EventTypeId",
                 table: "ActivitiesEventsTypes",
-                column: "EventTypeId");
+                column: "EventTypeId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_EventId",
                 table: "Comment",
-                column: "EventId");
+                column: "EventId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_InstituteId",
                 table: "Departments",
-                column: "InstituteId");
+                column: "InstituteId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_EventTypeId",
                 table: "Events",
-                column: "EventTypeId");
+                column: "EventTypeId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_StateUserId",
                 table: "Events",
-                column: "StateUserId");
+                column: "StateUserId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventsFiles_EventId",
                 table: "EventsFiles",
-                column: "EventId");
+                column: "EventId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventsFiles_FileId",
                 table: "EventsFiles",
-                column: "FileId");
+                column: "FileId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventsTypes_WorkId",
                 table: "EventsTypes",
-                column: "WorkId");
+                column: "WorkId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Files_StateUserId",
                 table: "Files",
-                column: "StateUserId");
+                column: "StateUserId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_EventId",
                 table: "Lessons",
-                column: "EventId");
+                column: "EventId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_LessonTypeId",
                 table: "Lessons",
-                column: "LessonTypeId");
+                column: "LessonTypeId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Records_ActivityId",
                 table: "Records",
-                column: "ActivityId");
+                column: "ActivityId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Records_LessonTypeId",
                 table: "Records",
-                column: "LessonTypeId");
+                column: "LessonTypeId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Records_StateUserId",
                 table: "Records",
-                column: "StateUserId");
+                column: "StateUserId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_DepartmentId",
                 table: "States",
-                column: "DepartmentId");
+                column: "DepartmentId"
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "IX_States_JobId",
-                table: "States",
-                column: "JobId");
+            migrationBuilder.CreateIndex(name: "IX_States_JobId", table: "States", column: "JobId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatesUsers_StateId",
                 table: "StatesUsers",
-                column: "StateId");
+                column: "StateId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatesUsers_UserId",
                 table: "StatesUsers",
-                column: "UserId");
+                column: "UserId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_DegreeId",
                 table: "Users",
-                column: "DegreeId");
+                column: "DegreeId"
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_RankId",
-                table: "Users",
-                column: "RankId");
+            migrationBuilder.CreateIndex(name: "IX_Users_RankId", table: "Users", column: "RankId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ActivitiesEventsTypes");
+            migrationBuilder.DropTable(name: "ActivitiesEventsTypes");
 
-            migrationBuilder.DropTable(
-                name: "Comment");
+            migrationBuilder.DropTable(name: "Comment");
 
-            migrationBuilder.DropTable(
-                name: "EventsFiles");
+            migrationBuilder.DropTable(name: "EventsFiles");
 
-            migrationBuilder.DropTable(
-                name: "Lessons");
+            migrationBuilder.DropTable(name: "Lessons");
 
-            migrationBuilder.DropTable(
-                name: "Records");
+            migrationBuilder.DropTable(name: "Records");
 
-            migrationBuilder.DropTable(
-                name: "Files");
+            migrationBuilder.DropTable(name: "Files");
 
-            migrationBuilder.DropTable(
-                name: "Events");
+            migrationBuilder.DropTable(name: "Events");
 
-            migrationBuilder.DropTable(
-                name: "Activities");
+            migrationBuilder.DropTable(name: "Activities");
 
-            migrationBuilder.DropTable(
-                name: "LessonTypes");
+            migrationBuilder.DropTable(name: "LessonTypes");
 
-            migrationBuilder.DropTable(
-                name: "EventsTypes");
+            migrationBuilder.DropTable(name: "EventsTypes");
 
-            migrationBuilder.DropTable(
-                name: "StatesUsers");
+            migrationBuilder.DropTable(name: "StatesUsers");
 
-            migrationBuilder.DropTable(
-                name: "Work");
+            migrationBuilder.DropTable(name: "Work");
 
-            migrationBuilder.DropTable(
-                name: "States");
+            migrationBuilder.DropTable(name: "States");
 
-            migrationBuilder.DropTable(
-                name: "Users");
+            migrationBuilder.DropTable(name: "Users");
 
-            migrationBuilder.DropTable(
-                name: "Departments");
+            migrationBuilder.DropTable(name: "Departments");
 
-            migrationBuilder.DropTable(
-                name: "Jobs");
+            migrationBuilder.DropTable(name: "Jobs");
 
-            migrationBuilder.DropTable(
-                name: "Degrees");
+            migrationBuilder.DropTable(name: "Degrees");
 
-            migrationBuilder.DropTable(
-                name: "Ranks");
+            migrationBuilder.DropTable(name: "Ranks");
 
-            migrationBuilder.DropTable(
-                name: "Institutes");
+            migrationBuilder.DropTable(name: "Institutes");
         }
     }
 }

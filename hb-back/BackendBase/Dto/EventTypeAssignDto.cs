@@ -2,6 +2,12 @@
 
 public class EventTypeAssignDto
 {
-    public string EventTypeId { get; set; }
-    public string ActivityId { get; set; }
+    public EventTypeAssignDto(Guid EventTypeId, Guid ActivityId)
+    {
+        this.EventTypeId = EventTypeId;
+        this.ActivityId = ActivityId;
+    }
+
+    public readonly Guid EventTypeId;
+    public readonly Guid ActivityId;
 }

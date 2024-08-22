@@ -10,10 +10,9 @@ public interface IEventTypeService
     Task<Dictionary<string, Pagination<EventTypeDto>>> SearchMap(SearchDto searchDto);
     Task<ICollection<EventTypeDto>> GetAllForReport(Guid stateUserId, Guid workId, bool first);
     Task<bool> Delete(Guid activityId, Guid entityTypeId);
-    Task<EventType> AddEntity(EventType entity);
-    Task<EventTypeDto> GetById(Guid id);
     Task<ICollection<EventTypeDto>> GetAll();
     Task<EventType> Update(EventType entity);
     Task<bool> DeleteById(Guid entityId);
-    Task<Pagination<EventTypeDto>> Search(SearchDto searchDto);
+
+    Task<Pagination<EventType>> Search(SearchDto searchDto);
 }

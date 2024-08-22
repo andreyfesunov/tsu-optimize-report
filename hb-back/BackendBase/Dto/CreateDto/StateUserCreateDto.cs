@@ -1,10 +1,13 @@
-﻿using BackendBase.Models;
+﻿namespace BackendBase.Dto.CreateDto;
 
-namespace BackendBase.Dto.CreateDto
+public class StateUserCreateDto
 {
-    public class StateUserCreateDto
+    public StateUserCreateDto(Guid StateId, Guid UserId)
     {
-        public string StateId { get; set; }
-        public string UserId { get; set; }
+        this.StateId = StateId;
+        this.UserId = UserId;
     }
+
+    public readonly Guid StateId;
+    public readonly Guid UserId;
 }

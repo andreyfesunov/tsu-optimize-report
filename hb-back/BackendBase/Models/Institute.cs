@@ -1,10 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace BackendBase.Models
+namespace BackendBase.Models;
+
+public class Institute : Base
 {
-    public class Institute : Base
-    {
-        public ICollection<Department> Departments { get; set; }
-        public string Name { get; set; }
-    }
+    protected Institute() { }
+
+    [SetsRequiredMembers]
+    public Institute(string Name, Guid? Id = null)
+        : base(Id) => this.Name = Name;
+
+    public required string Name { get; init; }
+
+    public ICollection<Department>? Departments { get; init; }
 }

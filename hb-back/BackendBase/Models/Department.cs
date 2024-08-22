@@ -1,12 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace BackendBase.Models
+namespace BackendBase.Models;
+
+public class Department : Base
 {
-    public class Department : Base
+    protected Department() { }
+
+    [SetsRequiredMembers]
+    public Department(string Name, Guid InstituteId, Guid? Id = null)
+        : base()
     {
-        public ICollection<State> States { get; set; }
-        public Guid InstituteId { get; set; }
-        public Institute Institute { get; set; } = null!;
-        public string Name { get; set; } = null!;
+        this.Name = Name;
+        this.InstituteId = InstituteId;
     }
+
+    public required string Name { get; init; }
+    public required Guid InstituteId { get; init; }
+
+    public ICollection<State>? States { get; init; }
+    public Institute? Institute { get; init; }
 }

@@ -1,8 +1,7 @@
-﻿namespace BackendBase.Models.Enum
+﻿namespace BackendBase.Models.Enum;
+
+public enum RoleUserEnum
 {
-    public enum RoleUserEnum
-    {
-        User = 1,
-        Admin = 2
-    }
+    User = 1,
+    Admin = 2
 }

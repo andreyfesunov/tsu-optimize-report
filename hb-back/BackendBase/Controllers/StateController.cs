@@ -18,7 +18,6 @@ public class StateController : ControllerBase
         _service = service;
     }
 
-
     [HttpPost]
     public async Task<ActionResult<string>> Create(StateCreateDto entity)
     {
@@ -53,13 +52,14 @@ public class StateController : ControllerBase
         try
         {
             var result = await _service.Search(searchDto);
-            return Ok(new Pagination<StateDto>
-            {
-                PageNumber = result.PageNumber,
-                PageSize = result.PageSize,
-                TotalPages = result.TotalPages,
-                Entities = result.Entities.Select(u => u.toDTO()).ToList()
-            });
+            return Ok(
+                new Pagination<StateDto>(
+                    PageNumber: result.PageNumber,
+                    PageSize: result.PageSize,
+                    TotalPages: result.TotalPages,
+                    Entities: result.Entities.Select(u => u.toDTO()).ToList()
+                )
+            );
         }
         catch (Exception ex)
         {

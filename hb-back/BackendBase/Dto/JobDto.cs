@@ -2,6 +2,12 @@
 
 public class JobDto
 {
-    public string Id { get; set; }
-    public string Name { get; set; }
+    public JobDto(Guid Id, string Name)
+    {
+        this.Id = Id;
+        this.Name = Name;
+    }
+
+    public readonly Guid Id;
+    public readonly string Name;
 }

@@ -28,26 +28,28 @@ public class StateService : IStateService
 
     public async Task<string> Create(StateCreateDto dto)
     {
-        var state = new State
-        {
-            JobId = Guid.Parse(dto.JobId),
-            Count = dto.Count,
-            Hours = dto.Hours,
-            StartDate = dto.StartDate,
-            EndDate = dto.EndDate
-        };
-
         // TODO improve creating, add departmentId to DTO or to UserInfo
-        var test = await _departmentRepository.Search(new SearchDto { PageNumber = 1, PageSize = 1 });
-        state.DepartmentId = test.Entities.First().Id;
+        var departments = await _departmentRepository.Search(
+            new SearchDto(PageNumber: 1, PageSize: 1)
+        );
+        var departmentId = departments.Entities.First().Id;
+
+        var state = new State(
+            DepartmentId: departmentId,
+            JobId: dto.JobId,
+            Count: dto.Count,
+            Hours: dto.Hours,
+            StartDate: dto.StartDate,
+            EndDate: dto.EndDate
+        );
 
         return (await _stateRepository.AddEntity(state)).Id.ToString();
     }
 
-    public async Task<bool> Assign(StateUserCreateDto stateUserCreateDto)
+    public async Task<bool> Assign(StateUserCreateDto dto)
     {
-        var state = await _stateRepository.GetById(Guid.Parse(stateUserCreateDto.StateId));
-        var userDto = await _userRepository.GetById(Guid.Parse(stateUserCreateDto.UserId));
+        var state = await _stateRepository.GetById(dto.StateId);
+        var userDto = await _userRepository.GetById(dto.UserId);
         if (state == null || userDto == null)
             return false;
         if (state.Count < 1)
@@ -56,18 +58,13 @@ public class StateService : IStateService
         state.Count -= 1;
         await _stateRepository.UpdateEntity(state);
 
-        var stateUser = new StateUser
-        {
-            StateId = Guid.Parse(stateUserCreateDto.StateId),
-            UserId = Guid.Parse(stateUserCreateDto.UserId)
-        };
-        stateUser.Rate = 1.0;
+        var stateUser = new StateUser(StateId: dto.StateId, UserId: dto.UserId, Rate: 1.0);
 
         await _stateUserRepository.AddEntity(stateUser);
 
         return true;
     }
 
-    public async Task<Pagination<State>> Search(SearchDto searchDto)
-        => await _stateRepository.Search(searchDto);
+    public async Task<Pagination<State>> Search(SearchDto searchDto) =>
+        await _stateRepository.Search(searchDto);
 }

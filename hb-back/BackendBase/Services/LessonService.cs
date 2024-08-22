@@ -37,7 +37,7 @@ public class LessonService : ILessonService
 
     public async Task<Lesson> Update(LessonUpdateDto dto)
     {
-        var entity = await _repository.GetById(Guid.Parse(dto.Id));
+        var entity = await _repository.GetById(dto.Id);
         await _security.validateCanUse(entity);
         // ****
 

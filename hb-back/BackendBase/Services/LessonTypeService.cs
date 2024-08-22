@@ -45,17 +45,18 @@ public class LessonTypeService : ILessonTypeService
     public async Task<Pagination<LessonTypeDto>> Search(SearchDto searchDto)
     {
         var result = await _repository.Search(searchDto);
-        return new Pagination<LessonTypeDto>
-        {
-            PageNumber = result.PageNumber,
-            PageSize = result.PageSize,
-            TotalPages = result.TotalPages,
-            Entities = result.Entities.Select(u => _mapper.Map<LessonTypeDto>(u)).ToList()
-        };
+        return new Pagination<LessonTypeDto>(
+            PageNumber: result.PageNumber,
+            PageSize: result.PageSize,
+            TotalPages: result.TotalPages,
+            Entities: result.Entities.Select(u => _mapper.Map<LessonTypeDto>(u)).ToList()
+        );
     }
 
     public async Task<ICollection<LessonTypeDto>> GetAllForEvent(Guid stateUserId)
     {
-        return (await _repository.GetAllForReport(stateUserId)).Select(x => _mapper.Map<LessonTypeDto>(x)).ToList();
+        return (await _repository.GetAllForReport(stateUserId))
+            .Select(x => _mapper.Map<LessonTypeDto>(x))
+            .ToList();
     }
 }

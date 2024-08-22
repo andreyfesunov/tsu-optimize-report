@@ -2,13 +2,32 @@
 
 public class StateDto
 {
-    public string Id { get; set; }
-    public int Count { get; set; }
-    public int Hours { get; set; }
+    public StateDto(
+        Guid Id,
+        int Count,
+        int Hours,
+        DateTime StartDate,
+        DateTime EndDate,
+        DepartmentDto? Department,
+        JobDto? Job
+    )
+    {
+        this.Id = Id;
+        this.Count = Count;
+        this.Hours = Hours;
+        this.StartDate = StartDate;
+        this.EndDate = EndDate;
+        this.Department = Department;
+        this.Job = Job;
+    }
 
-    public DepartmentDto Department { get; set; }
-    public JobDto Job { get; set; }
+    public readonly Guid Id;
+    public readonly int Count;
+    public readonly int Hours;
 
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public readonly DateTime StartDate;
+    public readonly DateTime EndDate;
+
+    public readonly DepartmentDto? Department;
+    public readonly JobDto? Job;
 }

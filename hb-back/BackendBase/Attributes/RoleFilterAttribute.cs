@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿using BackendBase.Models;
 using BackendBase.Models.Enum;
-using BackendBase.Models;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BackendBase.Attributes
 {
@@ -15,7 +13,10 @@ namespace BackendBase.Attributes
             _permissionLevel = permissionLevel;
         }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public async Task OnActionExecutionAsync(
+            ActionExecutingContext context,
+            ActionExecutionDelegate next
+        )
         {
             if (await Validate(context))
                 await next();

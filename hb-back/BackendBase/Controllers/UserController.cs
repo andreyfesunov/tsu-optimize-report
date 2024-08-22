@@ -52,7 +52,7 @@ public class UserController : ControllerBase
         try
         {
             var token = await _service.LogIn(loginDto);
-            return Ok(new UserLoginDto { Token = token });
+            return Ok(new UserLoginDto(Token: token));
         }
         catch (Exception ex)
         {
@@ -81,13 +81,14 @@ public class UserController : ControllerBase
         {
             var result = await _service.Search(searchDto);
 
-            return Ok(new Pagination<UserDto>
-            {
-                PageNumber = result.PageNumber,
-                PageSize = result.PageSize,
-                TotalPages = result.TotalPages,
-                Entities = result.Entities.Select(u => u.toDTO()).ToList()
-            });
+            return Ok(
+                new Pagination<UserDto>(
+                    PageNumber: result.PageNumber,
+                    PageSize: result.PageSize,
+                    TotalPages: result.TotalPages,
+                    Entities: result.Entities.Select(u => u.toDTO()).ToList()
+                )
+            );
         }
         catch (Exception ex)
         {

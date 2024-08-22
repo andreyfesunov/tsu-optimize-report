@@ -1,4 +1,5 @@
 ﻿using BackendBase.Dto;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,34 +15,6 @@ public class EventTypeController : ControllerBase
     public EventTypeController(IEventTypeService service)
     {
         _service = service;
-    }
-
-    [HttpPost("create")]
-    public async Task<ActionResult<EventType>> Create(EventType entity)
-    {
-        try
-        {
-            var result = await _service.AddEntity(entity);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpGet("{Id}")]
-    public async Task<ActionResult<EventTypeDto>> GetById(Guid Id)
-    {
-        try
-        {
-            var result = await _service.GetById(Id);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
     }
 
     [HttpGet("getAll")]
@@ -92,7 +65,14 @@ public class EventTypeController : ControllerBase
         try
         {
             var result = await _service.Search(searchDto);
-            return Ok(result);
+            return Ok(
+                new Pagination<EventTypeDto>(
+                    Entities: result.Entities.Select(x => x.toDTO()).ToList(),
+                    PageSize: result.PageSize,
+                    PageNumber: result.PageNumber,
+                    TotalPages: result.TotalPages
+                )
+            );
         }
         catch (Exception ex)
         {
@@ -100,10 +80,10 @@ public class EventTypeController : ControllerBase
         }
     }
 
-
     [HttpPost("searchMap")]
     public async Task<ActionResult<Dictionary<string, Pagination<EventTypeDto>>>> SearchMap(
-        [FromBody] SearchDto searchDto)
+        [FromBody] SearchDto searchDto
+    )
     {
         try
         {
@@ -117,7 +97,10 @@ public class EventTypeController : ControllerBase
     }
 
     [HttpPost("{activityId:guid}/search")]
-    public async Task<ActionResult<Pagination<EventTypeDto>>> Search(Guid activityId, [FromBody] SearchDto searchDto)
+    public async Task<ActionResult<Pagination<EventTypeDto>>> Search(
+        Guid activityId,
+        [FromBody] SearchDto searchDto
+    )
     {
         try
         {
@@ -145,8 +128,11 @@ public class EventTypeController : ControllerBase
     }
 
     [HttpGet("getAll/{stateUserId:guid}/{workId:guid}/{first:bool}")]
-    public async Task<ActionResult<ICollection<EventTypeDto>>> GetAllForReport(Guid stateUserId, Guid workId,
-        bool first)
+    public async Task<ActionResult<ICollection<EventTypeDto>>> GetAllForReport(
+        Guid stateUserId,
+        Guid workId,
+        bool first
+    )
     {
         try
         {

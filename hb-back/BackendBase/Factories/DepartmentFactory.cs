@@ -8,12 +8,7 @@ public static class DepartmentFactory
     {
         return new List<Department>
         {
-            new()
-            {
-                Id = Guid.NewGuid(),
-                Institute = institute,
-                Name = "Вычислительная техника"
-            }
+            new(InstituteId: institute.Id, Name: "Вычислительная техника")
         };
     }
 }

@@ -26,7 +26,7 @@ public class UserServiceTests
     {
         _configuration["Jwt:Audience"] = "localhost:4200";
         _configuration["Jwt:Issuer"] = "localhost:4200";
-        _configuration["Jwt:Key"] = "TestJWTKey_TestJWTKey";
+        _configuration["Jwt:Key"] = "tgthVABOl50mLjZOPRz2Y1qBquczBAxH";
     }
 
     [SetUp]
@@ -42,13 +42,12 @@ public class UserServiceTests
     [Test]
     public async Task REGISTER_NewUser()
     {
-        var dto = new RegistrationDto
-        {
-            Email = "test1@gmail.com",
-            Firstname = "Alex",
-            Lastname = "Shuverov",
-            Password = "123123"
-        };
+        var dto = new RegistrationDto(
+            Email: "test1@gmail.com",
+            Firstname: "Alex",
+            Lastname: "Shuverov",
+            Password: "123123"
+        );
 
         _repository.Setup(x => x.GetByEmail("test1@gmail.com")).ReturnsAsync((User?)null);
         _repository.Setup(x => x.AddEntity(It.IsAny<User>())).ReturnsAsync((User x) => x);
@@ -61,18 +60,24 @@ public class UserServiceTests
     [Test]
     public void REGISTER_UserExists()
     {
-        var dto = new RegistrationDto
-        {
-            Email = "test1@gmail.com",
-            Firstname = "Alex",
-            Lastname = "Shuverov",
-            Password = "123123"
-        };
+        var dto = new RegistrationDto(
+            Email: "test1@gmail.com",
+            Firstname: "Alex",
+            Lastname: "Shuverov",
+            Password: "123123"
+        );
 
-        _repository.Setup(x => x.GetByEmail("test1@gmail.com")).ReturnsAsync(new User
-        {
-            Email = "test1@gmail.com"
-        });
+        _repository
+            .Setup(x => x.GetByEmail("test1@gmail.com"))
+            .ReturnsAsync(
+                new User(
+                    Email: "test1@gmail.com",
+                    Password: "Password",
+                    Role: RoleUserEnum.User,
+                    Firstname: "Firstname",
+                    Lastname: "Lastname"
+                )
+            );
 
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _service.Reg(dto));
     }
@@ -80,18 +85,19 @@ public class UserServiceTests
     [Test]
     public async Task LOGIN_Success()
     {
-        var dto = new LoginDto
-        {
-            Email = "test1@gmail.com",
-            Password = "123123"
-        };
+        var dto = new LoginDto(Email: "test1@gmail.com", Password: "123123");
 
-        _repository.Setup(x => x.GetByEmail("test1@gmail.com")).ReturnsAsync(new User
-        {
-            Id = Guid.NewGuid(),
-            Password = PasswordUtils.GetPasswordHash("123123"),
-            Role = RoleUserEnum.User
-        });
+        _repository
+            .Setup(x => x.GetByEmail("test1@gmail.com"))
+            .ReturnsAsync(
+                new User(
+                    Email: "test1@gmail.com",
+                    Password: PasswordUtils.GetPasswordHash("123123"),
+                    Role: RoleUserEnum.User,
+                    Firstname: "Firstname",
+                    Lastname: "Lastname"
+                )
+            );
 
         await _service.LogIn(dto);
 
@@ -101,11 +107,7 @@ public class UserServiceTests
     [Test]
     public void LOGIN_NotFound()
     {
-        var dto = new LoginDto
-        {
-            Email = "test1@gmail.com",
-            Password = "123123"
-        };
+        var dto = new LoginDto(Email: "test1@gmail.com", Password: "123123");
 
         _repository.Setup(x => x.GetByEmail("test1@gmail.com")).ReturnsAsync((User?)null);
 
@@ -115,16 +117,19 @@ public class UserServiceTests
     [Test]
     public void LOGIN_WrongPassword()
     {
-        var dto = new LoginDto
-        {
-            Email = "test1@gmail.com",
-            Password = "123123"
-        };
+        var dto = new LoginDto(Email: "test1@gmail.com", Password: "123123");
 
-        _repository.Setup(x => x.GetByEmail("test1@gmail.com")).ReturnsAsync(new User
-        {
-            Password = PasswordUtils.GetPasswordHash("123456")
-        });
+        _repository
+            .Setup(x => x.GetByEmail("test1@gmail.com"))
+            .ReturnsAsync(
+                new User(
+                    Email: "test1@gmail.com",
+                    Password: PasswordUtils.GetPasswordHash("123456"),
+                    Role: RoleUserEnum.User,
+                    Firstname: "Firstname",
+                    Lastname: "Lastname"
+                )
+            );
 
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _service.LogIn(dto));
     }

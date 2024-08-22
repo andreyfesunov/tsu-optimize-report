@@ -17,15 +17,8 @@ public static class ActivityFactory
         return res;
     }
 
-    private static Activity _makeActivity(string name, int col)
-    {
-        return new Activity
-        {
-            Id = Guid.NewGuid(),
-            Name = name,
-            Column = col
-        };
-    }
+    private static Activity _makeActivity(string name, int col) =>
+        new Activity(Name: name, Column: col);
 
     private static Dictionary<int, string> _getDefaultFields()
     {
@@ -47,7 +40,7 @@ public static class ActivityFactory
             { 38, "Руководство ВКР" },
             { 39, "Консультации по части  ДП" },
             { 40, "ГЭК по защитам ВКР" },
-            { 41, "Участие в работе АК" }
+            { 41, "Участие в работе АК" },
         };
     }
 }

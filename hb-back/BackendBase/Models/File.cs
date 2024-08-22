@@ -1,10 +1,24 @@
-﻿namespace BackendBase.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BackendBase.Models;
 
 public class File : Base
 {
-    ICollection<EventFile> EventsFiles { get; set; }
-    public Guid StateUserId { get; set; }
-    public StateUser StateUser { get; set; }
-    public string Path { get; set; }
-    public DateTime CreatedDate { get; set; }
-}  
+    protected File() { }
+
+    [SetsRequiredMembers]
+    public File(Guid StateUserId, string Path, DateTime CreatedDate, Guid? Id = null)
+        : base(Id)
+    {
+        this.StateUserId = StateUserId;
+        this.Path = Path;
+        this.CreatedDate = CreatedDate;
+    }
+
+    public required Guid StateUserId { get; init; }
+    public required string Path { get; init; }
+    public required DateTime CreatedDate { get; init; }
+
+    public ICollection<EventFile>? EventsFiles { get; init; }
+    public StateUser? StateUser { get; init; }
+}

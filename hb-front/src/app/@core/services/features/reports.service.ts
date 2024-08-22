@@ -1,16 +1,12 @@
-import {Injectable} from "@angular/core";
-import {IPaginationRequest} from "@core/dtos";
-import {concat, Observable, of, Subject, switchMap, tap} from "rxjs";
-import {IPagination, IReportDetail, IReportListItem} from "@core/models";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { IPaginationRequest } from "@core/dtos";
+import { concat, Observable, of, Subject, switchMap, tap } from "rxjs";
+import { IPagination, IReportDetail, IReportListItem, IEventType } from "@core/models";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-@Injectable({providedIn: "root"})
+@Injectable({ providedIn: "root" })
 export class ReportsService {
-  constructor(
-    private readonly _httpClient: HttpClient
-  ) {
-  }
-
+  private readonly _httpClient = inject(HttpClient);
   private readonly _reload$: Subject<void> = new Subject<void>();
 
   public search(dto: IPaginationRequest): Observable<IPagination<IReportListItem>> {
@@ -34,5 +30,9 @@ export class ReportsService {
       headers: new HttpHeaders().append('Content-Type', 'application/json'),
       responseType: 'blob' as 'json'
     });
+  }
+
+  public eventTypes(reportId: string): Observable<readonly IEventType[]> {
+    return this._httpClient.get<readonly IEventType[]>(`/api/Report/${reportId}/event-type`);
   }
 }

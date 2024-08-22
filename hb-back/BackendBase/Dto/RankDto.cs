@@ -1,8 +1,13 @@
-﻿namespace BackendBase.Dto
+﻿namespace BackendBase.Dto;
+
+public class RankDto
 {
-    public class RankDto
+    public RankDto(Guid Id, string Name)
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        this.Id = Id;
+        this.Name = Name;
     }
+
+    public readonly Guid Id;
+    public readonly string Name;
 }

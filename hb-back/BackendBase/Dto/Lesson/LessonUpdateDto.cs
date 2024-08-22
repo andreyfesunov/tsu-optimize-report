@@ -2,7 +2,14 @@
 
 public class LessonUpdateDto
 {
-    public string Id { get; set; }
-    public int? PlanDate { get; set; }
-    public int? FactDate { get; set; }
+    public LessonUpdateDto(Guid Id, int? PlanDate, int? FactDate)
+    {
+        this.Id = Id;
+        this.PlanDate = PlanDate;
+        this.FactDate = FactDate;
+    }
+
+    public readonly Guid Id;
+    public readonly int? PlanDate;
+    public readonly int? FactDate;
 }

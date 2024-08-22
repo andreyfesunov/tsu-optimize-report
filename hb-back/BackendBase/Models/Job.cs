@@ -1,8 +1,16 @@
-﻿namespace BackendBase.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BackendBase.Models;
+
+public class Job : Base
 {
-    public class Job : Base
-    {
-        public ICollection<State> States { get; set; }
-        public string Name { get; set; }
-    }
+    protected Job() { }
+
+    [SetsRequiredMembers]
+    public Job(string Name, Guid? Id = null)
+        : base(Id) => this.Name = Name;
+
+    public required string Name { get; init; }
+
+    public ICollection<State>? States { get; init; }
 }

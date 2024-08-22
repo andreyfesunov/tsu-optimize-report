@@ -1,12 +1,27 @@
-﻿namespace BackendBase.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BackendBase.Models;
 
 public class Record : Base
 {
-    public Guid ActivityId { get; set; }
-    public Activity Activity { get; set; }
-    public Guid StateUserId { get; set; }
-    public StateUser StateUser { get; set; }
-    public Guid LessonTypeId { get; set; }
-    public LessonType LessonType { get; set; }
-    public int Hours { get; set; }
+    protected Record() { }
+
+    [SetsRequiredMembers]
+    public Record(Guid StateUserId, Guid ActivityId, Guid LessonTypeId, int Hours, Guid? Id = null)
+        : base(Id)
+    {
+        this.StateUserId = StateUserId;
+        this.ActivityId = ActivityId;
+        this.LessonTypeId = LessonTypeId;
+        this.Hours = Hours;
+    }
+
+    public required Guid StateUserId { get; init; }
+    public required Guid ActivityId { get; init; }
+    public required Guid LessonTypeId { get; init; }
+    public required int Hours { get; init; }
+
+    public Activity? Activity { get; init; }
+    public StateUser? StateUser { get; init; }
+    public LessonType? LessonType { get; init; }
 }

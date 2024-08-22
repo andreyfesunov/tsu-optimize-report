@@ -17,10 +17,10 @@ public class LessonSecurityServiceTests
     public LessonSecurityServiceTests()
     {
         _service = new LessonSecurityService(
-                _userInfo.Object,
-                _stateUserRepo.Object,
-                _eventRepo.Object
-                );
+            _userInfo.Object,
+            _stateUserRepo.Object,
+            _eventRepo.Object
+        );
     }
 
     private readonly ILessonSecurityService _service;
@@ -42,16 +42,23 @@ public class LessonSecurityServiceTests
         var userId = Guid.NewGuid();
 
         _userInfo.Setup(x => x.GetUserId()).Returns(userId.ToString());
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            StateUserId = Guid.NewGuid()
-        });
-        _stateUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new StateUser
-        {
-            UserId = userId
-        });
+        _eventRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new Event(
+                    StateUserId: Guid.NewGuid(),
+                    EventTypeId: Guid.NewGuid(),
+                    StartedAt: DateTime.UtcNow,
+                    EndedAt: DateTime.UtcNow
+                )
+            );
+        _stateUserRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(new StateUser(UserId: userId, StateId: Guid.NewGuid(), Rate: 1.0));
 
-        await _service.validateCanUse(new Lesson { EventId = Guid.NewGuid() });
+        await _service.validateCanUse(
+            new Lesson(EventId: Guid.NewGuid(), LessonTypeId: Guid.NewGuid())
+        );
 
         Assert.Pass("Can use");
     }
@@ -60,28 +67,42 @@ public class LessonSecurityServiceTests
     public void LESSON_CanUse__NotOwner()
     {
         _userInfo.Setup(x => x.GetUserId()).Returns(Guid.NewGuid().ToString());
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            StateUserId = Guid.NewGuid()
-        });
-        _stateUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new StateUser
-        {
-            UserId = Guid.NewGuid()
-        });
+        _eventRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new Event(
+                    StateUserId: Guid.NewGuid(),
+                    EventTypeId: Guid.NewGuid(),
+                    StartedAt: DateTime.UtcNow,
+                    EndedAt: DateTime.UtcNow
+                )
+            );
+        _stateUserRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new StateUser(UserId: Guid.NewGuid(), StateId: Guid.NewGuid(), Rate: 1.0)
+            );
 
-        Assert.ThrowsAsync<AppException>(async () => await _service.validateCanUse(new Lesson { EventId = Guid.NewGuid() }));
+        Assert.ThrowsAsync<AppException>(
+            async () =>
+                await _service.validateCanUse(
+                    new Lesson(EventId: Guid.NewGuid(), LessonTypeId: Guid.NewGuid())
+                )
+        );
     }
 
     [Test]
     public async Task LESSON_CanCreate__VALID()
     {
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            EventType = new EventType { WorkId = Guid.Parse(SystemWorks.AcademicMethodicalWorkId) },
-            Lessons = new Lesson[] { }
-        });
+        var entity = new Mock<Event>();
 
-        await _service.validateCanCreate(new Lesson { EventId = Guid.NewGuid(), LessonTypeId = Guid.NewGuid() });
+        entity.Setup(x => x.WorkId).Returns(Guid.Parse(SystemWorks.AcademicMethodicalWorkId));
+
+        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(entity.Object);
+
+        await _service.validateCanCreate(
+            new Lesson(EventId: Guid.NewGuid(), LessonTypeId: Guid.NewGuid())
+        );
 
         Assert.Pass("Can create");
     }
@@ -89,25 +110,34 @@ public class LessonSecurityServiceTests
     [Test]
     public void LESSON_CanCreate__IncorrectWorkId()
     {
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            EventType = new EventType { WorkId = Guid.Parse(SystemWorks.ExtraWorkId) },
-            Lessons = new Lesson[] { }
-        });
+        var entity = new Mock<Event>();
 
-        Assert.ThrowsAsync<AppException>(async () => await _service.validateCanCreate(new Lesson { EventId = Guid.NewGuid(), LessonTypeId = Guid.NewGuid() }));
+        entity.Setup(x => x.WorkId).Returns(Guid.Parse(SystemWorks.ExtraWorkId));
+
+        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(entity.Object);
+
+        Assert.ThrowsAsync<AppException>(
+            async () =>
+                await _service.validateCanCreate(
+                    new Lesson(EventId: Guid.NewGuid(), LessonTypeId: Guid.NewGuid())
+                )
+        );
     }
 
     [Test]
     public void LESSON_CanCreate__LessonTypeCopy()
     {
         var id = Guid.NewGuid();
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            EventType = new EventType { WorkId = Guid.Parse(SystemWorks.AcademicMethodicalWorkId) },
-            Lessons = new Lesson[] { new Lesson { LessonTypeId = id } }
-        });
+        var entity = new Mock<Event>();
 
-        Assert.ThrowsAsync<AppException>(async () => await _service.validateCanCreate(new Lesson { EventId = Guid.NewGuid(), LessonTypeId = id }));
+        entity.Setup(x => x.HasLessonType(id)).Returns(true);
+        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(entity.Object);
+
+        Assert.ThrowsAsync<AppException>(
+            async () =>
+                await _service.validateCanCreate(
+                    new Lesson(EventId: Guid.NewGuid(), LessonTypeId: id)
+                )
+        );
     }
 }

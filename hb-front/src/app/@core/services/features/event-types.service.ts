@@ -13,7 +13,7 @@ export class EventTypesService {
 
   private readonly _activityId$: Subject<string> = new Subject<string>();
 
-  private readonly _eventTypes$: Observable<IEventType[]> = this._httpClient.get<IEventType[]>('/api/EventType/getAll').pipe(
+  private readonly _eventTypes$: Observable<IEventType[]> = this._httpClient.get<IEventType[]>('/api/EventType').pipe(
     shareReplay(1)
   )
 

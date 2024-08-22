@@ -2,6 +2,12 @@
 
 public class InstituteDto
 {
-    public string Id { get; set; }
-    public string Name { get; set; }
+    public InstituteDto(Guid Id, string Name)
+    {
+        this.Id = Id;
+        this.Name = Name;
+    }
+
+    public readonly Guid Id;
+    public readonly string Name;
 }

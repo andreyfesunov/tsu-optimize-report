@@ -60,13 +60,14 @@ public class ReportController : ControllerBase
         try
         {
             var result = await _service.Search(searchDto);
-            return Ok(new Pagination<ReportListDto>
-            {
-                PageNumber = result.PageNumber,
-                PageSize = result.PageSize,
-                TotalPages = result.TotalPages,
-                Entities = result.Entities.Select(x => _mapper.Map<ReportListDto>(x)).ToList()
-            });
+            return Ok(
+                new Pagination<ReportListDto>(
+                    PageNumber: result.PageNumber,
+                    PageSize: result.PageSize,
+                    TotalPages: result.TotalPages,
+                    Entities: result.Entities.Select(x => _mapper.Map<ReportListDto>(x)).ToList()
+                )
+            );
         }
         catch (Exception ex)
         {

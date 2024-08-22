@@ -45,12 +45,11 @@ public class WorkService : IWorkService
     public async Task<Pagination<WorkDto>> Search(SearchDto searchDto)
     {
         var result = await _repository.Search(searchDto);
-        return new Pagination<WorkDto>
-        {
-            PageNumber = result.PageNumber,
-            PageSize = result.PageSize,
-            TotalPages = result.TotalPages,
-            Entities = result.Entities.Select(u => _mapper.Map<WorkDto>(u)).ToList()
-        };
+        return new Pagination<WorkDto>(
+            PageNumber: result.PageNumber,
+            PageSize: result.PageSize,
+            TotalPages: result.TotalPages,
+            Entities: result.Entities.Select(u => _mapper.Map<WorkDto>(u)).ToList()
+        );
     }
 }

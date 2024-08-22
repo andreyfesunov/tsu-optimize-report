@@ -4,15 +4,6 @@ namespace BackendBase.Factories;
 
 public static class InstituteFactory
 {
-    public static List<Institute> Make()
-    {
-        return new List<Institute>
-        {
-            new()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Институт прикладной математики и компьютерных наук"
-            }
-        };
-    }
+    public static List<Institute> Make() =>
+        new List<Institute> { new(Name: "Институт прикладной математики и компьютерных наук") };
 }

@@ -1,15 +1,33 @@
-﻿using BackendBase.Models;
-using BackendBase.Models.Enum;
+﻿using BackendBase.Models.Enum;
 
 namespace BackendBase.Dto;
 
 public class UserDto
 {
-    public string Id { get; set; }
-    public RoleUserEnum Role { get; set; }
-    public string Firstname { get; set; }
-    public string Lastname { get; set; }
-    public string Email { get; set; }
-    public Rank? Rank { get; set; }
-    public Degree? Degree { get; set; }
+    public UserDto(
+        Guid Id,
+        string Email,
+        string Firstname,
+        string Lastname,
+        RoleUserEnum Role,
+        RankDto? Rank,
+        DegreeDto? Degree
+    )
+    {
+        this.Id = Id;
+        this.Email = Email;
+        this.Firstname = Firstname;
+        this.Lastname = Lastname;
+        this.Role = Role;
+        this.Rank = Rank;
+        this.Degree = Degree;
+    }
+
+    public readonly Guid Id;
+    public readonly string Email;
+    public readonly string Firstname;
+    public readonly string Lastname;
+    public readonly RoleUserEnum Role;
+    public readonly RankDto? Rank;
+    public readonly DegreeDto? Degree;
 }

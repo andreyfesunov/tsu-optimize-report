@@ -17,10 +17,10 @@ public class CommentSecurityServiceTests
     public CommentSecurityServiceTests()
     {
         _service = new CommentSecurityService(
-                _userInfo.Object,
-                _stateUserRepo.Object,
-                _eventRepo.Object
-                );
+            _userInfo.Object,
+            _stateUserRepo.Object,
+            _eventRepo.Object
+        );
     }
 
     private readonly ICommentSecurityService _service;
@@ -42,16 +42,21 @@ public class CommentSecurityServiceTests
         var userId = Guid.NewGuid();
 
         _userInfo.Setup(x => x.GetUserId()).Returns(userId.ToString());
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            StateUserId = Guid.NewGuid()
-        });
-        _stateUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new StateUser
-        {
-            UserId = userId
-        });
+        _eventRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new Event(
+                    StateUserId: Guid.NewGuid(),
+                    EventTypeId: Guid.NewGuid(),
+                    StartedAt: DateTime.UtcNow,
+                    EndedAt: DateTime.UtcNow
+                )
+            );
+        _stateUserRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(new StateUser(UserId: userId, StateId: Guid.NewGuid(), Rate: 1.0));
 
-        await _service.validateCanUse(new Comment { EventId = Guid.NewGuid() });
+        await _service.validateCanUse(new Comment(EventId: Guid.NewGuid(), Content: "Content"));
 
         Assert.Pass("Can use");
     }
@@ -60,27 +65,40 @@ public class CommentSecurityServiceTests
     public void COMMENT_CanUse__NotOwner()
     {
         _userInfo.Setup(x => x.GetUserId()).Returns(Guid.NewGuid().ToString());
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            StateUserId = Guid.NewGuid()
-        });
-        _stateUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new StateUser
-        {
-            UserId = Guid.NewGuid()
-        });
+        _eventRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new Event(
+                    StateUserId: Guid.NewGuid(),
+                    StartedAt: DateTime.UtcNow,
+                    EndedAt: DateTime.UtcNow,
+                    EventTypeId: Guid.NewGuid()
+                )
+            );
+        _stateUserRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new StateUser(UserId: Guid.NewGuid(), StateId: Guid.NewGuid(), Rate: 1.0)
+            );
 
-        Assert.ThrowsAsync<AppException>(async () => await _service.validateCanUse(new Comment { EventId = Guid.NewGuid() }));
+        Assert.ThrowsAsync<AppException>(
+            async () =>
+                await _service.validateCanUse(
+                    new Comment(EventId: Guid.NewGuid(), Content: "Content")
+                )
+        );
     }
 
     [Test]
     public async Task COMMENT_CanCreate__VALID()
     {
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            EventType = new EventType { WorkId = Guid.Parse(SystemWorks.ExtraWorkId) },
-        });
+        var entity = new Mock<Event>();
 
-        await _service.validateCanCreate(new Comment { EventId = Guid.NewGuid() });
+        entity.Setup(x => x.WorkId).Returns(Guid.Parse(SystemWorks.ExtraWorkId));
+
+        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(entity.Object);
+
+        await _service.validateCanCreate(new Comment(EventId: Guid.NewGuid(), Content: "Content"));
 
         Assert.Pass("Can create");
     }
@@ -88,11 +106,17 @@ public class CommentSecurityServiceTests
     [Test]
     public void COMMENT_CanCreate__IncorrectWorkId()
     {
-        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Event
-        {
-            EventType = new EventType { WorkId = Guid.Parse(SystemWorks.AcademicMethodicalWorkId) },
-        });
+        var entity = new Mock<Event>();
 
-        Assert.ThrowsAsync<AppException>(async () => await _service.validateCanCreate(new Comment { EventId = Guid.NewGuid() }));
+        entity.Setup(x => x.WorkId).Returns(Guid.Parse(SystemWorks.AcademicMethodicalWorkId));
+
+        _eventRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(entity.Object);
+
+        Assert.ThrowsAsync<AppException>(
+            async () =>
+                await _service.validateCanCreate(
+                    new Comment(EventId: Guid.NewGuid(), Content: "Content")
+                )
+        );
     }
 }

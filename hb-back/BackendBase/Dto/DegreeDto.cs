@@ -1,8 +1,13 @@
-﻿namespace BackendBase.Dto
+﻿namespace BackendBase.Dto;
+
+public class DegreeDto
 {
-    public class DegreeDto
+    public DegreeDto(Guid Id, string Name)
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        this.Id = Id;
+        this.Name = Name;
     }
+
+    public readonly Guid Id;
+    public readonly string Name;
 }

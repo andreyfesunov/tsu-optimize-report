@@ -1,9 +1,15 @@
-﻿namespace BackendBase.Dto
+﻿namespace BackendBase.Dto;
+
+public class ActivityDto
 {
-    public class ActivityDto
+    public ActivityDto(Guid Id, string Name, int Column)
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public int Column { get; set; }
+        this.Id = Id;
+        this.Name = Name;
+        this.Column = Column;
     }
+
+    public readonly Guid Id;
+    public readonly string Name;
+    public readonly int Column;
 }

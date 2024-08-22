@@ -1,8 +1,18 @@
-﻿namespace BackendBase.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BackendBase.Models;
+
+public class Degree : Base
 {
-    public class Degree : Base
+    protected Degree() { }
+
+    [SetsRequiredMembers]
+    public Degree(string Name, Guid? Id = null)
+        : base(Id)
     {
-        public string Name { get; set; }
-        public ICollection<User> Users { get; set; }
+        this.Name = Name;
     }
+
+    public required string Name { get; init; }
+    public ICollection<User>? Users { get; init; }
 }

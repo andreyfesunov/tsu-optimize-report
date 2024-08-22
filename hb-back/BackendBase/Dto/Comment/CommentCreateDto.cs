@@ -2,8 +2,16 @@
 
 public class CommentCreateDto
 {
-    public string EventId { get; set; }
-    public string Content { get; set; }
-    public int? PlanDate { get; set; }
-    public int? FactDate { get; set; }
+    public CommentCreateDto(Guid EventId, string Content, int? PlanDate, int? FactDate)
+    {
+        this.EventId = EventId;
+        this.Content = Content;
+        this.PlanDate = PlanDate;
+        this.FactDate = FactDate;
+    }
+
+    public readonly Guid EventId;
+    public readonly string Content;
+    public readonly int? PlanDate;
+    public readonly int? FactDate;
 }

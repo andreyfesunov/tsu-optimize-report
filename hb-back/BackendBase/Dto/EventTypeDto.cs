@@ -1,12 +1,17 @@
-﻿using BackendBase.Models;
+﻿namespace BackendBase.Dto;
 
-namespace BackendBase.Dto
+public class EventTypeDto
 {
-    public class EventTypeDto
+    public EventTypeDto(Guid Id, string Name, string Description, WorkDto? Work)
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public WorkDto Work { get; set; }
+        this.Id = Id;
+        this.Name = Name;
+        this.Description = Description;
+        this.Work = Work;
     }
+
+    public readonly Guid Id;
+    public readonly string Name;
+    public readonly string Description;
+    public readonly WorkDto? Work;
 }

@@ -4,9 +4,24 @@ namespace BackendBase.Dto;
 
 public class RecordDto
 {
-    public string Id { get; set; }
-    public ActivityDto Activity { get; set; }
-    public ReportListDto StateUser { get; set; }
-    public LessonTypeDto LessonType { get; set; }
-    public int Hours { get; set; }
+    public RecordDto(
+        Guid Id,
+        int Hours,
+        ActivityDto? Activity,
+        ReportListDto? StateUser,
+        LessonTypeDto? LessonType
+    )
+    {
+        this.Id = Id;
+        this.Hours = Hours;
+        this.Activity = Activity;
+        this.StateUser = StateUser;
+        this.LessonType = LessonType;
+    }
+
+    public readonly Guid Id;
+    public readonly int Hours;
+    public readonly ActivityDto? Activity;
+    public readonly ReportListDto? StateUser;
+    public readonly LessonTypeDto? LessonType;
 }

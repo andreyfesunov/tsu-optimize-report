@@ -45,12 +45,11 @@ public class InstituteService : IInstituteService
     public async Task<Pagination<InstituteDto>> Search(SearchDto searchDto)
     {
         var result = await _repository.Search(searchDto);
-        return new Pagination<InstituteDto>
-        {
-            PageNumber = result.PageNumber,
-            PageSize = result.PageSize,
-            TotalPages = result.TotalPages,
-            Entities = result.Entities.Select(u => _mapper.Map<InstituteDto>(u)).ToList()
-        };
+        return new Pagination<InstituteDto>(
+            PageNumber: result.PageNumber,
+            PageSize: result.PageSize,
+            TotalPages: result.TotalPages,
+            Entities: result.Entities.Select(u => _mapper.Map<InstituteDto>(u)).ToList()
+        );
     }
 }

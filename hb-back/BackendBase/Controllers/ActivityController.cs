@@ -1,7 +1,7 @@
 ﻿using BackendBase.Dto;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using BackendBase.Extensions.Entities;
 
 namespace BackendBase.Controllers;
 

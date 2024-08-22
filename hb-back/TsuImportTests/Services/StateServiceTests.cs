@@ -5,6 +5,7 @@ using BackendBase.Dto.CreateDto;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
+using BackendBase.Models.Enum;
 using BackendBase.Services;
 using Moq;
 using NUnit.Framework;
@@ -40,22 +41,27 @@ public class StateServiceTests
     [Test]
     public async Task STATE_Create()
     {
-        var dto = new StateCreateDto
-        {
-            JobId = Guid.NewGuid().ToString(),
-            Count = 1,
-            Hours = 1485,
-            EndDate = new System.DateTime(2024, 1, 1),
-            StartDate = new System.DateTime(2023, 12, 31)
-        };
+        var dto = new StateCreateDto(
+            JobId: Guid.NewGuid(),
+            Count: 1,
+            Hours: 1485,
+            EndDate: new System.DateTime(2024, 1, 1),
+            StartDate: new System.DateTime(2023, 12, 31)
+        );
 
-        _departmentRepo.Setup(x => x.Search(It.IsAny<SearchDto>())).ReturnsAsync(new Pagination<Department>
-        {
-            PageSize = 1,
-            PageNumber = 1,
-            TotalPages = 1,
-            Entities = new Department[] { new Department { Id = Guid.NewGuid() } }
-        });
+        _departmentRepo
+            .Setup(x => x.Search(It.IsAny<SearchDto>()))
+            .ReturnsAsync(
+                new Pagination<Department>(
+                    PageSize: 1,
+                    PageNumber: 1,
+                    TotalPages: 1,
+                    Entities: new Department[]
+                    {
+                        new Department(Name: "Test Name", InstituteId: Guid.NewGuid())
+                    }
+                )
+            );
         _stateRepo.Setup(x => x.AddEntity(It.IsAny<State>())).ReturnsAsync((State x) => x);
 
         var stateId = await _service.Create(dto);
@@ -69,14 +75,33 @@ public class StateServiceTests
         var userId = Guid.NewGuid();
         var stateId = Guid.NewGuid();
 
-        _stateRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new State { Id = stateId, Count = 1 });
-        _userRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new User { Id = userId });
+        _stateRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new State(
+                    Id: stateId,
+                    Count: 1,
+                    DepartmentId: Guid.NewGuid(),
+                    JobId: Guid.NewGuid(),
+                    Hours: 1485,
+                    StartDate: DateTime.UtcNow,
+                    EndDate: DateTime.UtcNow
+                )
+            );
+        _userRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new User(
+                    Id: userId,
+                    Email: "test@data.com",
+                    Password: "Password",
+                    Role: RoleUserEnum.User,
+                    Firstname: "Firstname",
+                    Lastname: "Lastname"
+                )
+            );
 
-        var dto = new StateUserCreateDto
-        {
-            UserId = userId.ToString(),
-            StateId = stateId.ToString()
-        };
+        var dto = new StateUserCreateDto(UserId: userId, StateId: stateId);
 
         var success = await _service.Assign(dto);
 
@@ -89,14 +114,33 @@ public class StateServiceTests
         var userId = Guid.NewGuid();
         var stateId = Guid.NewGuid();
 
-        _stateRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new State { Id = stateId, Count = 0 });
-        _userRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new User { Id = userId });
+        _stateRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new State(
+                    Id: stateId,
+                    Count: 0,
+                    DepartmentId: Guid.NewGuid(),
+                    JobId: Guid.NewGuid(),
+                    Hours: 1485,
+                    StartDate: DateTime.UtcNow,
+                    EndDate: DateTime.UtcNow
+                )
+            );
+        _userRepo
+            .Setup(x => x.GetById(It.IsAny<Guid>()))
+            .ReturnsAsync(
+                new User(
+                    Id: userId,
+                    Email: "test@data.com",
+                    Password: "Password",
+                    Role: RoleUserEnum.User,
+                    Firstname: "Firstname",
+                    Lastname: "Lastname"
+                )
+            );
 
-        var dto = new StateUserCreateDto
-        {
-            UserId = userId.ToString(),
-            StateId = stateId.ToString()
-        };
+        var dto = new StateUserCreateDto(UserId: userId, StateId: stateId);
 
         var success = await _service.Assign(dto);
 

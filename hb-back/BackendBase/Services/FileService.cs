@@ -10,11 +10,7 @@ public class FileService : IFileService, IStorage
     private readonly string _root;
     private readonly IFileRepository _repository;
 
-    public FileService(
-            IWebHostEnvironment env,
-            IConfiguration conf,
-            IFileRepository repository
-            )
+    public FileService(IWebHostEnvironment env, IConfiguration conf, IFileRepository repository)
     {
         _root = Path.Combine(env.ContentRootPath, conf["Storage:Folder"]);
         _repository = repository;

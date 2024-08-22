@@ -15,7 +15,8 @@ public class UserInfoMiddleware
     {
         var userId = context.User.FindFirst("id")?.Value;
 
-        if (userId != null) userInfo.SetUserId(userId);
+        if (userId != null)
+            userInfo.SetUserId(userId);
 
         await _next(context);
     }

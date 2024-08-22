@@ -2,8 +2,16 @@
 
 public class CommentDto
 {
-    public string Id { get; set; }
-    public string Content { get; set; }
-    public DateTime FactDate { get; set; }
-    public DateTime PlanDate { get; set; }
+    public CommentDto(Guid Id, string Content, DateTime PlanDate, DateTime FactDate)
+    {
+        this.Id = Id;
+        this.Content = Content;
+        this.PlanDate = PlanDate;
+        this.FactDate = FactDate;
+    }
+
+    public readonly Guid Id;
+    public readonly string Content;
+    public readonly DateTime FactDate;
+    public readonly DateTime PlanDate;
 }

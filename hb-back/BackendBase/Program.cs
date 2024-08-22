@@ -121,6 +121,17 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+/* var ClientOriginsPolicy = "ClientOriginsPolicy"; */
+
+/* builder.Services.AddCors(options => */
+/* { */
+/*     options.AddPolicy(name: ClientOriginsPolicy, */
+/*                       policy => */
+/*                       { */
+/*                           policy.WithOrigins("http://tsu71.ru", "http://localhost"); */
+/*                       }); */
+/* }); */
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -130,6 +141,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.ApplyMigrations();
     app.Seed();
+} else {
+    /* app.UseCors(ClientOriginsPolicy); */
 }
 
 app.UseHttpsRedirection();

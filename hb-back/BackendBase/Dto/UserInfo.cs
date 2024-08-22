@@ -6,7 +6,8 @@ public class UserInfo
 
     public virtual string GetUserId()
     {
-        if (UserId != null) return UserId;
+        if (UserId != null)
+            return UserId;
         throw new Exception("UserInfo not initialized.");
     }
 

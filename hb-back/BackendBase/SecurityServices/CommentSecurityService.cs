@@ -39,7 +39,7 @@ public class CommentSecurityService : BaseSecurityService<Comment>, ICommentSecu
     {
         var @event = await _eventRepository.GetById(item.EventId);
 
-        if (@event.EventType.WorkId.ToString() == SystemWorks.AcademicMethodicalWorkId)
+        if (@event.WorkId.ToString() == SystemWorks.AcademicMethodicalWorkId)
         {
             throw new AppException("Comment cannot be created inside Academical Methodical Work");
         }

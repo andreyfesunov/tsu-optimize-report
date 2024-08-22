@@ -1,10 +1,22 @@
-﻿namespace BackendBase.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BackendBase.Models
 {
     public class ActivityEventType : Base
     {
-        public Guid ActivityId { get; set; }
-        public Activity Activity { get; set; }
-        public Guid EventTypeId { get; set; }
-        public EventType EventType { get; set; }
+        protected ActivityEventType() { }
+
+        [SetsRequiredMembers]
+        public ActivityEventType(Guid ActivityId, Guid EventTypeId, Guid? Id = null)
+            : base(Id)
+        {
+            this.ActivityId = ActivityId;
+            this.EventTypeId = EventTypeId;
+        }
+
+        public required Guid ActivityId { get; init; }
+        public required Guid EventTypeId { get; init; }
+        public Activity? Activity { get; init; }
+        public EventType? EventType { get; init; }
     }
 }

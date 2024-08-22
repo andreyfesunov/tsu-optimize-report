@@ -4,13 +4,24 @@ namespace BackendBase.Dto;
 
 public class RegistrationDto
 {
-    [Required] public string Email { get; set; }
+    public RegistrationDto(string Email, string Password, string Firstname, string Lastname)
+    {
+        this.Email = Email;
+        this.Password = Password;
+        this.Firstname = Firstname;
+        this.Lastname = Lastname;
+    }
+
+    [Required]
+    public readonly string Email;
 
     [Required]
     [DataType(DataType.Password)]
-    public string Password { get; set; }
+    public readonly string Password;
 
-    [Required] public string Firstname { get; set; }
+    [Required]
+    public readonly string Firstname;
 
-    [Required] public string Lastname { get; set; }
+    [Required]
+    public readonly string Lastname;
 }

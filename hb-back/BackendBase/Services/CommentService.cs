@@ -19,7 +19,7 @@ public class CommentService : ICommentService
 
     public async Task<Comment> Update(CommentUpdateDto dto)
     {
-        var comment = await _repository.GetById(Guid.Parse(dto.Id));
+        var comment = await _repository.GetById(dto.Id);
         await _security.validateCanUse(comment);
         // ****
 

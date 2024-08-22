@@ -29,16 +29,6 @@ public class EventTypeService : IEventTypeService
         _mapper = mapper;
     }
 
-    public async Task<EventType> AddEntity(EventType entity)
-    {
-        return await _repository.AddEntity(entity);
-    }
-
-    public async Task<EventTypeDto> GetById(Guid id)
-    {
-        return _mapper.Map<EventTypeDto>(await _repository.GetById(id));
-    }
-
     public async Task<ICollection<EventTypeDto>> GetAll()
     {
         return (await _repository.GetAll()).Select(u => _mapper.Map<EventTypeDto>(u)).ToList();
@@ -54,17 +44,8 @@ public class EventTypeService : IEventTypeService
         return await _repository.DeleteById(entityId);
     }
 
-    public async Task<Pagination<EventTypeDto>> Search(SearchDto searchDto)
-    {
-        var result = await _repository.Search(searchDto);
-        return new Pagination<EventTypeDto>
-        {
-            PageNumber = result.PageNumber,
-            PageSize = result.PageSize,
-            TotalPages = result.TotalPages,
-            Entities = result.Entities.Select(u => _mapper.Map<EventTypeDto>(u)).ToList()
-        };
-    }
+    public async Task<Pagination<EventType>> Search(SearchDto searchDto) =>
+        await _repository.Search(searchDto);
 
     public async Task<Dictionary<string, Pagination<EventTypeDto>>> SearchMap(SearchDto searchDto)
     {
@@ -78,15 +59,23 @@ public class EventTypeService : IEventTypeService
         return searchMap;
     }
 
-    public async Task<ICollection<EventTypeDto>> GetAllForReport(Guid stateUserId, Guid workId, bool first)
+    public async Task<ICollection<EventTypeDto>> GetAllForReport(
+        Guid stateUserId,
+        Guid workId,
+        bool first
+    )
     {
         var stateUser = await _stateUserRepository.GetById(stateUserId);
-        var activityIds = stateUser.Records.Select(x => x.Activity.Id);
-        var eventTypeIds =
-            (await _activityEventTypeRepository.GetAll(x => activityIds.Contains(x.ActivityId))).Select(x =>
-                x.EventTypeId);
+        var activityIds = stateUser.Records.Select(x => x.Activity?.Id);
+        var eventTypeIds = (
+            await _activityEventTypeRepository.GetAll(x => activityIds.Contains(x.ActivityId))
+        ).Select(x => x.EventTypeId);
 
-        return (await _repository.GetAll(x => x.WorkId == workId && (eventTypeIds.Contains(x.Id) || !first)))
+        return (
+            await _repository.GetAll(x =>
+                x.WorkId == workId && (eventTypeIds.Contains(x.Id) || !first)
+            )
+        )
             .Select(x => _mapper.Map<EventTypeDto>(x))
             .ToList();
     }
@@ -94,13 +83,12 @@ public class EventTypeService : IEventTypeService
     public async Task<Pagination<EventTypeDto>> Search(Guid activityId, SearchDto searchDto)
     {
         var result = await _repository.Search(activityId, searchDto);
-        return new Pagination<EventTypeDto>
-        {
-            PageNumber = result.PageNumber,
-            PageSize = result.PageSize,
-            TotalPages = result.TotalPages,
-            Entities = result.Entities.Select(u => _mapper.Map<EventTypeDto>(u)).ToList()
-        };
+        return new Pagination<EventTypeDto>(
+            PageNumber: result.PageNumber,
+            PageSize: result.PageSize,
+            TotalPages: result.TotalPages,
+            Entities: result.Entities.Select(u => _mapper.Map<EventTypeDto>(u)).ToList()
+        );
     }
 
     public async Task<ActivityEventType> Assign(EventTypeAssignDto dto)
@@ -114,11 +102,9 @@ public class EventTypeService : IEventTypeService
 
     public async Task<bool> Delete(Guid activityId, Guid entityTypeId)
     {
-        var links = await _activityEventTypeRepository
-            .GetAll(
-                x => x.ActivityId == activityId &&
-                     x.EventTypeId == entityTypeId
-            );
+        var links = await _activityEventTypeRepository.GetAll(x =>
+            x.ActivityId == activityId && x.EventTypeId == entityTypeId
+        );
 
         return await _activityEventTypeRepository.DeleteBatch(links);
     }
