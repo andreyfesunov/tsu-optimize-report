@@ -24,28 +24,30 @@ public class Event : Base
     }
 
     public required Guid StateUserId { get; init; }
-    public required Guid EventTypeId { get; init; }
+public required Guid EventTypeId { get; init; }
 
-    /** Editable Fields */
-    public required DateTime StartedAt { get; set; }
-    public required DateTime EndedAt { get; set; }
+/** Editable Fields */
+public required DateTime StartedAt
+{ get; set; }
+public required DateTime EndedAt
+{ get; set; }
 
-    public ICollection<Lesson>? Lessons { get; init; }
-    public ICollection<Comment>? Comments { get; init; }
-    public ICollection<EventFile>? EventsFiles { get; init; }
+public ICollection<Lesson>? Lessons { get; init; }
+public ICollection<Comment>? Comments { get; init; }
+public ICollection<EventFile>? EventsFiles { get; init; }
 
-    public EventType? EventType { get; init; }
-    public StateUser? StateUser { get; init; }
+public EventType? EventType { get; init; }
+public StateUser? StateUser { get; init; }
 
-    /** Methods */
-    public virtual Guid? WorkId => this.EventType?.WorkId;
+/** Methods */
+public virtual Guid? WorkId => this.EventType?.WorkId;
 
-    public virtual bool HasLessonType(Guid Id)
+public virtual bool HasLessonType(Guid Id)
+{
+    if (this.Lessons == null)
     {
-        if (this.Lessons == null)
-        {
-            throw new AppException("Lessons not loaded");
-        }
-        return this.Lessons.Where(x => x.Id == Id).Count() != 0;
+        throw new AppException("Lessons not loaded");
     }
+    return this.Lessons.Where(x => x.Id == Id).Count() != 0;
+}
 }

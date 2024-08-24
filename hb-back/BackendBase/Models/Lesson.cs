@@ -23,12 +23,12 @@ public class Lesson : Base
     }
 
     public required Guid EventId { get; init; }
-    public required Guid LessonTypeId { get; init; }
+public required Guid LessonTypeId { get; init; }
 
-    /** Editable Fields */
-    public int? FactDate { get; set; }
-    public int? PlanDate { get; set; }
+/** Editable Fields */
+public int? FactDate { get; set; }
+public int? PlanDate { get; set; }
 
-    public Event? Event { get; init; }
-    public LessonType? LessonType { get; init; }
+public Event? Event { get; init; }
+public LessonType? LessonType { get; init; }
 }

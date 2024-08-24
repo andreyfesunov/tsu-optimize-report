@@ -32,12 +32,12 @@ public class User : Base
     public required string Email { get; init; }
     public required string Password { get; init; }
     public required RoleUserEnum Role { get; init; }
-    public required string Firstname { get; init; }
-    public required string Lastname { get; init; }
+public required string Firstname { get; init; }
+public required string Lastname { get; init; }
 
-    public Guid? RankId { get; private set; }
-    public Guid? DegreeId { get; private set; }
+public Guid? RankId { get; private set; }
+public Guid? DegreeId { get; private set; }
 
-    public Rank? Rank { get; private set; }
-    public Degree? Degree { get; private set; }
+public Rank? Rank { get; private set; }
+public Degree? Degree { get; private set; }
 }

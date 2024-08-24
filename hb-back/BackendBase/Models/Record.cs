@@ -17,11 +17,12 @@ public class Record : Base
     }
 
     public required Guid StateUserId { get; init; }
-    public required Guid ActivityId { get; init; }
-    public required Guid LessonTypeId { get; init; }
-    public required int Hours { get; init; }
+public required Guid ActivityId { get; init; }
+public required Guid LessonTypeId
+{ get; init; }
+public required int Hours { get; init; }
 
-    public Activity? Activity { get; init; }
-    public StateUser? StateUser { get; init; }
-    public LessonType? LessonType { get; init; }
+public Activity? Activity { get; init; }
+public StateUser? StateUser { get; init; }
+public LessonType? LessonType { get; init; }
 }

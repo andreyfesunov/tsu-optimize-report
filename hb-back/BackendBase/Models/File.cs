@@ -16,9 +16,9 @@ public class File : Base
     }
 
     public required Guid StateUserId { get; init; }
-    public required string Path { get; init; }
-    public required DateTime CreatedDate { get; init; }
+public required string Path { get; init; }
+public required DateTime CreatedDate { get; init; }
 
-    public ICollection<EventFile>? EventsFiles { get; init; }
-    public StateUser? StateUser { get; init; }
+public ICollection<EventFile>? EventsFiles { get; init; }
+public StateUser? StateUser { get; init; }
 }

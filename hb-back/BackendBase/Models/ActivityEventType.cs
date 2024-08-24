@@ -15,8 +15,8 @@ namespace BackendBase.Models
         }
 
         public required Guid ActivityId { get; init; }
-        public required Guid EventTypeId { get; init; }
-        public Activity? Activity { get; init; }
-        public EventType? EventType { get; init; }
+    public required Guid EventTypeId { get; init; }
+public Activity? Activity { get; init; }
+public EventType? EventType { get; init; }
     }
 }

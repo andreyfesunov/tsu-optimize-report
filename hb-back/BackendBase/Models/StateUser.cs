@@ -16,13 +16,13 @@ public class StateUser : Base
     }
 
     public required Guid StateId { get; init; }
-    public required Guid UserId { get; init; }
-    public required double Rate { get; init; }
+public required Guid UserId { get; init; }
+public required double Rate { get; init; }
 
-    public ICollection<Event>? Events { get; init; }
-    public ICollection<File>? Files { get; init; }
-    public ICollection<Record>? Records { get; init; }
+public ICollection<Event>? Events { get; init; }
+public ICollection<File>? Files { get; init; }
+public ICollection<Record>? Records { get; init; }
 
-    public State? State { get; init; }
-    public User? User { get; init; }
+public State? State { get; init; }
+public User? User { get; init; }
 }

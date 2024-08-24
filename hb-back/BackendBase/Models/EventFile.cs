@@ -16,9 +16,9 @@ namespace BackendBase.Models
         }
 
         public required Guid FileId { get; init; }
-        public required Guid EventId { get; init; }
+    public required Guid EventId { get; init; }
 
-        public File? File { get; init; }
-        public Event? Event { get; init; }
+public File? File { get; init; }
+public Event? Event { get; init; }
     }
 }

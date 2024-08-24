@@ -27,16 +27,18 @@ public class State : Base
     }
 
     public required Guid DepartmentId { get; init; }
-    public required Guid JobId { get; init; }
-    public required int Hours { get; init; }
-    public required DateTime StartDate { get; init; }
-    public required DateTime EndDate { get; init; }
+public required Guid JobId { get; init; }
+public required int Hours { get; init; }
+public required DateTime StartDate
+{ get; init; }
+public required DateTime EndDate
+{ get; init; }
 
-    /** Editable Fields */
-    public required int Count { get; set; }
+/** Editable Fields */
+public required int Count { get; set; }
 
-    public ICollection<StateUser>? StatesUsers { get; init; }
+public ICollection<StateUser>? StatesUsers { get; init; }
 
-    public Department? Department { get; private set; }
-    public Job? Job { get; private set; }
+public Department? Department { get; private set; }
+public Job? Job { get; private set; }
 }

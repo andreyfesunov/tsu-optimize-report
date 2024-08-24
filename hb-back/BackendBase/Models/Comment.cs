@@ -21,5 +21,5 @@ public class Comment : Base
 
     /** Comment belongs to Event */
     public required Guid EventId { get; init; }
-    public Event? Event { get; init; }
+public Event? Event { get; init; }
 }

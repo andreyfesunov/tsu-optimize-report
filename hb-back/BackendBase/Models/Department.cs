@@ -17,6 +17,6 @@ public class Department : Base
     public required string Name { get; init; }
     public required Guid InstituteId { get; init; }
 
-    public ICollection<State>? States { get; init; }
-    public Institute? Institute { get; init; }
+public ICollection<State>? States { get; init; }
+public Institute? Institute { get; init; }
 }

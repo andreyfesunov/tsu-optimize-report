@@ -16,11 +16,11 @@ public class EventType : Base
     }
 
     public required Guid WorkId { get; init; }
-    public required string Name { get; init; }
-    public required string Description { get; init; }
+public required string Name { get; init; }
+public required string Description { get; init; }
 
-    public ICollection<ActivityEventType>? ActivitiesEventsTypes { get; init; }
-    public ICollection<Event>? Events { get; init; }
+public ICollection<ActivityEventType>? ActivitiesEventsTypes { get; init; }
+public ICollection<Event>? Events { get; init; }
 
-    public Work? Work { get; init; }
+public Work? Work { get; init; }
 }
