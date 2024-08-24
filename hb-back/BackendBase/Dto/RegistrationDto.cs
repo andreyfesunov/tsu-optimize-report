@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BackendBase.Dto;
+﻿namespace BackendBase.Dto;
 
 public class RegistrationDto
 {
@@ -12,16 +10,8 @@ public class RegistrationDto
         this.Lastname = Lastname;
     }
 
-    [Required]
-    public readonly string Email;
-
-    [Required]
-    [DataType(DataType.Password)]
-    public readonly string Password;
-
-    [Required]
-    public readonly string Firstname;
-
-    [Required]
-    public readonly string Lastname;
+    public string Email { get; init; }
+    public string Password { get; init; }
+    public string Firstname { get; init; }
+    public string Lastname { get; init; }
 }

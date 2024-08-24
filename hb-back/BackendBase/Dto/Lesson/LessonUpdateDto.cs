@@ -9,7 +9,7 @@ public class LessonUpdateDto
         this.FactDate = FactDate;
     }
 
-    public readonly Guid Id;
-    public readonly int? PlanDate;
-    public readonly int? FactDate;
+    public Guid Id { get; init; }
+    public int? PlanDate { get; init; }
+    public int? FactDate { get; init; }
 }

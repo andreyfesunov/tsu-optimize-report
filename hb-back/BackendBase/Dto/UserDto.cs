@@ -23,11 +23,11 @@ public class UserDto
         this.Degree = Degree;
     }
 
-    public readonly Guid Id;
-    public readonly string Email;
-    public readonly string Firstname;
-    public readonly string Lastname;
-    public readonly RoleUserEnum Role;
-    public readonly RankDto? Rank;
-    public readonly DegreeDto? Degree;
+    public Guid Id { get; init; }
+    public string Email { get; init; }
+    public string Firstname { get; init; }
+    public string Lastname { get; init; }
+    public RoleUserEnum Role { get; init; }
+    public RankDto? Rank { get; init; }
+    public DegreeDto? Degree { get; init; }
 }

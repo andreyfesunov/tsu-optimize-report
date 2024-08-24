@@ -23,8 +23,8 @@ public class Pagination<TEntity>
         this.Entities = Entities;
     }
 
-    public readonly int PageNumber;
-    public readonly int PageSize;
-    public readonly int TotalPages;
-    public readonly ICollection<TEntity> Entities;
+    public int PageNumber { get; init; }
+    public int PageSize { get; init; }
+    public int TotalPages { get; init; }
+    public ICollection<TEntity> Entities { get; init; }
 }

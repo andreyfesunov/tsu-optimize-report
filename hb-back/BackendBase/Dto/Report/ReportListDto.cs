@@ -12,9 +12,9 @@ public class ReportListDto
         this.State = State;
     }
 
-    public readonly Guid Id;
-    public readonly double Rate;
-    public readonly StateUserStatus Status;
+    public Guid Id { get; init; }
+    public double Rate { get; init; }
+    public StateUserStatus Status { get; init; }
 
-    public readonly StateDto? State;
+    public StateDto? State { get; init; }
 }

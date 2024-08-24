@@ -3,7 +3,7 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "5243:80"
+      - "5243:8080"
   tsu-frontend:
     ports:
       - "8080:80"

@@ -10,8 +10,8 @@ public class EventCreateDto
         this.EndedAt = EndedAt;
     }
 
-    public readonly Guid EventTypeId;
-    public readonly Guid StateUserId;
-    public readonly DateTime StartedAt;
-    public readonly DateTime EndedAt;
+    public Guid EventTypeId { get; init; }
+    public Guid StateUserId { get; init; }
+    public DateTime StartedAt { get; init; }
+    public DateTime EndedAt { get; init; }
 }

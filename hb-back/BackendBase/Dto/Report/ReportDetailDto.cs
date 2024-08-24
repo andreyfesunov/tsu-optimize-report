@@ -14,5 +14,5 @@ public class ReportDetailDto : ReportListDto
         : base(Id: Id, Rate: Rate, Status: Status, State: State) =>
         this.Events = Events ?? new List<EventDto>();
 
-    public readonly ICollection<EventDto> Events;
+    public ICollection<EventDto> Events { get; init; }
 }

@@ -10,8 +10,8 @@ public class LessonDto
         this.FactDate = FactDate;
     }
 
-    public readonly Guid Id;
-    public readonly LessonTypeDto? LessonType;
-    public readonly int? FactDate;
-    public readonly int? PlanDate;
+    public Guid Id { get; init; }
+    public LessonTypeDto? LessonType { get; init; }
+    public int? FactDate { get; init; }
+    public int? PlanDate { get; init; }
 }

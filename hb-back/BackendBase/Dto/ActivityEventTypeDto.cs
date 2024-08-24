@@ -9,7 +9,7 @@ public class ActivityEventTypeDto
         this.EventType = EventType;
     }
 
-    public readonly Guid Id;
-    public readonly ActivityDto? Activity;
-    public readonly EventTypeDto? EventType;
+    public Guid Id { get; init; }
+    public ActivityDto? Activity { get; init; }
+    public EventTypeDto? EventType { get; init; }
 }

@@ -19,9 +19,9 @@ public class RecordDto
         this.LessonType = LessonType;
     }
 
-    public readonly Guid Id;
-    public readonly int Hours;
-    public readonly ActivityDto? Activity;
-    public readonly ReportListDto? StateUser;
-    public readonly LessonTypeDto? LessonType;
+    public Guid Id { get; init; }
+    public int Hours { get; init; }
+    public ActivityDto? Activity { get; init; }
+    public ReportListDto? StateUser { get; init; }
+    public LessonTypeDto? LessonType { get; init; }
 }

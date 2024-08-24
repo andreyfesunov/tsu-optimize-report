@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BackendBase.Dto;
+﻿namespace BackendBase.Dto;
 
 public class LoginDto
 {
@@ -10,9 +8,6 @@ public class LoginDto
         this.Password = Password;
     }
 
-    [Required]
-    public readonly string Email;
-
-    [DataType(DataType.Password)]
-    public readonly string Password;
+    public string Email { get; init; }
+    public string Password { get; init; }
 }

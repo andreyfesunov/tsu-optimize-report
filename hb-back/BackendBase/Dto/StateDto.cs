@@ -21,13 +21,13 @@ public class StateDto
         this.Job = Job;
     }
 
-    public readonly Guid Id;
-    public readonly int Count;
-    public readonly int Hours;
+    public Guid Id { get; init; }
+    public int Count { get; init; }
+    public int Hours { get; init; }
 
-    public readonly DateTime StartDate;
-    public readonly DateTime EndDate;
+    public DateTime StartDate { get; init; }
+    public DateTime EndDate { get; init; }
 
-    public readonly DepartmentDto? Department;
-    public readonly JobDto? Job;
+    public DepartmentDto? Department { get; init; }
+    public JobDto? Job { get; init; }
 }

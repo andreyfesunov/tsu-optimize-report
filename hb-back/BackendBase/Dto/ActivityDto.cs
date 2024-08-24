@@ -9,7 +9,7 @@ public class ActivityDto
         this.Column = Column;
     }
 
-    public readonly Guid Id;
-    public readonly string Name;
-    public readonly int Column;
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public int Column { get; init; }
 }

@@ -9,7 +9,7 @@ public class DepartmentDto
         this.Institute = Institute;
     }
 
-    public readonly Guid Id;
-    public readonly string Name;
-    public readonly InstituteDto? Institute;
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public InstituteDto? Institute { get; init; }
 }

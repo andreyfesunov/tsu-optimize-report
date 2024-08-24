@@ -8,6 +8,6 @@ public class SearchDto
         this.PageSize = PageSize;
     }
 
-    public readonly int PageNumber;
-    public readonly int PageSize;
+    public int PageNumber { get; init; }
+    public int PageSize { get; init; }
 }

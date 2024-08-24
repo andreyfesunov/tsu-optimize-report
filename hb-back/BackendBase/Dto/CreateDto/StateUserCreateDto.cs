@@ -8,6 +8,6 @@ public class StateUserCreateDto
         this.UserId = UserId;
     }
 
-    public readonly Guid StateId;
-    public readonly Guid UserId;
+    public Guid StateId { get; init; }
+    public Guid UserId { get; init; }
 }

@@ -19,12 +19,12 @@ public class EventDto
         this.Comments = Comments ?? new List<CommentDto>();
     }
 
-    public readonly Guid Id;
-    public readonly DateTime StartedAt;
-    public readonly DateTime EndedAt;
+    public Guid Id { get; init; }
+    public DateTime StartedAt { get; init; }
+    public DateTime EndedAt { get; init; }
 
-    public readonly ICollection<LessonDto> Lessons;
-    public readonly ICollection<CommentDto> Comments;
+    public ICollection<LessonDto> Lessons { get; init; }
+    public ICollection<CommentDto> Comments { get; init; }
 
-    public readonly EventTypeDto? EventType;
+    public EventTypeDto? EventType { get; init; }
 }

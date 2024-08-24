@@ -10,8 +10,8 @@ public class CommentDto
         this.FactDate = FactDate;
     }
 
-    public readonly Guid Id;
-    public readonly string Content;
-    public readonly DateTime FactDate;
-    public readonly DateTime PlanDate;
+    public Guid Id { get; init; }
+    public string Content { get; init; }
+    public DateTime FactDate { get; init; }
+    public DateTime PlanDate { get; init; }
 }

@@ -8,6 +8,6 @@ public class EventTypeAssignDto
         this.ActivityId = ActivityId;
     }
 
-    public readonly Guid EventTypeId;
-    public readonly Guid ActivityId;
+    public Guid EventTypeId { get; init; }
+    public Guid ActivityId { get; init; }
 }

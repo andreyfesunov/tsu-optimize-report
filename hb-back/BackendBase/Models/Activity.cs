@@ -14,9 +14,9 @@ public class Activity : Base
         this.Column = Column;
     }
 
-    public required string Name { get; init; }
-    public required int Column { get; init; }
+    public required string Name { get; set; }
+    public required int Column { get; set; }
 
-    public ICollection<ActivityEventType>? ActivitiesEventsTypes { get; init; }
-    public ICollection<Record>? Records { get; init; }
+    public ICollection<ActivityEventType>? ActivitiesEventsTypes { get; set; }
+    public ICollection<Record>? Records { get; set; }
 }

@@ -4,5 +4,5 @@ public class UserLoginDto
 {
     public UserLoginDto(string Token) => this.Token = Token;
 
-    public readonly string Token;
+    public string Token { get; init; }
 }

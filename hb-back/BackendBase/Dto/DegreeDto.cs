@@ -8,6 +8,6 @@ public class DegreeDto
         this.Name = Name;
     }
 
-    public readonly Guid Id;
-    public readonly string Name;
+    public Guid Id { get; init; }
+    public string Name { get; init; }
 }

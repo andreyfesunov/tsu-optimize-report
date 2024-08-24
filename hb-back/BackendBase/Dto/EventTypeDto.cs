@@ -10,8 +10,8 @@ public class EventTypeDto
         this.Work = Work;
     }
 
-    public readonly Guid Id;
-    public readonly string Name;
-    public readonly string Description;
-    public readonly WorkDto? Work;
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public string Description { get; init; }
+    public WorkDto? Work { get; init; }
 }
