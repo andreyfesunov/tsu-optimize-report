@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Tsu.IndividualPlan.WebApi.Dto;
+using Tsu.IndividualPlan.WebApi.Extensions.Entities;
 using Tsu.IndividualPlan.WebApi.Interfaces.Services;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
@@ -21,7 +22,7 @@ public class EventTypeController : ControllerBase
         try
         {
             var result = await _service.GetAll();
-            return Ok(result);
+            return Ok(result.Select(x => x.toDTO()).ToList());
         }
         catch (Exception ex)
         {
@@ -54,7 +55,14 @@ public class EventTypeController : ControllerBase
         try
         {
             var result = await _service.Search(activityId, searchDto);
-            return Ok(result);
+            return Ok(
+                new Pagination<EventTypeDto>(
+                    PageNumber: result.PageNumber,
+                    PageSize: result.PageSize,
+                    TotalPages: result.TotalPages,
+                    Entities: result.Entities.Select(x => x.toDTO()).ToList()
+                )
+            );
         }
         catch (Exception ex)
         {
@@ -85,7 +93,7 @@ public class EventTypeController : ControllerBase
         try
         {
             var eventTypes = await _service.GetAllForReport(stateUserId, workId);
-            return Ok(eventTypes);
+            return Ok(eventTypes.Select(x => x.toDTO()).ToList());
         }
         catch (Exception ex)
         {
