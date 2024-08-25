@@ -7,7 +7,7 @@ export LC_ALL=ru_RU.UTF-8
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P )
 
 backend_folder="$parent_path/../hb-back"
-solution_file="./BackendBase.sln"
+solution_file="./Tsu.sln"
 echo "$backend_folder"
 
 # Check backend

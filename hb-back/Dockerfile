@@ -6,21 +6,21 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 COPY *.sln .
-COPY BackendBase/*.csproj ./BackendBase/
-COPY TsuImportTests/*.csproj ./TsuImportTests/
+COPY Tsu.IndividualPlan.WebApi/*.csproj ./Tsu.IndividualPlan.WebApi/
+COPY Tsu.IndividualPlan.Tests/*.csproj ./Tsu.IndividualPlan.Tests/
 
 RUN dotnet restore
 
 COPY . .
 
-WORKDIR /src/BackendBase/
-RUN dotnet build "BackendBase.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR /src/Tsu.IndividualPlan.WebApi/
+RUN dotnet build "Tsu.IndividualPlan.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "BackendBase.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Tsu.IndividualPlan.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BackendBase.dll"]
+ENTRYPOINT ["dotnet", "Tsu.IndividualPlan.WebApi.dll"]
