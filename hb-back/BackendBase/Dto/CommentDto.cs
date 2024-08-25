@@ -2,7 +2,7 @@
 
 public class CommentDto
 {
-    public CommentDto(Guid Id, string Content, DateTime PlanDate, DateTime FactDate)
+    public CommentDto(Guid Id, string Content, int? PlanDate, int? FactDate)
     {
         this.Id = Id;
         this.Content = Content;
@@ -12,6 +12,6 @@ public class CommentDto
 
     public Guid Id { get; init; }
     public string Content { get; init; }
-    public DateTime FactDate { get; init; }
-    public DateTime PlanDate { get; init; }
+    public int? FactDate { get; init; }
+    public int? PlanDate { get; init; }
 }

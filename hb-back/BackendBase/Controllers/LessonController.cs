@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Dto.Lesson;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
-using BackendBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +12,11 @@ namespace BackendBase.Controllers;
 [Authorize]
 public class LessonController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly ILessonService _service;
 
-    public LessonController(ILessonService service, IMapper mapper)
+    public LessonController(ILessonService service)
     {
         _service = service;
-        _mapper = mapper;
     }
 
     [HttpPost]
@@ -27,8 +24,8 @@ public class LessonController : ControllerBase
     {
         try
         {
-            var entity = await _service.AddEntity(_mapper.Map<Lesson>(dto));
-            return Ok(_mapper.Map<LessonDto>(entity));
+            var entity = await _service.AddEntity(dto);
+            return Ok(entity.toDTO());
         }
         catch (Exception ex)
         {
@@ -42,7 +39,7 @@ public class LessonController : ControllerBase
         try
         {
             var entity = await _service.Update(dto);
-            return Ok(_mapper.Map<LessonDto>(entity));
+            return Ok(entity.toDTO());
         }
         catch (Exception ex)
         {

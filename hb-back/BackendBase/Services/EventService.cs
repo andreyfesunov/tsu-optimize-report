@@ -29,8 +29,15 @@ public class EventService : IEventService
         return await _repository.UpdateEntity(entity);
     }
 
-    public async Task<Event> AddEntity(Event entity)
+    public async Task<Event> AddEntity(EventCreateDto dto)
     {
+        var entity = new Event(
+            StateUserId: dto.StateUserId,
+            EventTypeId: dto.EventTypeId,
+            StartedAt: dto.StartedAt,
+            EndedAt: dto.EndedAt
+        );
+
         await _security.validateCanUse(entity);
         await _security.validateCanCreate(entity);
         // ****

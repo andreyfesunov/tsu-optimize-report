@@ -1,8 +1,8 @@
-﻿using BackendBase.Dto;
+﻿using BackendBase.Models;
 
 namespace BackendBase.Interfaces.Services;
 
 public interface IRecordService
 {
-    Task<RecordDto[]> Get(Guid stateUserId);
+    Task<ICollection<Record>> GetForReport(Guid stateUserId);
 }

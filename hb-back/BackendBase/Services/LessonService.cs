@@ -17,8 +17,15 @@ public class LessonService : ILessonService
         _security = security;
     }
 
-    public async Task<Lesson> AddEntity(Lesson entity)
+    public async Task<Lesson> AddEntity(LessonCreateDto dto)
     {
+        var entity = new Lesson(
+            EventId: dto.EventId,
+            LessonTypeId: dto.LessonTypeId,
+            FactDate: dto.FactDate,
+            PlanDate: dto.PlanDate
+        );
+
         await _security.validateCanUse(entity);
         await _security.validateCanCreate(entity);
         // ****

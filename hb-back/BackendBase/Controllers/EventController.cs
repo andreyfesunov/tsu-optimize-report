@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Dto.Event;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +11,11 @@ namespace BackendBase.Controllers;
 [ApiController]
 public class EventController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IEventService _service;
 
-    public EventController(IEventService service, IMapper mapper)
+    public EventController(IEventService service)
     {
         _service = service;
-        _mapper = mapper;
     }
 
     [HttpPost]
@@ -25,8 +23,8 @@ public class EventController : ControllerBase
     {
         try
         {
-            var entity = await _service.AddEntity(_mapper.Map<Event>(dto));
-            return Ok(_mapper.Map<EventDto>(entity));
+            var entity = await _service.AddEntity(dto);
+            return Ok(entity.toDTO());
         }
         catch (Exception ex)
         {
@@ -40,7 +38,7 @@ public class EventController : ControllerBase
         try
         {
             var entity = await _service.Update(dto);
-            return Ok(_mapper.Map<EventDto>(entity));
+            return Ok(entity.toDTO());
         }
         catch (Exception ex)
         {

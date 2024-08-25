@@ -1,5 +1,5 @@
-import {EventsService, EventTypesService} from "@core/services";
-import {IEvent, IEventType, IReportDetail, IWork} from "@core/models";
+import { EventsService, EventTypesService } from "@core/services";
+import { IEvent, IEventType, IReportDetail, IWork } from "@core/models";
 import {
   BehaviorSubject,
   combineLatest,
@@ -11,12 +11,12 @@ import {
   shareReplay,
   switchMap
 } from "rxjs";
-import {EventFormState} from "@core/states";
-import {FormArray} from "@angular/forms";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {DestroyRef} from "@angular/core";
-import {Spinner, withSpinner} from "@core/utils";
-import {EventFormStateFactory} from "@core/factories";
+import { EventFormState } from "@core/states";
+import { FormArray } from "@angular/forms";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { DestroyRef } from "@angular/core";
+import { Spinner, withSpinner } from "@core/utils";
+import { EventFormStateFactory } from "@core/factories";
 
 export class WorkFormState {
   public constructor(
@@ -38,8 +38,7 @@ export class WorkFormState {
 
   private readonly _events$: Observable<IEventType[]> = withSpinner(this._eventTypesService.getAllForReport(
     this._report.id,
-    this.work.id,
-    this.index === 0
+    this.work.id
   ), this._spinner).pipe(
     shareReplay({
       bufferSize: 1,
@@ -66,7 +65,7 @@ export class WorkFormState {
 
       return events.filter((event) => !selectedEvents.includes(event.id) || eventChanges[index] === event.id);
     }))),
-    shareReplay({refCount: true, bufferSize: 1})
+    shareReplay({ refCount: true, bufferSize: 1 })
   ));
 
   public addEvent(event: IEvent | null = null): void {

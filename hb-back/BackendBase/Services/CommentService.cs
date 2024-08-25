@@ -39,8 +39,15 @@ public class CommentService : ICommentService
         return await _repository.Delete(comment);
     }
 
-    public async Task<Comment> AddEntity(Comment entity)
+    public async Task<Comment> AddEntity(CommentCreateDto dto)
     {
+        var entity = new Comment(
+            EventId: dto.EventId,
+            Content: dto.Content,
+            PlanDate: dto.PlanDate,
+            FactDate: dto.FactDate
+        );
+
         await _security.validateCanUse(entity);
         await _security.validateCanCreate(entity);
         // ****

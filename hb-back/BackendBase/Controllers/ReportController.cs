@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Dto.Report;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using BackendBase.Interfaces.Services.Report;
 using BackendBase.Models;
@@ -14,7 +14,6 @@ namespace BackendBase.Controllers;
 [Authorize]
 public class ReportController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IReportCreateService _reportCreateService;
     private readonly IReportExportService _reportExportService;
     private readonly IStateUserService _service;
@@ -22,14 +21,12 @@ public class ReportController : ControllerBase
     public ReportController(
         IReportCreateService reportCreateService,
         IReportExportService reportExportService,
-        IStateUserService service,
-        IMapper mapper
+        IStateUserService service
     )
     {
         _reportCreateService = reportCreateService;
         _reportExportService = reportExportService;
         _service = service;
-        _mapper = mapper;
     }
 
     [HttpPost("{stateUserId:guid}/[action]")]
@@ -48,7 +45,7 @@ public class ReportController : ControllerBase
 
         var result = new FileContentResult(stream.ToArray(), "application/vnd.ms-excel")
         {
-            FileDownloadName = "individual-plan.xls"
+            FileDownloadName = "individual-plan.xls",
         };
 
         return result;
@@ -65,7 +62,7 @@ public class ReportController : ControllerBase
                     PageNumber: result.PageNumber,
                     PageSize: result.PageSize,
                     TotalPages: result.TotalPages,
-                    Entities: result.Entities.Select(x => _mapper.Map<ReportListDto>(x)).ToList()
+                    Entities: result.Entities.Select(x => x.toListDTO()).ToList()
                 )
             );
         }
@@ -81,7 +78,7 @@ public class ReportController : ControllerBase
         try
         {
             var result = await _service.GetById(id);
-            return Ok(_mapper.Map<ReportDetailDto>(result));
+            return Ok(result.toDTO());
         }
         catch (Exception ex)
         {

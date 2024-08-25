@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Dto.Comment;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
-using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendBase.Controllers;
@@ -11,13 +10,11 @@ namespace BackendBase.Controllers;
 [ApiController]
 public class CommentController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly ICommentService _service;
 
-    public CommentController(ICommentService service, IMapper mapper)
+    public CommentController(ICommentService service)
     {
         _service = service;
-        _mapper = mapper;
     }
 
     [HttpPost]
@@ -25,8 +22,8 @@ public class CommentController : ControllerBase
     {
         try
         {
-            var comment = await _service.AddEntity(_mapper.Map<Comment>(dto));
-            return Ok(_mapper.Map<CommentDto>(comment));
+            var comment = await _service.AddEntity(dto);
+            return Ok(comment.toDTO());
         }
         catch (Exception ex)
         {
@@ -40,7 +37,7 @@ public class CommentController : ControllerBase
         try
         {
             var comment = await _service.Update(dto);
-            return Ok(_mapper.Map<CommentDto>(comment));
+            return Ok(comment.toDTO());
         }
         catch (Exception ex)
         {

@@ -5,7 +5,7 @@ namespace BackendBase.Interfaces.Services;
 
 public interface IEventService
 {
-    Task<Event> AddEntity(Event entity);
-    Task<Event> Update(EventUpdateDto entity);
+    Task<Event> AddEntity(EventCreateDto dto);
+    Task<Event> Update(EventUpdateDto dto);
     Task<bool> DeleteById(Guid entityId);
 }

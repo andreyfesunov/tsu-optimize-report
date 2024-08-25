@@ -1,7 +1,5 @@
-﻿using BackendBase.Data;
-using BackendBase.Dto;
-using BackendBase.Exceptions;
-using BackendBase.Extensions;
+﻿using System.Diagnostics;
+using BackendBase.Data;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +17,6 @@ public class LessonTypeRepository : ILessonTypeRepository
         DbSet = Context.Set<LessonType>();
     }
 
-
     public async Task<LessonType> AddEntity(LessonType entity)
     {
         var model = await DbSet.AddAsync(entity);
@@ -27,47 +24,10 @@ public class LessonTypeRepository : ILessonTypeRepository
         return model.Entity;
     }
 
-    public async Task<LessonType> GetById(Guid id)
-    {
-        var entityQuery = DbSet.AsQueryable().Where(e => e.Id == id);
-        return (await IncludeChildren(entityQuery).ToListAsync())[0];
-    }
-
-    public async Task<ICollection<LessonType>> GetAll()
-    {
-        var itemsQuery = DbSet.AsNoTracking().AsQueryable();
-        return await IncludeChildren(itemsQuery).ToListAsync();
-    }
-
-    public async Task<LessonType> UpdateEntity(LessonType entity)
-    {
-        var model = Context.Update(entity).Entity;
-        await Save();
-        return model;
-    }
-
-    public async Task<bool> DeleteById(Guid entityId)
-    {
-        var entity = await GetById(entityId);
-        if (entity == null) throw new AppException("Entity not found");
-        Context.Remove(entity);
-        return await Save();
-    }
-
-    public virtual async Task<Pagination<LessonType>> Search(SearchDto searchDto)
-    {
-        return await IncludeChildren(DbSet).Search(searchDto);
-    }
-
     public async Task<bool> Save()
     {
         var saved = await Context.SaveChangesAsync();
         return saved > 0;
-    }
-
-    public IQueryable<LessonType> IncludeChildren(IQueryable<LessonType> query)
-    {
-        return query;
     }
 
     public Task<LessonType?> GetLessonTypeByName(string name)
@@ -77,7 +37,10 @@ public class LessonTypeRepository : ILessonTypeRepository
 
     public async Task<ICollection<LessonType>> GetAllForReport(Guid stateUserId)
     {
-        return await DbSet.Where(x => x.Records.Count(x => x.StateUserId == stateUserId) != 0)
+        return await DbSet
+            .Where(x =>
+                x.Records != null && x.Records.Count(x => x.StateUserId == stateUserId) != 0
+            )
             .ToListAsync();
     }
 }

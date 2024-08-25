@@ -1,4 +1,5 @@
 ﻿using BackendBase.Dto;
+using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,8 @@ public class RecordController : ControllerBase
     {
         try
         {
-            var result = await _recordService.Get(stateUserId);
-            return Ok(result);
+            var result = await _recordService.GetForReport(stateUserId);
+            return Ok(result.Select(x => x.toDTO()).ToList());
         }
         catch (Exception ex)
         {

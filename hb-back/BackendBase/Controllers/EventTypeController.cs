@@ -1,5 +1,4 @@
 ﻿using BackendBase.Dto;
-using BackendBase.Extensions.Entities;
 using BackendBase.Interfaces.Services;
 using BackendBase.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,62 +16,13 @@ public class EventTypeController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("getAll")]
+    [HttpGet]
     public async Task<ActionResult<ICollection<EventTypeDto>>> GetAll()
     {
         try
         {
             var result = await _service.GetAll();
             return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPut("update")]
-    public async Task<ActionResult<EventType>> Update(EventType entity)
-    {
-        try
-        {
-            var result = await _service.Update(entity);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpDelete("{entityId}")]
-    public async Task<ActionResult<bool>> DeleteById(Guid entityId)
-    {
-        try
-        {
-            var result = await _service.DeleteById(entityId);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPost("search")]
-    public async Task<ActionResult<Pagination<EventTypeDto>>> Search([FromBody] SearchDto searchDto)
-    {
-        try
-        {
-            var result = await _service.Search(searchDto);
-            return Ok(
-                new Pagination<EventTypeDto>(
-                    Entities: result.Entities.Select(x => x.toDTO()).ToList(),
-                    PageSize: result.PageSize,
-                    PageNumber: result.PageNumber,
-                    TotalPages: result.TotalPages
-                )
-            );
         }
         catch (Exception ex)
         {
@@ -127,31 +77,16 @@ public class EventTypeController : ControllerBase
         }
     }
 
-    [HttpGet("getAll/{stateUserId:guid}/{workId:guid}/{first:bool}")]
+    [HttpGet("getAll/{stateUserId:guid}/{workId:guid}")]
     public async Task<ActionResult<ICollection<EventTypeDto>>> GetAllForReport(
         Guid stateUserId,
-        Guid workId,
-        bool first
+        Guid workId
     )
     {
         try
         {
-            var eventTypes = await _service.GetAllForReport(stateUserId, workId, first);
+            var eventTypes = await _service.GetAllForReport(stateUserId, workId);
             return Ok(eventTypes);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpDelete("{activityId:guid}/{entityTypeId:guid}")]
-    public async Task<ActionResult<bool>> Delete(Guid activityId, Guid entityTypeId)
-    {
-        try
-        {
-            var result = await _service.Delete(activityId, entityTypeId);
-            return Ok(result);
         }
         catch (Exception ex)
         {

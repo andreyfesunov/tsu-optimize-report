@@ -1,10 +1,10 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {IActivitiesAssignEventRequest, IPaginationRequest} from "@core/dtos";
-import {concat, filter, map, Observable, of, shareReplay, Subject, switchMap, take, tap} from "rxjs";
-import {IEventType, IPagination} from "@core/models";
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { IActivitiesAssignEventRequest, IPaginationRequest } from "@core/dtos";
+import { concat, filter, map, Observable, of, shareReplay, Subject, switchMap, take, tap } from "rxjs";
+import { IEventType, IPagination } from "@core/models";
 
-@Injectable({providedIn: "root"})
+@Injectable({ providedIn: "root" })
 export class EventTypesService {
   constructor(
     private readonly _httpClient: HttpClient
@@ -23,8 +23,8 @@ export class EventTypesService {
     return this._eventTypes$;
   }
 
-  public getAllForReport(reportId: string, workId: string, first: boolean): Observable<IEventType[]> {
-    return this._httpClient.get<IEventType[]>(`/api/EventType/getAll/${reportId}/${workId}/${first}`);
+  public getAllForReport(reportId: string, workId: string): Observable<IEventType[]> {
+    return this._httpClient.get<IEventType[]>(`/api/EventType/getAll/${reportId}/${workId}`);
   }
 
   public search(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {
@@ -54,7 +54,7 @@ export class EventTypesService {
       switchMap(() => this._httpClient.post<{
         [key: string]: IPagination<IEventType>
       }>(`/api/EventType/searchMap`, req)),
-      shareReplay({bufferSize: 1, refCount: true})
+      shareReplay({ bufferSize: 1, refCount: true })
     ))).pipe(
       map((map) => map[activityId]),
       take(1)

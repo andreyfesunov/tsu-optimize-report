@@ -5,7 +5,7 @@ namespace BackendBase.Interfaces.Services;
 
 public interface ILessonService
 {
-    Task<Lesson> AddEntity(Lesson entity);
-    Task<Lesson> Update(LessonUpdateDto entity);
+    Task<Lesson> AddEntity(LessonCreateDto dto);
+    Task<Lesson> Update(LessonUpdateDto dto);
     Task<bool> DeleteById(Guid entityId);
 }

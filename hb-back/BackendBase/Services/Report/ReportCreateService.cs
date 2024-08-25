@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BackendBase.Dto;
+﻿using BackendBase.Dto;
 using BackendBase.Interfaces.Repositories;
 using BackendBase.Interfaces.Services;
 using BackendBase.Interfaces.Services.Report;
@@ -15,7 +14,6 @@ public class ReportCreateService : IReportCreateService
 {
     private readonly IActivityRepository _activityRepository;
     private readonly ILessonTypeRepository _lessonTypeRepository;
-    private readonly IMapper _mapper;
     private readonly IRecordRepository _recordRepository;
     private readonly IStateUserRepository _stateUserRepository;
     private readonly IFileService _fileService;
@@ -29,8 +27,7 @@ public class ReportCreateService : IReportCreateService
         IStateUserRepository stateUserRepository,
         IFileService fileService,
         IStorage storage,
-        UserInfo userInfo,
-        IMapper mapper
+        UserInfo userInfo
     )
     {
         _activityRepository = activityRepository;
@@ -40,7 +37,6 @@ public class ReportCreateService : IReportCreateService
         _fileService = fileService;
         _storage = storage;
         _userInfo = userInfo;
-        _mapper = mapper;
     }
 
     public async Task<bool> CreateReport(Guid stateUserId, IFormFile file)
@@ -60,8 +56,7 @@ public class ReportCreateService : IReportCreateService
         if (worksheetCount <= 1)
             throw new Exception("Workbook is incorrect, too few worksheets");
 
-        var activitiesDto = await _activityRepository.GetAll();
-        var activities = activitiesDto.Select(x => _mapper.Map<Activity>(x)).ToList();
+        var activities = await _activityRepository.GetAll();
         var stateUser = await _stateUserRepository.GetById(stateUserId);
 
         for (var worksheetNumber = 1; worksheetNumber < worksheetCount; worksheetNumber++)

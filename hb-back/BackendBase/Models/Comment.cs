@@ -7,7 +7,13 @@ public class Comment : Base
     protected Comment() { }
 
     [SetsRequiredMembers]
-    public Comment(string Content, Guid EventId, Guid? Id = null)
+    public Comment(
+        string Content,
+        Guid EventId,
+        int? PlanDate = null,
+        int? FactDate = null,
+        Guid? Id = null
+    )
         : base(Id)
     {
         this.Content = Content;
@@ -21,5 +27,5 @@ public class Comment : Base
 
     /** Comment belongs to Event */
     public required Guid EventId { get; init; }
-public Event? Event { get; init; }
+    public Event? Event { get; init; }
 }

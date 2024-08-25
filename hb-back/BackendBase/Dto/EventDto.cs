@@ -4,7 +4,7 @@ public class EventDto
 {
     public EventDto(
         Guid Id,
-        EventTypeDto EventType,
+        EventTypeDto? EventType,
         DateTime StartedAt,
         DateTime EndedAt,
         ICollection<LessonDto>? Lessons,
@@ -23,8 +23,8 @@ public class EventDto
     public DateTime StartedAt { get; init; }
     public DateTime EndedAt { get; init; }
 
-    public ICollection<LessonDto> Lessons { get; init; }
-    public ICollection<CommentDto> Comments { get; init; }
+    public ICollection<LessonDto>? Lessons { get; init; }
+    public ICollection<CommentDto>? Comments { get; init; }
 
     public EventTypeDto? EventType { get; init; }
 }
