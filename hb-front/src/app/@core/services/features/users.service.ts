@@ -6,14 +6,14 @@ import {IPagination, IUser} from "@core/models";
 
 @Injectable({providedIn: "root"})
 export class UsersService {
+  private readonly _users$ = this._httpClient.get<IUser[]>('/api/User').pipe(
+    shareReplay(1)
+  );
+
   constructor(
     private readonly _httpClient: HttpClient
   ) {
   }
-
-  private readonly _users$ = this._httpClient.get<IUser[]>('/api/User').pipe(
-    shareReplay(1)
-  );
 
   public getAll(): Observable<IUser[]> {
     return this._users$;

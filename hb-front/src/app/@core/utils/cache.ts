@@ -1,12 +1,12 @@
 import {Observable, of, shareReplay} from "rxjs";
 
 export class ObservableEntityCache<T> {
-  constructor(private readonly getById: (id: string | null) => Observable<T>) {
-  }
-
   private readonly map: {
     [key: string]: Observable<T>;
   } = {};
+
+  constructor(private readonly getById: (id: string | null) => Observable<T>) {
+  }
 
   public resolve(id: string): Observable<T> {
     const existing = this.map[id];

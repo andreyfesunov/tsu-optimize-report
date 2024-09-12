@@ -29,6 +29,8 @@ import {ReportsDialogService, ReportsService, RouterService} from "@core/service
   host: {class: 'host-class'}
 })
 export class ReportsListComponent extends SubscriptionController {
+  protected readonly spinner = new Spinner();
+
   constructor(
     private readonly _reportService: ReportsService,
     private readonly _reportDialogService: ReportsDialogService,
@@ -36,8 +38,6 @@ export class ReportsListComponent extends SubscriptionController {
   ) {
     super();
   }
-
-  protected readonly spinner = new Spinner();
 
   protected readonly loadFn = (req: IPaginationRequest) => withSpinner(this._reportService.search(req), this.spinner);
 

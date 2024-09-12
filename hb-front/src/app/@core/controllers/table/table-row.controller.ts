@@ -11,13 +11,13 @@ export class TableRowController<TEntity, TCol extends string> {
   public readonly layoutRefs = contentChildren(LayoutRefDirective);
 
   public readonly actionsRef = computed(() => this.layoutRefs().find((f) => f.appLayoutRef() === LayoutRefs.ACTIONS)?.templateRef ?? null);
-
-  @HostListener('mouseenter') onMouseEnter = () => this.clickable && (this.hovered = true);
-  @HostListener('mouseleave') onMouseLeave = () => this.clickable && (this.hovered = false);
+  protected hovered: boolean = false;
 
   @HostBinding('style.cursor') get cursor(): string {
     return this.clickable ? 'pointer' : 'default';
   }
 
-  protected hovered: boolean = false;
+  @HostListener('mouseenter') onMouseEnter = () => this.clickable && (this.hovered = true);
+
+  @HostListener('mouseleave') onMouseLeave = () => this.clickable && (this.hovered = false);
 }

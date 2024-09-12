@@ -1,11 +1,6 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class UserLoginDto
+public class UserLoginDto(string Token)
 {
-    public UserLoginDto(string Token)
-    {
-        this.Token = Token;
-    }
-
-    public string Token { get; init; }
+    public string Token { get; init; } = Token;
 }

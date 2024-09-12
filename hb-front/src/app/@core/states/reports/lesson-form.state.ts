@@ -8,6 +8,14 @@ import {exists, required} from "@core/utils";
 import {ILessonCreateDto, ILessonUpdateDto} from "@core/dtos";
 
 export class LessonFormState {
+  public readonly types$: BehaviorSubject<ILessonType[]> = new BehaviorSubject<ILessonType[]>([]);
+  public readonly form: FormGroup<ILessonForm> = new FormGroup<ILessonForm>({
+    lessonType: new FormControl<string | null>(null),
+    fact: new FormControl<number | null>(null, {nonNullable: true}),
+    plan: new FormControl<number | null>(null, {nonNullable: true}),
+  })
+  private readonly _id$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
   constructor(
     private readonly _eventId: string,
     public readonly lesson: ILesson | null,
@@ -16,16 +24,6 @@ export class LessonFormState {
   ) {
     this._init();
   }
-
-  private readonly _id$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-
-  public readonly types$: BehaviorSubject<ILessonType[]> = new BehaviorSubject<ILessonType[]>([]);
-
-  public readonly form: FormGroup<ILessonForm> = new FormGroup<ILessonForm>({
-    lessonType: new FormControl<string | null>(null),
-    fact: new FormControl<number | null>(null, {nonNullable: true}),
-    plan: new FormControl<number | null>(null, {nonNullable: true}),
-  })
 
   private _init(): void {
     this.lesson && this._bindForm(this.lesson);

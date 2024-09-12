@@ -1,5 +1,5 @@
+using Tsu.IndividualPlan.Domain.Models.Business;
 using Tsu.IndividualPlan.WebApi.Dto.Report;
-using Tsu.IndividualPlan.WebApi.Models;
 
 namespace Tsu.IndividualPlan.WebApi.Extensions.Entities;
 

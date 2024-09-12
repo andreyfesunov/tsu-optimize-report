@@ -1,43 +1,32 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Tsu.IndividualPlan.WebApi.Dto;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Project;
+using Tsu.IndividualPlan.Transfer.Interfaces.Report;
 using Tsu.IndividualPlan.WebApi.Dto.Report;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services.Report;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class ReportController : ControllerBase
+public class ReportController(
+    IReportCreateService reportCreateService,
+    IReportExportService reportExportService,
+    IStateUserService service)
+    : ControllerBase
 {
-    private readonly IReportCreateService _reportCreateService;
-    private readonly IReportExportService _reportExportService;
-    private readonly IStateUserService _service;
-
-    public ReportController(
-        IReportCreateService reportCreateService,
-        IReportExportService reportExportService,
-        IStateUserService service
-    )
-    {
-        _reportCreateService = reportCreateService;
-        _reportExportService = reportExportService;
-        _service = service;
-    }
-
     [HttpPost("{stateUserId:guid}/[action]")]
     public async Task<bool> CreateReport(Guid stateUserId, IFormFile file)
     {
-        return await _reportCreateService.CreateReport(stateUserId, file);
+        return await reportCreateService.CreateReport(stateUserId, file);
     }
 
     [HttpGet("{stateUserId:guid}/[action]")]
     public async Task<FileContentResult> ExportReport(Guid stateUserId)
     {
-        var workbook = await _reportExportService.ExportReport(stateUserId.ToString());
+        var workbook = await reportExportService.ExportReport(stateUserId.ToString());
 
         using var stream = new MemoryStream();
         workbook.Write(stream);
@@ -51,11 +40,11 @@ public class ReportController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<Pagination<ReportListDto>>> Search(SearchDto searchDto)
+    public async Task<ActionResult<Pagination<ReportListDto>>> Search(Search search)
     {
         try
         {
-            var result = await _service.Search(searchDto);
+            var result = await service.Search(search);
             return Ok(
                 new Pagination<ReportListDto>(
                     result.PageNumber,
@@ -76,7 +65,7 @@ public class ReportController : ControllerBase
     {
         try
         {
-            var result = await _service.GetById(id);
+            var result = await service.GetById(id);
             return Ok(result.toDTO());
         }
         catch (Exception ex)

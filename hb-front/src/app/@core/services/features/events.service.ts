@@ -13,12 +13,12 @@ import {IComment, IEvent, ILesson, ILessonType} from "@core/models";
 
 @Injectable({providedIn: "root"})
 export class EventsService {
+  private readonly _lessonTypesMemo: { [key: string]: Observable<ILessonType[]> } = {};
+
   constructor(
     private readonly _httpClient: HttpClient
   ) {
   }
-
-  private readonly _lessonTypesMemo: { [key: string]: Observable<ILessonType[]> } = {};
 
   public create(dto: IEventCreateDto): Observable<IEvent> {
     return this._httpClient.post<IEvent>('/api/Event', dto);

@@ -1,13 +1,7 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class JobDto
+public class JobDto(Guid Id, string Name)
 {
-    public JobDto(Guid Id, string Name)
-    {
-        this.Id = Id;
-        this.Name = Name;
-    }
-
-    public Guid Id { get; init; }
-    public string Name { get; init; }
+    public Guid Id { get; init; } = Id;
+    public string Name { get; init; } = Name;
 }

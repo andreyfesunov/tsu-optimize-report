@@ -8,12 +8,7 @@ export interface ITableConfig {
 }
 
 export abstract class TableController<TEntity> {
-  protected abstract config(): ITableConfig;
-
-  protected abstract load(request: IPaginationRequest): Observable<IPagination<TEntity>>;
-
   protected readonly request$: BehaviorSubject<IPaginationRequest> = new BehaviorSubject<IPaginationRequest>(this.config().request);
-
   protected readonly page$: Observable<IPagination<TEntity>> = this.request$.pipe(
     switchMap((request) => this.load(request)),
     shareReplay({
@@ -21,8 +16,11 @@ export abstract class TableController<TEntity> {
       refCount: true
     })
   );
-
   protected readonly items$: Observable<TEntity[]> = this.page$.pipe(map((page) => page.entities));
+
+  protected abstract config(): ITableConfig;
+
+  protected abstract load(request: IPaginationRequest): Observable<IPagination<TEntity>>;
 
   protected nextPage(): void {
     const req = this.request$.value;

@@ -1,15 +1,8 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class ActivityDto
+public class ActivityDto(Guid Id, string Name, int Column)
 {
-    public ActivityDto(Guid Id, string Name, int Column)
-    {
-        this.Id = Id;
-        this.Name = Name;
-        this.Column = Column;
-    }
-
-    public Guid Id { get; init; }
-    public string Name { get; init; }
-    public int Column { get; init; }
+    public Guid Id { get; init; } = Id;
+    public string Name { get; init; } = Name;
+    public int Column { get; init; } = Column;
 }

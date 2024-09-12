@@ -1,27 +1,17 @@
-﻿using Tsu.IndividualPlan.WebApi.Models.Enum;
+﻿using Tsu.IndividualPlan.Domain.Enumerations;
 
 namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class StateUserDto
+public class StateUserDto(
+    Guid Id,
+    double Rate,
+    StateUserStatus Status,
+    StateDto? State,
+    UserDto? User)
 {
-    public StateUserDto(
-        Guid Id,
-        double Rate,
-        StateUserStatus Status,
-        StateDto? State,
-        UserDto? User
-    )
-    {
-        this.Id = Id;
-        this.Rate = Rate;
-        this.Status = Status;
-        this.State = State;
-        this.User = User;
-    }
-
-    public Guid Id { get; init; }
-    public double Rate { get; init; }
-    public StateUserStatus Status { get; init; }
-    public StateDto? State { get; init; }
-    public UserDto? User { get; init; }
+    public Guid Id { get; init; } = Id;
+    public double Rate { get; init; } = Rate;
+    public StateUserStatus Status { get; init; } = Status;
+    public StateDto? State { get; init; } = State;
+    public UserDto? User { get; init; } = User;
 }

@@ -1,9 +1,9 @@
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { IWork } from "@core/models";
-import { Injectable } from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {IWork} from "@core/models";
+import {Injectable} from "@angular/core";
 
-@Injectable({ providedIn: "root" })
+@Injectable({providedIn: "root"})
 export class WorksService {
   constructor(private readonly _httpClient: HttpClient) {
   }

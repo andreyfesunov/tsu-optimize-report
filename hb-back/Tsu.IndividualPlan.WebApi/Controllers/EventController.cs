@@ -1,28 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tsu.IndividualPlan.Domain.Dto.Event;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
 using Tsu.IndividualPlan.WebApi.Dto;
-using Tsu.IndividualPlan.WebApi.Dto.Event;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EventController : ControllerBase
+public class EventController(IEventService service) : ControllerBase
 {
-    private readonly IEventService _service;
-
-    public EventController(IEventService service)
-    {
-        _service = service;
-    }
-
     [HttpPost]
     public async Task<ActionResult<EventDto>> Create([FromBody] EventCreateDto dto)
     {
         try
         {
-            var entity = await _service.AddEntity(dto);
+            var entity = await service.AddEntity(dto);
             return Ok(entity.toDTO());
         }
         catch (Exception ex)
@@ -36,7 +29,7 @@ public class EventController : ControllerBase
     {
         try
         {
-            var entity = await _service.Update(dto);
+            var entity = await service.Update(dto);
             return Ok(entity.toDTO());
         }
         catch (Exception ex)
@@ -50,7 +43,7 @@ public class EventController : ControllerBase
     {
         try
         {
-            var result = await _service.DeleteById(entityId);
+            var result = await service.DeleteById(entityId);
             return Ok(result);
         }
         catch (Exception ex)

@@ -40,13 +40,13 @@ import {
   host: {class: 'host-class'}
 })
 export class ReportsFirstHalfTableComponent extends TableController<IRecordEntry> {
+  public readonly reportId = input.required<string>();
+
   constructor(
     private readonly _service: RecordsService
   ) {
     super();
   }
-
-  public readonly reportId = input.required<string>();
 
   protected config(): ITableConfig {
     return {request: getDefaultPaginationRequest()};
@@ -62,20 +62,6 @@ export class ReportsFirstHalfTableComponent extends TableController<IRecordEntry
         totalPages: 1
       }))
     );
-  }
-
-  private _toEntry(records: IRecord[]): IRecordEntry[] {
-    const entries: { [key: string]: (IActivity & { hours: number })[] } = {};
-
-    records.forEach((record) => {
-      if (!entries[record.lessonType.name]) entries[record.lessonType.name] = [];
-      entries[record.lessonType.name].push({...record.activity, hours: record.hours});
-    })
-
-    return Object.entries(entries).map(([name, activities]) => ({
-      lessonTypeName: name,
-      activities: activities
-    }));
   }
 
   protected getCols(items: IRecordEntry[]): ITableColumn[] {
@@ -99,5 +85,19 @@ export class ReportsFirstHalfTableComponent extends TableController<IRecordEntry
     }))
 
     return [lesson, ...activities]
+  }
+
+  private _toEntry(records: IRecord[]): IRecordEntry[] {
+    const entries: { [key: string]: (IActivity & { hours: number })[] } = {};
+
+    records.forEach((record) => {
+      if (!entries[record.lessonType.name]) entries[record.lessonType.name] = [];
+      entries[record.lessonType.name].push({...record.activity, hours: record.hours});
+    })
+
+    return Object.entries(entries).map(([name, activities]) => ({
+      lessonTypeName: name,
+      activities: activities
+    }));
   }
 }

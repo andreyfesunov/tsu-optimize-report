@@ -2,13 +2,14 @@ using System;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Tsu.IndividualPlan.WebApi.Dto;
-using Tsu.IndividualPlan.WebApi.Dto.CreateDto;
-using Tsu.IndividualPlan.WebApi.Interfaces.Repositories;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
-using Tsu.IndividualPlan.WebApi.Models;
-using Tsu.IndividualPlan.WebApi.Models.Enum;
-using Tsu.IndividualPlan.WebApi.Services;
+using Tsu.IndividualPlan.Domain.Dto.IndividualPlan;
+using Tsu.IndividualPlan.Domain.Dto.State;
+using Tsu.IndividualPlan.Domain.Enumerations;
+using Tsu.IndividualPlan.Domain.Interfaces.Repositories;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Business;
+using Tsu.IndividualPlan.Domain.Models.Project;
+using Tsu.IndividualPlan.Domain.Services;
 
 namespace Tsu.IndividualPlan.Tests.Services;
 
@@ -50,7 +51,7 @@ public class StateServiceTests
         );
 
         _departmentRepo
-            .Setup(x => x.Search(It.IsAny<SearchDto>()))
+            .Setup(x => x.Search(It.IsAny<Search>()))
             .ReturnsAsync(
                 new Pagination<Department>(
                     PageSize: 1,
@@ -101,7 +102,7 @@ public class StateServiceTests
                 )
             );
 
-        var dto = new StateUserCreateDto(UserId: userId, StateId: stateId);
+        var dto = new IndividualPlanCreateDto(UserId: userId, StateId: stateId);
 
         var success = await _service.Assign(dto);
 
@@ -140,7 +141,7 @@ public class StateServiceTests
                 )
             );
 
-        var dto = new StateUserCreateDto(UserId: userId, StateId: stateId);
+        var dto = new IndividualPlanCreateDto(UserId: userId, StateId: stateId);
 
         var success = await _service.Assign(dto);
 

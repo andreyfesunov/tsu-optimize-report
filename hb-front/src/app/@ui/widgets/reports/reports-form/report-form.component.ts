@@ -56,23 +56,20 @@ import {ReportsFormStateFactory} from "@core/factories";
   host: {class: 'host-class'}
 })
 export class ReportFormComponent extends SubscriptionController {
+  public readonly id = input.required<string>();
+  protected readonly spinner = new Spinner();
+  protected readonly state = computed(() => this._reportStateFactory.create(
+    this.id(),
+    this.spinner,
+    this._destroyRef
+  ));
+  protected readonly tabChanged$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
   constructor(
     private readonly _reportStateFactory: ReportsFormStateFactory,
     private readonly _destroyRef: DestroyRef
   ) {
     super();
   }
-
-  public readonly id = input.required<string>();
-
-  protected readonly spinner = new Spinner();
-
-  protected readonly state = computed(() => this._reportStateFactory.create(
-    this.id(),
-    this.spinner,
-    this._destroyRef
-  ));
-
-  protected readonly tabChanged$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 }
 

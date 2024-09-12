@@ -8,6 +8,15 @@ import {exists, required} from "@core/utils";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 export class CommentFormState {
+  public readonly form: FormGroup<ICommentForm> = new FormGroup<ICommentForm>({
+    content: new FormControl<string>('', {nonNullable: true}),
+    fact: new FormControl<number | null>(null, {nonNullable: true}),
+    plan: new FormControl<number | null>(null, {nonNullable: true}),
+  })
+  private readonly _id$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
+  private readonly _commentSubscription: Subscription = new Subscription();
+
   constructor(
     private readonly _eventId: string,
     public readonly comment: IComment | null,
@@ -16,16 +25,6 @@ export class CommentFormState {
   ) {
     this._init();
   }
-
-  private readonly _id$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-
-  private readonly _commentSubscription: Subscription = new Subscription();
-
-  public readonly form: FormGroup<ICommentForm> = new FormGroup<ICommentForm>({
-    content: new FormControl<string>('', {nonNullable: true}),
-    fact: new FormControl<number | null>(null, {nonNullable: true}),
-    plan: new FormControl<number | null>(null, {nonNullable: true}),
-  })
 
   private _init(): void {
     this.comment && this._bindForm(this.comment);

@@ -1,20 +1,14 @@
-﻿using Tsu.IndividualPlan.WebApi.Models.Enum;
+﻿using Tsu.IndividualPlan.Domain.Enumerations;
 
 namespace Tsu.IndividualPlan.WebApi.Dto.Report;
 
-public class ReportDetailDto : ReportListDto
+public class ReportDetailDto(
+    Guid Id,
+    double Rate,
+    StateUserStatus Status,
+    StateDto? State,
+    ICollection<EventDto>? Events = null)
+    : ReportListDto(Id, Rate, Status, State)
 {
-    public ReportDetailDto(
-        Guid Id,
-        double Rate,
-        StateUserStatus Status,
-        StateDto? State,
-        ICollection<EventDto>? Events = null
-    )
-        : base(Id, Rate, Status, State)
-    {
-        this.Events = Events ?? new List<EventDto>();
-    }
-
-    public ICollection<EventDto> Events { get; init; }
+    public ICollection<EventDto>? Events { get; init; } = Events;
 }

@@ -1,28 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Business;
 using Tsu.IndividualPlan.WebApi.Dto;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ActivityController : ControllerBase
+public class ActivityController(IActivityService service) : ControllerBase
 {
-    private readonly IActivityService _service;
-
-    public ActivityController(IActivityService service)
-    {
-        _service = service;
-    }
-
     [HttpGet]
     public async Task<ActionResult<ICollection<ActivityDto>>> GetAll()
     {
         try
         {
-            var result = await _service.GetAll();
-            return Ok(result.Select(v => v.toDTO()));
+            var result = await service.GetAll();
+            return Ok(result.Select<Activity, ActivityDto>(v => v.toDTO()).ToList());
         }
         catch (Exception ex)
         {

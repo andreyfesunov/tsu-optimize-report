@@ -1,17 +1,9 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class CommentDto
+public class CommentDto(Guid Id, string Content, int? PlanDate, int? FactDate)
 {
-    public CommentDto(Guid Id, string Content, int? PlanDate, int? FactDate)
-    {
-        this.Id = Id;
-        this.Content = Content;
-        this.PlanDate = PlanDate;
-        this.FactDate = FactDate;
-    }
-
-    public Guid Id { get; init; }
-    public string Content { get; init; }
-    public int? FactDate { get; init; }
-    public int? PlanDate { get; init; }
+    public Guid Id { get; init; } = Id;
+    public string Content { get; init; } = Content;
+    public int? FactDate { get; init; } = FactDate;
+    public int? PlanDate { get; init; } = PlanDate;
 }

@@ -1,16 +1,16 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { MatButton } from "@angular/material/button";
-import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
-import { MatInput } from "@angular/material/input";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { IJob } from "@core/models";
-import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from "@angular/material/autocomplete";
-import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
-import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
-import { IStateCreateRequest } from "@core/dtos";
-import { ModalDialogActionComponent, ModalDialogComponent } from "@ui/widgets";
-import { MatDialogRef } from "@angular/material/dialog";
-import { JobsService } from "@core/services";
+import {ChangeDetectionStrategy, Component} from "@angular/core";
+import {MatButton} from "@angular/material/button";
+import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {IJob} from "@core/models";
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
+import {IStateCreateRequest} from "@core/dtos";
+import {ModalDialogActionComponent, ModalDialogComponent} from "@ui/widgets";
+import {MatDialogRef} from "@angular/material/dialog";
+import {JobsService} from "@core/services";
 
 @Component({
   selector: 'app-states-create-dialog',
@@ -83,36 +83,35 @@ import { JobsService } from "@core/services";
   `
 })
 export class StatesCreateDialogComponent {
-  constructor(
-    private readonly _jobsService: JobsService,
-    private readonly _dialogRef: MatDialogRef<StatesCreateDialogComponent>
-  ) {
-  }
-
   protected readonly jobs$ = this._jobsService.list();
-
-  protected displayFn(opts: IJob[]) {
-    return (id: string) => {
-      const job = opts.find(v => v.id === id);
-      return job ? job.name : '';
-    }
-  }
-
   protected readonly form: FormGroup<IStatesDialogForm> = new FormGroup<IStatesDialogForm>({
-    hours: new FormControl<number>(1485, { nonNullable: true, validators: [Validators.min(1), Validators.required] }),
-    count: new FormControl<number>(1, { nonNullable: true, validators: [Validators.min(0), Validators.required] }),
-    job: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
-    startDate: new FormControl<Date>(new Date(), { nonNullable: true, validators: [Validators.required] }),
+    hours: new FormControl<number>(1485, {nonNullable: true, validators: [Validators.min(1), Validators.required]}),
+    count: new FormControl<number>(1, {nonNullable: true, validators: [Validators.min(0), Validators.required]}),
+    job: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
+    startDate: new FormControl<Date>(new Date(), {nonNullable: true, validators: [Validators.required]}),
     endDate: new FormControl<Date>(this._endDate, {
       nonNullable: true,
       validators: [Validators.required]
     }),
   });
 
+  constructor(
+    private readonly _jobsService: JobsService,
+    private readonly _dialogRef: MatDialogRef<StatesCreateDialogComponent>
+  ) {
+  }
+
   private get _endDate(): Date {
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 30);
     return endDate;
+  }
+
+  protected displayFn(opts: IJob[]) {
+    return (id: string) => {
+      const job = opts.find(v => v.id === id);
+      return job ? job.name : '';
+    }
   }
 
   protected submit(): void {

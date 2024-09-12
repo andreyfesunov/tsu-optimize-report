@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Tsu.IndividualPlan.WebApi.Models;
-using Tsu.IndividualPlan.WebApi.Models.Enum;
+using Tsu.IndividualPlan.Domain.Enumerations;
+using Tsu.IndividualPlan.Domain.Models.Business;
 
 namespace Tsu.IndividualPlan.WebApi.Attributes;
 
-public class RoleFilterAttribute : Attribute, IAsyncActionFilter
+public class RoleFilterAttribute(RoleUserEnum permissionLevel) : Attribute, IAsyncActionFilter
 {
-    private readonly RoleUserEnum _permissionLevel;
-
-    public RoleFilterAttribute(RoleUserEnum permissionLevel)
-    {
-        _permissionLevel = permissionLevel;
-    }
-
     public async Task OnActionExecutionAsync(
         ActionExecutingContext context,
         ActionExecutionDelegate next
@@ -26,11 +19,9 @@ public class RoleFilterAttribute : Attribute, IAsyncActionFilter
     {
         context.ActionArguments.TryGetValue("user", out var objectModel);
 
-        var model = objectModel as User;
+        if (objectModel is not User model)
+            return permissionLevel == RoleUserEnum.User;
 
-        if (model == null)
-            return _permissionLevel == RoleUserEnum.User;
-
-        return model.Role >= _permissionLevel;
+        return model.Role >= permissionLevel;
     }
 }

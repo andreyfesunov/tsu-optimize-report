@@ -58,6 +58,9 @@ import {ActivitiesDialogService, ActivitiesService, EventTypesService} from "@co
   host: {class: 'host-class'}
 })
 export class ActivitiesListComponent extends SubscriptionController {
+  protected readonly activities$ = this._activitiesService.getAll();
+  protected readonly spinner = new Spinner();
+
   constructor(
     private readonly _activitiesService: ActivitiesService,
     private readonly _eventTypesService: EventTypesService,
@@ -65,10 +68,6 @@ export class ActivitiesListComponent extends SubscriptionController {
   ) {
     super();
   }
-
-  protected readonly activities$ = this._activitiesService.getAll();
-
-  protected readonly spinner = new Spinner();
 
   protected readonly loadFn = (id: string, req: IPaginationRequest) => withSpinner(this._eventTypesService.search(id, req), this.spinner);
 

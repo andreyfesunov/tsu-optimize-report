@@ -5,27 +5,27 @@ $tablet-media: 950px;
 $phone-media: 500px;
 
 .container {
-    display: grid;
-    grid-template-columns: 96px 1fr;
+  display: grid;
+  grid-template-columns: 96px 1fr;
 
-    height: 100%;
-    margin: 0;
+  height: 100%;
+  margin: 0;
 
-    @media(max-width: $phone-media) {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 80px;
-    }
+  @media(max-width: $phone-media) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 80px;
+  }
 }
 
 .main {
-    overflow: auto;
+  overflow: auto;
 
-    &::-webkit-scrollbar {
-        width: 0;
-    }
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 
-    @media(max-width: $phone-media) {
-        grid-column: 1;
-        grid-row: 1;
-    }
+  @media(max-width: $phone-media) {
+    grid-column: 1;
+    grid-row: 1;
+  }
 }

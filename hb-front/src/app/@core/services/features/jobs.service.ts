@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { IJob } from "@core/models";
-import { HttpClient } from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
+import {IJob} from "@core/models";
+import {HttpClient} from "@angular/common/http";
 
-@Injectable({ providedIn: "root" })
+@Injectable({providedIn: "root"})
 export class JobsService {
   constructor(
     private readonly _httpClient: HttpClient

@@ -52,25 +52,23 @@ import {EventTypesService} from "@core/services";
   `
 })
 export class ActivitiesEventDialogComponent {
+  protected readonly formControl: FormControl<string> = new FormControl<string>('', {
+    validators: [Validators.required],
+    nonNullable: true
+  });
+  protected readonly events$ = this._eventsService.getAll().pipe(
+    switchMap((events) => concat(of(this.formControl.value), this.formControl.valueChanges).pipe(
+      map((value) => events.filter((event) => event.name.includes(value)))
+    ))
+  );
+  protected readonly title = `Назначить событие активности "${this._dialogData.activityName}"`;
+
   constructor(
     private readonly _eventsService: EventTypesService,
     private readonly _dialogRef: MatDialogRef<ActivitiesEventDialogComponent, IActivitiesAssignEventRequest>,
     @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IActivitiesEventDialogData
   ) {
   }
-
-  protected readonly formControl: FormControl<string> = new FormControl<string>('', {
-    validators: [Validators.required],
-    nonNullable: true
-  });
-
-  protected readonly events$ = this._eventsService.getAll().pipe(
-    switchMap((events) => concat(of(this.formControl.value), this.formControl.valueChanges).pipe(
-      map((value) => events.filter((event) => event.name.includes(value)))
-    ))
-  );
-
-  protected readonly title = `Назначить событие активности "${this._dialogData.activityName}"`;
 
   protected displayFn(opts: IEventType[]) {
     return (id: string) => {

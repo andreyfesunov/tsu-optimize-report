@@ -1,15 +1,8 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class ActivityEventTypeDto
+public class ActivityEventTypeDto(Guid Id, ActivityDto? Activity, EventTypeDto? EventType)
 {
-    public ActivityEventTypeDto(Guid Id, ActivityDto? Activity, EventTypeDto? EventType)
-    {
-        this.Id = Id;
-        this.Activity = Activity;
-        this.EventType = EventType;
-    }
-
-    public Guid Id { get; init; }
-    public ActivityDto? Activity { get; init; }
-    public EventTypeDto? EventType { get; init; }
+    public Guid Id { get; init; } = Id;
+    public ActivityDto? Activity { get; init; } = Activity;
+    public EventTypeDto? EventType { get; init; } = EventType;
 }

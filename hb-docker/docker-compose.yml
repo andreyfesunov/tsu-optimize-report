@@ -1,18 +1,14 @@
-﻿services:
+services:
   tsu-nginx:
     container_name: tsu-nginx
-    image: nginx:1.23.3
+    build:
+      context: ../hb-front
+    image: tsu-nginx
     volumes:
       - ../hb-docker/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - tsu-backend
-      - tsu-frontend
       - tsu-psql
-  tsu-frontend:
-    container_name: tsu-frontend
-    build:
-      context: ../hb-front
-    image: tsu-frontend
   tsu-backend:
     container_name: tsu-backend
     build:

@@ -12,9 +12,6 @@
         <PackageReference Include="coverlet.collector" Version="3.1.0"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Application\"/>
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\Tsu.IndividualPlan.WebApi\Tsu.IndividualPlan.WebApi.csproj"/>
     </ItemGroup>
 </Project>

@@ -1,28 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tsu.IndividualPlan.Domain.Dto.IndividualPlan;
+using Tsu.IndividualPlan.Domain.Dto.State;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Project;
 using Tsu.IndividualPlan.WebApi.Dto;
-using Tsu.IndividualPlan.WebApi.Dto.CreateDto;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class StateController : ControllerBase
+public class StateController(IStateService service) : ControllerBase
 {
-    private readonly IStateService _service;
-
-    public StateController(IStateService service)
-    {
-        _service = service;
-    }
-
     [HttpPost]
     public async Task<ActionResult<string>> Create(StateCreateDto entity)
     {
         try
         {
-            var result = await _service.Create(entity);
+            var result = await service.Create(entity);
             return Ok(result);
         }
         catch (Exception ex)
@@ -32,11 +27,11 @@ public class StateController : ControllerBase
     }
 
     [HttpPost("assign")]
-    public async Task<ActionResult<bool>> Assign(StateUserCreateDto dto)
+    public async Task<ActionResult<bool>> Assign(IndividualPlanCreateDto dto)
     {
         try
         {
-            var result = await _service.Assign(dto);
+            var result = await service.Assign(dto);
             return Ok(result);
         }
         catch (Exception ex)
@@ -46,11 +41,11 @@ public class StateController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<Pagination<StateDto>>> Search([FromBody] SearchDto searchDto)
+    public async Task<ActionResult<Pagination<StateDto>>> Search([FromBody] Search search)
     {
         try
         {
-            var result = await _service.Search(searchDto);
+            var result = await service.Search(search);
             return Ok(
                 new Pagination<StateDto>(
                     result.PageNumber,

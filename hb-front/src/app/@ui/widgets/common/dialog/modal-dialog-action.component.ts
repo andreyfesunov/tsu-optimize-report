@@ -30,13 +30,13 @@ import {DialogRef} from "@angular/cdk/dialog";
   styleUrls: ['modal-dialog-action.component.scss']
 })
 export class ModalDialogActionComponent {
-  constructor(private readonly _dialogRef: DialogRef) {
-  }
-
   public readonly cancelDisabled = input<boolean>(false);
   public readonly applyDisabled = input<boolean>(false);
   public readonly applyText = input<string>('Создать');
   public readonly apply = output();
+
+  constructor(private readonly _dialogRef: DialogRef) {
+  }
 
   protected readonly cancel = () => this._dialogRef.close();
 }

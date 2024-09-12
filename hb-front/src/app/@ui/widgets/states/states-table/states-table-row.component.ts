@@ -1,7 +1,7 @@
-import { TableRowController } from "@core/controllers";
-import { IState } from "@core/models";
-import { Component } from "@angular/core";
-import { CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase } from "@angular/common";
+import {TableRowController} from "@core/controllers";
+import {IState} from "@core/models";
+import {Component} from "@angular/core";
+import {CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 
 export enum StateTableRowItemField {
   JOB = 'JOB',
@@ -32,8 +32,10 @@ export enum StateTableRowItemField {
         <ng-container *ngSwitchCase="StateTableRowItemField.JOB">{{ item.job.name }}</ng-container>
         <ng-container *ngSwitchCase="StateTableRowItemField.COUNT">{{ item.count }}</ng-container>
         <ng-container *ngSwitchCase="StateTableRowItemField.HOURS">{{ item.hours }}</ng-container>
-        <ng-container *ngSwitchCase="StateTableRowItemField.END_DATE">{{ item.endDate | date: 'dd.MM.yyyy' }}</ng-container>
-        <ng-container *ngSwitchCase="StateTableRowItemField.START_DATE">{{ item.startDate | date: 'dd.MM.yyyy'}}</ng-container>
+        <ng-container *ngSwitchCase="StateTableRowItemField.END_DATE">{{ item.endDate | date: 'dd.MM.yyyy' }}
+        </ng-container>
+        <ng-container *ngSwitchCase="StateTableRowItemField.START_DATE">{{ item.startDate | date: 'dd.MM.yyyy' }}
+        </ng-container>
       </ng-container>
     </td>
   `

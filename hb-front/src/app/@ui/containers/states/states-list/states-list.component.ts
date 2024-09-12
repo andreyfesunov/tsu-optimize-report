@@ -30,14 +30,14 @@ import {StatesDialogService, StatesService} from "@core/services";
   host: {class: 'host-class'}
 })
 export class StatesListComponent extends SubscriptionController {
+  protected readonly spinner = new Spinner();
+
   constructor(
     private readonly _statesService: StatesService,
     private readonly _statesDialogService: StatesDialogService
   ) {
     super();
   }
-
-  protected readonly spinner = new Spinner();
 
   protected readonly loadFn = (request: IPaginationRequest) => withSpinner(this._statesService.search(request), this.spinner);
 

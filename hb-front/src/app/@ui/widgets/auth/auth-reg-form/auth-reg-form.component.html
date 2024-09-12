@@ -4,31 +4,31 @@
     <span class="register__title">Создать аккаунт</span>
     <div class="login">
       <span class="">Уже есть аккаунт?</span>
-      <a class="login__button" (click)="toLogin()">Войти</a>
+      <a (click)="toLogin()" class="login__button">Войти</a>
     </div>
     <form [formGroup]="form" class="register__form">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput [formControl]="form.controls.email">
+        <input [formControl]="form.controls.email" matInput>
         <!-- <mat-error *ngIf="email.hasError("required")">Email обязательное поле</mat-error>     -->
         <!-- <mat-error *ngIf="email.hasError("email")">Email не валидный</mat-error>     -->
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Имя</mat-label>
-        <input matInput [formControl]="form.controls.firstname">
+        <input [formControl]="form.controls.firstname" matInput>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Фамилия</mat-label>
-        <input matInput [formControl]="form.controls.lastname">
+        <input [formControl]="form.controls.lastname" matInput>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Пароль</mat-label>
         <!-- <mat-error *ngIf="password.hasError("required")">Пароль обязательное поле</mat-error> -->
-        <input type="password" matInput [formControl]="form.controls.password">
+        <input [formControl]="form.controls.password" matInput type="password">
       </mat-form-field>
     </form>
     <div class="register__buttons">
-      <button mat-flat-button [disabled]="form.invalid" (click)="submit()">Создать аккаунт</button>
+      <button (click)="submit()" [disabled]="form.invalid" mat-flat-button>Создать аккаунт</button>
     </div>
   </div>
 </div>

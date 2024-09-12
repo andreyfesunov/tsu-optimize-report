@@ -6,12 +6,12 @@ import {Injectable} from "@angular/core";
 
 @Injectable({providedIn: "root"})
 export class StatesService {
+  private readonly _reload$: Subject<void> = new Subject<void>();
+
   constructor(
     private readonly _httpClient: HttpClient
   ) {
   }
-
-  private readonly _reload$: Subject<void> = new Subject<void>();
 
   public search(dto: IPaginationRequest): Observable<IPagination<IState>> {
     return concat(of(0), this._reload$).pipe(

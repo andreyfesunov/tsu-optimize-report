@@ -1,28 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Business;
 using Tsu.IndividualPlan.WebApi.Dto;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class WorkController : ControllerBase
+public class WorkController(IWorkService service) : ControllerBase
 {
-    private readonly IWorkService _service;
-
-    public WorkController(IWorkService service)
-    {
-        _service = service;
-    }
-
     [HttpGet]
     public async Task<ActionResult<ICollection<WorkDto>>> GetAll()
     {
         try
         {
-            var result = await _service.GetAll();
-            return Ok(result.Select(x => x.toDTO()).ToList());
+            var result = await service.GetAll();
+            return Ok(result.Select<Work, WorkDto>(x => x.toDTO()).ToList());
         }
         catch (Exception ex)
         {

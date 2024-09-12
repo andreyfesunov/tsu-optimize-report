@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
-using Tsu.IndividualPlan.WebApi.Dto;
-using Tsu.IndividualPlan.WebApi.Interfaces.Repositories;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
-using Tsu.IndividualPlan.WebApi.Models;
-using Tsu.IndividualPlan.WebApi.Models.Enum;
-using Tsu.IndividualPlan.WebApi.Services;
-using Tsu.IndividualPlan.WebApi.Utils;
+using Tsu.IndividualPlan.Domain.Dto.Auth;
+using Tsu.IndividualPlan.Domain.Enumerations;
+using Tsu.IndividualPlan.Domain.Interfaces.Repositories;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Business;
+using Tsu.IndividualPlan.Domain.Services;
+using Tsu.IndividualPlan.Domain.Utils;
 
 namespace Tsu.IndividualPlan.Tests.Services;
 

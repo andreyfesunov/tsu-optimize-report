@@ -88,7 +88,7 @@ import {MatTooltip} from "@angular/material/tooltip";
           </button>
         </ng-template>
       </tr>
-      
+
       <tr
         *ngFor="let commentState of state().commentFormStates$ | async; index as index"
         app-comment-form-table-row

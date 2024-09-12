@@ -15,19 +15,18 @@
         <DockerComposeProjectPath>docker-compose.dcproj</DockerComposeProjectPath>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Npgsql" Version="8.*"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.*"/>
-        <PackageReference Include="NPOI" Version="2.7.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.1"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8"/>
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Migrations\"/>
     </ItemGroup>
     <ItemGroup>
         <None Remove="Properties\launchSettings.json"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Extensions\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Tsu.IndividualPlan.Data\Tsu.IndividualPlan.Data.csproj"/>
+        <ProjectReference Include="..\Tsu.IndividualPlan.Domain\Tsu.IndividualPlan.Domain.csproj"/>
+        <ProjectReference Include="..\Tsu.IndividualPlan.Transfer\Tsu.IndividualPlan.Transfer.csproj"/>
     </ItemGroup>
 </Project>

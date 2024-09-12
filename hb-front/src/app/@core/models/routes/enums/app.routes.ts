@@ -1,4 +1,4 @@
 export enum AppRoutes {
-    AUTH = "auth",
-    MAIN = "tsu-import"
+  AUTH = "auth",
+  MAIN = "tsu-import"
 }

@@ -52,23 +52,22 @@ import {UsersService} from "@core/services";
   `
 })
 export class StatesAssignDialogComponent {
+  protected readonly formControl: FormControl<string> = new FormControl<string>('', {
+    validators: [Validators.required],
+    nonNullable: true
+  });
+  protected readonly users$ = this._usersService.getAll().pipe(
+    switchMap((users) => concat(of(this.formControl.value), this.formControl.valueChanges).pipe(
+      map((value) => users.filter((user) => `${user.firstname} ${user.lastname}`.includes(value)))
+    ))
+  );
+
   constructor(
     private readonly _usersService: UsersService,
     private readonly _dialogRef: MatDialogRef<StatesAssignDialogComponent, IStateAssignRequest>,
     @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IStatesAssignDialogData
   ) {
   }
-
-  protected readonly formControl: FormControl<string> = new FormControl<string>('', {
-    validators: [Validators.required],
-    nonNullable: true
-  });
-
-  protected readonly users$ = this._usersService.getAll().pipe(
-    switchMap((users) => concat(of(this.formControl.value), this.formControl.valueChanges).pipe(
-      map((value) => users.filter((user) => `${user.firstname} ${user.lastname}`.includes(value)))
-    ))
-  );
 
   protected displayFn(opts: IUser[]) {
     return (id: string) => {

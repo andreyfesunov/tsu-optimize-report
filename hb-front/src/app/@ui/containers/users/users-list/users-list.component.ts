@@ -24,12 +24,12 @@ import {UsersService} from "@core/services";
   host: {class: 'host-class'}
 })
 export class UsersListComponent {
+  protected readonly spinner = new Spinner();
+
   constructor(
     private readonly _usersService: UsersService
   ) {
   }
-
-  protected readonly spinner = new Spinner();
 
   protected readonly loadFn = (request: IPaginationRequest) => withSpinner(this._usersService.search(request), this.spinner);
 }

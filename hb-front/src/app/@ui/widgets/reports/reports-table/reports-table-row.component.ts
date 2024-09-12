@@ -1,7 +1,7 @@
-import { TableRowController } from "@core/controllers";
-import { IReportListItem, reportStatusStyles, reportStatusToString } from "@core/models";
-import { Component } from "@angular/core";
-import { CommonModule, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase } from "@angular/common";
+import {TableRowController} from "@core/controllers";
+import {IReportListItem, reportStatusStyles, reportStatusToString} from "@core/models";
+import {Component} from "@angular/core";
+import {CommonModule, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 
 export enum ReportsTableRowItemField {
   JOB = 'JOB',
@@ -43,9 +43,10 @@ export enum ReportsTableRowItemField {
         </ng-container>
         <ng-container *ngSwitchCase="ReportsTableRowItemField.HOURS">{{ item.state.hours }}</ng-container>
         <ng-container
-          *ngSwitchCase="ReportsTableRowItemField.START_DATE">{{ item.state.startDate | date: 'dd.MM.yyyy'}}
+          *ngSwitchCase="ReportsTableRowItemField.START_DATE">{{ item.state.startDate | date: 'dd.MM.yyyy' }}
         </ng-container>
-        <ng-container *ngSwitchCase="ReportsTableRowItemField.END_DATE">{{ item.state.endDate | date: 'dd.MM.yyyy'}}</ng-container>
+        <ng-container *ngSwitchCase="ReportsTableRowItemField.END_DATE">{{ item.state.endDate | date: 'dd.MM.yyyy' }}
+        </ng-container>
         <ng-container *ngSwitchCase="ReportsTableRowItemField.STATUS">
           <span [ngClass]="reportStatusStyles(item.status)">{{ reportStatusToString(item.status) }}</span>
         </ng-container>

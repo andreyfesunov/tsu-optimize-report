@@ -8,7 +8,7 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/m
 import {MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {TableRowController} from "@core/controllers";
-import { MatTooltip } from "@angular/material/tooltip";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: "tr[app-event-form-table-row]",
@@ -45,7 +45,8 @@ import { MatTooltip } from "@angular/material/tooltip";
           <ng-container *ngIf="item.eventForm.controls.eventType as control">
             <ng-container *ngIf="item.events$ | async as eventTypes">
               <mat-form-field *ngIf="eventTypes.length !== 0" appearance="outline" style="width: 100%">
-                <input [matTooltip]="getPropertyEvent(control.value, EventTypeProperies.name, eventTypes)" [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
+                <input [matTooltip]="getPropertyEvent(control.value, EventTypeProperies.name, eventTypes)"
+                       [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
                        placeholder="Выберите событие" matInput>
 
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
@@ -71,7 +72,7 @@ import { MatTooltip } from "@angular/material/tooltip";
                 white-space: nowrap;
                 text-overflow: ellipsis;"
               >
-                {{getPropertyEvent(control.value, EventTypeProperies.description, eventTypes)}}
+                {{ getPropertyEvent(control.value, EventTypeProperies.description, eventTypes) }}
               </p>
             </ng-container>
           </ng-container>
@@ -79,8 +80,9 @@ import { MatTooltip } from "@angular/material/tooltip";
 
         <ng-container *ngSwitchCase="ReportItemField.START_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="item.eventForm.controls.startDate" [matDatepicker]="dp1" matInput style="display: none;">
-            <div> {{ item.eventForm.controls.startDate.value | date: 'dd.MM.yyyy' }} </div>
+            <input [formControl]="item.eventForm.controls.startDate" [matDatepicker]="dp1" matInput
+                   style="display: none;">
+            <div> {{ item.eventForm.controls.startDate.value | date: 'dd.MM.yyyy' }}</div>
             <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
             <mat-datepicker #dp1></mat-datepicker>
           </mat-form-field>
@@ -88,22 +90,23 @@ import { MatTooltip } from "@angular/material/tooltip";
 
         <ng-container *ngSwitchCase="ReportItemField.END_DATE">
           <mat-form-field appearance="outline">
-            <input [formControl]="item.eventForm.controls.endDate" [matDatepicker]="dp2" matInput style="display: none;">
-            <div> {{ item.eventForm.controls.endDate.value | date: 'dd.MM.yyyy' }} </div>
+            <input [formControl]="item.eventForm.controls.endDate" [matDatepicker]="dp2" matInput
+                   style="display: none;">
+            <div> {{ item.eventForm.controls.endDate.value | date: 'dd.MM.yyyy' }}</div>
             <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
             <mat-datepicker #dp2></mat-datepicker>
           </mat-form-field>
         </ng-container>
-  
+
         <ng-container>
           <div [matTooltip]="actualDescriptionEventType">
             <ng-container *ngSwitchCase="ReportItemField.PLAN">
-              <div  style="width: 212px; height: 20px"></div>
-            </ng-container>
-            <ng-container  *ngSwitchCase="ReportItemField.FACT">
               <div style="width: 212px; height: 20px"></div>
             </ng-container>
-          </div>  
+            <ng-container *ngSwitchCase="ReportItemField.FACT">
+              <div style="width: 212px; height: 20px"></div>
+            </ng-container>
+          </div>
         </ng-container>
 
         <ng-container *ngSwitchCase="ReportItemField.ACTIONS">
@@ -127,14 +130,14 @@ export class EventFormTableRowComponent extends TableRowController<EventFormStat
   }
 
   protected getPropertyEvent(id: string | null, property: EventTypeProperties, opts: IEventType[]): string {
-    if(!id) return "Выберите событие";
+    if (!id) return "Выберите событие";
     let test = "";
     opts.forEach((opt) => {
       if (opt.id === id) {
         test = opt[property];
       }
     });
-    
+
     if (property == this.EventTypeProperies.description) {
       this.actualDescriptionEventType = test;
     }

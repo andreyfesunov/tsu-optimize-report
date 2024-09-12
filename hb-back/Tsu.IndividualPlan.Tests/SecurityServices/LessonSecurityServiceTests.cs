@@ -2,12 +2,12 @@ using System;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Tsu.IndividualPlan.WebApi.Dto;
-using Tsu.IndividualPlan.WebApi.Exceptions;
-using Tsu.IndividualPlan.WebApi.Interfaces.Repositories;
-using Tsu.IndividualPlan.WebApi.Interfaces.SecurityServices;
-using Tsu.IndividualPlan.WebApi.Models;
-using Tsu.IndividualPlan.WebApi.SecurityServices;
+using Tsu.IndividualPlan.Domain.Exceptions;
+using Tsu.IndividualPlan.Domain.Interfaces.Repositories;
+using Tsu.IndividualPlan.Domain.Interfaces.SecurityServices;
+using Tsu.IndividualPlan.Domain.Models.Business;
+using Tsu.IndividualPlan.Domain.Models.Project;
+using Tsu.IndividualPlan.Domain.Security;
 
 namespace Tsu.IndividualPlan.Tests.SecurityServices;
 

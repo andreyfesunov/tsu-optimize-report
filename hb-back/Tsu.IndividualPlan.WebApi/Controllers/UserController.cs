@@ -1,29 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tsu.IndividualPlan.Domain.Dto.Auth;
+using Tsu.IndividualPlan.Domain.Enumerations;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Project;
 using Tsu.IndividualPlan.WebApi.Dto;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
-using Tsu.IndividualPlan.WebApi.Models.Enum;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController : ControllerBase
+public class UserController(IUserService service) : ControllerBase
 {
-    private readonly IUserService _service;
-
-    public UserController(IUserService service)
-    {
-        _service = service;
-    }
-
     [HttpGet]
     public async Task<ActionResult<ICollection<UserDto>>> GetAll()
     {
         try
         {
-            var users = await _service.GetAll();
-            return Ok(users.Select(u => u.toDTO()));
+            var users = await service.GetAll();
+            return Ok(users.Select(u => u.toDTO()).ToList());
         }
         catch (Exception ex)
         {
@@ -36,7 +31,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = await _service.GetById(id);
+            var user = await service.GetById(id);
             return Ok(user.toDTO());
         }
         catch (Exception ex)
@@ -50,7 +45,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var token = await _service.LogIn(loginDto);
+            var token = await service.LogIn(loginDto);
             return Ok(new UserLoginDto(token));
         }
         catch (Exception ex)
@@ -64,7 +59,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var role = await _service.Reg(registrationDto);
+            var role = await service.Reg(registrationDto);
             return Ok(role);
         }
         catch (Exception ex)
@@ -74,11 +69,11 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<ActionResult<Pagination<UserDto>>> Search(SearchDto searchDto)
+    public async Task<ActionResult<Pagination<UserDto>>> Search(Search search)
     {
         try
         {
-            var result = await _service.Search(searchDto);
+            var result = await service.Search(search);
 
             return Ok(
                 new Pagination<UserDto>(

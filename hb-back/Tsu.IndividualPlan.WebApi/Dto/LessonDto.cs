@@ -1,17 +1,9 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class LessonDto
+public class LessonDto(Guid Id, LessonTypeDto? LessonType, int? FactDate, int? PlanDate)
 {
-    public LessonDto(Guid Id, LessonTypeDto? LessonType, int? FactDate, int? PlanDate)
-    {
-        this.Id = Id;
-        this.LessonType = LessonType;
-        this.PlanDate = PlanDate;
-        this.FactDate = FactDate;
-    }
-
-    public Guid Id { get; init; }
-    public LessonTypeDto? LessonType { get; init; }
-    public int? FactDate { get; init; }
-    public int? PlanDate { get; init; }
+    public Guid Id { get; init; } = Id;
+    public LessonTypeDto? LessonType { get; init; } = LessonType;
+    public int? FactDate { get; init; } = FactDate;
+    public int? PlanDate { get; init; } = PlanDate;
 }

@@ -20,24 +20,13 @@ import {ILoginDto, IRegDto} from "@core/dtos";
 
 })
 export class AuthRegFormComponent {
+  @Output() public readonly submitEvent: EventEmitter<ILoginDto> = new EventEmitter<ILoginDto>()
+  @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
+  protected readonly form: FormGroup<IAuthRegForm> = this._buildForm();
+
   public constructor(
     private readonly _fb: NonNullableFormBuilder,
   ) {
-  }
-
-  @Output() public readonly submitEvent: EventEmitter<ILoginDto> = new EventEmitter<ILoginDto>()
-
-  @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
-
-  protected readonly form: FormGroup<IAuthRegForm> = this._buildForm();
-
-  private _buildForm(): FormGroup<IAuthRegForm> {
-    return this._fb.group<IAuthRegForm>({
-      email: this._fb.control<string>("", [Validators.required, Validators.email]),
-      firstname: this._fb.control<string>("", [Validators.required]),
-      lastname: this._fb.control<string>("", [Validators.required]),
-      password: this._fb.control<string>("", Validators.required)
-    })
   }
 
   protected toLogin(): void {
@@ -57,6 +46,15 @@ export class AuthRegFormComponent {
     };
 
     this.submitEvent.next(request);
+  }
+
+  private _buildForm(): FormGroup<IAuthRegForm> {
+    return this._fb.group<IAuthRegForm>({
+      email: this._fb.control<string>("", [Validators.required, Validators.email]),
+      firstname: this._fb.control<string>("", [Validators.required]),
+      lastname: this._fb.control<string>("", [Validators.required]),
+      password: this._fb.control<string>("", Validators.required)
+    })
   }
 }
 

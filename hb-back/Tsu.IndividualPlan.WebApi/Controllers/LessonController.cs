@@ -1,30 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tsu.IndividualPlan.Domain.Dto.Lesson;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
 using Tsu.IndividualPlan.WebApi.Dto;
-using Tsu.IndividualPlan.WebApi.Dto.Lesson;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class LessonController : ControllerBase
+public class LessonController(ILessonService service) : ControllerBase
 {
-    private readonly ILessonService _service;
-
-    public LessonController(ILessonService service)
-    {
-        _service = service;
-    }
-
     [HttpPost]
     public async Task<ActionResult<LessonDto>> Create(LessonCreateDto dto)
     {
         try
         {
-            var entity = await _service.AddEntity(dto);
+            var entity = await service.AddEntity(dto);
             return Ok(entity.toDTO());
         }
         catch (Exception ex)
@@ -38,7 +31,7 @@ public class LessonController : ControllerBase
     {
         try
         {
-            var entity = await _service.Update(dto);
+            var entity = await service.Update(dto);
             return Ok(entity.toDTO());
         }
         catch (Exception ex)
@@ -52,7 +45,7 @@ public class LessonController : ControllerBase
     {
         try
         {
-            var result = await _service.DeleteById(entityId);
+            var result = await service.DeleteById(entityId);
             return Ok(result);
         }
         catch (Exception ex)

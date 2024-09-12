@@ -1,10 +1,13 @@
-FROM node:20.11 as build
+FROM node:20-alpine as build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:1.23.3 as publish
-COPY --from=build /app/dist/hb-front /usr/share/nginx/html
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/dist/hb-front/browser /usr/share/nginx/html
 EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -9,8 +9,8 @@ export enum LayoutRefs {
   standalone: true
 })
 export class LayoutRefDirective {
+  public readonly appLayoutRef = input.required<string>();
+
   constructor(public readonly templateRef: TemplateRef<unknown>) {
   }
-
-  public readonly appLayoutRef = input.required<string>();
 }

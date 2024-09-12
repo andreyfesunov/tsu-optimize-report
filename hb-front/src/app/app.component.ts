@@ -27,12 +27,6 @@ import {roleFn$} from "@core/guards";
 })
 export class AppComponent {
   @HostBinding('class.host-class') addHostClass = true;
-
-  constructor(
-    private readonly _authState: AuthState,
-  ) {
-  }
-
   protected readonly navItems: Navigation[] = [
     {
       text: "Отчёты",
@@ -72,4 +66,9 @@ export class AppComponent {
   ];
   protected readonly valid$ = this._authState.valid$;
   protected readonly invalid$ = this.valid$.pipe(map((v) => !v));
+
+  constructor(
+    private readonly _authState: AuthState,
+  ) {
+  }
 }

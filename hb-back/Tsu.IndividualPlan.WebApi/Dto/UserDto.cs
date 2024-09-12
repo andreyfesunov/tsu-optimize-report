@@ -1,33 +1,21 @@
-﻿using Tsu.IndividualPlan.WebApi.Models.Enum;
+﻿using Tsu.IndividualPlan.Domain.Enumerations;
 
 namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class UserDto
+public class UserDto(
+    Guid Id,
+    string Email,
+    string Firstname,
+    string Lastname,
+    RoleUserEnum Role,
+    RankDto? Rank,
+    DegreeDto? Degree)
 {
-    public UserDto(
-        Guid Id,
-        string Email,
-        string Firstname,
-        string Lastname,
-        RoleUserEnum Role,
-        RankDto? Rank,
-        DegreeDto? Degree
-    )
-    {
-        this.Id = Id;
-        this.Email = Email;
-        this.Firstname = Firstname;
-        this.Lastname = Lastname;
-        this.Role = Role;
-        this.Rank = Rank;
-        this.Degree = Degree;
-    }
-
-    public Guid Id { get; init; }
-    public string Email { get; init; }
-    public string Firstname { get; init; }
-    public string Lastname { get; init; }
-    public RoleUserEnum Role { get; init; }
-    public RankDto? Rank { get; init; }
-    public DegreeDto? Degree { get; init; }
+    public Guid Id { get; init; } = Id;
+    public string Email { get; init; } = Email;
+    public string Firstname { get; init; } = Firstname;
+    public string Lastname { get; init; } = Lastname;
+    public RoleUserEnum Role { get; init; } = Role;
+    public RankDto? Rank { get; init; } = Rank;
+    public DegreeDto? Degree { get; init; } = Degree;
 }

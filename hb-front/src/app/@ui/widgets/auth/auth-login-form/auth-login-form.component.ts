@@ -20,16 +20,14 @@ import {ILoginDto} from "@core/dtos";
 
 })
 export class AuthLoginFormComponent {
+  @Output() public readonly submitEvent: EventEmitter<ILoginDto> = new EventEmitter<ILoginDto>()
+  @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
+  protected readonly form: FormGroup<IAuthLoginForm> = this._buildForm();
+
   public constructor(
     private readonly _fb: NonNullableFormBuilder
   ) {
   }
-
-  @Output() public readonly submitEvent: EventEmitter<ILoginDto> = new EventEmitter<ILoginDto>()
-
-  @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
-
-  protected readonly form: FormGroup<IAuthLoginForm> = this._buildForm();
 
   protected submit(): void {
     if (this.form.invalid) {

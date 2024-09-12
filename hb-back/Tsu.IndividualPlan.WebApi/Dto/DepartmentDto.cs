@@ -1,15 +1,8 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class DepartmentDto
+public class DepartmentDto(Guid Id, string Name, InstituteDto? Institute)
 {
-    public DepartmentDto(Guid Id, string Name, InstituteDto? Institute)
-    {
-        this.Id = Id;
-        this.Name = Name;
-        this.Institute = Institute;
-    }
-
-    public Guid Id { get; init; }
-    public string Name { get; init; }
-    public InstituteDto? Institute { get; init; }
+    public Guid Id { get; init; } = Id;
+    public string Name { get; init; } = Name;
+    public InstituteDto? Institute { get; init; } = Institute;
 }

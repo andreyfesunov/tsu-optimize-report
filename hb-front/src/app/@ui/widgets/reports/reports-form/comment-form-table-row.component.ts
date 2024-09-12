@@ -7,7 +7,7 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/mater
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {TableRowController} from "@core/controllers";
-import { MatTooltip } from "@angular/material/tooltip";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: "tr[app-comment-form-table-row]",
@@ -37,7 +37,8 @@ import { MatTooltip } from "@angular/material/tooltip";
       <ng-container *ngIf="item" [ngSwitch]="col.id">
         <ng-container *ngSwitchCase="ReportItemField.ENTITY_NAME">
           <mat-form-field appearance="outline">
-            <input [matTooltip]="item.form.controls.content.value" [formControl]="item.form.controls.content" type="textarea" matInput>
+            <input [matTooltip]="item.form.controls.content.value" [formControl]="item.form.controls.content"
+                   type="textarea" matInput>
           </mat-form-field>
         </ng-container>
 

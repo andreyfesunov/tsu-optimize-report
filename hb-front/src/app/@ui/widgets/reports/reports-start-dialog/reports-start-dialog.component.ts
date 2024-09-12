@@ -38,7 +38,8 @@ import {MatDialogRef} from "@angular/material/dialog";
       <form (ngSubmit)="submit()">
         <mat-form-field appearance="outline">
           <mat-label style="margin-left: 12px;">Файл</mat-label>
-          <button mat-icon-button matPrefix (click)="$event.preventDefault(); file_input.click()" style="margin-left: 8px">
+          <button mat-icon-button matPrefix (click)="$event.preventDefault(); file_input.click()"
+                  style="margin-left: 8px">
             <mat-icon>attach_file</mat-icon>
           </button>
           <input type="text" readonly [formControl]="displayControl" matInput>
@@ -55,13 +56,13 @@ import {MatDialogRef} from "@angular/material/dialog";
   `
 })
 export class ReportsStartDialogComponent {
+  protected readonly fileControl: FormControl<File | null> = new FormControl<File | null>(null, Validators.required);
+  protected readonly displayControl: FormControl<string> = new FormControl<string>('', {nonNullable: true});
+
   constructor(
     private readonly _dialogRef: MatDialogRef<ReportsStartDialogComponent, FormData>
   ) {
   }
-
-  protected readonly fileControl: FormControl<File | null> = new FormControl<File | null>(null, Validators.required);
-  protected readonly displayControl: FormControl<string> = new FormControl<string>('', {nonNullable: true});
 
   protected change(files: FileList): void {
     if (files.length === 0) return;

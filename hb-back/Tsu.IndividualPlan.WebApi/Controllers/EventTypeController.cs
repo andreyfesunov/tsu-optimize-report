@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
+using Tsu.IndividualPlan.Domain.Dto.EventType;
+using Tsu.IndividualPlan.Domain.Interfaces.Services;
+using Tsu.IndividualPlan.Domain.Models.Project;
 using Tsu.IndividualPlan.WebApi.Dto;
 using Tsu.IndividualPlan.WebApi.Extensions.Entities;
-using Tsu.IndividualPlan.WebApi.Interfaces.Services;
 
 namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EventTypeController : ControllerBase
+public class EventTypeController(IEventTypeService service) : ControllerBase
 {
-    private readonly IEventTypeService _service;
-
-    public EventTypeController(IEventTypeService service)
-    {
-        _service = service;
-    }
-
     [HttpGet]
     public async Task<ActionResult<ICollection<EventTypeDto>>> GetAll()
     {
         try
         {
-            var result = await _service.GetAll();
+            var result = await service.GetAll();
             return Ok(result.Select(x => x.toDTO()).ToList());
         }
         catch (Exception ex)
@@ -32,12 +27,21 @@ public class EventTypeController : ControllerBase
 
     [HttpPost("searchMap")]
     public async Task<ActionResult<Dictionary<string, Pagination<EventTypeDto>>>> SearchMap(
-        [FromBody] SearchDto searchDto
+        [FromBody] Search search
     )
     {
         try
         {
-            var result = await _service.SearchMap(searchDto);
+            var searchMap = await service.SearchMap(search);
+            var result = searchMap.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new Pagination<EventTypeDto>(
+                    kvp.Value.PageNumber,
+                    kvp.Value.PageSize,
+                    kvp.Value.TotalPages,
+                    kvp.Value.Entities.Select(x => x.toDTO()).ToList()
+                )
+            );
             return Ok(result);
         }
         catch (Exception ex)
@@ -49,18 +53,18 @@ public class EventTypeController : ControllerBase
     [HttpPost("{activityId:guid}/search")]
     public async Task<ActionResult<Pagination<EventTypeDto>>> Search(
         Guid activityId,
-        [FromBody] SearchDto searchDto
+        [FromBody] Search search
     )
     {
         try
         {
-            var result = await _service.Search(activityId, searchDto);
+            var result = await service.Search(activityId, search);
             return Ok(
                 new Pagination<EventTypeDto>(
-                    PageNumber: result.PageNumber,
-                    PageSize: result.PageSize,
-                    TotalPages: result.TotalPages,
-                    Entities: result.Entities.Select(x => x.toDTO()).ToList()
+                    result.PageNumber,
+                    result.PageSize,
+                    result.TotalPages,
+                    result.Entities.Select(x => x.toDTO()).ToList()
                 )
             );
         }
@@ -75,7 +79,7 @@ public class EventTypeController : ControllerBase
     {
         try
         {
-            await _service.Assign(dto);
+            await service.Assign(dto);
             return Ok(true);
         }
         catch (Exception ex)
@@ -92,7 +96,7 @@ public class EventTypeController : ControllerBase
     {
         try
         {
-            var eventTypes = await _service.GetAllForReport(stateUserId, workId);
+            var eventTypes = await service.GetAllForReport(stateUserId, workId);
             return Ok(eventTypes.Select(x => x.toDTO()).ToList());
         }
         catch (Exception ex)

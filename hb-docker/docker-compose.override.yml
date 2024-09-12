@@ -1,12 +1,9 @@
-﻿services: 
+﻿services:
   tsu-backend:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5243:8080"
-  tsu-frontend:
-    ports:
-      - "8080:80"
   tsu-nginx:
     ports:
       - "80:80"

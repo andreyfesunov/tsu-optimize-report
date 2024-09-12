@@ -18,12 +18,12 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
   `
 })
 export class ReportsDetailDialogComponent {
+  protected readonly id: string = this._dialogData.id;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IReportsDetailDialogData,
   ) {
   }
-
-  protected readonly id: string = this._dialogData.id;
 }
 
 export interface IReportsDetailDialogData {

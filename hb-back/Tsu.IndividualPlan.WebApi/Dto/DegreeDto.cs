@@ -1,13 +1,7 @@
 ﻿namespace Tsu.IndividualPlan.WebApi.Dto;
 
-public class DegreeDto
+public class DegreeDto(Guid Id, string Name)
 {
-    public DegreeDto(Guid Id, string Name)
-    {
-        this.Id = Id;
-        this.Name = Name;
-    }
-
-    public Guid Id { get; init; }
-    public string Name { get; init; }
+    public Guid Id { get; init; } = Id;
+    public string Name { get; init; } = Name;
 }
