@@ -43,6 +43,6 @@ public class State : Base
 
     public ICollection<StateUser>? StatesUsers { get; init; }
 
-    public Department? Department { get; }
-    public Job? Job { get; }
+    public Department? Department { get; init; }
+    public Job? Job { get; init; }
 }
