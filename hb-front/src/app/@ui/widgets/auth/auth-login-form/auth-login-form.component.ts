@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from "@angular/core";
+import {Component, inject, output} from "@angular/core";
 import {MatInputModule} from "@angular/material/input";
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
@@ -20,14 +20,12 @@ import {ILoginDto} from "@core/dtos";
 
 })
 export class AuthLoginFormComponent {
-  @Output() public readonly submitEvent: EventEmitter<ILoginDto> = new EventEmitter<ILoginDto>()
-  @Output() public readonly redirectEvent: EventEmitter<void> = new EventEmitter<void>();
-  protected readonly form: FormGroup<IAuthLoginForm> = this._buildForm();
+  private readonly _fb = inject(NonNullableFormBuilder);
 
-  public constructor(
-    private readonly _fb: NonNullableFormBuilder
-  ) {
-  }
+  public readonly submitEvent = output<ILoginDto>()
+  public readonly redirectEvent = output<void>();
+
+  protected readonly form: FormGroup<IAuthLoginForm> = this._buildForm();
 
   protected submit(): void {
     if (this.form.invalid) {
@@ -39,11 +37,11 @@ export class AuthLoginFormComponent {
       password: this.form.controls.password.value
     };
 
-    this.submitEvent.next(request);
+    this.submitEvent.emit(request);
   }
 
   protected toRegister(): void {
-    this.redirectEvent.next();
+    this.redirectEvent.emit();
   }
 
   private _buildForm(): FormGroup<IAuthLoginForm> {

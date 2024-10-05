@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from "@angular/core";
+import {ChangeDetectionStrategy, Component, inject} from "@angular/core";
 import {MatButton} from "@angular/material/button";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
@@ -83,6 +83,9 @@ import {JobsService} from "@core/services";
   `
 })
 export class StatesCreateDialogComponent {
+  private readonly _jobsService = inject(JobsService);
+  private readonly _dialogRef = inject(MatDialogRef<StatesCreateDialogComponent>);
+
   protected readonly jobs$ = this._jobsService.list();
   protected readonly form: FormGroup<IStatesDialogForm> = new FormGroup<IStatesDialogForm>({
     hours: new FormControl<number>(1485, {nonNullable: true, validators: [Validators.min(1), Validators.required]}),
@@ -94,12 +97,6 @@ export class StatesCreateDialogComponent {
       validators: [Validators.required]
     }),
   });
-
-  constructor(
-    private readonly _jobsService: JobsService,
-    private readonly _dialogRef: MatDialogRef<StatesCreateDialogComponent>
-  ) {
-  }
 
   private get _endDate(): Date {
     const endDate = new Date();

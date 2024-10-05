@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {ContentComponent, ReportFormComponent, ReportsFirstHalfTableComponent, ScrollableComponent} from "@ui/widgets";
 import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs";
@@ -67,17 +67,13 @@ import FileSaver from 'file-saver';
   styleUrls: ['report-detail.component.scss']
 })
 export class ReportDetailComponent extends SubscriptionController {
+  private readonly _route = inject(ActivatedRoute);
+  private readonly _reportsService = inject(ReportsService);
+
   protected readonly id$ = this._route.paramMap.pipe(
     map((v) => v.get(ParamsRoutes.ID)),
     exists()
   )
-
-  constructor(
-    private readonly _route: ActivatedRoute,
-    private readonly _reportsService: ReportsService
-  ) {
-    super();
-  }
 
   protected export(id: string): void {
     this.subscription.add(

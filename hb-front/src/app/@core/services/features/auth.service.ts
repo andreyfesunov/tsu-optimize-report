@@ -1,14 +1,11 @@
 import {ILoginDto, ITokenDto} from "@core/dtos";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 
 @Injectable({providedIn: "root"})
 export class AuthService {
-  constructor(
-    private readonly _http: HttpClient
-  ) {
-  }
+  private readonly _http = inject(HttpClient);
 
   public logIn(credentials: ILoginDto): Observable<ITokenDto> {
     return this._http.post<ITokenDto>("/api/User/log-in", credentials);

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {IActivitiesAssignEventRequest, IPaginationRequest} from "@core/dtos";
 import {concat, filter, map, Observable, of, shareReplay, Subject, switchMap, take, tap} from "rxjs";
@@ -6,16 +6,13 @@ import {IEventType, IPagination} from "@core/models";
 
 @Injectable({providedIn: "root"})
 export class EventTypesService {
+  private readonly _httpClient = inject(HttpClient);
+
   private readonly _activityId$: Subject<string> = new Subject<string>();
   private readonly _eventTypes$: Observable<IEventType[]> = this._httpClient.get<IEventType[]>('/api/EventType').pipe(
     shareReplay(1)
   )
   private _eventTypesMap$: Observable<{ [key: string]: IPagination<IEventType> }> | null = null;
-
-  constructor(
-    private readonly _httpClient: HttpClient
-  ) {
-  }
 
   public getAll(): Observable<IEventType[]> {
     return this._eventTypes$;

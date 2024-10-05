@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {ContentComponent, SpinnerComponent, UsersTableComponent} from "@ui/widgets";
 import {IPaginationRequest} from "@core/dtos";
 import {NgIf} from "@angular/common";
@@ -24,12 +24,9 @@ import {UsersService} from "@core/services";
   host: {class: 'host-class'}
 })
 export class UsersListComponent {
-  protected readonly spinner = new Spinner();
+  private readonly _usersService = inject(UsersService);
 
-  constructor(
-    private readonly _usersService: UsersService
-  ) {
-  }
+  protected readonly spinner = new Spinner();
 
   protected readonly loadFn = (request: IPaginationRequest) => withSpinner(this._usersService.search(request), this.spinner);
 }

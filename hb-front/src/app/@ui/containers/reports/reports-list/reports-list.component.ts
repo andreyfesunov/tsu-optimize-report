@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {ContentComponent, ReportsTableComponent, SpinnerComponent} from "@ui/widgets";
 import {IPaginationRequest} from "@core/dtos";
 import {exists, Spinner, switchMapSpinner, withSpinner} from "@core/utils";
@@ -29,15 +29,11 @@ import {ReportsDialogService, ReportsService, RouterService} from "@core/service
   host: {class: 'host-class'}
 })
 export class ReportsListComponent extends SubscriptionController {
-  protected readonly spinner = new Spinner();
+  private readonly _reportService = inject(ReportsService);
+  private readonly _reportDialogService = inject(ReportsDialogService);
+  private readonly _routerService = inject(RouterService);
 
-  constructor(
-    private readonly _reportService: ReportsService,
-    private readonly _reportDialogService: ReportsDialogService,
-    private readonly _routerService: RouterService
-  ) {
-    super();
-  }
+  protected readonly spinner = new Spinner();
 
   protected readonly loadFn = (req: IPaginationRequest) => withSpinner(this._reportService.search(req), this.spinner);
 

@@ -1,4 +1,4 @@
-import {Component, computed, DestroyRef, input, ViewEncapsulation} from '@angular/core';
+import {Component, computed, DestroyRef, inject, input, ViewEncapsulation} from '@angular/core';
 import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
 import {BehaviorSubject} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -56,6 +56,9 @@ import {ReportsFormStateFactory} from "@core/factories";
   host: {class: 'host-class'}
 })
 export class ReportFormComponent extends SubscriptionController {
+  private readonly _reportStateFactory = inject(ReportsFormStateFactory);
+  private readonly _destroyRef = inject(DestroyRef);
+
   public readonly id = input.required<string>();
   protected readonly spinner = new Spinner();
   protected readonly state = computed(() => this._reportStateFactory.create(
@@ -64,12 +67,5 @@ export class ReportFormComponent extends SubscriptionController {
     this._destroyRef
   ));
   protected readonly tabChanged$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-
-  constructor(
-    private readonly _reportStateFactory: ReportsFormStateFactory,
-    private readonly _destroyRef: DestroyRef
-  ) {
-    super();
-  }
 }
 

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {
   ICommentCreateDto,
@@ -13,12 +13,9 @@ import {IComment, IEvent, ILesson, ILessonType} from "@core/models";
 
 @Injectable({providedIn: "root"})
 export class EventsService {
-  private readonly _lessonTypesMemo: { [key: string]: Observable<ILessonType[]> } = {};
+  private readonly _httpClient = inject(HttpClient);
 
-  constructor(
-    private readonly _httpClient: HttpClient
-  ) {
-  }
+  private readonly _lessonTypesMemo: { [key: string]: Observable<ILessonType[]> } = {};
 
   public create(dto: IEventCreateDto): Observable<IEvent> {
     return this._httpClient.post<IEvent>('/api/Event', dto);

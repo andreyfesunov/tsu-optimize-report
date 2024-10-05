@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {AuthRegFormComponent} from "@ui/widgets";
 import {toLogin} from "@core/models";
 import {ILoginDto} from "@core/dtos";
@@ -17,12 +17,8 @@ import {AuthService, RouterService} from "@core/services";
 
 })
 export class AuthRegComponent extends SubscriptionController {
-  public constructor(
-    private readonly _authService: AuthService,
-    private readonly _routerService: RouterService,
-  ) {
-    super();
-  }
+  private readonly _authService = inject(AuthService);
+  private readonly _routerService = inject(RouterService);
 
   protected onSubmit(params: ILoginDto): void {
     this.subscription.add(this._authService.reg(params).subscribe(() => this.onLogin()));

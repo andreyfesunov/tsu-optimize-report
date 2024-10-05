@@ -1,4 +1,4 @@
-import {Component, Inject} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {ModalDialogComponent, ReportFormComponent} from "@ui/widgets";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 
@@ -18,12 +18,8 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
   `
 })
 export class ReportsDetailDialogComponent {
+  private readonly _dialogData = inject<IReportsDetailDialogData>(MAT_DIALOG_DATA);
   protected readonly id: string = this._dialogData.id;
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IReportsDetailDialogData,
-  ) {
-  }
 }
 
 export interface IReportsDetailDialogData {

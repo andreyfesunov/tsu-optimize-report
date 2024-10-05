@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
@@ -56,13 +56,10 @@ import {MatDialogRef} from "@angular/material/dialog";
   `
 })
 export class ReportsStartDialogComponent {
+  private readonly _dialogRef = inject<MatDialogRef<ReportsStartDialogComponent, FormData>>(MatDialogRef);
+
   protected readonly fileControl: FormControl<File | null> = new FormControl<File | null>(null, Validators.required);
   protected readonly displayControl: FormControl<string> = new FormControl<string>('', {nonNullable: true});
-
-  constructor(
-    private readonly _dialogRef: MatDialogRef<ReportsStartDialogComponent, FormData>
-  ) {
-  }
 
   protected change(files: FileList): void {
     if (files.length === 0) return;

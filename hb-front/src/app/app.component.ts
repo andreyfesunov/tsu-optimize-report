@@ -1,4 +1,4 @@
-import {Component, HostBinding} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {RouterModule, RouterOutlet} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
@@ -23,10 +23,12 @@ import {roleFn$} from "@core/guards";
     MatListModule,
     MatIconModule,
     MatButtonModule
-  ]
+  ],
+  host: { class: 'host-class' }
 })
 export class AppComponent {
-  @HostBinding('class.host-class') addHostClass = true;
+  private readonly _authState = inject(AuthState);
+
   protected readonly navItems: Navigation[] = [
     {
       text: "Отчёты",
@@ -66,9 +68,4 @@ export class AppComponent {
   ];
   protected readonly valid$ = this._authState.valid$;
   protected readonly invalid$ = this.valid$.pipe(map((v) => !v));
-
-  constructor(
-    private readonly _authState: AuthState,
-  ) {
-  }
 }

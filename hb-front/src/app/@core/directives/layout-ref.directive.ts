@@ -1,4 +1,4 @@
-import {Directive, input, TemplateRef} from "@angular/core";
+import {Directive, inject, input, TemplateRef} from "@angular/core";
 
 export enum LayoutRefs {
   ACTIONS = 'ACTIONS'
@@ -9,8 +9,6 @@ export enum LayoutRefs {
   standalone: true
 })
 export class LayoutRefDirective {
+  public readonly templateRef = inject(TemplateRef<unknown>);
   public readonly appLayoutRef = input.required<string>();
-
-  constructor(public readonly templateRef: TemplateRef<unknown>) {
-  }
 }

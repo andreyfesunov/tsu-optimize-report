@@ -2,16 +2,12 @@ import {IPaginationRequest, IStateAssignRequest, IStateCreateRequest} from "@cor
 import {concat, Observable, of, Subject, switchMap, tap} from "rxjs";
 import {IPagination, IState} from "@core/models";
 import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 
 @Injectable({providedIn: "root"})
 export class StatesService {
+  private readonly _httpClient = inject(HttpClient);
   private readonly _reload$: Subject<void> = new Subject<void>();
-
-  constructor(
-    private readonly _httpClient: HttpClient
-  ) {
-  }
 
   public search(dto: IPaginationRequest): Observable<IPagination<IState>> {
     return concat(of(0), this._reload$).pipe(

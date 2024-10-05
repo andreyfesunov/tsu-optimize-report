@@ -1,14 +1,11 @@
-import {DestroyRef, Injectable} from "@angular/core";
+import {DestroyRef, Injectable, inject} from "@angular/core";
 import {EventsService} from "@core/services";
 import {CommentFormState, EventFormState, LessonFormState} from "@core/states";
 import {IComment, IEvent, ILesson} from "@core/models";
 
 @Injectable({providedIn: "root"})
 export class EventFormStateFactory {
-  constructor(
-    private readonly _eventsService: EventsService
-  ) {
-  }
+  private readonly _eventsService = inject(EventsService);
 
   public create(
     reportId: string,

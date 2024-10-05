@@ -1,4 +1,4 @@
-import {Component, input, output} from "@angular/core";
+import {Component, inject, input, output} from "@angular/core";
 import {MatButton} from "@angular/material/button";
 import {DialogRef} from "@angular/cdk/dialog";
 
@@ -30,13 +30,12 @@ import {DialogRef} from "@angular/cdk/dialog";
   styleUrls: ['modal-dialog-action.component.scss']
 })
 export class ModalDialogActionComponent {
+  private readonly _dialogRef = inject(DialogRef);
+
   public readonly cancelDisabled = input<boolean>(false);
   public readonly applyDisabled = input<boolean>(false);
   public readonly applyText = input<string>('Создать');
   public readonly apply = output();
-
-  constructor(private readonly _dialogRef: DialogRef) {
-  }
 
   protected readonly cancel = () => this._dialogRef.close();
 }

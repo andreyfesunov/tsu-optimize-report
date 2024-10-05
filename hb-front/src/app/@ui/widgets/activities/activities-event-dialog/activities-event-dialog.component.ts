@@ -1,4 +1,4 @@
-import {Component, Inject} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalDialogActionComponent, ModalDialogComponent} from "@ui/widgets";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -52,6 +52,10 @@ import {EventTypesService} from "@core/services";
   `
 })
 export class ActivitiesEventDialogComponent {
+  private readonly _eventsService = inject(EventTypesService);
+  private readonly _dialogRef = inject<MatDialogRef<ActivitiesEventDialogComponent, IActivitiesAssignEventRequest>>(MatDialogRef);
+  private readonly _dialogData = inject<IActivitiesEventDialogData>(MAT_DIALOG_DATA);
+
   protected readonly formControl: FormControl<string> = new FormControl<string>('', {
     validators: [Validators.required],
     nonNullable: true
@@ -62,13 +66,6 @@ export class ActivitiesEventDialogComponent {
     ))
   );
   protected readonly title = `Назначить событие активности "${this._dialogData.activityName}"`;
-
-  constructor(
-    private readonly _eventsService: EventTypesService,
-    private readonly _dialogRef: MatDialogRef<ActivitiesEventDialogComponent, IActivitiesAssignEventRequest>,
-    @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IActivitiesEventDialogData
-  ) {
-  }
 
   protected displayFn(opts: IEventType[]) {
     return (id: string) => {

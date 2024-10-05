@@ -1,4 +1,4 @@
-import {Component, input} from "@angular/core";
+import {Component, inject, input} from "@angular/core";
 import {ITableConfig, TableController} from "@core/controllers";
 import {IActivity, IPagination, IRecord, ITableColumn} from "@core/models";
 import {map, Observable} from "rxjs";
@@ -40,13 +40,9 @@ import {
   host: {class: 'host-class'}
 })
 export class ReportsFirstHalfTableComponent extends TableController<IRecordEntry> {
-  public readonly reportId = input.required<string>();
+  private readonly _service = inject(RecordsService);
 
-  constructor(
-    private readonly _service: RecordsService
-  ) {
-    super();
-  }
+  public readonly reportId = input.required<string>();
 
   protected config(): ITableConfig {
     return {request: getDefaultPaginationRequest()};

@@ -1,10 +1,9 @@
 import {Router} from "@angular/router";
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 
 @Injectable({providedIn: "root"})
 export class RouterService {
-  constructor(private readonly _router: Router) {
-  }
+  private readonly _router = inject(Router);
 
   /** For now just wrapper */
   public navigate(params: string[]): Promise<boolean> {

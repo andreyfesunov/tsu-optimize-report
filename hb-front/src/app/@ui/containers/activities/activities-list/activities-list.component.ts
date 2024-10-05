@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {ActivitiesTableComponent, ContentComponent, SpinnerComponent} from "@ui/widgets";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {exists, Spinner, withSpinner} from "@core/utils";
@@ -58,16 +58,12 @@ import {ActivitiesDialogService, ActivitiesService, EventTypesService} from "@co
   host: {class: 'host-class'}
 })
 export class ActivitiesListComponent extends SubscriptionController {
+  private readonly _activitiesService = inject(ActivitiesService);
+  private readonly _eventTypesService = inject(EventTypesService);
+  private readonly _activitiesDialogService = inject(ActivitiesDialogService);
+
   protected readonly activities$ = this._activitiesService.getAll();
   protected readonly spinner = new Spinner();
-
-  constructor(
-    private readonly _activitiesService: ActivitiesService,
-    private readonly _eventTypesService: EventTypesService,
-    private readonly _activitiesDialogService: ActivitiesDialogService
-  ) {
-    super();
-  }
 
   protected readonly loadFn = (id: string, req: IPaginationRequest) => withSpinner(this._eventTypesService.search(id, req), this.spinner);
 

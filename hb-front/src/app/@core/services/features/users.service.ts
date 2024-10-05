@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {IPaginationRequest} from "@core/dtos";
 import {Observable, shareReplay} from "rxjs";
@@ -6,14 +6,11 @@ import {IPagination, IUser} from "@core/models";
 
 @Injectable({providedIn: "root"})
 export class UsersService {
+  private readonly _httpClient = inject(HttpClient);
+
   private readonly _users$ = this._httpClient.get<IUser[]>('/api/User').pipe(
     shareReplay(1)
   );
-
-  constructor(
-    private readonly _httpClient: HttpClient
-  ) {
-  }
 
   public getAll(): Observable<IUser[]> {
     return this._users$;

@@ -1,4 +1,4 @@
-import {Component, Inject} from "@angular/core";
+import {Component, inject} from "@angular/core";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -52,6 +52,10 @@ import {UsersService} from "@core/services";
   `
 })
 export class StatesAssignDialogComponent {
+  private readonly _usersService = inject(UsersService);
+  private readonly _dialogRef = inject<MatDialogRef<StatesAssignDialogComponent, IStateAssignRequest>>(MatDialogRef);
+  private readonly _dialogData = inject<IStatesAssignDialogData>(MAT_DIALOG_DATA);
+
   protected readonly formControl: FormControl<string> = new FormControl<string>('', {
     validators: [Validators.required],
     nonNullable: true
@@ -61,13 +65,6 @@ export class StatesAssignDialogComponent {
       map((value) => users.filter((user) => `${user.firstname} ${user.lastname}`.includes(value)))
     ))
   );
-
-  constructor(
-    private readonly _usersService: UsersService,
-    private readonly _dialogRef: MatDialogRef<StatesAssignDialogComponent, IStateAssignRequest>,
-    @Inject(MAT_DIALOG_DATA) private readonly _dialogData: IStatesAssignDialogData
-  ) {
-  }
 
   protected displayFn(opts: IUser[]) {
     return (id: string) => {

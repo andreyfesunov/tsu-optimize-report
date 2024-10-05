@@ -1,14 +1,11 @@
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {IStatesAssignDialogData, StatesAssignDialogComponent, StatesCreateDialogComponent} from "@ui/widgets";
 import {IStateAssignRequest, IStateCreateRequest} from "@core/dtos";
 
 @Injectable({providedIn: "root"})
 export class StatesDialogService {
-  constructor(
-    private readonly _dialog: MatDialog
-  ) {
-  }
+  private readonly _dialog = inject(MatDialog);
 
   public openCreate(): MatDialogRef<StatesCreateDialogComponent, IStateCreateRequest> {
     return this._dialog.open(StatesCreateDialogComponent, {minWidth: '600px'});
