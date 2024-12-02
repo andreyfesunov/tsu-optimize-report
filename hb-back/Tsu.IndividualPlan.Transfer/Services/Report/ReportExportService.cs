@@ -1,4 +1,6 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
@@ -124,17 +126,22 @@ public class ReportExportService : IReportExportService
 
     private readonly WriteLesson _writeLessonShort = (ev, offset, style) => new List<CellData>();
 
+    private readonly string _root;
+
     public ReportExportService(
         IUserRepository userRepo,
         IStateUserRepository stateUserRepo,
         IRecordRepository recordRepo,
-        UserInfo userInfo
+        UserInfo userInfo,
+        IHostEnvironment env, IConfiguration conf
     )
     {
         _userRepo = userRepo;
         _stateUserRepo = stateUserRepo;
         _recordRepo = recordRepo;
         _userInfo = userInfo;
+
+        _root = Path.Combine(env.ContentRootPath, conf["Storage:Folder"] ?? throw new InvalidOperationException());
     }
 
     public async Task<IWorkbook> ExportReport(string reportId)
@@ -287,7 +294,7 @@ public class ReportExportService : IReportExportService
 
     private async Task _addFirstHalfPages(IWorkbook workbook, User user, StateUser stateUser)
     {
-        var path = stateUser.Files.ToList()[0].Path;
+        var path = Path.Combine(_root, stateUser.Files.ToList()[0].Path);
         await using var fs = new FileStream(path, FileMode.Open);
         // var formFile = new FormFile(
         //     fs,
