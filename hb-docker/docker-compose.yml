@@ -1,37 +1,50 @@
 services:
   tsu-nginx:
     container_name: tsu-nginx
-    build:
-      context: ../hb-front
-    image: tsu-nginx
+    image: nginx:latest
     volumes:
       - ../hb-docker/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - tsu-backend
       - tsu-psql
+      - tsu-client
+    ports:
+      - "80:80"
+
+  tsu-client:
+    container_name: tsu-client
+    build:
+      context: ../hb-front
+    depends_on:
+      - tsu-backend
+    ports:
+      - "4200:4200"
+
   tsu-backend:
     container_name: tsu-backend
     build:
       context: ../hb-back
-    image: tsu-backend
-    develop:
-      watch:
-        - action: rebuild
-          path: ../hb-back
+    image: tsu-backend 
     volumes:
       - storage:/app/Storage
     depends_on:
       - tsu-psql
+    ports:
+      - "5243:8080"
+
   tsu-psql:
     image: postgres:latest
     container_name: tsu-psql
-    restart: always
     volumes:
       - tsu_db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   tsu-adminer:
-    image: adminer:latest
     container_name: tsu-adminer
-    restart: always
+    image: adminer:latest
+    ports:
+      - "8080:8080"
 
 volumes:
   tsu_db:

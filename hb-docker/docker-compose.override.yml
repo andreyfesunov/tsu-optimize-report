@@ -2,18 +2,13 @@
   tsu-backend:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5243:8080"
-  tsu-nginx:
-    ports:
-      - "80:80"
-  tsu-adminer:
-    ports:
-      - "8081:8080"
+    develop:
+      watch:
+        - action: rebuild
+          path: ../hb-back
+
   tsu-psql:
     environment:
       POSTGRES_DB: tsu
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-    ports:
-      - "6789:5432"
