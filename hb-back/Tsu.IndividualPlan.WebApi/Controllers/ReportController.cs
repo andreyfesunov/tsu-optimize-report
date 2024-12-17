@@ -29,14 +29,17 @@ public class ReportController(
         var workbook = await reportExportService.ExportReport(stateUserId.ToString());
 
         using var stream = new MemoryStream();
+
         workbook.Write(stream);
 
-        var result = new FileContentResult(stream.ToArray(), "application/vnd.ms-excel")
+        var file = new FileBase
         {
-            FileDownloadName = "individual-plan.xls"
+            Content = stream.ToArray(),
+            ContentType = "application/vnd.ms-excel",
+            FileName = string.Format("individual-plan-{0}.xls", DateTime.Now)
         };
 
-        return result;
+        return File(file.Content, file.ContentType, file.FileName);
     }
 
     [HttpPost("search")]
