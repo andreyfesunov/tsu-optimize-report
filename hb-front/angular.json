@@ -94,11 +94,10 @@
               "buildTarget": "hb-front:build:production"
             },
             "development": {
-              "buildTarget": "hb-front:build:development",
-              "proxyConfig": "proxy-dev.conf.js"
+              "buildTarget": "hb-front:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
