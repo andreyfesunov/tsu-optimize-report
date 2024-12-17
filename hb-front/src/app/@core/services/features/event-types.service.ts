@@ -3,9 +3,10 @@ import {HttpClient} from "@angular/common/http";
 import {IActivitiesAssignEventRequest, IPaginationRequest} from "@core/dtos";
 import {concat, filter, map, Observable, of, shareReplay, Subject, switchMap, take, tap} from "rxjs";
 import {IEventType, IPagination} from "@core/models";
-
+import { environment } from "src/environments/environment";
 @Injectable({providedIn: "root"})
 export class EventTypesService {
+  private readonly _apiRoot = environment.apiRoot;
   private readonly _httpClient = inject(HttpClient);
 
   private readonly _activityId$: Subject<string> = new Subject<string>();
@@ -19,7 +20,7 @@ export class EventTypesService {
   }
 
   public getAllForReport(reportId: string, workId: string): Observable<IEventType[]> {
-    return this._httpClient.get<IEventType[]>(`/api/EventType/getAll/${reportId}/${workId}`);
+    return this._httpClient.get<IEventType[]>(`${this._apiRoot}/EventType/getAll/${reportId}/${workId}`);
   }
 
   public search(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {
@@ -29,7 +30,7 @@ export class EventTypesService {
   }
 
   public assign(req: IActivitiesAssignEventRequest): Observable<boolean> {
-    return this._httpClient.post<boolean>('/api/EventType/assign', req).pipe(
+    return this._httpClient.post<boolean>(`${this._apiRoot}/EventType/assign`, req).pipe(
       tap(() => this._activityId$.next(req.activityId))
     );
   }
@@ -39,7 +40,7 @@ export class EventTypesService {
   );
 
   private _getSearchRequest(activityId: string, req: IPaginationRequest): Observable<IPagination<IEventType>> {
-    const defaultRequest = this._httpClient.post<IPagination<IEventType>>(`/api/EventType/${activityId}/search`, req);
+    const defaultRequest = this._httpClient.post<IPagination<IEventType>>(`${this._apiRoot}/EventType/${activityId}/search`, req);
 
     if (req.pageNumber !== 1) {
       return defaultRequest;
@@ -48,7 +49,7 @@ export class EventTypesService {
     return (this._eventTypesMap$ ?? (this._eventTypesMap$ = concat(of(0), this._activityId$).pipe(
       switchMap(() => this._httpClient.post<{
         [key: string]: IPagination<IEventType>
-      }>(`/api/EventType/searchMap`, req)),
+      }>(`${this._apiRoot}/EventType/searchMap`, req)),
       shareReplay({bufferSize: 1, refCount: true})
     ))).pipe(
       map((map) => map[activityId]),
