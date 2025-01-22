@@ -314,49 +314,63 @@ public class ReportExportService : IReportExportService
             var sourceSheet = package.GetSheetAt(i);
             var newSheet = workbook.CreateSheet(i == 1 ? "2_Осень" : "3_Весна");
 
-            for (
-                var rowIndex = sourceSheet.FirstRowNum;
-                rowIndex <= sourceSheet.LastRowNum;
-                rowIndex++
-            )
+            for (var rowIndex = sourceSheet.FirstRowNum; rowIndex <= sourceSheet.LastRowNum; rowIndex++)
             {
                 var sourceRow = sourceSheet.GetRow(rowIndex);
-
                 if (sourceRow == null) continue;
 
                 var newRow = newSheet.CreateRow(rowIndex);
-
-                for (
-                    int cellIndex = sourceRow.FirstCellNum;
-                    cellIndex < sourceRow.LastCellNum;
-                    cellIndex++
-                )
+                for (int cellIndex = sourceRow.FirstCellNum; cellIndex < sourceRow.LastCellNum; cellIndex++)
                 {
                     var sourceCell = sourceRow.GetCell(cellIndex);
                     var newCell = newRow.CreateCell(cellIndex);
-
                     if (sourceCell == null) continue;
 
                     newCell.SetCellValue(sourceCell.ToString());
-                    newCell.CellStyle = ((HSSFCellStyle)sourceCell.CellStyle).toXSSF(
-                        workbook
-                    );
+
+                    var newCellStyle = workbook.CreateCellStyle();
+                    var sourceCellStyle = (HSSFCellStyle)sourceCell.CellStyle;
+
+                    if (sourceCellStyle != null)
+                    {
+                        var fontIndex = sourceCellStyle.FontIndex;
+                        var font = package.GetFontAt(fontIndex);
+
+                        var newFont = workbook.CreateFont();
+                        newFont.FontName = font.FontName;
+                        newFont.FontHeightInPoints = font.FontHeightInPoints;
+                        newFont.Color = font.Color;
+                        newFont.Boldweight = font.Boldweight;
+                        newFont.IsItalic = font.IsItalic;
+                        newFont.Underline = font.Underline;
+
+                        newCellStyle.SetFont(newFont);
+                        newCellStyle.Alignment = sourceCellStyle.Alignment;
+                        newCellStyle.VerticalAlignment = sourceCellStyle.VerticalAlignment;
+                        newCellStyle.BorderBottom = sourceCellStyle.BorderBottom;
+                        newCellStyle.BorderTop = sourceCellStyle.BorderTop;
+                        newCellStyle.BorderLeft = sourceCellStyle.BorderLeft;
+                        newCellStyle.BorderRight = sourceCellStyle.BorderRight;
+                        newCellStyle.FillForegroundColor = sourceCellStyle.FillForegroundColor;
+                        newCellStyle.FillPattern = sourceCellStyle.FillPattern;
+                        newCellStyle.WrapText = sourceCellStyle.WrapText;
+                    }
+
+                    newCell.CellStyle = newCellStyle;
                 }
             }
 
             for (var j = 0; j < sourceSheet.NumMergedRegions; j++)
             {
                 var mergedRegion = sourceSheet.GetMergedRegion(j);
-                newSheet.AddMergedRegion(
-                    new CellRangeAddress(
-                        mergedRegion.FirstRow,
-                        mergedRegion.LastRow,
-                        mergedRegion.FirstColumn,
-                        mergedRegion.LastColumn
-                    )
-                );
+                newSheet.AddMergedRegion(new CellRangeAddress(
+                    mergedRegion.FirstRow,
+                    mergedRegion.LastRow,
+                    mergedRegion.FirstColumn,
+                    mergedRegion.LastColumn));
             }
         }
+
     }
 
     private void _addAcademicWorkPage(
@@ -1221,6 +1235,11 @@ public class ReportExportService : IReportExportService
         var style = workbook.CreateCellStyle();
         style.Alignment = HorizontalAlignment.Center;
         style.WrapText = true;
+
+        var newFont = workbook.CreateFont();
+        newFont.IsBold = true;
+        style.SetFont(newFont);
+
         return style;
     }
 
