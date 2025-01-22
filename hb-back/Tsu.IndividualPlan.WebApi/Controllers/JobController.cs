@@ -10,6 +10,20 @@ namespace Tsu.IndividualPlan.WebApi.Controllers;
 [ApiController]
 public class JobController(IJobService service) : ControllerBase
 {
+    [HttpPost]
+    public async Task<ActionResult<JobDto>> Create(string name)
+    {
+        try
+        {
+            var comment = await service.AddEntity(name);
+            return Ok(comment.toDTO());
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpGet]
     public async Task<ActionResult<ICollection<JobDto>>> GetAll()
     {
