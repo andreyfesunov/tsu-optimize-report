@@ -95,8 +95,8 @@ public class ReportExportService : IReportExportService
         new List<CellData>
         {
             new(offset, 0, ev.EventType.Name, style),
-            new(offset, 1, ev.StartedAt.ToString("d"), style),
-            new(offset, 2, ev.EndedAt.ToString("d"), style),
+            new(offset, 1, ev.StartedAt.ToString("MM.dd.yyyy"), style),
+            new(offset, 2, ev.EndedAt.ToString("MM.dd.yyyy"), style),
             new(offset, 3, "", style, new CellRangeAddress(offset, offset, 3, 5))
         };
 
