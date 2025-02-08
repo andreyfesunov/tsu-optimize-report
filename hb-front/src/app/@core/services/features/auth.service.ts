@@ -1,6 +1,6 @@
 import {ILoginDto, ITokenDto} from "@core/dtos";
 import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Injectable, inject} from "@angular/core";
 import { environment } from "src/environments/environment";
 
@@ -10,7 +10,16 @@ export class AuthService {
   private readonly _http = inject(HttpClient);
 
   public logIn(credentials: ILoginDto): Observable<ITokenDto> {
-    return this._http.post<ITokenDto>(`${this._apiRoot}/User/log-in`, credentials);
+    console.log('API URL:', `${this._apiRoot}/User/log-in`);
+    return this._http.post<ITokenDto>(
+      `${this._apiRoot}/User/log-in`, 
+      credentials,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        })
+      }
+    );
   }
 
   public reg(credentials: ILoginDto): Observable<string> {

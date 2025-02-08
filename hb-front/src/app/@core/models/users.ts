@@ -6,6 +6,8 @@ export enum RoleEnum {
 export interface ITokenModel {
   readonly id: string;
   readonly role: RoleEnum;
+  readonly firstname: string;
+  readonly lastname: string;
   readonly exp: number;
   readonly iss: string;
   readonly aud: string;

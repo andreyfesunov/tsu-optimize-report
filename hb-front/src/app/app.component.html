@@ -3,6 +3,7 @@
     <app-navigation-bar [items]="navItems"></app-navigation-bar>
 
     <main class="main host-class">
+      <span class="name" *ngIf="userName$ | async as userName">{{ userName }}</span>
       <router-outlet></router-outlet>
     </main>
   </div>

@@ -16,7 +16,7 @@ public class DepartmentRepository(DataContext context) : IDepartmentRepository
         return await IncludeChildren(_dbSet).Search(search);
     }
 
-// TODO to specification
+    // TODO to specification
     private static IQueryable<Department> IncludeChildren(IQueryable<Department> query)
     {
         return query

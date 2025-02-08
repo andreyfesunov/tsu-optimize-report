@@ -1,14 +1,14 @@
-import {Component, inject} from "@angular/core";
-import {RouterModule, RouterOutlet} from "@angular/router";
-import {CommonModule} from "@angular/common";
-import {MatIconModule} from "@angular/material/icon";
-import {MatListModule} from "@angular/material/list";
-import {MatButtonModule} from "@angular/material/button";
-import {Navigation, RoleEnum, toActivities, toLogin, toReports, toStates, toUsers} from "@core/models";
-import {NavigationBarComponent} from "@ui/widgets";
-import {map} from "rxjs";
-import {AuthState} from "@core/states";
-import {roleFn$} from "@core/guards";
+import { Component, inject } from "@angular/core";
+import { RouterModule, RouterOutlet } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { MatButtonModule } from "@angular/material/button";
+import { Navigation, RoleEnum, toActivities, toLogin, toReports, toStates, toUsers } from "@core/models";
+import { NavigationBarComponent } from "@ui/widgets";
+import { map } from "rxjs";
+import { AuthState } from "@core/states";
+import { roleFn$ } from "@core/guards";
 
 @Component({
   selector: "app-root",
@@ -28,6 +28,10 @@ import {roleFn$} from "@core/guards";
 })
 export class AppComponent {
   private readonly _authState = inject(AuthState);
+
+  protected readonly userName$ = this._authState.userName$;
+  protected readonly valid$ = this._authState.valid$;
+  protected readonly invalid$ = this.valid$.pipe(map((v) => !v));
 
   protected readonly navItems: Navigation[] = [
     {
@@ -66,6 +70,4 @@ export class AppComponent {
       canActivate$: roleFn$(RoleEnum.USER)
     }
   ];
-  protected readonly valid$ = this._authState.valid$;
-  protected readonly invalid$ = this.valid$.pipe(map((v) => !v));
 }

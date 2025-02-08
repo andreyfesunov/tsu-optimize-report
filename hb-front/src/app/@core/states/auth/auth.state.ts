@@ -30,6 +30,15 @@ export class AuthState {
     })
   );
 
+  public readonly userName$: Observable<string> = this.user$.pipe(
+    map((user) => `${user.firstname} ${user.lastname}`),
+    shareReplay({
+      bufferSize: 1,
+      refCount: true
+    })
+  );
+
+
   public readonly valid$: Observable<boolean> = this.tokenRaw$.pipe(
     map((token) => isTokenValid(token))
   );

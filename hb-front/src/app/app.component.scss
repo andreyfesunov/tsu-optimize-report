@@ -28,4 +28,16 @@ $phone-media: 500px;
     grid-column: 1;
     grid-row: 1;
   }
+
+  .name {
+    padding: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #460c0c;
+    margin-inline: 16px;
+  }
 }

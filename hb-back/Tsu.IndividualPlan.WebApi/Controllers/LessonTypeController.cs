@@ -11,7 +11,7 @@ namespace Tsu.IndividualPlan.WebApi.Controllers;
 public class LessonTypeController(ILessonTypeService service) : ControllerBase
 {
     [HttpGet("{Id:guid}")]
-// TODO move to report service
+    // TODO move to report service
     public async Task<ActionResult<LessonTypeDto>> GetByReportId(Guid Id)
     {
         try

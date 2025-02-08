@@ -70,7 +70,9 @@ public class UserService(IConfiguration configuration, IUserRepository repositor
         var claims = new[]
         {
             new Claim("id", user.Id.ToString()),
-            new Claim("role", user.Role.ToString("D"))
+            new Claim("role", user.Role.ToString("D")),
+            new Claim("firstname", user.Firstname),
+            new Claim("lastname", user.Lastname)
         };
         var token = new JwtSecurityToken(
             configuration["Jwt:Issuer"],
