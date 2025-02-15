@@ -1,4 +1,4 @@
-name: Build
+name: Check Client
 
 on: [push, pull_request]
 
@@ -16,5 +16,6 @@ jobs:
           
       - name: Build and Test
         run: |
+          cd ./tsu-client
           chmod +x ./gradlew
           ./gradlew check 
