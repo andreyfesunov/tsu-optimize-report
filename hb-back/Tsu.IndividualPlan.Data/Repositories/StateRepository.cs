@@ -33,6 +33,12 @@ public class StateRepository : IStateRepository
         return (await IncludeChildren(entityQuery).ToListAsync())[0];
     }
 
+    public async Task<IEnumerable<State>> GetById(IEnumerable<Guid> ids)
+    {
+        var entityQuery = IncludeChildren(_dbSet).Where(e => ids.Contains(e.Id));
+        return entityQuery.ToList();
+    }
+
     public async Task<ICollection<State>> GetAll()
     {
         var itemsQuery = _dbSet.AsNoTracking().AsQueryable();

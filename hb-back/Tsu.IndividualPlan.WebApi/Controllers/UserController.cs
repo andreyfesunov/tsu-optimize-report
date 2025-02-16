@@ -10,7 +10,8 @@ namespace Tsu.IndividualPlan.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService service) : ControllerBase
+public class UserController(IUserService service,
+    IStateUserService stateUserService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<ICollection<UserDto>>> GetAll()
@@ -77,6 +78,28 @@ public class UserController(IUserService service) : ControllerBase
 
             return Ok(
                 new Pagination<UserDto>(
+                    result.PageNumber,
+                    result.PageSize,
+                    result.TotalPages,
+                    result.Entities.Select(u => u.toDTO()).ToList()
+                )
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("GetUserAllStates")]
+    public async Task<ActionResult<Pagination<UserAllStatesDto>>> GetUserAllStates(Search search)
+    {
+        try
+        {
+            var result = await stateUserService.GetUserAllStates(search);
+
+            return Ok(
+                new Pagination<UserAllStatesDto>(
                     result.PageNumber,
                     result.PageSize,
                     result.TotalPages,

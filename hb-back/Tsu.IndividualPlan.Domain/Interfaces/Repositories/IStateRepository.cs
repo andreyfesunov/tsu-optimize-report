@@ -10,4 +10,5 @@ public interface IStateRepository
     Task<State> AddEntity(State entity);
     Task<Pagination<State>> Search(Search search);
     Task<State> UpdateEntity(State entity);
+    Task<IEnumerable<State>> GetById(IEnumerable<Guid> ids);
 }
