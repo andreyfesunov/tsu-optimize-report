@@ -9,4 +9,5 @@ public interface IStateUserRepository
     Task<ICollection<StateUser>> GetAll();
     Task<StateUser> AddEntity(StateUser entity);
     Task<Pagination<StateUser>> Search(Search search);
+    Task<IEnumerable<StateUser>> Get(IEnumerable<Guid> userIds);
 }

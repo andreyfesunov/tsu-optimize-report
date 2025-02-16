@@ -32,6 +32,14 @@ public class StateUserRepository : IStateUserRepository
         return await IncludeChildren(itemsQuery).ToListAsync();
     }
 
+    public async Task<IEnumerable<StateUser>> Get(IEnumerable<Guid> userIds)
+    {
+        return await _dbSet.AsQueryable()
+            .Include(x => x.State)
+            .Where(x => userIds.Contains(x.User.Id))
+            .ToListAsync();
+    }
+
     public async Task<StateUser> AddEntity(StateUser entity)
     {
         var model = await _dbSet.AddAsync(entity);
