@@ -16,14 +16,8 @@ public class StateService(
 {
     public async Task<string> Create(StateCreateDto dto)
     {
-        // TODO improve creating, add departmentId to DTO or to UserInfo
-        var departments = await departmentRepository.Search(
-            new Search(1, 1)
-        );
-        var departmentId = departments.Entities.First().Id;
-
         var state = new State(
-            departmentId,
+            dto.DepartmentId,
             dto.JobId,
             dto.Count,
             dto.Hours,

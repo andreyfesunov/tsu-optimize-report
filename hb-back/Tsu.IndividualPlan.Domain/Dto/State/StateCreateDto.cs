@@ -4,6 +4,7 @@ public class StateCreateDto(
     Guid JobId,
     DateTime StartDate,
     DateTime EndDate,
+    Guid DepartmentId,
     int Count = 1,
     int Hours = 1485)
 {
@@ -12,4 +13,5 @@ public class StateCreateDto(
     public Guid JobId { get; init; } = JobId;
     public DateTime StartDate { get; init; } = StartDate;
     public DateTime EndDate { get; init; } = EndDate;
+    public Guid DepartmentId { get; init; } = DepartmentId;
 }

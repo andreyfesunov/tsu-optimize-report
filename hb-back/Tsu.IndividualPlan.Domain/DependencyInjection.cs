@@ -40,6 +40,7 @@ public static class DependencyInjection
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IStateUserService, StateUserService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IDepartmentService, DepartmentService>();
     }
 
     private static void AddSecurity(this IServiceCollection services)
