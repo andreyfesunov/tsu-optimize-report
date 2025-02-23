@@ -35,31 +35,16 @@ import FileSaver from 'file-saver';
           </button>
         </div>
 
-        <div class="report-detail-tabs host-class">
-
-          <app-scrollable
-            class="host-class report-table"
-            [horizontalScroll]="true"
-          >
-            <app-scrollable
-              class="host-class"
-              [horizontalScroll]="true"
-            >
-              <app-reports-first-half-table
-                [reportId]="id"
-              ></app-reports-first-half-table>
-            </app-scrollable>
+        <div class="report-detail-tabs host-class horizontal-layout">  <!-- Добавлен класс horizontal-layout -->
+          <app-scrollable class="host-class report-table" [horizontalScroll]="true">
+            <!-- Первая таблица -->
+            <app-reports-first-half-table [reportId]="id"></app-reports-first-half-table>
           </app-scrollable>
 
-          <app-scrollable
-            class="host-class report-table"
-            [horizontalScroll]="true"
-          >
-            <app-report-form
-              [id]="id"
-            ></app-report-form>
+          <app-scrollable class="host-class report-table" [horizontalScroll]="true">
+            <!-- Форма -->
+            <app-report-form [id]="id"></app-report-form>
           </app-scrollable>
-
         </div>
       </app-content>
     `,

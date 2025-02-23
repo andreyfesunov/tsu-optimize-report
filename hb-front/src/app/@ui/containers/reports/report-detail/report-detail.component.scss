@@ -16,3 +16,14 @@
   border-radius: variables.$padding-lg;
   padding: variables.$padding-lg;
 }
+
+.report-detail-tabs.horizontal-layout {
+  display: flex; // Включаем flex-распределение
+  gap: 16px; // Расстояние между блоками
+  flex-direction: column; // Элементы в строку
+
+  .report-table {
+    flex: 1; // Равная ширина для обоих блоков
+    min-width: 0; // Фикс для переполнения контента
+  }
+}
