@@ -28,5 +28,6 @@ export class UsersListComponent {
 
   protected readonly spinner = new Spinner();
 
-  protected readonly loadFn = (request: IPaginationRequest) => withSpinner(this._usersService.search(request), this.spinner);
+  // protected readonly loadFn = (request: IPaginationRequest) => withSpinner(this._usersService.search(request), this.spinner);
+  protected readonly loadFn = (request: IPaginationRequest) => withSpinner(this._usersService.getUserStates(request), this.spinner);
 }

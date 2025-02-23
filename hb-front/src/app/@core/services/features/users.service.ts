@@ -2,7 +2,7 @@ import {Injectable, inject} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {IPaginationRequest} from "@core/dtos";
 import {Observable, shareReplay} from "rxjs";
-import {IPagination, IUser} from "@core/models";
+import {IPagination, IUser, IUserState} from "@core/models";
 import { environment } from "src/environments/environment";
 @Injectable({providedIn: "root"})
 export class UsersService {
@@ -19,5 +19,9 @@ export class UsersService {
 
   public search(dto: IPaginationRequest): Observable<IPagination<IUser>> {
     return this._httpClient.post<IPagination<IUser>>(`${this._apiRoot}/User/search`, dto);
+  }
+
+  public getUserStates(dto: IPaginationRequest): Observable<IPagination<IUserState>> {
+    return this._httpClient.post<IPagination<IUserState>>(`${this._apiRoot}/User/GetUserAllStates`, dto);
   }
 }

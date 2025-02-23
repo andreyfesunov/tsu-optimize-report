@@ -1,12 +1,13 @@
-import {TableRowController} from "@core/controllers";
-import {IUser} from "@core/models";
-import {Component} from "@angular/core";
-import {NgForOf, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
+import { TableRowController } from "@core/controllers";
+import { IUserState } from "@core/models";
+import { Component } from "@angular/core";
+import { NgForOf, NgIf, NgSwitch, NgSwitchCase } from "@angular/common";
 
 export enum UsersTableRowItemField {
   FIRSTNAME = 'FIRSTNAME',
   LASTNAME = 'LASTNAME',
-  EMAIL = 'EMAIL'
+  EMAIL = 'EMAIL',
+  EXPAND = 'EXPAND'
 }
 
 @Component({
@@ -26,13 +27,26 @@ export enum UsersTableRowItemField {
       [class.tsu-table-td--center]="col.align === 'center'"
     >
       <ng-container *ngIf="item" [ngSwitch]="col.id">
-        <ng-container *ngSwitchCase="UsersTableRowItemField.FIRSTNAME">{{ item.firstname }}</ng-container>
-        <ng-container *ngSwitchCase="UsersTableRowItemField.LASTNAME">{{ item.lastname }}</ng-container>
-        <ng-container *ngSwitchCase="UsersTableRowItemField.EMAIL">{{ item.email }}</ng-container>
+        <ng-container *ngSwitchCase="UsersTableRowItemField.EXPAND">
+          <button class="expand-button" (click)="item.expanded = !item.expanded">
+            {{ item.expanded ? '▼' : '▶' }}
+          </button>
+        </ng-container>
+        <ng-container *ngSwitchCase="UsersTableRowItemField.FIRSTNAME">{{ item.user.firstname }}</ng-container>
+        <ng-container *ngSwitchCase="UsersTableRowItemField.LASTNAME">{{ item.user.lastname }}</ng-container>
+        <ng-container *ngSwitchCase="UsersTableRowItemField.EMAIL">{{ item.user.email }}</ng-container>
       </ng-container>
     </td>
-  `
+  `,
+  styles: [`
+    .expand-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+  `]
 })
-export class UsersTableRowComponent extends TableRowController<IUser, UsersTableRowItemField> {
+export class UsersTableRowComponent extends TableRowController<IUserState, UsersTableRowItemField> {
   protected readonly UsersTableRowItemField = UsersTableRowItemField;
 }
