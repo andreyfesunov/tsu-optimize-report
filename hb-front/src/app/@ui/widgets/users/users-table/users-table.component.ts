@@ -1,5 +1,5 @@
 import { ITableConfig, TableController } from "@core/controllers";
-import { IPagination, ITableColumn, IUser, IUserState } from "@core/models";
+import { IPagination, ITableColumn, IUserState } from "@core/models";
 import { IPaginationRequest } from "@core/dtos";
 import { BehaviorSubject, map, Observable, shareReplay, switchMap } from "rxjs";
 import { getDefaultPaginationRequest } from "@core/utils";
