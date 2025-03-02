@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NPOI" Version="2.7.1"/>
+        <PackageReference Include="NPOI" Version="2.7.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Interfaces\"/>
+        <Folder Include="Interfaces\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,7 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Tsu.IndividualPlan.Domain\Tsu.IndividualPlan.Domain.csproj"/>
+        <ProjectReference Include="..\Tsu.IndividualPlan.Data\Tsu.IndividualPlan.Data.csproj" />
+        <ProjectReference Include="..\Tsu.IndividualPlan.Domain\Tsu.IndividualPlan.Domain.csproj" />
     </ItemGroup>
 
 </Project>

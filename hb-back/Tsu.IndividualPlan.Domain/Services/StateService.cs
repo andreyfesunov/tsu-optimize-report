@@ -4,6 +4,7 @@ using Tsu.IndividualPlan.Domain.Interfaces.Repositories;
 using Tsu.IndividualPlan.Domain.Interfaces.Services;
 using Tsu.IndividualPlan.Domain.Models.Business;
 using Tsu.IndividualPlan.Domain.Models.Project;
+using Tsu.IndividualPlan.Data.Context;
 
 namespace Tsu.IndividualPlan.Domain.Services;
 
@@ -11,7 +12,8 @@ public class StateService(
     IStateRepository repository,
     IDepartmentRepository departmentRepository,
     IUserRepository userRepository,
-    IStateUserRepository stateUserRepository)
+    IStateUserRepository stateUserRepository,
+    DataContext context)
     : IStateService
 {
     public async Task<string> Create(StateCreateDto dto)
@@ -36,19 +38,32 @@ public class StateService(
 
     public async Task<bool> Assign(IndividualPlanCreateDto dto)
     {
-        var state = await repository.GetById(dto.StateId);
+        using (var transaction = context.Database.BeginTransaction())
+        {
+            try
+            {
+                var state = await repository.GetById(dto.StateId);
 
-        if (state.Count < 1)
-            return false;
+                if (state.Count < 1)
+                    return false;
 
-        state.Count -= 1;
-        await repository.UpdateEntity(state);
+                state.Count -= 1;
+                await repository.UpdateEntity(state);
 
-        var stateUser = new StateUser(dto.StateId, dto.UserId, 1.0);
+                var stateUser = new StateUser(dto.StateId, dto.UserId, 1.0);
 
-        await stateUserRepository.AddEntity(stateUser);
+                await stateUserRepository.AddEntity(stateUser);
 
-        return true;
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
 
     public async Task<Pagination<State>> Search(Search search)
