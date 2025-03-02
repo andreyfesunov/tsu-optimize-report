@@ -10,6 +10,7 @@ public static class RecordExtensions
         return new RecordDto(
             entity.Id,
             entity.Hours,
+            entity.GroupString,
             entity.Activity?.toDTO(),
             entity.StateUser?.toListDTO(),
             entity.LessonType?.toDTO()

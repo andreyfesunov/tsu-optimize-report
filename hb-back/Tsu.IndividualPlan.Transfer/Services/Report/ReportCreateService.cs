@@ -75,9 +75,11 @@ public class ReportCreateService(
          *
          * 5 - строка, с которой начинаются отчёты.
          * "Всего за семестр" - строка, которой оканчивается часть, необходимая для считывания.
+         * 4 - столбец, в котором написана группа
          */
         var row = 5;
         const string endString = "Всего за семестр";
+        var groupStringCellNum = 4;
 
         var cell = worksheet.GetRow(row).GetCell(1);
 
@@ -104,7 +106,8 @@ public class ReportCreateService(
                         LessonTypeId: lessonType.Id,
                         ActivityId: activity.Id,
                         Hours: hours,
-                        StateUserId: stateUser.Id
+                        StateUserId: stateUser.Id,
+                        GroupString: worksheet.GetRow(row).GetCell(groupStringCellNum).StringCellValue
                     )
                 );
             }

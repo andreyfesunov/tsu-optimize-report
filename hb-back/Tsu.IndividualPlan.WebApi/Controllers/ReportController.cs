@@ -65,7 +65,7 @@ public class ReportController(
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ReportDetailDto>> Detail(Guid id)
-    {
+    { 
         try
         {
             var result = await service.GetById(id);
