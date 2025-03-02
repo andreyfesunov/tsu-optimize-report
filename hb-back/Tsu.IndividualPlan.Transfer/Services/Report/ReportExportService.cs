@@ -146,8 +146,8 @@ public class ReportExportService : IReportExportService
 
     public async Task<IWorkbook> ExportReport(string reportId)
     {
-        var user = await _userRepo.GetById(Guid.Parse(_userInfo.GetUserId()));
         var stateUser = await _stateUserRepo.GetById(Guid.Parse(reportId));
+        var user = await _userRepo.GetById(stateUser.UserId);
         var records = await _recordRepo.Get(Guid.Parse(reportId));
         var workbook = new XSSFWorkbook();
 
