@@ -294,21 +294,14 @@ public class ReportExportService : IReportExportService
 
     private async Task _addFirstHalfPages(IWorkbook workbook, User user, StateUser stateUser)
     {
-        var path = Path.Combine(_root, stateUser.Files.ToList()[0].Path);
+        var firstHalfFile = stateUser.Files.ToList()[0];
+        string firstHalfFileExtension = Path.GetExtension(firstHalfFile.Path).ToLower();
+        var path = Path.Combine(_root, firstHalfFile.Path);
         await using var fs = new FileStream(path, FileMode.Open);
-        // var formFile = new FormFile(
-        //     fs,
-        //     0,
-        //     fs.Length,
-        //     Path.GetFileName(path),
-        //     Path.GetFileName(path)
-        // );
-        //
-        // using var stream = new MemoryStream();
-        // await formFile.CopyToAsync(stream);
-        // stream.Position = 0;
 
-        using var package = new HSSFWorkbook(fs);
+        using var package = firstHalfFileExtension == ".xlsx"
+            ? (IWorkbook)new XSSFWorkbook(fs)
+            : (IWorkbook)new HSSFWorkbook(fs);
         for (var i = 1; i < package.NumberOfSheets; i++)
         {
             var sourceSheet = package.GetSheetAt(i);
@@ -329,7 +322,9 @@ public class ReportExportService : IReportExportService
                     newCell.SetCellValue(sourceCell.ToString());
 
                     var newCellStyle = workbook.CreateCellStyle();
-                    var sourceCellStyle = (HSSFCellStyle)sourceCell.CellStyle;
+                    var sourceCellStyle = firstHalfFileExtension == ".xlsx"
+                        ? (ICellStyle)(XSSFCellStyle)sourceCell.CellStyle
+                        : (ICellStyle)(HSSFCellStyle)sourceCell.CellStyle;
 
                     if (sourceCellStyle != null)
                     {
