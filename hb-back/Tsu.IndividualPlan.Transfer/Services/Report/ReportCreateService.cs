@@ -8,6 +8,7 @@ using Tsu.IndividualPlan.Domain.Models.Business;
 using Tsu.IndividualPlan.Domain.Models.Project;
 using Tsu.IndividualPlan.Transfer.Interfaces.Report;
 using File = Tsu.IndividualPlan.Domain.Models.Business.File;
+using NPOI.XSSF.UserModel;
 
 namespace Tsu.IndividualPlan.Transfer.Services.Report;
 
@@ -24,14 +25,8 @@ public class ReportCreateService(
     public async Task<bool> CreateReport(Guid stateUserId, IFormFile file)
     {
         // TODO add validation of StateUserId
-        if (!file.FileName.EndsWith(".xls"))
-            throw new Exception("Please, put '.xls' document");
 
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-        stream.Position = 0;
-
-        using var package = new HSSFWorkbook(stream);
+        using var package = _openWorkbook(file);
         var worksheetCount = package.NumberOfSheets;
 
         if (worksheetCount <= 1)
@@ -46,6 +41,26 @@ public class ReportCreateService(
         await _saveFile(file, stateUser.Id);
 
         return true;
+    }
+
+    private IWorkbook _openWorkbook(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            throw new ArgumentException("Файл не был загружен или пуст");
+
+        string extension = Path.GetExtension(file.FileName).ToLower();
+
+        using (Stream stream = file.OpenReadStream())
+        {
+            return extension switch
+            {
+                ".xls" => new HSSFWorkbook(stream), //Excel 97-2003
+                ".xlsx" => new XSSFWorkbook(stream), //Excel 2007+
+                _ => throw new ArgumentException(
+                    $"Неподдерживаемый формат файла: {extension}. " +
+                    "Поддерживаются только .xls и .xlsx")
+            };
+        }
     }
 
     private async Task<File> _saveFile(IFormFile file, Guid stateUserId)
