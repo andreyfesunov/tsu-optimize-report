@@ -1,4 +1,4 @@
-import { IDepartment, IInstitute, IJob } from "@core/models";
+import { IDepartment, IJob } from "@core/models";
 
 export interface IStateCreateRequest {
   hours: number;
