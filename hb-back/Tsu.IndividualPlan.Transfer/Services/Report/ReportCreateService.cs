@@ -90,10 +90,11 @@ public class ReportCreateService(
             {
                 var contentCell = worksheet.GetRow(row).GetCell(activity.Column);
 
-                if (contentCell is not { CellType: CellType.String })
-                    continue;
-
-                var hours = int.Parse(contentCell.StringCellValue);
+                var hours = contentCell.CellType switch
+                {
+                    CellType.Numeric => (int)contentCell.NumericCellValue,
+                    _ => int.Parse(contentCell.StringCellValue)
+                };
 
                 if (hours <= 0)
                     continue;
