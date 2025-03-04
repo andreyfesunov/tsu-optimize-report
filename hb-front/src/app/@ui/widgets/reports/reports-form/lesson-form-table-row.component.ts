@@ -47,6 +47,7 @@ import {MatTooltip} from "@angular/material/tooltip";
               <mat-form-field *ngIf="types.length !== 0" appearance="outline" style="width: 100%">
                 <input
                   [matTooltip]="getTooltip(control.value, types)"
+                  [maxLength]="0"
                   [readonly]="control.value !== null"
                   [formControl]="control"
                   [matAutocomplete]="auto"

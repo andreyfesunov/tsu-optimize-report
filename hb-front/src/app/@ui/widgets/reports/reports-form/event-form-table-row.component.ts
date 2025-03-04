@@ -47,7 +47,9 @@ import {MatTooltip} from "@angular/material/tooltip";
             <ng-container *ngIf="item.events$ | async as eventTypes">
               <mat-form-field *ngIf="eventTypes.length !== 0" appearance="outline" style="width: 100%">
                 <input [matTooltip]="getPropertyEvent(control.value, EventTypeProperies.name, eventTypes)"
-                       [readonly]="control.value !== null" [formControl]="control" [matAutocomplete]="auto"
+                       [maxLength]="0" [readonly]="control.value !== null"
+                       [formControl]="control"
+                       [matAutocomplete]="auto"
                        placeholder="Выберите событие" matInput>
 
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn(eventTypes)">
