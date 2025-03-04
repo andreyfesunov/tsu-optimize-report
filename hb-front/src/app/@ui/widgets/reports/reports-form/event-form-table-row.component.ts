@@ -38,6 +38,7 @@ import {MatTooltip} from "@angular/material/tooltip";
     <td
       *ngFor="let col of cols"
       class="tsu-table-td"
+      [colSpan]="col.id === ReportItemField.PLAN ? 2 : 1"
       [class.tsu-table-td--center]="col.align === 'center'"
     >
       <ng-container *ngIf="item" [ngSwitch]="col.id">
@@ -55,25 +56,6 @@ import {MatTooltip} from "@angular/material/tooltip";
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-              <p *ngIf="control.valid" style="
-                position: absolute;
-                left: 768px;
-                top: 4px;
-                font-size: 16px;
-                color: #830100;
-                background-color: #fbdfdf;
-                padding: 8px;
-                box-sizing: border-box;
-                border-radius: 8px;
-                border: 1px solid #830100;
-                font-weight: 500;
-                max-width: 400px;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;"
-              >
-                {{ getPropertyEvent(control.value, EventTypeProperies.description, eventTypes) }}
-              </p>
             </ng-container>
           </ng-container>
         </ng-container>
@@ -98,15 +80,24 @@ import {MatTooltip} from "@angular/material/tooltip";
           </mat-form-field>
         </ng-container>
 
-        <ng-container>
-          <div [matTooltip]="actualDescriptionEventType">
-            <ng-container *ngSwitchCase="ReportItemField.PLAN">
-              <div style="width: 212px; height: 20px"></div>
-            </ng-container>
-            <ng-container *ngSwitchCase="ReportItemField.FACT">
-              <div style="width: 212px; height: 20px"></div>
-            </ng-container>
-          </div>
+        <ng-container *ngSwitchCase="ReportItemField.PLAN">
+          <p *ngIf="item.eventForm.controls.eventType.valid" style="
+                              font-size: 16px;
+                              color: #830100;
+                              background-color: #fbdfdf;
+                              padding: 8px;
+                              box-sizing: border-box;
+                              border-radius: 8px;
+                              border: 1px solid #830100;
+                              font-weight: 500;
+                              overflow: hidden;
+                              white-space: nowrap;
+                              text-overflow: ellipsis;
+                              text-align: center;
+        "
+          >
+            {{ getPropertyEvent(item.eventForm.controls.eventType.value, EventTypeProperies.description, (item.events$ | async) ?? []) }}
+          </p>
         </ng-container>
 
         <ng-container *ngSwitchCase="ReportItemField.ACTIONS">
