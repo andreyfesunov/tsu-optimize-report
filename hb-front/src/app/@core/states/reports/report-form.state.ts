@@ -7,24 +7,24 @@ import {DestroyRef} from "@angular/core";
 import {Spinner, withSpinner} from "@core/utils";
 
 export class ReportFormState {
-  public readonly works$: Observable<IWork[]> = withSpinner(this._worksService.getAll(), this._spinner).pipe(
+  public readonly works$: Observable<IWork[]> = withSpinner(this._worksService.getAll(), this.spinner).pipe(
     shareReplay({
       bufferSize: 1,
       refCount: true
     })
   );
-  private readonly _report$: Observable<IReportDetail> = withSpinner(this._reportsService.detail(this._id), this._spinner).pipe(
+  public readonly report$: Observable<IReportDetail> = withSpinner(this._reportsService.detail(this._id), this.spinner).pipe(
     shareReplay({
       bufferSize: 1,
       refCount: true
     })
   )
-  public readonly states$: Observable<WorkFormState[]> = combineLatest([this._report$, this.works$]).pipe(
+  public readonly states$: Observable<WorkFormState[]> = combineLatest([this.report$, this.works$]).pipe(
     map(([report, works]) => works.map((work, index) => this._workStateFactory.create(
       index,
       report,
       work,
-      this._spinner,
+      this.spinner,
       this._destroyRef
     ))),
     shareReplay({
@@ -38,7 +38,7 @@ export class ReportFormState {
     private readonly _worksService: WorksService,
     private readonly _reportsService: ReportsService,
     private readonly _workStateFactory: WorkFormStateFactory,
-    private readonly _spinner: Spinner,
+    public readonly spinner: Spinner,
     private readonly _destroyRef: DestroyRef
   ) {
   }

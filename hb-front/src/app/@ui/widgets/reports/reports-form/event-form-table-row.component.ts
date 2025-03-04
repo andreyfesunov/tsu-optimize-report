@@ -46,7 +46,7 @@ import {MatTooltip} from "@angular/material/tooltip";
           <ng-container *ngIf="item.eventForm.controls.eventType as control">
             <ng-container *ngIf="item.events$ | async as eventTypes">
               <mat-form-field *ngIf="eventTypes.length !== 0" appearance="outline" style="width: 100%">
-                <input [matTooltip]="getPropertyEvent(control.value, EventTypeProperies.name, eventTypes)"
+                <input [matTooltip]="getPropertyEvent(control.value, EventTypeProperties.name, eventTypes)"
                        [maxLength]="0" [readonly]="control.value !== null"
                        [formControl]="control"
                        [matAutocomplete]="auto"
@@ -98,7 +98,7 @@ import {MatTooltip} from "@angular/material/tooltip";
                               text-align: center;
         "
           >
-            {{ getPropertyEvent(item.eventForm.controls.eventType.value, EventTypeProperies.description, (item.events$ | async) ?? []) }}
+            {{ getPropertyEvent(item.eventForm.controls.eventType.value, EventTypeProperties.description, (item.events$ | async) ?? []) }}
           </p>
         </ng-container>
 
@@ -111,7 +111,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 })
 export class EventFormTableRowComponent extends TableRowController<EventFormState, ReportItemField> {
   protected readonly ReportItemField = ReportItemField;
-  protected readonly EventTypeProperies = EventTypeProperties;
+  protected readonly EventTypeProperties = EventTypeProperties;
   protected actualDescriptionEventType: string = "";
 
   protected displayFn(opts: IEventType[]) {
@@ -131,7 +131,7 @@ export class EventFormTableRowComponent extends TableRowController<EventFormStat
       }
     });
 
-    if (property == this.EventTypeProperies.description) {
+    if (property == this.EventTypeProperties.description) {
       this.actualDescriptionEventType = test;
     }
 
