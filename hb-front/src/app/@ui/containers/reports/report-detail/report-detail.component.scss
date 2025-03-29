@@ -1,7 +1,24 @@
 @use "../../../../../scss/shared/variables";
 
 .report-detail-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   margin-bottom: variables.$padding-lg;
+}
+
+.report-hours-counter {
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 8px;
+
+  box-sizing: border-box;
+
+  color: #830100;
+  background-color: #fbdfdf;
+  border: 1px solid #830100;
+  font-weight: 500;
 }
 
 .report-detail-tabs {
