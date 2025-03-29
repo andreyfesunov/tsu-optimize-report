@@ -7,13 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
-        <PackageReference Include="Npgsql" Version="8.0.4"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Tsu.IndividualPlan.Domain\Tsu.IndividualPlan.Domain.csproj"/>
+        <ProjectReference Include="..\Tsu.IndividualPlan.Domain\Tsu.IndividualPlan.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,5 +15,17 @@
             <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
         </Reference>
     </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8" />
+    <PackageReference Include="Npgsql" Version="8.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
 
 </Project>
