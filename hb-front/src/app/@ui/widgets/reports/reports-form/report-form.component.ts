@@ -1,11 +1,10 @@
-import {Component, computed, DestroyRef, inject, input, ViewEncapsulation} from '@angular/core';
+import {Component, input, ViewEncapsulation} from '@angular/core';
 import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
 import {BehaviorSubject} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {SpinnerComponent, WorkFormComponent} from "@ui/widgets";
-import {Spinner} from "@core/utils";
 import {SubscriptionController} from "@core/controllers";
-import {ReportsFormStateFactory} from "@core/factories";
+import {ReportFormState} from "@core/states";
 
 @Component({
   selector: 'app-report-form',
@@ -34,7 +33,7 @@ import {ReportsFormStateFactory} from "@core/factories";
       </mat-tab>
     </mat-tab-group>
 
-    <app-spinner *ngIf="spinner.active$"></app-spinner>
+    <app-spinner *ngIf="state().spinner.active$"></app-spinner>
   `,
   encapsulation: ViewEncapsulation.None,
   styles: [
@@ -56,16 +55,8 @@ import {ReportsFormStateFactory} from "@core/factories";
   host: {class: 'host-class'}
 })
 export class ReportFormComponent extends SubscriptionController {
-  private readonly _reportStateFactory = inject(ReportsFormStateFactory);
-  private readonly _destroyRef = inject(DestroyRef);
+  public readonly state = input.required<ReportFormState>();
 
-  public readonly id = input.required<string>();
-  protected readonly spinner = new Spinner();
-  protected readonly state = computed(() => this._reportStateFactory.create(
-    this.id(),
-    this.spinner,
-    this._destroyRef
-  ));
   protected readonly tabChanged$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 }
 

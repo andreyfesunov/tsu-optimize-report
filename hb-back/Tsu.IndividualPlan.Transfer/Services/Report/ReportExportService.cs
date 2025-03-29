@@ -146,8 +146,8 @@ public class ReportExportService : IReportExportService
 
     public async Task<IWorkbook> ExportReport(string reportId)
     {
-        var user = await _userRepo.GetById(Guid.Parse(_userInfo.GetUserId()));
         var stateUser = await _stateUserRepo.GetById(Guid.Parse(reportId));
+        var user = await _userRepo.GetById(stateUser.UserId);
         var records = await _recordRepo.Get(Guid.Parse(reportId));
         var workbook = new XSSFWorkbook();
 
@@ -292,27 +292,59 @@ public class ReportExportService : IReportExportService
         _applyPageData(sheet, pageData);
     }
 
+    private void _copyLayout(ISheet sourceSheet, ISheet targetSheet)
+    {
+        // 1. Копируем ширину колонок
+        for (int col = 0; col <= sourceSheet.GetRow(0).LastCellNum; col++)
+        {
+            double width = sourceSheet.GetColumnWidth(col);
+            targetSheet.SetColumnWidth(col, width);
+
+            // Если колонка скрыта
+            targetSheet.SetColumnHidden(col, sourceSheet.IsColumnHidden(col));
+        }
+
+        // 2. Копируем высоту строк
+        for (int rowIdx = sourceSheet.FirstRowNum; rowIdx <= sourceSheet.LastRowNum; rowIdx++)
+        {
+            IRow sourceRow = sourceSheet.GetRow(rowIdx);
+            if (sourceRow == null) continue;
+
+            IRow targetRow = targetSheet.GetRow(rowIdx) ?? targetSheet.CreateRow(rowIdx);
+
+            // Копируем высоту
+            targetRow.Height = sourceRow.Height;
+
+            // Если строка скрыта
+            targetRow.ZeroHeight = sourceRow.ZeroHeight;
+        }
+
+        // 3. Копируем объединенные ячейки
+        for (int i = 0; i < sourceSheet.NumMergedRegions; i++)
+        {
+            CellRangeAddress merged = sourceSheet.GetMergedRegion(i);
+            targetSheet.AddMergedRegion(merged);
+        }
+    }
+
     private async Task _addFirstHalfPages(IWorkbook workbook, User user, StateUser stateUser)
     {
-        var path = Path.Combine(_root, stateUser.Files.ToList()[0].Path);
+        var firstHalfFile = stateUser.Files.ToList()[0];
+        string firstHalfFileExtension = Path.GetExtension(firstHalfFile.Path).ToLower();
+        var path = Path.Combine(_root, firstHalfFile.Path);
         await using var fs = new FileStream(path, FileMode.Open);
-        // var formFile = new FormFile(
-        //     fs,
-        //     0,
-        //     fs.Length,
-        //     Path.GetFileName(path),
-        //     Path.GetFileName(path)
-        // );
-        //
-        // using var stream = new MemoryStream();
-        // await formFile.CopyToAsync(stream);
-        // stream.Position = 0;
 
-        using var package = new HSSFWorkbook(fs);
+        using var package = firstHalfFileExtension == ".xlsx"
+            ? (IWorkbook)new XSSFWorkbook(fs)
+            : (IWorkbook)new HSSFWorkbook(fs);
         for (var i = 1; i < package.NumberOfSheets; i++)
         {
             var sourceSheet = package.GetSheetAt(i);
             var newSheet = workbook.CreateSheet(i == 1 ? "2_Осень" : "3_Весна");
+            _copyLayout(sourceSheet, newSheet);
+            newSheet.PrintSetup.Landscape = true;
+            newSheet.PrintSetup.Scale = 90; // 90% масштаб,
+            newSheet.FitToPage = false; // Отключаем авто-подгонку под страницы
 
             for (var rowIndex = sourceSheet.FirstRowNum; rowIndex <= sourceSheet.LastRowNum; rowIndex++)
             {
@@ -329,7 +361,9 @@ public class ReportExportService : IReportExportService
                     newCell.SetCellValue(sourceCell.ToString());
 
                     var newCellStyle = workbook.CreateCellStyle();
-                    var sourceCellStyle = (HSSFCellStyle)sourceCell.CellStyle;
+                    var sourceCellStyle = firstHalfFileExtension == ".xlsx"
+                        ? (ICellStyle)(XSSFCellStyle)sourceCell.CellStyle
+                        : (ICellStyle)(HSSFCellStyle)sourceCell.CellStyle;
 
                     if (sourceCellStyle != null)
                     {
@@ -339,7 +373,7 @@ public class ReportExportService : IReportExportService
                         var newFont = workbook.CreateFont();
                         newFont.FontName = font.FontName;
                         newFont.FontHeightInPoints = font.FontHeightInPoints;
-                        newFont.Color = font.Color;
+                        newFont.Color = IndexedColors.Black.Index;
                         newFont.Boldweight = font.Boldweight;
                         newFont.IsItalic = font.IsItalic;
                         newFont.Underline = font.Underline;
@@ -351,23 +385,14 @@ public class ReportExportService : IReportExportService
                         newCellStyle.BorderTop = sourceCellStyle.BorderTop;
                         newCellStyle.BorderLeft = sourceCellStyle.BorderLeft;
                         newCellStyle.BorderRight = sourceCellStyle.BorderRight;
-                        newCellStyle.FillForegroundColor = sourceCellStyle.FillForegroundColor;
-                        newCellStyle.FillPattern = sourceCellStyle.FillPattern;
+                        newCellStyle.FillForegroundColor = IndexedColors.White.Index;
+                        newCellStyle.FillPattern = FillPattern.SolidForeground;
                         newCellStyle.WrapText = sourceCellStyle.WrapText;
+                        newCellStyle.Rotation = sourceCellStyle.Rotation;
                     }
 
                     newCell.CellStyle = newCellStyle;
                 }
-            }
-
-            for (var j = 0; j < sourceSheet.NumMergedRegions; j++)
-            {
-                var mergedRegion = sourceSheet.GetMergedRegion(j);
-                newSheet.AddMergedRegion(new CellRangeAddress(
-                    mergedRegion.FirstRow,
-                    mergedRegion.LastRow,
-                    mergedRegion.FirstColumn,
-                    mergedRegion.LastColumn));
             }
         }
 
@@ -381,6 +406,7 @@ public class ReportExportService : IReportExportService
     )
     {
         var sheet = workbook.CreateSheet("4_УЧ-МЕТ");
+        sheet.PrintSetup.Landscape = true;
 
         sheet.SetColumnWidth(0, 64 * 256);
         sheet.SetColumnWidth(5, 24 * 256);
@@ -456,6 +482,7 @@ public class ReportExportService : IReportExportService
     )
     {
         var sheet = workbook.CreateSheet("5_НДиНМД");
+        sheet.PrintSetup.Landscape = true;
 
         sheet.SetColumnWidth(0, 64 * 256);
         sheet.SetColumnWidth(5, 24 * 256);
@@ -530,6 +557,7 @@ public class ReportExportService : IReportExportService
     )
     {
         var sheet = workbook.CreateSheet("6_НИРС.ОМР");
+        sheet.PrintSetup.Landscape = true;
 
         sheet.SetColumnWidth(0, 64 * 256);
         sheet.SetColumnWidth(1, 24 * 256);
@@ -721,6 +749,7 @@ public class ReportExportService : IReportExportService
     private void _addEducationalWorkPage(IWorkbook workbook, User user, StateUser stateUser)
     {
         var sheet = workbook.CreateSheet("7_ВР ДПО");
+        sheet.PrintSetup.Landscape = true;
 
         sheet.SetColumnWidth(0, 64 * 256);
         sheet.SetColumnWidth(4, 24 * 256);
