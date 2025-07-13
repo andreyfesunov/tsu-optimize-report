@@ -11,7 +11,7 @@ namespace Tsu.IndividualPlan.Data.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Group",
+                name: "GroupString",
                 table: "Records",
                 type: "text",
                 nullable: false,
