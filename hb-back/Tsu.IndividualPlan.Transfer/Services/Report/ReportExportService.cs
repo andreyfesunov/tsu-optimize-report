@@ -149,10 +149,7 @@ public class ReportExportService : IReportExportService
         var stateUser = await _stateUserRepo.GetById(Guid.Parse(reportId));
         var user = await _userRepo.GetById(stateUser.UserId);
         var records = await _recordRepo.Get(Guid.Parse(reportId));
-        var workbook = new XSSFWorkbook();
-
-        _addTitlePage(workbook, user, stateUser, records);
-        await _addFirstHalfPages(workbook, user, stateUser);
+        var workbook = _openFirstHalfPages(stateUser);
         _addAcademicWorkPage(workbook, user, stateUser, 54);
         _addScienceWorkPage(workbook, user, stateUser, 54);
         _addGuidanceWorkPage(workbook, user, stateUser, 26);
@@ -327,75 +324,16 @@ public class ReportExportService : IReportExportService
         }
     }
 
-    private async Task _addFirstHalfPages(IWorkbook workbook, User user, StateUser stateUser)
+    private IWorkbook _openFirstHalfPages(StateUser stateUser)
     {
         var firstHalfFile = stateUser.Files.ToList()[0];
         string firstHalfFileExtension = Path.GetExtension(firstHalfFile.Path).ToLower();
         var path = Path.Combine(_root, firstHalfFile.Path);
-        await using var fs = new FileStream(path, FileMode.Open);
+        using var fs = new FileStream(path, FileMode.Open);
 
-        using var package = firstHalfFileExtension == ".xlsx"
+        return firstHalfFileExtension == ".xlsx"
             ? (IWorkbook)new XSSFWorkbook(fs)
             : (IWorkbook)new HSSFWorkbook(fs);
-        for (var i = 1; i < package.NumberOfSheets; i++)
-        {
-            var sourceSheet = package.GetSheetAt(i);
-            var newSheet = workbook.CreateSheet(i == 1 ? "2_Осень" : "3_Весна");
-            _copyLayout(sourceSheet, newSheet);
-            newSheet.PrintSetup.Landscape = true;
-            newSheet.PrintSetup.Scale = 90; // 90% масштаб,
-            newSheet.FitToPage = false; // Отключаем авто-подгонку под страницы
-
-            for (var rowIndex = sourceSheet.FirstRowNum; rowIndex <= sourceSheet.LastRowNum; rowIndex++)
-            {
-                var sourceRow = sourceSheet.GetRow(rowIndex);
-                if (sourceRow == null) continue;
-
-                var newRow = newSheet.CreateRow(rowIndex);
-                for (int cellIndex = sourceRow.FirstCellNum; cellIndex < sourceRow.LastCellNum; cellIndex++)
-                {
-                    var sourceCell = sourceRow.GetCell(cellIndex);
-                    var newCell = newRow.CreateCell(cellIndex);
-                    if (sourceCell == null) continue;
-
-                    newCell.SetCellValue(sourceCell.ToString());
-
-                    var newCellStyle = workbook.CreateCellStyle();
-                    var sourceCellStyle = firstHalfFileExtension == ".xlsx"
-                        ? (ICellStyle)(XSSFCellStyle)sourceCell.CellStyle
-                        : (ICellStyle)(HSSFCellStyle)sourceCell.CellStyle;
-
-                    if (sourceCellStyle != null)
-                    {
-                        var fontIndex = sourceCellStyle.FontIndex;
-                        var font = package.GetFontAt(fontIndex);
-
-                        var newFont = workbook.CreateFont();
-                        newFont.FontName = font.FontName;
-                        newFont.FontHeightInPoints = font.FontHeightInPoints;
-                        newFont.Color = IndexedColors.Black.Index;
-                        newFont.Boldweight = font.Boldweight;
-                        newFont.IsItalic = font.IsItalic;
-                        newFont.Underline = font.Underline;
-
-                        newCellStyle.SetFont(newFont);
-                        newCellStyle.Alignment = sourceCellStyle.Alignment;
-                        newCellStyle.VerticalAlignment = sourceCellStyle.VerticalAlignment;
-                        newCellStyle.BorderBottom = sourceCellStyle.BorderBottom;
-                        newCellStyle.BorderTop = sourceCellStyle.BorderTop;
-                        newCellStyle.BorderLeft = sourceCellStyle.BorderLeft;
-                        newCellStyle.BorderRight = sourceCellStyle.BorderRight;
-                        newCellStyle.FillForegroundColor = IndexedColors.White.Index;
-                        newCellStyle.FillPattern = FillPattern.SolidForeground;
-                        newCellStyle.WrapText = sourceCellStyle.WrapText;
-                        newCellStyle.Rotation = sourceCellStyle.Rotation;
-                    }
-
-                    newCell.CellStyle = newCellStyle;
-                }
-            }
-        }
-
     }
 
     private void _addAcademicWorkPage(
