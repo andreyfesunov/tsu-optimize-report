@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tsu.IndividualPlan.Data.Context;
 
 #nullable disable
 
-namespace Tsu.IndividualPlan.Data.Migrations
+namespace Tsu.IndividualPlan.Data.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250719210842_AddFieldSemestrId")]
+    partial class AddFieldSemestrId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,10 +142,6 @@ namespace Tsu.IndividualPlan.Data.Migrations
 
                     b.Property<Guid>("StateUserId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("SemestrId")
-                        .IsRequired()
-                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 
@@ -299,10 +298,6 @@ namespace Tsu.IndividualPlan.Data.Migrations
                     b.Property<string>("GroupString")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("SemestrId")
-                        .IsRequired()
-                        .HasColumnType("smallint");
 
                     b.Property<int>("Hours")
                         .HasColumnType("integer");

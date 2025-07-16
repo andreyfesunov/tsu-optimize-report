@@ -4,7 +4,7 @@ namespace Tsu.IndividualPlan.Domain.Interfaces.Repositories;
 
 public interface IRecordRepository
 {
-    Task<Record[]> Get(Guid stateUserId);
+    Task<Record[]> Get(Guid stateUserId, int? semestrId = null);
     IQueryable<Record> IncludeChildren(IQueryable<Record> query);
     Task<Record> AddEntity(Record entity);
 }

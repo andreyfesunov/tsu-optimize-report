@@ -16,9 +16,12 @@ public class RecordRepository : IRecordRepository
         _dbSet = _context.Set<Record>();
     }
 
-    public async Task<Record[]> Get(Guid stateUserId)
+    public async Task<Record[]> Get(Guid stateUserId, int? semestrId = null)
     {
-        return await IncludeChildren(_dbSet).Where(x => x.StateUserId == stateUserId).ToArrayAsync();
+        var result = IncludeChildren(_dbSet).Where(x => x.StateUserId == stateUserId);
+        if (semestrId.HasValue)
+            result = result.Where(x => x.SemestrId == semestrId);
+        return await result.ToArrayAsync();
     }
 
     public IQueryable<Record> IncludeChildren(IQueryable<Record> query)

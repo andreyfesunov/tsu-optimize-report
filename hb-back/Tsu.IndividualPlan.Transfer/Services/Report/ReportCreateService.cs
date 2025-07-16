@@ -110,6 +110,7 @@ public class ReportCreateService(
         var row = 5;
         const string endString = "Всего за семестр";
         var groupStringCellNum = 4;
+        var semestrId = worksheet.SheetName.Contains("Осень") ? 1 : 2;
 
         var cell = worksheet.GetRow(row).GetCell(1);
 
@@ -137,7 +138,8 @@ public class ReportCreateService(
                         ActivityId: activity.Id,
                         Hours: hours,
                         StateUserId: stateUser.Id,
-                        GroupString: worksheet.GetRow(row).GetCell(groupStringCellNum).StringCellValue
+                        GroupString: worksheet.GetRow(row).GetCell(groupStringCellNum).StringCellValue,
+                        SemestrId: semestrId
                     )
                 );
             }

@@ -20,10 +20,11 @@ public class StateUserRepository : IStateUserRepository
         _userInfo = userInfo;
     }
 
-    public async Task<StateUser> GetById(Guid id)
+    public async Task<StateUser> GetById(Guid id, int? semestrId = null)
     {
         var entityQuery = _dbSet.AsQueryable().Where(e => e.Id == id);
-        return (await IncludeChildren(entityQuery).ToListAsync())[0];
+        var result = IncludeChildren(entityQuery, semestrId);
+        return (await result.ToListAsync())[0];
     }
 
     public async Task<ICollection<StateUser>> GetAll()
@@ -60,9 +61,21 @@ public class StateUserRepository : IStateUserRepository
         return saved > 0;
     }
 
-    private static IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query)
+    private static IQueryable<StateUser> IncludeChildren(IQueryable<StateUser> query, int? semestrId = null)
     {
-        return query
+        var result = query;
+        if (semestrId.HasValue)
+            result = result
+            .Include(x => x.Events.Where(y => y.SemestrId == semestrId))
+            .ThenInclude(x => x.EventType)
+            .ThenInclude(x => x.Work)
+            .Include(x => x.Events.Where(y => y.SemestrId == semestrId))
+            .ThenInclude(x => x.Comments)
+            .Include(x => x.Events.Where(y => y.SemestrId == semestrId))
+            .ThenInclude(x => x.Lessons)
+            .ThenInclude(x => x.LessonType);
+        else
+            result = result
             .Include(x => x.Events)
             .ThenInclude(x => x.EventType)
             .ThenInclude(x => x.Work)
@@ -70,7 +83,8 @@ public class StateUserRepository : IStateUserRepository
             .ThenInclude(x => x.Comments)
             .Include(x => x.Events)
             .ThenInclude(x => x.Lessons)
-            .ThenInclude(x => x.LessonType)
+            .ThenInclude(x => x.LessonType);
+        return result
             .Include(x => x.User)
             .Include(x => x.Files)
             .Include(x => x.Records)

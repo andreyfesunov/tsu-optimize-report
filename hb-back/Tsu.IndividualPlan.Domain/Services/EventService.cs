@@ -27,7 +27,8 @@ public class EventService(IEventRepository repository, IEventSecurityService sec
             dto.StateUserId,
             dto.EventTypeId,
             dto.StartedAt,
-            dto.EndedAt
+            dto.EndedAt,
+            dto.SemestrId
         );
 
         await security.validateCanUse(entity);

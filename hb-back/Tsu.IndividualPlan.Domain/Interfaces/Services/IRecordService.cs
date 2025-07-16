@@ -4,5 +4,5 @@ namespace Tsu.IndividualPlan.Domain.Interfaces.Services;
 
 public interface IRecordService
 {
-    Task<ICollection<Record>> GetForReport(Guid stateUserId);
+    Task<ICollection<Record>> GetForReport(Guid stateUserId, int semestrId);
 }

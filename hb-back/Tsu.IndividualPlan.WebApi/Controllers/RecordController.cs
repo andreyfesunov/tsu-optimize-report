@@ -12,12 +12,12 @@ namespace Tsu.IndividualPlan.WebApi.Controllers;
 [Authorize]
 public class RecordController(IRecordService recordService) : ControllerBase
 {
-    [HttpGet("{stateUserId:guid}")]
-    public async Task<ActionResult<RecordDto[]>> Get(Guid stateUserId)
+    [HttpGet("{stateUserId:guid}/{semestrId}")]
+    public async Task<ActionResult<RecordDto[]>> Get(Guid stateUserId, [FromRoute] int semestrId)
     {
         try
         {
-            var result = await recordService.GetForReport(stateUserId);
+            var result = await recordService.GetForReport(stateUserId, semestrId);
             return Ok(result.Select<Record, RecordDto>(x => x.toDTO()).ToList());
         }
         catch (Exception ex)

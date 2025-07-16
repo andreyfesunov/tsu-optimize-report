@@ -63,12 +63,12 @@ public class ReportController(
         }
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ReportDetailDto>> Detail(Guid id)
+    [HttpGet("{id:guid}/{semestrId}")]
+    public async Task<ActionResult<ReportDetailDto>> Detail(Guid id, [FromRoute] int semestrId)
     { 
         try
         {
-            var result = await service.GetById(id);
+            var result = await service.GetById(id, semestrId);
             return Ok(result.toDTO());
         }
         catch (Exception ex)

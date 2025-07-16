@@ -15,6 +15,7 @@ public class Event : Base
         Guid EventTypeId,
         DateTime StartedAt,
         DateTime EndedAt,
+        int SemestrId,
         Guid? Id = null
     )
         : base(Id)
@@ -23,6 +24,7 @@ public class Event : Base
         this.EventTypeId = EventTypeId;
         this.StartedAt = StartedAt;
         this.EndedAt = EndedAt;
+        this.SemestrId = SemestrId;
     }
 
     public required Guid StateUserId { get; init; }
@@ -34,6 +36,7 @@ public class Event : Base
     public required DateTime StartedAt { get; set; }
 
     public required DateTime EndedAt { get; set; }
+    public required int SemestrId { get; init; }
 
     public ICollection<Lesson>? Lessons { get; init; }
     public ICollection<Comment>? Comments { get; init; }

@@ -10,9 +10,9 @@ public class StateUserService(IStateUserRepository stateUserRepository,
         IUserRepository userRepository,
         IStateRepository stateRepository) : IStateUserService
 {
-    public async Task<StateUser> GetById(Guid id)
+    public async Task<StateUser> GetById(Guid id, int? semestrId = null)
     {
-        return await stateUserRepository.GetById(id);
+        return await stateUserRepository.GetById(id, semestrId);
     }
 
     public async Task<Pagination<UserAllStates>> GetUserAllStates(Search search)

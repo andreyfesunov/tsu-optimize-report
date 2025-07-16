@@ -13,8 +13,8 @@ public class RecordService : IRecordService
         _recordRepository = recordRepository;
     }
 
-    public async Task<ICollection<Record>> GetForReport(Guid stateUserId)
+    public async Task<ICollection<Record>> GetForReport(Guid stateUserId, int semestrId)
     {
-        return await _recordRepository.Get(stateUserId);
+        return await _recordRepository.Get(stateUserId, semestrId);
     }
 }
