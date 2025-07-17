@@ -98,50 +98,48 @@ public class ReportCreateService(
         ICollection<Activity> activities
     )
     {
-        /*
-         * TODO get rid of HARDCODE
-         *
-         * NPOI - считает с нуля
-         *
-         * 5 - строка, с которой начинаются отчёты.
-         * "Всего за семестр" - строка, которой оканчивается часть, необходимая для считывания.
-         * 4 - столбец, в котором написана группа
-         */
-        var row = 5;
+        Dictionary<string, ICell> cellFoundCache = new Dictionary<string, ICell>();
+
+        var disciplineHeaderCell = _findCell(worksheet, "Наименование дисциплины, практики и её тип, испытания государственной итоговой аттесатции", cellFoundCache);
+        var row = disciplineHeaderCell.Address.Row + 1;
         const string endString = "Всего за семестр";
-        var groupStringCellNum = 4;
+        var groupStringCellNum = _findCell(worksheet, "Индекс учебной группы", cellFoundCache).Address.Column;
         var semestrId = worksheet.SheetName.Contains("Осень") ? 1 : 2;
 
-        var cell = worksheet.GetRow(row).GetCell(1);
+        var cell = worksheet.GetRow(row).GetCell(disciplineHeaderCell.Address.Column);
 
         while (cell != null && cell.StringCellValue != endString)
         {
-            var lessonName = cell.StringCellValue;
-            var lessonType = await _resolveLessonType(lessonName);
-
-            foreach (var activity in activities)
+            if (cell.StringCellValue != string.Empty)
             {
-                var contentCell = worksheet.GetRow(row).GetCell(activity.Column);
+                var lessonName = cell.StringCellValue;
+                var lessonType = await _resolveLessonType(lessonName);
 
-                var hours = contentCell.CellType switch
+                foreach (var activity in activities)
                 {
-                    CellType.Numeric => (int)contentCell.NumericCellValue,
-                    _ => int.Parse(contentCell.StringCellValue)
-                };
+                    var activityHeaderCell = _findCell(worksheet, _takeFirstWords(activity.Name, 4), cellFoundCache); //_takeFirstWords потому что "Лабораторные работы, клинические практические " в первой части обрезаны
+                    var contentCell = worksheet.GetRow(row).GetCell(activityHeaderCell.Address.Column);
 
-                if (hours <= 0)
-                    continue;
+                    var hours = contentCell.CellType switch
+                    {
+                        CellType.Numeric => (int)contentCell.NumericCellValue,
+                        _ => int.Parse(contentCell.StringCellValue)
+                    };
 
-                await recordRepository.AddEntity(
-                    new Record(
-                        LessonTypeId: lessonType.Id,
-                        ActivityId: activity.Id,
-                        Hours: hours,
-                        StateUserId: stateUser.Id,
-                        GroupString: worksheet.GetRow(row).GetCell(groupStringCellNum).StringCellValue,
-                        SemestrId: semestrId
-                    )
-                );
+                    if (hours <= 0)
+                        continue;
+
+                    await recordRepository.AddEntity(
+                        new Record(
+                            LessonTypeId: lessonType.Id,
+                            ActivityId: activity.Id,
+                            Hours: hours,
+                            StateUserId: stateUser.Id,
+                            GroupString: worksheet.GetRow(row).GetCell(groupStringCellNum).StringCellValue,
+                            SemestrId: semestrId
+                        )
+                    );
+                }
             }
 
             row += 1;
@@ -158,5 +156,41 @@ public class ReportCreateService(
 
         return lessonType
                ?? await lessonTypeRepository.AddEntity(new LessonType(lessonName));
+    }
+
+    private ICell _findCell(ISheet worksheet, string str, Dictionary<string, ICell> cellFoundCache)
+    {
+        str = _standartize(str);
+        if (cellFoundCache.Keys.Contains(str))
+            return cellFoundCache[str];
+
+        const int maxRows = 25;
+        const int maxCols = 75;
+        for (int row = 0; row < maxRows; row++)
+        {
+            var sheetRow = worksheet.GetRow(row);
+            if (sheetRow == null) continue;
+            for (int col = 0; col < maxCols; col++)
+            {
+                var cell = sheetRow.GetCell(col);
+                if (cell == null) continue;
+                if (cell.CellType == CellType.String && _standartize(cell.StringCellValue).StartsWith(str))
+                {
+                    cellFoundCache.Add(str, cell);
+                    return cell;
+                }
+            }
+        }
+        throw new Exception($"Cell with text {str} not found");
+    }
+
+    private string _takeFirstWords(string str, int wordsCount)
+        => string.Join(" ", str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Take(wordsCount));
+
+    private string _standartize(string str)
+    {
+        if (string.IsNullOrWhiteSpace(str))
+            return string.Empty;
+        return string.Join("", str.Where(x => char.IsLetter(x))).ToUpper();
     }
 }
