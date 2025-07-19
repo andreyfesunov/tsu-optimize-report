@@ -10,6 +10,9 @@ using Tsu.IndividualPlan.Domain.Models.Project;
 using Tsu.IndividualPlan.Transfer.Extensions.Lib;
 using Tsu.IndividualPlan.Transfer.Interfaces.Report;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using UserInfo = Tsu.IndividualPlan.Domain.Models.Project.UserInfo;
+using Comment = Tsu.IndividualPlan.Domain.Models.Business.Comment;
 
 namespace Tsu.IndividualPlan.Transfer.Services.Report;
 
@@ -317,12 +320,16 @@ public class ReportExportService : IReportExportService
 
             for (int i = 3; i < 8; i++)
                 wbSource.Worksheet(i + 1).CopyTo(wbTarget, wbSource.Worksheets.ElementAt(i).Name);
-            
+
             using (var memoryStream = new MemoryStream())
             {
                 wbTarget.SaveAs(memoryStream);
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                return (IWorkbook)new XSSFWorkbook(memoryStream);
+
+                var result = (IWorkbook)new XSSFWorkbook(memoryStream);
+                result.GetSheetAt(1).PrintSetup.Landscape = true;
+                result.GetSheetAt(2).PrintSetup.Landscape = true;
+                return result;
             }
         }
     }
@@ -335,7 +342,6 @@ public class ReportExportService : IReportExportService
     )
     {
         var sheet = workbook.GetSheetAt(3);
-        sheet.PrintSetup.Landscape = true;
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
@@ -384,7 +390,6 @@ public class ReportExportService : IReportExportService
     )
     {
         var sheet = workbook.GetSheetAt(4);
-        sheet.PrintSetup.Landscape = true;
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
@@ -432,7 +437,6 @@ public class ReportExportService : IReportExportService
     )
     {
         var sheet = workbook.GetSheetAt(5);
-        sheet.PrintSetup.Landscape = true;
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
@@ -527,7 +531,6 @@ public class ReportExportService : IReportExportService
     private void _addEducationalWorkPage(IWorkbook workbook, User user, StateUser stateUser)
     {
         var sheet = workbook.GetSheetAt(6);
-        sheet.PrintSetup.Landscape = true;
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
@@ -682,7 +685,6 @@ public class ReportExportService : IReportExportService
     private void _addChangesWorkPage(IWorkbook workbook, User user, StateUser stateUser)
     {
         var sheet = workbook.GetSheetAt(7);
-        sheet.PrintSetup.Landscape = true;
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
