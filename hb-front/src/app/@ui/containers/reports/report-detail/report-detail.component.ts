@@ -155,7 +155,7 @@ export class ReportDetailComponent extends SubscriptionController {
   protected export(id: string): void {
     this.subscription.add(
       this._reportsService.export(id).subscribe((data) => {
-        FileSaver.saveAs(new Blob([data]), "ind-plan.xls");
+        FileSaver.saveAs(new Blob([data]), "ind-plan.xlsx");
       })
     )
   }

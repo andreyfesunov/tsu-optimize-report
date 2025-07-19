@@ -36,7 +36,7 @@ public class ReportController(
         {
             Content = stream.ToArray(),
             ContentType = "application/vnd.ms-excel",
-            FileName = string.Format("individual-plan-{0}.xls", DateTime.Now)
+            FileName = string.Format("individual-plan-{0}.xlsx", DateTime.Now)
         };
 
         return File(file.Content, file.ContentType, file.FileName);
