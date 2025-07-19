@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security;
 using Tsu.IndividualPlan.Data.Context;
 using Tsu.IndividualPlan.Data.Extensions;
 using Tsu.IndividualPlan.Domain.Exceptions;
@@ -54,6 +55,8 @@ public class StateRepository : IStateRepository
 
     public virtual async Task<Pagination<State>> Search(Search search)
     {
+        if(search.IsActive)
+            return await IncludeChildren(_dbSet).Where(x => x.Count != 0).Search(search);
         return await IncludeChildren(_dbSet).Search(search);
     }
 
