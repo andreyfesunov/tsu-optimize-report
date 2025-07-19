@@ -9,6 +9,7 @@ using Tsu.IndividualPlan.Domain.Models.Business;
 using Tsu.IndividualPlan.Domain.Models.Project;
 using Tsu.IndividualPlan.Transfer.Extensions.Lib;
 using Tsu.IndividualPlan.Transfer.Interfaces.Report;
+using ClosedXML.Excel;
 
 namespace Tsu.IndividualPlan.Transfer.Services.Report;
 
@@ -149,7 +150,8 @@ public class ReportExportService : IReportExportService
         var stateUser = await _stateUserRepo.GetById(Guid.Parse(reportId));
         var user = await _userRepo.GetById(stateUser.UserId);
         var records = await _recordRepo.Get(Guid.Parse(reportId));
-        var workbook = _openFirstHalfPages(stateUser);
+        var workbook = _getReportPlaceholder(stateUser);
+        _addTitlePage(workbook, user, stateUser, records);
         _addAcademicWorkPage(workbook, user, stateUser, 54);
         _addScienceWorkPage(workbook, user, stateUser, 54);
         _addGuidanceWorkPage(workbook, user, stateUser, 26);
@@ -166,7 +168,7 @@ public class ReportExportService : IReportExportService
         ICollection<Record> records
     )
     {
-        var sheet = workbook.CreateSheet("1_Тит");
+        var sheet = workbook.GetSheetAt(0);
 
         var centeredStyle = workbook.CreateCellStyle();
         centeredStyle.Alignment = HorizontalAlignment.Center;
@@ -174,6 +176,7 @@ public class ReportExportService : IReportExportService
 
         var underlineStyle = _getUnderlineStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
+        var nameStyle = _getNameStyle(workbook);
 
         var firstHalfHours = records.Select(x => x.Hours).Sum();
         var secondHalfHours =
@@ -187,45 +190,15 @@ public class ReportExportService : IReportExportService
                 .Sum()
             ?? 0;
 
+
         var pageData = new List<CellData>
         {
-            new(2, 2, "МИНОБРАНАУКИ РОССИИ", centeredStyle, new CellRangeAddress(2, 2, 2, 8)),
+            new(5, 0, $"Кафедра {stateUser.State.Department.Name.ToString()}", nameStyle),
+            new(21, 7, stateUser.State.StartDate.Year.ToString(), centeredStyle),
+            new(21, 14, stateUser.State.EndDate.Year.ToString(), centeredStyle),
             new(
-                3,
-                2,
-                "ФГБОУ ВО \"Тульский государственный университет\"",
-                centeredStyle,
-                new CellRangeAddress(3, 3, 2, 8)
-            ),
-            new(
-                5,
-                1,
-                "Кафедра________________________________________________________",
-                centeredStyle,
-                new CellRangeAddress(5, 5, 1, 9)
-            ),
-            new(8, 1, "Утверждаю"),
-            new(8, 6, "Утверждаю"),
-            new(9, 1, "Проректор по научной работе"),
-            new(9, 6, "Проректор по научной работе"),
-            new(11, 1, "___________________________"),
-            new(11, 6, "___________________________"),
-            new(12, 1, "«____» ______________  _____ г."),
-            new(12, 6, "«____» ______________  _____ г."),
-            new(15, 1, "Директор института"),
-            new(15, 3, "_________", null, new CellRangeAddress(15, 15, 3, 8)),
-            new(17, 1, "___________________________"),
-            new(18, 1, "«____» ______________  _____ г."),
-            new(22, 3, "ИНДИВИДУАЛЬНЫЙ ПЛАН", centeredStyle, new CellRangeAddress(22, 22, 3, 7)),
-            new(23, 3, "РАБОТЫ ПРЕПОДАВАТЕЛЯ", centeredStyle, new CellRangeAddress(23, 23, 3, 7)),
-            new(25, 3, "на", centeredStyle),
-            new(25, 4, stateUser.State.StartDate.Year.ToString(), centeredStyle),
-            new(25, 5, "-", centeredStyle),
-            new(25, 6, stateUser.State.EndDate.Year.ToString(), centeredStyle),
-            new(25, 7, "уч. г.г.", centeredStyle),
-            new(
-                28,
-                1,
+                23,
+                0,
                 stateUser.State.Job.Name
                 + " "
                 + user.Lastname
@@ -235,55 +208,61 @@ public class ReportExportService : IReportExportService
                 + "("
                 + stateUser.Rate
                 + ")",
-                underlineStyle,
-                new CellRangeAddress(28, 28, 1, 8)
+                nameStyle
             ),
+            new(31, 9, firstHalfHours.ToString(), centeredStyle),
+            new(32, 9, secondHalfHours.ToString(), centeredStyle),
+            new(34, 16, (firstHalfHours + secondHalfHours).ToString(), underlineStyle),
+            new(37, 0, $"Тула {stateUser.State.StartDate.Year.ToString()} г.")
+        };
+
+        _applyPageData(sheet, pageData);
+    }
+
+    private void _finishTitlePage(
+        IWorkbook workbook,
+        User user,
+        StateUser stateUser,
+        ICollection<Record> records
+    )
+    {
+        var sheet = workbook.GetSheetAt(0);
+
+        var centeredStyle = workbook.CreateCellStyle();
+        centeredStyle.Alignment = HorizontalAlignment.Center;
+        centeredStyle.WrapText = true;
+
+        var underlineStyle = _getUnderlineStyle(workbook);
+
+        var firstHalfHours = records.Select(x => x.Hours).Sum();
+        var secondHalfHours =
+            stateUser
+                .Events.Select(x => x.Lessons)
+                .Select(x => x.Select(v => v.PlanDate).Sum())
+                .Sum()
+            + stateUser
+                .Events.Select(x => x.Comments)
+                .Select(x => x.Select(v => v.PlanDate).Sum())
+                .Sum()
+            ?? 0;
+
+        var secondHalfHoursCell = sheet.FindCell("2 половина рабочего дня");
+        var sumHalfHoursCell = sheet.FindCell("Всего:");
+
+        var pageData = new List<CellData>
+        {
             new(
-                29,
-                1,
-                "должность,ученая степень, ученое звание,  фамилия, инициалы, (должн. исполнение)",
-                centeredStyle,
-                new CellRangeAddress(29, 29, 1, 8)
-            ),
-            new(32, 1, "Дата", tableStyle),
+                secondHalfHoursCell.Address.Row,
+                secondHalfHoursCell.IsMergedCell
+                ? sheet.GetMergedRegionContainingCell(secondHalfHoursCell.Address).LastColumn + 1
+                : secondHalfHoursCell.Address.Column + 1,
+                secondHalfHours.ToString(), centeredStyle),
             new(
-                32,
-                2,
-                "Сведения о заключении трудового договора, присвоении учёной степени и учёного звания, квалификации «Преподаватель высшей школы»",
-                tableStyle,
-                new CellRangeAddress(32, 32, 2, 6)
-            ),
-            new(
-                32,
-                7,
-                "Номер договора, диплома, аттестата, приказа",
-                tableStyle,
-                new CellRangeAddress(32, 32, 7, 8)
-            ),
-            new(33, 1, "", tableStyle),
-            new(33, 2, "", tableStyle, new CellRangeAddress(33, 33, 2, 6)),
-            new(33, 7, "", tableStyle, new CellRangeAddress(33, 33, 7, 8)),
-            new(
-                41,
-                2,
-                "1 половина рабочего дня",
-                centeredStyle,
-                new CellRangeAddress(41, 41, 2, 4)
-            ),
-            new(41, 5, firstHalfHours.ToString(), centeredStyle),
-            new(41, 6, "- час", centeredStyle),
-            new(
-                42,
-                2,
-                "2 половина рабочего дня",
-                centeredStyle,
-                new CellRangeAddress(42, 42, 2, 4)
-            ),
-            new(42, 5, secondHalfHours.ToString(), centeredStyle),
-            new(42, 6, "- час", centeredStyle),
-            new(44, 4, "Всего:"),
-            new(44, 5, (firstHalfHours + secondHalfHours).ToString(), underlineStyle),
-            new(44, 6, "часов")
+                sumHalfHoursCell.Address.Row,
+                sumHalfHoursCell.IsMergedCell
+                ? sheet.GetMergedRegionContainingCell(sumHalfHoursCell.Address).LastColumn + 1
+                : sumHalfHoursCell.Address.Column + 1,
+                (firstHalfHours + secondHalfHours).ToString(), underlineStyle),
         };
 
         _applyPageData(sheet, pageData);
@@ -324,16 +303,28 @@ public class ReportExportService : IReportExportService
         }
     }
 
-    private IWorkbook _openFirstHalfPages(StateUser stateUser)
+    private IWorkbook _getReportPlaceholder(StateUser stateUser)
     {
         var firstHalfFile = stateUser.Files.ToList()[0];
         string firstHalfFileExtension = Path.GetExtension(firstHalfFile.Path).ToLower();
         var path = Path.Combine(_root, firstHalfFile.Path);
-        using var fs = new FileStream(path, FileMode.Open);
 
-        return firstHalfFileExtension == ".xlsx"
-            ? (IWorkbook)new XSSFWorkbook(fs)
-            : (IWorkbook)new HSSFWorkbook(fs);
+        using (var wbSource = new XLWorkbook(Path.Combine(_root, "SecondPartExample.xlsx")))
+        using (var wbTarget = new XLWorkbook(path))
+        {
+            wbTarget.Worksheets.First().Delete();
+            wbSource.Worksheet(1).CopyTo(wbTarget, wbSource.Worksheets.First().Name, 1);
+
+            for (int i = 3; i < 8; i++)
+                wbSource.Worksheet(i + 1).CopyTo(wbTarget, wbSource.Worksheets.ElementAt(i).Name);
+            
+            using (var memoryStream = new MemoryStream())
+            {
+                wbTarget.SaveAs(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                return (IWorkbook)new XSSFWorkbook(memoryStream);
+            }
+        }
     }
 
     private void _addAcademicWorkPage(
@@ -343,42 +334,22 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        var sheet = workbook.CreateSheet("4_УЧ-МЕТ");
+        var sheet = workbook.GetSheetAt(3);
         sheet.PrintSetup.Landscape = true;
-
-        sheet.SetColumnWidth(0, 64 * 256);
-        sheet.SetColumnWidth(5, 24 * 256);
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
 
-        var pageData = new List<CellData>
-        {
-            new(
-                0,
-                0,
-                "II.  УЧЕБНО-МЕТОДИЧЕСКАЯ РАБОТА",
-                headerStyle,
-                new CellRangeAddress(0, 0, 0, 5)
-            ),
-            new(2, 0, "Наименование работы", tableStyle, new CellRangeAddress(2, 3, 0, 0)),
-            new(2, 1, "Срок выполнения", tableStyle, new CellRangeAddress(2, 2, 1, 2)),
-            new(2, 3, "Затраты времени, час", tableStyle, new CellRangeAddress(2, 2, 3, 4)),
-            new(2, 5, "Отметка зав.каф.о выполнении", tableStyle, new CellRangeAddress(2, 3, 5, 5)),
-            new(3, 1, "Начало", tableStyle),
-            new(3, 2, "Конец", tableStyle),
-            new(3, 3, "План", tableStyle),
-            new(3, 4, "Факт.", tableStyle)
-        };
+        var pageData = new List<CellData>();
 
-        var offset = 4;
+        var offset = 5;
 
         var events = stateUser.Events.Where(x =>
                 x.EventType.WorkId.ToString() == SystemWorks.AcademicMethodicalWorkId
             )
             .ToList();
 
-        _applyEventsData(
+        _applySemestrSensitiveEventsData(
             pageData,
             events,
             ref offset,
@@ -396,13 +367,6 @@ public class ReportExportService : IReportExportService
         pageData.AddRange(
             new List<CellData>
             {
-                new(
-                    offset,
-                    0,
-                    "Итого за год",
-                    tableStyle,
-                    new CellRangeAddress(offset, offset, 0, 2)
-                ),
                 new(offset, 3, planHours.ToString(), tableStyle),
                 new(offset, 4, factHours.ToString(), tableStyle),
                 new(offset, 5, "", tableStyle)
@@ -419,41 +383,21 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        var sheet = workbook.CreateSheet("5_НДиНМД");
+        var sheet = workbook.GetSheetAt(4);
         sheet.PrintSetup.Landscape = true;
-
-        sheet.SetColumnWidth(0, 64 * 256);
-        sheet.SetColumnWidth(5, 24 * 256);
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
 
-        var pageData = new List<CellData>
-        {
-            new(
-                0,
-                0,
-                "III.  НАУЧНАЯ И НАУЧНО-МЕТОДИЧЕСКАЯ ДЕЯТЕЛЬНОСТЬ",
-                headerStyle,
-                new CellRangeAddress(0, 0, 0, 5)
-            ),
-            new(2, 0, "Наименование работы", tableStyle, new CellRangeAddress(2, 3, 0, 0)),
-            new(2, 1, "Срок выполнения", tableStyle, new CellRangeAddress(2, 2, 1, 2)),
-            new(2, 3, "Затраты времени, час", tableStyle, new CellRangeAddress(2, 2, 3, 4)),
-            new(2, 5, "Отметка зав.каф.о выполнении", tableStyle, new CellRangeAddress(2, 3, 5, 5)),
-            new(3, 1, "Начало", tableStyle),
-            new(3, 2, "Конец", tableStyle),
-            new(3, 3, "План", tableStyle),
-            new(3, 4, "Факт.", tableStyle)
-        };
+        var pageData = new List<CellData>();
 
-        var offset = 4;
+        var offset = 5;
 
         var events = stateUser
             .Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.ScienceWorkId)
             .ToList();
 
-        _applyEventsData(
+        _applySemestrSensitiveEventsData(
             pageData,
             events,
             ref offset,
@@ -471,13 +415,6 @@ public class ReportExportService : IReportExportService
         pageData.AddRange(
             new List<CellData>
             {
-                new(
-                    offset,
-                    0,
-                    "Итого за год",
-                    tableStyle,
-                    new CellRangeAddress(offset, offset, 0, 2)
-                ),
                 new(offset, 3, planHours.ToString(), tableStyle),
                 new(offset, 4, factHours.ToString(), tableStyle),
                 new(offset, 5, "", tableStyle)
@@ -494,18 +431,14 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        var sheet = workbook.CreateSheet("6_НИРС.ОМР");
+        var sheet = workbook.GetSheetAt(5);
         sheet.PrintSetup.Landscape = true;
-
-        sheet.SetColumnWidth(0, 64 * 256);
-        sheet.SetColumnWidth(1, 24 * 256);
-        sheet.SetColumnWidth(4, 24 * 256);
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
 
-        var offset = 0;
         var pageData = new List<CellData>();
+        var offset = 0;
 
         var events = stateUser
             .Events.Where(x => x.EventType.WorkId.ToString() == SystemWorks.GuidanceWorkId)
@@ -530,49 +463,6 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "IV. РУКОВОДСТВО НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ РАБОТОЙ СТУДЕНТОВ",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 4)
-                ),
-                new(
-                    offset + 1,
-                    0,
-                    "Виды работ",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 0, 0)
-                ),
-                new(
-                    offset + 1,
-                    1,
-                    "Ф.И.О. студента,  № группы",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 1, 1)
-                ),
-                new(
-                    offset + 1,
-                    2,
-                    "Затраты времени, час",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 1, 2, 3)
-                ),
-                new(
-                    offset + 1,
-                    4,
-                    "Отметка зав.каф. о выполнении",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 4, 4)
-                ),
-                new(offset + 2, 2, "План", tableStyle),
-                new(offset + 2, 3, "Факт.", tableStyle)
-            }
-        );
-
         offset += 3;
 
         _applyEventsData(
@@ -590,13 +480,6 @@ public class ReportExportService : IReportExportService
         pageData.AddRange(
             new List<CellData>
             {
-                new(
-                    offset,
-                    0,
-                    "Итого за год",
-                    tableStyle,
-                    new CellRangeAddress(offset, offset, 0, 1)
-                ),
                 new(offset, 2, _getPlanHours(events).ToString(), tableStyle),
                 new(offset, 3, _getFactHours(events).ToString(), tableStyle),
                 new(offset, 4, "", tableStyle)
@@ -615,42 +498,6 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "V. ОРГАНИЗАЦИОННО-МЕТОДИЧЕСКАЯ РАБОТА",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 4)
-                ),
-                new(
-                    offset + 1,
-                    0,
-                    "Виды работ",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 0, 1)
-                ),
-                new(
-                    offset + 1,
-                    2,
-                    "Затраты времени, час",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 1, 2, 3)
-                ),
-                new(
-                    offset + 1,
-                    4,
-                    "Отметка зав.каф. о выполнении",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 4, 4)
-                ),
-                new(offset + 2, 2, "План", tableStyle),
-                new(offset + 2, 3, "Факт.", tableStyle)
-            }
-        );
-
         offset += 3;
 
         _applyEventsData(
@@ -668,13 +515,6 @@ public class ReportExportService : IReportExportService
         pageData.AddRange(
             new List<CellData>
             {
-                new(
-                    offset,
-                    0,
-                    "Итого за год",
-                    tableStyle,
-                    new CellRangeAddress(offset, offset, 0, 1)
-                ),
                 new(offset, 2, _getPlanHours(events).ToString(), tableStyle),
                 new(offset, 3, _getFactHours(events).ToString(), tableStyle),
                 new(offset, 4, "", tableStyle)
@@ -686,11 +526,8 @@ public class ReportExportService : IReportExportService
 
     private void _addEducationalWorkPage(IWorkbook workbook, User user, StateUser stateUser)
     {
-        var sheet = workbook.CreateSheet("7_ВР ДПО");
+        var sheet = workbook.GetSheetAt(6);
         sheet.PrintSetup.Landscape = true;
-
-        sheet.SetColumnWidth(0, 64 * 256);
-        sheet.SetColumnWidth(4, 24 * 256);
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
@@ -724,42 +561,6 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "VI. ВОСПИТАТЕЛЬНАЯ РАБОТА",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 4)
-                ),
-                new(
-                    offset + 1,
-                    0,
-                    "Виды работ",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 0, 1)
-                ),
-                new(
-                    offset + 1,
-                    2,
-                    "Затраты времени, час",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 1, 2, 3)
-                ),
-                new(
-                    offset + 1,
-                    4,
-                    "Отметка зав.каф. о выполнении",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 4, 4)
-                ),
-                new(offset + 2, 2, "План", tableStyle),
-                new(offset + 2, 3, "Факт.", tableStyle)
-            }
-        );
-
         offset += 3;
 
         _applyEventsData(
@@ -777,13 +578,6 @@ public class ReportExportService : IReportExportService
         pageData.AddRange(
             new List<CellData>
             {
-                new(
-                    offset,
-                    0,
-                    "Итого за год",
-                    tableStyle,
-                    new CellRangeAddress(offset, offset, 0, 1)
-                ),
                 new(offset, 2, _getPlanHours(events).ToString(), tableStyle),
                 new(offset, 3, _getFactHours(events).ToString(), tableStyle),
                 new(offset, 4, "", tableStyle)
@@ -802,19 +596,6 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "VII. ОСУЩЕСТВЛЕНИЕ МЕДИЦИНСКОЙ ДЕЯТЕЛЬНОСТИ, НЕОБХОДИМОЙ ДЛЯ ПРАКТИЧЕСКОЙ ПОДГОТОВКИ ОБУЧАЮЩИХСЯ",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 4)
-                )
-            }
-        );
-
         offset += 1;
 
         _applyEventsData(
@@ -832,13 +613,6 @@ public class ReportExportService : IReportExportService
         pageData.AddRange(
             new List<CellData>
             {
-                new(
-                    offset,
-                    0,
-                    "Итого за год",
-                    tableStyle,
-                    new CellRangeAddress(offset, offset, 0, 1)
-                ),
                 new(offset, 2, _getPlanHours(events).ToString(), tableStyle),
                 new(offset, 3, _getFactHours(events).ToString(), tableStyle),
                 new(offset, 4, "", tableStyle)
@@ -857,42 +631,6 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "VIII. ДОПОЛНИТЕЛЬНОЕ ПРОФЕССИОНАЛЬНОЕ ОБРАЗОВАНИЕ ПО ПРОФИЛЮ ПЕДАГОГИЧЕСКОЙ ДЕЯТЕЛЬНОСТИ",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 4)
-                ),
-                new(
-                    offset + 1,
-                    0,
-                    "Виды работ",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 0, 1)
-                ),
-                new(
-                    offset + 1,
-                    2,
-                    "Затраты времени, час",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 1, 2, 3)
-                ),
-                new(
-                    offset + 1,
-                    4,
-                    "Отметка зав.каф. о выполнении",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 2, 4, 4)
-                ),
-                new(offset + 2, 2, "План", tableStyle),
-                new(offset + 2, 3, "Факт.", tableStyle)
-            }
-        );
-
         offset += 3;
 
         _applyEventsData(
@@ -910,13 +648,6 @@ public class ReportExportService : IReportExportService
         pageData.AddRange(
             new List<CellData>
             {
-                new(
-                    offset,
-                    0,
-                    "Итого за год",
-                    tableStyle,
-                    new CellRangeAddress(offset, offset, 0, 1)
-                ),
                 new(offset, 2, _getPlanHours(events).ToString(), tableStyle),
                 new(offset, 3, _getFactHours(events).ToString(), tableStyle),
                 new(offset, 4, "", tableStyle)
@@ -934,26 +665,6 @@ public class ReportExportService : IReportExportService
         int minCount
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "IX. РЕКОМЕНДАЦИИ КАФЕДРЫ ПО ОТЧЕТУ ПРЕПОДАВАТЕЛЯ",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 4)
-                ),
-                new(
-                    offset + 1,
-                    0,
-                    "",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 1, 0, 4)
-                )
-            }
-        );
-
         offset += 2;
 
         for (var i = 0; i < minCount; i++)
@@ -970,9 +681,8 @@ public class ReportExportService : IReportExportService
 
     private void _addChangesWorkPage(IWorkbook workbook, User user, StateUser stateUser)
     {
-        var sheet = workbook.CreateSheet("8_ИРИП ОПВП");
-
-        sheet.SetColumnWidth(3, 24 * 256);
+        var sheet = workbook.GetSheetAt(7);
+        sheet.PrintSetup.Landscape = true;
 
         var headerStyle = _getHeaderStyle(workbook);
         var tableStyle = _getTableStyle(workbook);
@@ -995,28 +705,6 @@ public class ReportExportService : IReportExportService
         ICellStyle tableStyle
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "X. ИЗМЕНЕНИЕ ИНДИВИДУАЛЬНОГО ПЛАНА",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 3)
-                ),
-                new(
-                    offset + 1,
-                    0,
-                    "Вводимые изменения",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 1, 0, 1)
-                ),
-                new(offset + 1, 2, "Раздел плана", tableStyle),
-                new(offset + 1, 3, "№ протокола заседания кафедры, дата", tableStyle)
-            }
-        );
-
         offset += 2;
 
         for (var i = 0; i < 30; i++)
@@ -1041,28 +729,6 @@ public class ReportExportService : IReportExportService
         ICellStyle tableStyle
     )
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    0,
-                    "ОТМЕТКИ О ПРОВЕРКЕ ВЫПОЛНЕНИЯ ПЛАНА",
-                    headerStyle,
-                    new CellRangeAddress(offset, offset, 0, 3)
-                ),
-                new(offset + 1, 0, "Замечания", tableStyle),
-                new(
-                    offset + 1,
-                    1,
-                    "Фамилия, И.О., должность проверяющего",
-                    tableStyle,
-                    new CellRangeAddress(offset + 1, offset + 1, 1, 2)
-                ),
-                new(offset + 1, 3, "Подпись преподавателя", tableStyle)
-            }
-        );
-
         offset += 2;
 
         for (var i = 0; i < 12; i++)
@@ -1082,119 +748,7 @@ public class ReportExportService : IReportExportService
 
     private void _addSignsTable(List<CellData> pageData, ref int offset, ICellStyle underlineStyle)
     {
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    1,
-                    "План обсужден на заседании кафедры",
-                    merge: new CellRangeAddress(offset, offset, 1, 3)
-                ),
-                new(
-                    offset + 1,
-                    1,
-                    "____ __________20__ г.       протокол №  ______",
-                    merge: new CellRangeAddress(offset + 1, offset + 1, 1, 3)
-                ),
-                new(
-                    offset + 2,
-                    1,
-                    "Заведующий кафедрой",
-                    merge: new CellRangeAddress(offset + 2, offset + 2, 1, 2)
-                ),
-                new(offset + 2, 3, "", underlineStyle),
-                new(
-                    offset + 3,
-                    1,
-                    "Подпись преподавателя",
-                    merge: new CellRangeAddress(offset + 3, offset + 3, 1, 2)
-                ),
-                new(offset + 3, 3, "", underlineStyle)
-            }
-        );
 
-        offset += 4;
-
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    1,
-                    "Выполнение плана в осеннем семестре проверено",
-                    merge: new CellRangeAddress(offset, offset, 1, 3)
-                ),
-                new(
-                    offset + 1,
-                    1,
-                    "и обсуждено на заседании кафедры",
-                    merge: new CellRangeAddress(offset + 1, offset + 1, 1, 3)
-                ),
-                new(
-                    offset + 2,
-                    1,
-                    "____ __________20__ г.       протокол №  ______",
-                    merge: new CellRangeAddress(offset + 2, offset + 2, 1, 3)
-                ),
-                new(
-                    offset + 3,
-                    1,
-                    "Заведующий кафедрой",
-                    merge: new CellRangeAddress(offset + 3, offset + 3, 1, 2)
-                ),
-                new(offset + 3, 3, "", underlineStyle),
-                new(
-                    offset + 4,
-                    1,
-                    "Подпись преподавателя",
-                    merge: new CellRangeAddress(offset + 4, offset + 4, 1, 2)
-                ),
-                new(offset + 4, 3, "", underlineStyle)
-            }
-        );
-
-        offset += 5;
-
-        pageData.AddRange(
-            new List<CellData>
-            {
-                new(
-                    offset,
-                    1,
-                    "Выполнение плана в весеннем семестре и за уч. год",
-                    merge: new CellRangeAddress(offset, offset, 1, 3)
-                ),
-                new(
-                    offset + 1,
-                    1,
-                    "проверено и обсуждено на заседании кафедры",
-                    merge: new CellRangeAddress(offset + 1, offset + 1, 1, 3)
-                ),
-                new(
-                    offset + 2,
-                    1,
-                    "____ __________20__ г.       протокол №  ______",
-                    merge: new CellRangeAddress(offset + 2, offset + 2, 1, 3)
-                ),
-                new(
-                    offset + 3,
-                    1,
-                    "Заведующий кафедрой",
-                    merge: new CellRangeAddress(offset + 3, offset + 3, 1, 2)
-                ),
-                new(offset + 3, 3, "", underlineStyle),
-                new(
-                    offset + 4,
-                    1,
-                    "Подпись преподавателя",
-                    merge: new CellRangeAddress(offset + 4, offset + 4, 1, 2)
-                ),
-                new(offset + 4, 3, "", underlineStyle)
-            }
-        );
-
-        offset += 5;
     }
 
     private ICellStyle _getHeaderStyle(IWorkbook workbook)
@@ -1231,6 +785,28 @@ public class ReportExportService : IReportExportService
         return style;
     }
 
+    private ICellStyle _getNameStyle(IWorkbook workbook)
+    {
+        var style = workbook.CreateCellStyle();
+
+        // Настройки границ и выравнивания
+        style.Alignment = HorizontalAlignment.Center;
+        style.VerticalAlignment = VerticalAlignment.Center; // Добавляем вертикальное выравнивание для полноты
+        style.WrapText = true;
+
+        // Создаём и настраиваем шрифт
+        IFont font = workbook.CreateFont();
+        font.FontName = "Tahoma";    // Шрифт
+        font.FontHeightInPoints = 12; // Размер 12pt
+        font.IsBold = true;          // Жирный
+        font.IsItalic = true;        // Курсив
+
+        // Применяем шрифт к стилю
+        style.SetFont(font);
+
+        return style;
+    }
+
     private int _getPlanHours(ICollection<Event> events)
     {
         return events.Select(x => x.Lessons.Select(l => l.PlanDate).Select(l => l ?? 0).Sum()).Sum()
@@ -1258,7 +834,7 @@ public class ReportExportService : IReportExportService
 
             if (data.Merge != null)
             {
-                sheet.AddMergedRegion(data.Merge);
+                //sheet.AddMergedRegion(data.Merge);
 
                 for (var i = data.Merge.FirstRow; i <= data.Merge.LastRow; i++)
                 {
@@ -1314,6 +890,51 @@ public class ReportExportService : IReportExportService
             pageData.AddRange(writeEmpty(offset, style));
             offset += 1;
         }
+    }
+
+    private void _applySemestrSensitiveEventsData(
+        List<CellData> pageData,
+        ICollection<Event> events,
+        ref int offset,
+        int minCount,
+        ICellStyle style,
+        WriteEvent writeEvent,
+        WriteLesson writeLesson,
+        WriteComment writeComment,
+        WriteEmpty writeEmpty
+    )
+    {
+        _applySemestrEventsData(pageData, events.Where(x => x.SemestrId == 1).ToList(), ref offset, minCount, style, writeEvent, writeLesson, writeComment, writeEmpty);
+        offset = 33;
+        _applySemestrEventsData(pageData, events.Where(x => x.SemestrId == 2).ToList(), ref offset, minCount, style, writeEvent, writeLesson, writeComment, writeEmpty);
+    }
+
+    private void _applySemestrEventsData(
+        List<CellData> pageData,
+        ICollection<Event> events,
+        ref int offset,
+        int minCount,
+        ICellStyle style,
+        WriteEvent writeEvent,
+        WriteLesson writeLesson,
+        WriteComment writeComment,
+        WriteEmpty writeEmpty
+    )
+    {
+        _applyEventsData(pageData, events, ref offset, 26, style, writeEvent, writeLesson, writeComment, writeEmpty);
+
+        var planHours = _getPlanHours(events);
+        var factHours = _getFactHours(events);
+
+        pageData.AddRange(
+            new List<CellData>
+            {
+                new(offset, 3, planHours.ToString(), style),
+                new(offset, 4, factHours.ToString(), style),
+                new(offset, 5, "", style)
+            }
+        );
+        offset += 1;
     }
 
     private class CellData

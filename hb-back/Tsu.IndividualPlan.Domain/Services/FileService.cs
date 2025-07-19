@@ -31,4 +31,7 @@ public class FileService(IHostEnvironment env, IConfiguration conf, IFileReposit
 
         return path;
     }
+
+    public string GetRoot()
+        => _root;
 }

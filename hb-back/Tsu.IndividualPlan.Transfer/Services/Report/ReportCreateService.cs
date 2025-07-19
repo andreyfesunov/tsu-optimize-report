@@ -10,6 +10,9 @@ using Tsu.IndividualPlan.Transfer.Interfaces.Report;
 using File = Tsu.IndividualPlan.Domain.Models.Business.File;
 using NPOI.XSSF.UserModel;
 using Tsu.IndividualPlan.Data.Context;
+using Spire.Xls;
+using ClosedXML.Excel;
+using Tsu.IndividualPlan.Transfer.Extensions.Lib;
 
 namespace Tsu.IndividualPlan.Transfer.Services.Report;
 
@@ -58,6 +61,31 @@ public class ReportCreateService(
         }
     }
 
+    private string _convertXlsToXlsx(Stream inputStream, string outputPath)
+    {
+        var path = Path.Combine(fileService.GetRoot(), outputPath); //Код вылезает из работы с экселем в работу с файлами, но без промежуточного сохранения документ нельзя конвертировать в xlsx
+        var dir = Path.GetDirectoryName(path);
+        if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
+        Workbook workbook = new Workbook();
+        workbook.LoadFromStream(inputStream, ExcelVersion.Version97to2003);
+        workbook.SaveToFile(path, ExcelVersion.Version2016);
+
+        _deleteLastWorksheet(path); //Удаляем вотермарку Spire 
+
+        return path;
+    }
+
+    private static void _deleteLastWorksheet(string path)
+    {
+        using (var workbook = new XLWorkbook(path))
+        {
+            var lastSheet = workbook.Worksheets.Last();
+            lastSheet.Delete();
+            workbook.Save();
+        }
+    }
+
     private IWorkbook _openWorkbook(IFormFile file)
     {
         if (file == null || file.Length == 0)
@@ -84,8 +112,11 @@ public class ReportCreateService(
             userInfo.GetUserId()
             + "/"
             + Guid.NewGuid()
-            + Path.GetExtension(file.FileName);
-        var path = await storage.SaveFileAsync(file, fileName);
+            + ".xlsx";
+
+        var path = Path.GetExtension(file.FileName) == ".xls"
+            ? _convertXlsToXlsx(file.OpenReadStream(), fileName)
+            : await storage.SaveFileAsync(file, fileName);
 
         return await fileService.AddEntity(
             new File(Path: fileName, StateUserId: stateUserId, CreatedDate: DateTime.UtcNow)
@@ -100,10 +131,10 @@ public class ReportCreateService(
     {
         Dictionary<string, ICell> cellFoundCache = new Dictionary<string, ICell>();
 
-        var disciplineHeaderCell = _findCell(worksheet, "Наименование дисциплины, практики и её тип, испытания государственной итоговой аттесатции", cellFoundCache);
+        var disciplineHeaderCell = worksheet.FindCell("Наименование дисциплины, практики и её тип, испытания государственной итоговой аттесатции", cellFoundCache);
         var row = disciplineHeaderCell.Address.Row + 1;
         const string endString = "Всего за семестр";
-        var groupStringCellNum = _findCell(worksheet, "Индекс учебной группы", cellFoundCache).Address.Column;
+        var groupStringCellNum = worksheet.FindCell("Индекс учебной группы", cellFoundCache).Address.Column;
         var semestrId = worksheet.SheetName.Contains("Осень") ? 1 : 2;
 
         var cell = worksheet.GetRow(row).GetCell(disciplineHeaderCell.Address.Column);
@@ -117,7 +148,7 @@ public class ReportCreateService(
 
                 foreach (var activity in activities)
                 {
-                    var activityHeaderCell = _findCell(worksheet, _takeFirstWords(activity.Name, 4), cellFoundCache); //_takeFirstWords потому что "Лабораторные работы, клинические практические " в первой части обрезаны
+                    var activityHeaderCell = worksheet.FindCell(_takeFirstWords(activity.Name, 4), cellFoundCache); //_takeFirstWords потому что "Лабораторные работы, клинические практические " в первой части обрезаны
                     var contentCell = worksheet.GetRow(row).GetCell(activityHeaderCell.Address.Column);
 
                     var hours = contentCell.CellType switch
@@ -158,39 +189,6 @@ public class ReportCreateService(
                ?? await lessonTypeRepository.AddEntity(new LessonType(lessonName));
     }
 
-    private ICell _findCell(ISheet worksheet, string str, Dictionary<string, ICell> cellFoundCache)
-    {
-        str = _standartize(str);
-        if (cellFoundCache.Keys.Contains(str))
-            return cellFoundCache[str];
-
-        const int maxRows = 25;
-        const int maxCols = 75;
-        for (int row = 0; row < maxRows; row++)
-        {
-            var sheetRow = worksheet.GetRow(row);
-            if (sheetRow == null) continue;
-            for (int col = 0; col < maxCols; col++)
-            {
-                var cell = sheetRow.GetCell(col);
-                if (cell == null) continue;
-                if (cell.CellType == CellType.String && _standartize(cell.StringCellValue).StartsWith(str))
-                {
-                    cellFoundCache.Add(str, cell);
-                    return cell;
-                }
-            }
-        }
-        throw new Exception($"Cell with text {str} not found");
-    }
-
     private string _takeFirstWords(string str, int wordsCount)
         => string.Join(" ", str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Take(wordsCount));
-
-    private string _standartize(string str)
-    {
-        if (string.IsNullOrWhiteSpace(str))
-            return string.Empty;
-        return string.Join("", str.Where(x => char.IsLetter(x))).ToUpper();
-    }
 }
