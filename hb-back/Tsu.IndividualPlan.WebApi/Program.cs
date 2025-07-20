@@ -21,6 +21,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.ApplyMigrations();
     app.Seed();
+    app.UseCors("AllowAll");
 }
 
 app.UseSwagger();
