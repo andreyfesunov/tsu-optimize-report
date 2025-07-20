@@ -13,6 +13,20 @@ public static class DependencyInjection
         services.AddEndpoints();
         services.AddSwagger();
         services.AddJwt(configuration);
+        services.AddCORS();
+    }
+
+    private static void AddCORS(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+              {
+                  policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+              });
+        });
     }
 
     private static void AddEndpoints(this IServiceCollection services)
