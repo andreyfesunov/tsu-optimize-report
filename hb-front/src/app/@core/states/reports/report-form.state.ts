@@ -52,6 +52,7 @@ export class ReportFormState {
           this._workStateFactory.create(
             index,
             report,
+            semesterId,
             work,
             this.spinner,
             this._destroyRef,

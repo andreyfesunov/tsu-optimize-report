@@ -1,8 +1,11 @@
+import { SemesterEnum } from '@core/models';
+
 export interface IEventCreateDto {
   readonly stateUserId: string;
   readonly eventTypeId: string;
   readonly startedAt: Date;
   readonly endedAt: Date;
+  readonly semesterId: SemesterEnum;
 }
 
 export interface IEventUpdateDto {

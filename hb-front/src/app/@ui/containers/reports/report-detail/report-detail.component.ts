@@ -28,7 +28,6 @@ import { ReportsService } from '@core/services';
 import { SubscriptionController } from '@core/controllers';
 import FileSaver from 'file-saver';
 import { ReportsFormStateFactory } from '@core/factories';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-report-detail',
@@ -110,8 +109,6 @@ export class ReportDetailComponent extends SubscriptionController {
     exists(),
   );
 
-  private readonly _semesterId$ = toObservable(this.semesterId);
-
   protected readonly state$ = this.id$.pipe(
     map((id) =>
       this._reportStateFactory.create(id, this.spinner, this._destroyRef),
@@ -126,10 +123,8 @@ export class ReportDetailComponent extends SubscriptionController {
     switchMap((state) =>
       combineLatest([
         state.records$.pipe(
-          combineLatestWith(this._semesterId$),
-          map(([records, semesterId]) =>
+          map((records) =>
             records
-              .filter((x) => x.semesterId === semesterId)
               .map((x) => x.records)
               .reduce((acc, cur) => [...acc, ...cur], [])
               .map((x) => x.hours)
@@ -204,10 +199,8 @@ export class ReportDetailComponent extends SubscriptionController {
     switchMap((state) =>
       combineLatest([
         state.records$.pipe(
-          combineLatestWith(this._semesterId$),
-          map(([records, semesterId]) =>
+          map((records) =>
             records
-              .filter((x) => x.semesterId === semesterId)
               .map((x) => x.records)
               .reduce((acc, cur) => [...acc, ...cur], [])
               .map((x) => x.hours)
