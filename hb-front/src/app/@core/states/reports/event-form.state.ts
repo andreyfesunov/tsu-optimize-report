@@ -247,7 +247,7 @@ export class EventFormState {
       stateUserId: this._reportId,
       endedAt: form.endDate,
       startedAt: form.startDate,
-      semesterId: this._semesterId,
+      semestrId: this._semesterId,
     };
 
     return this._eventsService.create(request);

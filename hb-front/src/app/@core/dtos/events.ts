@@ -5,7 +5,7 @@ export interface IEventCreateDto {
   readonly eventTypeId: string;
   readonly startedAt: Date;
   readonly endedAt: Date;
-  readonly semesterId: SemesterEnum;
+  readonly semestrId: SemesterEnum;
 }
 
 export interface IEventUpdateDto {
