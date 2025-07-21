@@ -26,4 +26,5 @@ RUN dotnet publish "Tsu.IndividualPlan.WebApi.csproj" -c $BUILD_CONFIGURATION -o
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN apt update && apt install libreoffice -y
 ENTRYPOINT ["dotnet", "Tsu.IndividualPlan.WebApi.dll"]
