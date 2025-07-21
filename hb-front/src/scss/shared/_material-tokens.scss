@@ -1,6 +1,7 @@
 body {
   // для изменения исходных переменных angular-material
   --mat-dialog-container-max-width: 1100px;
+  --mat-autocomplete-container-elevation-shadow: 0px 0px 12px 7px rgba(0, 0, 0, 0.2);
 
   mat-form-field {
     margin-top: 12px;
@@ -10,5 +11,9 @@ body {
     &.mat-mdc-form-field-bottom-align {
       height: 0px;
     }
+  }
+
+  mat-option {
+    border-bottom: 2px solid #c7b3b0;
   }
 }

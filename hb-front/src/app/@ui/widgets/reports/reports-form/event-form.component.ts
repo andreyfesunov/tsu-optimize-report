@@ -50,7 +50,7 @@ import {MatTooltip} from "@angular/material/tooltip";
     MatTooltip
   ],
   template: `
-    <table style="padding-bottom: 12px" app-table [cols]="defaultCols" [itemsCount]="1" [bordered]="true">
+    <table app-table [cols]="defaultCols" [itemsCount]="1" [bordered]="true">
       <tr
         app-event-form-table-row
         [cols]="defaultCols"
@@ -58,17 +58,6 @@ import {MatTooltip} from "@angular/material/tooltip";
         [clickable]="false"
       >
         <ng-template [appLayoutRef]="LayoutRefs.ACTIONS">
-          <button matTooltip="Добавить учебную дисциплину" *ngIf="workIndex() === 0"
-                  [disabled]="(state().editable$ | async) === false || (state().canAddLesson$ | async) === false"
-                  mat-icon-button
-                  (click)="state().addLesson()">
-            <mat-icon>add_circle</mat-icon>
-          </button>
-          <button matTooltip="Добавить запись" *ngIf="workIndex() !== 0"
-                  [disabled]="(state().editable$ | async) === false"
-                  mat-icon-button (click)="state().addComment()">
-            <mat-icon>add_circle</mat-icon>
-          </button>
           <button mat-icon-button [disabled]="state().deleteDisabled$ | async" (click)="deleteState.emit()">
             <mat-icon>delete</mat-icon>
           </button>
@@ -101,6 +90,41 @@ import {MatTooltip} from "@angular/material/tooltip";
             <mat-icon>delete</mat-icon>
           </button>
         </ng-template>
+      </tr>
+
+      <tr
+        style="position: relative; height: 50px;"
+      >
+        <div style="
+            width: 100%;
+            height: 50px;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;"
+        >
+          @if (workIndex() === 0) {
+            <button
+              mat-button
+              style="width: 80%;"
+              [disabled]="(state().editable$ | async) === false || (state().canAddLesson$ | async) === false"
+              (click)="state().addLesson()"
+            >
+              <mat-icon>add_circle</mat-icon>
+              Добавить учебную дисциплину
+            </button>
+          } @else {
+            <button
+              mat-button
+              style="width: 80%;"
+              [disabled]="(state().editable$ | async) === false"
+              (click)="state().addComment()"
+            >
+              <mat-icon>add_circle</mat-icon>
+              Добавить запись
+            </button>
+          }
+        </div>
       </tr>
     </table>
   `

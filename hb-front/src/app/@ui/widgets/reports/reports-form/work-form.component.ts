@@ -28,9 +28,14 @@ import {EventFormComponent, ScrollableComponent} from "@ui/widgets";
           (deleteState)="state().deleteState(index)"
         ></app-report-event-form>
 
-        <button mat-button (click)="state().addEvent()" [disabled]="state().addStateDisabled$ | async">
+        <button
+          mat-button
+          style="margin-block: 16px;"
+          [disabled]="state().addStateDisabled$ | async"
+          (click)="state().addEvent()"
+        >
           <mat-icon>add_circle</mat-icon>
-          Добавить событие
+          Добавить вид работы
         </button>
       </div>
     </app-scrollable>
