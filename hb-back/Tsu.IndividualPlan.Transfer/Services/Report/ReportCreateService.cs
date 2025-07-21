@@ -10,9 +10,9 @@ using Tsu.IndividualPlan.Transfer.Interfaces.Report;
 using File = Tsu.IndividualPlan.Domain.Models.Business.File;
 using NPOI.XSSF.UserModel;
 using Tsu.IndividualPlan.Data.Context;
-using Spire.Xls;
 using ClosedXML.Excel;
 using Tsu.IndividualPlan.Transfer.Extensions.Lib;
+using Activity = Tsu.IndividualPlan.Domain.Models.Business.Activity;
 
 namespace Tsu.IndividualPlan.Transfer.Services.Report;
 
@@ -61,21 +61,6 @@ public class ReportCreateService(
         }
     }
 
-    private string _convertXlsToXlsx(Stream inputStream, string outputPath)
-    {
-        var path = Path.Combine(fileService.GetRoot(), outputPath); //Код вылезает из работы с экселем в работу с файлами, но без промежуточного сохранения документ нельзя конвертировать в xlsx
-        var dir = Path.GetDirectoryName(path);
-        if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
-
-        Workbook workbook = new Workbook();
-        workbook.LoadFromStream(inputStream, ExcelVersion.Version97to2003);
-        workbook.SaveToFile(path, ExcelVersion.Version2016);
-
-        _deleteLastWorksheet(path); //Удаляем вотермарку Spire 
-
-        return path;
-    }
-
     private static void _deleteLastWorksheet(string path)
     {
         using (var workbook = new XLWorkbook(path))
@@ -112,11 +97,16 @@ public class ReportCreateService(
             userInfo.GetUserId()
             + "/"
             + Guid.NewGuid()
-            + ".xlsx";
+            + Path.GetExtension(file.FileName);
 
-        var path = Path.GetExtension(file.FileName) == ".xls"
-            ? _convertXlsToXlsx(file.OpenReadStream(), fileName)
-            : await storage.SaveFileAsync(file, fileName);
+        await storage.SaveFileAsync(file, fileName);
+
+        if (Path.GetExtension(file.FileName) == ".xls")
+        {
+            var newFileName = fileName.Replace("xls", "xlsx");
+            storage.ConvertXlsToXlsx(fileName, newFileName);
+            fileName = newFileName;
+        }
 
         return await fileService.AddEntity(
             new File(Path: fileName, StateUserId: stateUserId, CreatedDate: DateTime.UtcNow)

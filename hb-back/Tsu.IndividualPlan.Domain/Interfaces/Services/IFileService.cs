@@ -5,5 +5,4 @@ namespace Tsu.IndividualPlan.Domain.Interfaces.Services;
 public interface IFileService
 {
     public Task<File> AddEntity(File entity);
-    public string GetRoot();
 }
