@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import {
   combineLatest,
+  combineLatestWith,
   map,
   of,
   shareReplay,
@@ -27,6 +28,7 @@ import { ReportsService } from '@core/services';
 import { SubscriptionController } from '@core/controllers';
 import FileSaver from 'file-saver';
 import { ReportsFormStateFactory } from '@core/factories';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-report-detail',
@@ -108,6 +110,8 @@ export class ReportDetailComponent extends SubscriptionController {
     exists(),
   );
 
+  private readonly _semesterId$ = toObservable(this.semesterId);
+
   protected readonly state$ = this.id$.pipe(
     map((id) =>
       this._reportStateFactory.create(id, this.spinner, this._destroyRef),
@@ -121,6 +125,17 @@ export class ReportDetailComponent extends SubscriptionController {
   protected readonly plan$ = this.state$.pipe(
     switchMap((state) =>
       combineLatest([
+        state.records$.pipe(
+          combineLatestWith(this._semesterId$),
+          map(([records, semesterId]) =>
+            records
+              .filter((x) => x.semesterId === semesterId)
+              .map((x) => x.records)
+              .reduce((acc, cur) => [...acc, ...cur], [])
+              .map((x) => x.hours)
+              .reduce((acc, cur) => acc + cur, 0),
+          ),
+        ),
         state.reports$,
         state.states$.pipe(
           map((states) =>
@@ -175,15 +190,30 @@ export class ReportDetailComponent extends SubscriptionController {
               .map((x) => x ?? 0)
               .reduce((acc, cur) => acc + cur, 0),
           ),
+          startWith(0),
         ),
       ]),
     ),
-    map(([reports, plans]) => reports[0].report.state.hours - plans),
+    map(
+      ([firstHalfHours, reports, plans]) =>
+        reports[0].report.state.hours - firstHalfHours - plans,
+    ),
   );
 
   protected readonly fact$ = this.state$.pipe(
     switchMap((state) =>
       combineLatest([
+        state.records$.pipe(
+          combineLatestWith(this._semesterId$),
+          map(([records, semesterId]) =>
+            records
+              .filter((x) => x.semesterId === semesterId)
+              .map((x) => x.records)
+              .reduce((acc, cur) => [...acc, ...cur], [])
+              .map((x) => x.hours)
+              .reduce((acc, cur) => acc + cur, 0),
+          ),
+        ),
         state.reports$,
         state.states$.pipe(
           map((states) =>
@@ -238,10 +268,14 @@ export class ReportDetailComponent extends SubscriptionController {
               .map((x) => x ?? 0)
               .reduce((acc, cur) => acc + cur, 0),
           ),
+          startWith(0),
         ),
       ]),
     ),
-    map(([reports, facts]) => reports[0].report.state.hours - facts),
+    map(
+      ([firstHalfHours, reports, facts]) =>
+        reports[0].report.state.hours - firstHalfHours - facts,
+    ),
   );
 
   protected export(id: string): void {
