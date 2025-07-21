@@ -1,9 +1,8 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ITableConfig, TableController } from '@core/controllers';
 import { IActivity, IPagination, IRecord, ITableColumn } from '@core/models';
-import { combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { combineLatest, map, Observable, switchMap } from 'rxjs';
 import { getDefaultPaginationRequest } from '@core/utils';
-import { RecordsService } from '@core/services/features/records.service';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
   FirstHalfItemField,
@@ -12,6 +11,7 @@ import {
   TableComponent,
 } from '@ui/widgets';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { ReportFormState } from '@core/states';
 
 @Component({
   selector: 'app-reports-first-half-table',
@@ -39,31 +39,27 @@ import { toObservable } from '@angular/core/rxjs-interop';
   host: { class: 'host-class' },
 })
 export class ReportsFirstHalfTableComponent extends TableController<IRecordEntry> {
-  private readonly _service = inject(RecordsService);
-
-  public readonly reportId = input.required<string>();
+  public readonly state = input.required<ReportFormState>();
   public readonly semesterId = input.required<number>();
 
-  private readonly _reportId$ = toObservable(this.reportId);
   private readonly _semesterId$ = toObservable(this.semesterId);
+  private readonly _state$ = toObservable(this.state);
 
   protected config(): ITableConfig {
     return { request: getDefaultPaginationRequest() };
   }
 
   protected load(): Observable<IPagination<IRecordEntry>> {
-    const cache: { [key: string]: IRecord[] } = {};
-
-    return combineLatest([this._reportId$, this._semesterId$]).pipe(
-      switchMap(([reportId, semesterId]) => {
-        const key = `${reportId}_${semesterId}`;
-
-        return key in cache
-          ? of(cache[key])
-          : this._service
-              .get(reportId, semesterId)
-              .pipe(tap((records) => (cache[key] = records)));
-      }),
+    return combineLatest([
+      this._state$.pipe(switchMap((x) => x.records$)),
+      this._semesterId$,
+    ]).pipe(
+      map(
+        ([records, semesterId]) =>
+          records
+            .filter((x) => x.semesterId === semesterId)
+            .map((x) => x.records)[0],
+      ),
       map((records) => this._toEntry(records)),
       map((records) => ({
         entities: records,

@@ -1,4 +1,4 @@
-import {IEvent, IState} from "@core/models";
+import { IEvent, IState } from '@core/models';
 
 export enum ReportStatus {
   NOT_ACTIVE = 0,
@@ -6,14 +6,19 @@ export enum ReportStatus {
   FINISHED = 2,
 }
 
+export enum SemesterEnum {
+  AUTUMN = 1,
+  SPRING = 2,
+}
+
 export const reportStatusToString = (status: ReportStatus): string => {
   const map = {
     [ReportStatus.NOT_ACTIVE]: 'Неактивна',
     [ReportStatus.ACTIVE]: 'Активна',
-    [ReportStatus.FINISHED]: 'Завершена'
+    [ReportStatus.FINISHED]: 'Завершена',
   };
 
-  return map[status]
+  return map[status];
 };
 
 export const reportStatusStyles = (status: ReportStatus) => ({

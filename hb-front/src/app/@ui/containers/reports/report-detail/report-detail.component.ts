@@ -27,7 +27,6 @@ import { ReportsService } from '@core/services';
 import { SubscriptionController } from '@core/controllers';
 import FileSaver from 'file-saver';
 import { ReportsFormStateFactory } from '@core/factories';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-report-detail',
@@ -72,8 +71,9 @@ import { FormControl } from '@angular/forms';
         >
           <app-scrollable class="host-class" [horizontalScroll]="true">
             <app-reports-first-half-table
-              [reportId]="id"
+              *ngIf="state$ | async as state"
               [semesterId]="semesterId()"
+              [state]="state"
             />
           </app-scrollable>
         </app-scrollable>
@@ -82,7 +82,11 @@ import { FormControl } from '@angular/forms';
           class="host-class report-table"
           [horizontalScroll]="true"
         >
-          <app-report-form *ngIf="state$ | async as state" [state]="state" />
+          <app-report-form
+            *ngIf="state$ | async as state"
+            [state]="state"
+            [semesterId]="semesterId()"
+          />
         </app-scrollable>
       </div>
     </app-content>
@@ -117,8 +121,13 @@ export class ReportDetailComponent extends SubscriptionController {
   protected readonly plan$ = this.state$.pipe(
     switchMap((state) =>
       combineLatest([
-        state.report$,
+        state.reports$,
         state.states$.pipe(
+          map((states) =>
+            states
+              .map((x) => x.works)
+              .reduce((acc, cur) => [...acc, ...cur], []),
+          ),
           map((states) => states.map((x) => x.states$)),
           switchMap((states) => combineLatest(states)),
           map((states) => states.reduce((acc, cur) => [...acc, ...cur], [])),
@@ -169,14 +178,19 @@ export class ReportDetailComponent extends SubscriptionController {
         ),
       ]),
     ),
-    map(([report, plans]) => report.state.hours - plans),
+    map(([reports, plans]) => reports[0].report.state.hours - plans),
   );
 
   protected readonly fact$ = this.state$.pipe(
     switchMap((state) =>
       combineLatest([
-        state.report$,
+        state.reports$,
         state.states$.pipe(
+          map((states) =>
+            states
+              .map((x) => x.works)
+              .reduce((acc, cur) => [...acc, ...cur], []),
+          ),
           map((states) => states.map((x) => x.states$)),
           switchMap((states) => combineLatest(states)),
           map((states) => states.reduce((acc, cur) => [...acc, ...cur], [])),
@@ -227,7 +241,7 @@ export class ReportDetailComponent extends SubscriptionController {
         ),
       ]),
     ),
-    map(([report, facts]) => report.state.hours - facts),
+    map(([reports, facts]) => reports[0].report.state.hours - facts),
   );
 
   protected export(id: string): void {

@@ -1,10 +1,18 @@
-import {Component, input, ViewEncapsulation} from '@angular/core';
-import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
-import {BehaviorSubject} from "rxjs";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {SpinnerComponent, WorkFormComponent} from "@ui/widgets";
-import {SubscriptionController} from "@core/controllers";
-import {ReportFormState} from "@core/states";
+import { Component, input, ViewEncapsulation } from '@angular/core';
+import { MatTab, MatTabContent, MatTabGroup } from '@angular/material/tabs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  shareReplay,
+  switchMap,
+} from 'rxjs';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { SpinnerComponent, WorkFormComponent } from '@ui/widgets';
+import { SubscriptionController } from '@core/controllers';
+import { ReportFormState } from '@core/states';
+import { SemesterEnum } from '@core/models';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-report-form',
@@ -17,13 +25,19 @@ import {ReportFormState} from "@core/states";
     SpinnerComponent,
     AsyncPipe,
     WorkFormComponent,
-    MatTabContent
+    MatTabContent,
   ],
   template: `
-    <mat-tab-group *ngIf="state().states$ | async as workStates" class="reports-form host-class" animationDuration="0ms"
-                   (selectedTabChange)="tabChanged$.next($event.index)">
-      <mat-tab *ngFor="let workState of workStates; index as index"
-               [label]="workState.work.name">
+    <mat-tab-group
+      *ngIf="workStates$ | async as workStates"
+      class="reports-form host-class"
+      animationDuration="0ms"
+      (selectedTabChange)="tabChanged$.next($event.index)"
+    >
+      <mat-tab
+        *ngFor="let workState of workStates; index as index"
+        [label]="workState.work.name"
+      >
         <ng-template matTabContent>
           <app-report-work-form
             [state]="workState"
@@ -50,13 +64,34 @@ import {ReportFormState} from "@core/states";
       h1 {
         margin: 0;
       }
-    `
+    `,
   ],
-  host: {class: 'host-class'}
+  host: { class: 'host-class' },
 })
 export class ReportFormComponent extends SubscriptionController {
+  public readonly semesterId = input.required<SemesterEnum>();
   public readonly state = input.required<ReportFormState>();
 
-  protected readonly tabChanged$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-}
+  private readonly _state$ = toObservable(this.state);
+  private readonly _semesterId$ = toObservable(this.semesterId);
 
+  protected readonly workStates$ = combineLatest([
+    this._state$,
+    this._semesterId$,
+  ]).pipe(
+    switchMap(([state, semesterId]) =>
+      state.states$.pipe(
+        map((states) =>
+          states
+            .filter((x) => x.semesterId === semesterId)
+            .map((x) => x.works)
+            .reduce((acc, cur) => [...acc, ...cur], []),
+        ),
+      ),
+    ),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
+
+  protected readonly tabChanged$: BehaviorSubject<number> =
+    new BehaviorSubject<number>(0);
+}
