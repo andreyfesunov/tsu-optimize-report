@@ -8,6 +8,13 @@
   margin-bottom: variables.$padding-lg;
 }
 
+.report-detail-actions__left {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+}
+
 .report-hours-counter {
   font-size: 16px;
   padding: 8px;

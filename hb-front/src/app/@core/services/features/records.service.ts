@@ -1,15 +1,17 @@
-import {Observable} from "rxjs";
-import {IRecord} from "@core/models";
-import {HttpClient} from "@angular/common/http";
-import {Injectable, inject} from "@angular/core";
-import { environment } from "src/environments/environment";
+import { Observable } from 'rxjs';
+import { IRecord } from '@core/models';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class RecordsService {
   private readonly _apiRoot = environment.apiRoot;
   private readonly _httpClient = inject(HttpClient);
 
-  public get(reportId: string): Observable<IRecord[]> {
-    return this._httpClient.get<IRecord[]>(`${this._apiRoot}/Record/${reportId}`);
+  public get(reportId: string, semesterId: number): Observable<IRecord[]> {
+    return this._httpClient.get<IRecord[]>(
+      `${this._apiRoot}/Record/${reportId}/${semesterId.toString()}`,
+    );
   }
 }
