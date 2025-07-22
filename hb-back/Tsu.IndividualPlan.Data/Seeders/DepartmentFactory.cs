@@ -8,7 +8,8 @@ public static class DepartmentFactory
     {
         return new List<Department>
         {
-            new(InstituteId: institute.Id, Name: "Вычислительная техника")
+            new(InstituteId: institute.Id, Name: "ИПМКН"),
+            new(InstituteId: institute.Id, Name: "Вычислительная техника"),
         };
     }
 }
