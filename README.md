@@ -1,5 +1,7 @@
 # Individual Report Management System of Tula State University
 
+> Archived! Moved to https://github.com/tulasu/reports
+
 ## Repository Structure
 
 - [hb-back](./hb-back) — backend source code (Web API)
